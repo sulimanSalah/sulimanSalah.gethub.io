@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقدم للوظيفة - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        form input, form textarea, form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .form-footer a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>التقدم للوظيفة</h1>
+    </header>
+
+    <form action="#" method="post">
+        <h2>معلومات التقديم</h2>
+
+        <label for="name">الاسم الكامل:</label>
+        <input type="text" id="name" name="name" placeholder="أدخل اسمك الكامل" required>
+
+        <input type="tel" id="tel" name="tel"  placeholder="أكتب رقم هاتفك" required>
+        <label for="tel">رقم الهاتف :</label>
+
+        <label for="cv">السيرة الذاتية إن وجدت:</label>
+        <input type="file" id="cv" name="cv" >
+
+        <label for="cover-letter">رسالة تغطية:</label>
+        <textarea id="cover-letter" name="cover-letter" rows="5" placeholder="أدخل رسالة تغطية إن وجدت" required></textarea>
+
+        <button type="submit">تقديم الطلب</button>
+
+        <div class="form-footer">
+            <p>إذا كنت ترغب في التقديم لوظائف أخرى، يمكنك العودة إلى <a href="job_listing_page.html">الوظائف المتاحة</a></p>
+        </div>
+    </form>
+</body>
+</html>

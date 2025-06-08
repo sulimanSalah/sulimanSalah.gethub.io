@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرسائل - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .message-box {
+            padding: 20px;
+            margin: 10px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .message-box h4 {
+            color: #007BFF;
+            margin-bottom: 5px;
+        }
+        .message-box p {
+            color: #333;
+        }
+        .message-input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .send-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .send-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>الرسائل</h1>
+    </header>
+
+    <div class="container">
+        <div class="message-box">
+            <h4>أحمد محمد (الموظف)</h4>
+            <p>أرغب في معرفة المزيد عن متطلبات الوظيفة التي تم الإعلان عنها. هل يمكنك تزويدي بمزيد من التفاصيل؟</p>
+        </div>
+
+        <div class="message-box">
+            <h4>سارة عبد الله (صاحب العمل)</h4>
+            <p>مرحبًا أحمد، شكراً لاهتمامك! يمكنك إرسال السيرة الذاتية الخاصة بك مع رسالة تغطية عبر البريد الإلكتروني لتقييم مؤهلاتك.</p>
+        </div>
+
+        <textarea class="message-input" placeholder="أكتب رسالتك هنا..." rows="4"></textarea>
+        <button class="send-button">إرسال الرسالة</button>
+    </div>
+</body>
+</html>

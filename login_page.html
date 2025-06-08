@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .form-footer a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>تسجيل الدخول إلى حسابك</h1>
+    </header>
+
+    <form onsubmit="return loginUser(event)">
+        <h2>دخول</h2>
+
+        <label for="email">البريد الإلكتروني:</label>
+        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required>
+
+        <label for="password">كلمة المرور:</label>
+        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+
+        <button type="submit">دخول</button>
+
+        <div class="form-footer">
+            <p>ليس لديك حساب؟ <a href="registration_page.html">تسجيل حساب جديد</a></p>
+            <p><a href="forgot-password.html">نسيت كلمة المرور؟</a></p>
+        </div>
+    </form>
+
+    <script>
+        // دالة لتسجيل الدخول
+        function loginUser(event) {
+            event.preventDefault(); // لمنع إعادة تحميل الصفحة عند تقديم النموذج
+
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // تحقق من البيانات المدخلة (مثال بسيط)
+            if (email === "user@example.com" && password === "password123") {
+                // تخزين حالة تسجيل الدخول في LocalStorage
+                localStorage.setItem('loggedIn', 'true');
+                // توجيه المستخدم إلى صفحة حسابه بعد تسجيل الدخول بنجاح
+                window.location.href = 'account.html';
+            } else {
+                alert("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+            }
+        }
+    </script>
+</body>
+</html>

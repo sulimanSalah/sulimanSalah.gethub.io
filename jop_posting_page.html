@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة وظيفة - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        form input, form textarea, form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form textarea {
+            height: 100px;
+            resize: none;
+        }
+        form button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>إضافة وظيفة جديدة</h1>
+    </header>
+
+    <form action="#" method="post">
+        <h2>تفاصيل الوظيفة</h2>
+
+        <label for="job-title">عنوان الوظيفة:</label>
+        <input type="text" id="job-title" name="job_title" placeholder="مثل: مندوب مبيعات" required>
+
+        <label for="job-location">الموقع:</label>
+        <input type="text" id="job-location" name="job_location" placeholder="مثل: الخرطوم،الخرطوم وسط،السجانة" required>
+
+        <label for="job-duration">مدة العمل:</label>
+        <input type="text" id="job-duration" name="job_duration" placeholder="مثل: يوم، أسبوع، شهر" required>
+
+        <label for="job-salary">الراتب:</label>
+        <input type="number" id="job-salary" name="job_salary" placeholder="أدخل الراتب بالجنيه" required>
+
+        <label for="job-description">وصف الوظيفة:</label>
+        <textarea id="job-description" name="job_description" placeholder="أدخل تفاصيل الوظيفة هنا" required></textarea>
+
+        <button type="submit">إضافة الوظيفة</button>
+    </form>
+    <div><p>  دي دايرة قاعدة بيانات للمواصلة </p></div>
+</body>
+</html>

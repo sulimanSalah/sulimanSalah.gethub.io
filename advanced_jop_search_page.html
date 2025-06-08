@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البحث المتقدم عن الوظائف - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-section {
+            margin-bottom: 30px;
+        }
+        .search-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        .search-section label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .search-section input, .search-section select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .job-listing {
+            border-bottom: 1px solid #ccc;
+            padding: 15px 0;
+        }
+        .job-listing h3 {
+            color: #007BFF;
+        }
+        .job-listing p {
+            color: #333;
+            font-size: 1.1em;
+        }
+        .apply-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .apply-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>البحث المتقدم عن الوظائف</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-section">
+            <h2>بحث متقدم</h2>
+            <label for="location">الموقع:</label>
+            <input type="text" id="location" placeholder="أدخل المدينة أو المنطقة">
+
+            <label for="job-type">نوع الوظيفة:</label>
+            <select id="job-type">
+                <option value="full-time">دوام كامل</option>
+                <option value="part-time">دوام جزئي</option>
+                <option value="freelance">عمل حر</option>
+                <option value="internship">تدريب</option>
+            </select>
+
+            <label for="salary-range">نطاق الراتب:</label>
+            <input type="range" id="salary-range" min="0" max="10000" step="100" value="5000">
+            <p>الراتب: <span id="salary-value">5000</span> جنيهاً</p>
+
+            <button onclick="searchJobs()">ابحث عن وظائف</button>
+        </div>
+
+        <div class="job-listing">
+            <h3>مهندس برمجيات</h3>
+            <p><strong>الموقع:</strong> الخرطوم</p>
+            <p><strong>الراتب:</strong> 6000 جنيه</p>
+            <p><strong>نوع الوظيفة:</strong> دوام كامل</p>
+            <a href="job-details.html" class="apply-button">التفاصيل والتقديم</a>
+        </div>
+
+        <div class="job-listing">
+            <h3>محاسب</h3>
+            <p><strong>الموقع:</strong> أم درمان</p>
+            <p><strong>الراتب:</strong> 4500 جنيه</p>
+            <p><strong>نوع الوظيفة:</strong> دوام جزئي</p>
+            <a href="job-details.html" class="apply-button">التفاصيل والتقديم</a>
+        </div>
+
+        <!-- المزيد من الوظائف يمكن إضافتها هنا -->
+    </div>
+
+    <script>
+        document.getElementById('salary-range').addEventListener('input', function () {
+            document.getElementById('salary-value').textContent = this.value;
+        });
+
+        function searchJobs() {
+            alert('بحث عن الوظائف بناءً على المعايير المحددة');
+            // هنا يمكن إضافة منطق البحث الفعلي من خلال قاعدة البيانات
+        }
+    </script>
+</body>
+</html>

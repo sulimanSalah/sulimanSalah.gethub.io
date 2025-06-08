@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الموظفون المتاحون - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .employee-card {
+            background-color: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .employee-card h3 {
+            margin: 0;
+            color: #333;
+        }
+        .employee-card p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .employee-card button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .employee-card button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>الموظفون المتاحون</h1>
+    </header>
+
+    <div class="container">
+        <!-- بطاقة الموظف الأول -->
+        <div class="employee-card">
+            <div class="employee-info">
+                <h3>محمد أحمد</h3>
+                <p>المهارات: بناء، طلاء، تركيب السيراميك</p>
+                <p>الموقع: الخرطوم</p>
+                <p>التقييم: 4.5/5</p>
+            </div>
+            <button>تواصل</button>
+        </div>
+
+        <!-- بطاقة الموظف الثاني -->
+        <div class="employee-card">
+            <div class="employee-info">
+                <h3>أحمد علي</h3>
+                <p>المهارات: مبيعات، تسويق، خدمة عملاء</p>
+                <p>الموقع: أم درمان</p>
+                <p>التقييم: 4.7/5</p>
+            </div>
+            <button>تواصل</button>
+        </div>
+
+        <!-- بطاقة الموظف الثالث -->
+        <div class="employee-card">
+            <div class="employee-info">
+                <h3>فاطمة محمود</h3>
+                <p>المهارات: مساعد إداري، كتابة تقارير، إدارة مكاتب</p>
+                <p>الموقع: بحري</p>
+                <p>التقييم: 4.8/5</p>
+            </div>
+            <button>تواصل</button>
+        </div>
+    </div>
+    <div><p> دي دايرة قاعدة بيانات للمواصلة </p></div>
+
+    <footer>
+        <p>© 2025 موقع التوظيف - جميع الحقوق محفوظة</p>
+    </footer>
+</body>
+</html>

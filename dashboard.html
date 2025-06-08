@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .dashboard-card {
+            background-color: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .dashboard-card h3 {
+            color: #333;
+        }
+        .dashboard-card p {
+            color: #666;
+        }
+        .dashboard-card a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .dashboard-card a:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>لوحة التحكم</h1>
+    </header>
+
+    <div class="container">
+        <!-- بطاقة صاحب العمل -->
+        <div class="dashboard-card">
+            <h3>أنت صاحب عمل</h3>
+            <p>يمكنك إضافة وظائف جديدة، متابعة المتقدمين، وإدارة تفاصيل العمل.</p>
+            <a href="job-posting.html">إضافة وظيفة جديدة</a>
+            <a href="my-jobs.html">وظائفي الحالية</a>
+        </div>
+
+        <!-- بطاقة الموظف -->
+        <div class="dashboard-card">
+            <h3>أنت موظف</h3>
+            <p>يمكنك البحث عن وظائف جديدة، التقديم عليها، ومتابعة تقدمك في العمل.</p>
+            <a href="job-listings.html">عرض الوظائف المتاحة</a>
+            <a href="my-applications.html">طلباتي</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 موقع التوظيف - جميع الحقوق محفوظة</p>
+    </footer>
+</body>
+</html>
