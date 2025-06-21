@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>تسجيل حساب جديد - موقع التوظيف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        form h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .form-footer a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            min-height: 24px;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>إنشاء حساب جديد</h1>
+    </header>
+
+    <form id="registerForm" onsubmit="return registerUser(event)">
+        <h2>معلومات الحساب</h2>
+
+        <label for="name">الاسم الكامل:</label>
+        <input type="text" id="name" name="name" placeholder="أدخل اسمك الكامل" required />
+
+        <label for="email">البريد الإلكتروني:</label>
+        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required />
+
+        <label for="password">كلمة المرور:</label>
+        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required />
+
+        <label for="role">نوع الحساب:</label>
+        <select id="role" name="role" required>
+            <option value="" disabled selected>اختر نوع الحساب</option>
+            <option value="employee">موظف</option>
+            <option value="employer">صاحب عمل</option>
+        </select>
+
+        <button type="submit">تسجيل</button>
+
+        <div class="message" id="message"></div>
+
+        <div class="form-footer">
+            <p>هل لديك حساب؟ <a href="login_page.html">تسجيل الدخول</a></p>
+        </div>
+    </form>
+
+    <script>
+        function registerUser(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const role = document.getElementById('role').value;
+            const messageDiv = document.getElementById('message');
+
+            messageDiv.textContent = "";
+            messageDiv.className = "message";
+
+            // تحقق بسيط
+            if (!name || !email || !password || !role) {
+                messageDiv.textContent = "يرجى ملء جميع الحقول";
+                messageDiv.classList.add("error");
+                return false;
+            }
+
+            // مثال: تخزين بيانات التسجيل في localStorage (غير آمن للاستخدام الحقيقي)
+            const users = JSON.parse(localStorage.getItem('users') || "[]");
+
+            // تحقق من وجود البريد مسبقاً
+            if (users.some(user => user.email === email)) {
+                messageDiv.textContent = "هذا البريد الإلكتروني مستخدم مسبقاً";
+                messageDiv.classList.add("error");
+                return false;
+            }
+
+            // حفظ المستخدم الجديد
+            users.push({ name, email, password, role });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            messageDiv.textContent = "تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.";
+            messageDiv.classList.add("success");
+
+            // إعادة تعيين النموذج بعد التسجيل
+            document.getElementById('registerForm').reset();
+
+            return false;
+        }
+    </script>
+</body>
+</html>
