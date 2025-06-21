@@ -2,12 +2,13 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>إضافة وظيفة جديدة</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      padding: 20px;
+      padding: 15px;
       background-color: #f9f9f9;
       margin: 0;
       box-sizing: border-box;
@@ -15,16 +16,17 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       color: #007BFF;
+      font-size: 24px;
     }
 
     form {
-      max-width: 600px;
-      margin: 0 auto;
       background: white;
-      padding: 25px;
+      padding: 20px;
       border-radius: 10px;
+      max-width: 480px;
+      margin: 0 auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
@@ -40,10 +42,10 @@
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      border-radius: 5px;
+      border-radius: 6px;
       border: 1px solid #ccc;
       box-sizing: border-box;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       font-family: inherit;
       resize: vertical;
     }
@@ -60,25 +62,18 @@
       background-color: #0056b3;
     }
 
-    /* تنسيق متجاوب للشاشات الصغيرة */
-    @media (max-width: 640px) {
-      body {
-        padding: 15px;
-      }
-
+    /* تحسين العرض على الشاشات الصغيرة */
+    @media (max-width: 500px) {
       form {
-        padding: 20px;
+        padding: 15px;
         max-width: 100%;
       }
-
+      h1 {
+        font-size: 20px;
+      }
       input, textarea, button {
         font-size: 14px;
         padding: 10px;
-      }
-
-      h1 {
-        font-size: 22px;
-        margin-bottom: 20px;
       }
     }
   </style>
@@ -138,7 +133,6 @@
         await addDoc(collection(db, "jobs"), job);
         alert("تم حفظ الوظيفة بنجاح!");
         form.reset();
-        // توجيه لصفحة عرض الوظائف
         window.location.href = "jobs.html";
       } catch (error) {
         alert("حدث خطأ أثناء الحفظ: " + error.message);
