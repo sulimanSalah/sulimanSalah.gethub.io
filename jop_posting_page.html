@@ -2,61 +2,80 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <title>الوظائف المتاحة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إضافة وظيفة جديدة</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      background-color: #f9f9f9;
-      margin: 0;
       padding: 20px;
+      margin: 0;
+      background-color: #f9f9f9;
     }
-    #search {
-      width: 300px;
-      height: 30px;
-      margin-bottom: 20px;
+    form {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      padding: 5px 10px;
-      font-size: 16px;
+      box-sizing: border-box;
     }
-    .job-card {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .job-card h3 {
-      margin: 0 0 10px 0;
-    }
-    .job-card p {
-      margin: 5px 0;
-      color: #555;
-    }
-    button.details-btn {
-      margin-top: 10px;
+    button {
       background-color: #007BFF;
       color: white;
       border: none;
-      padding: 10px 15px;
+      padding: 12px;
       border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
+      margin-top: 15px;
     }
-    button.details-btn:hover {
+    button:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <h1>الوظائف المتاحة</h1>
-  <input type="search" id="search" placeholder="ابحث عن وظيفة هنا..." />
+  <h1>إضافة وظيفة جديدة</h1>
+  <form id="jobForm">
+    <label for="title">عنوان الوظيفة</label>
+    <input type="text" id="title" required />
 
-  <div id="jobs-container"></div>
+    <label for="location">الموقع</label>
+    <input type="text" id="location" required />
+
+    <label for="duration">مدة العمل</label>
+    <input type="text" id="duration" required />
+
+    <label for="salary">الراتب</label>
+    <input type="text" id="salary" required />
+
+    <label for="description">وصف الوظيفة</label>
+    <textarea id="description" rows="4" required></textarea>
+
+    <button type="submit">حفظ الوظيفة</button>
+  </form>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -71,65 +90,27 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const jobsContainer = document.getElementById("jobs-container");
-    const searchInput = document.getElementById("search");
+    const form = document.getElementById("jobForm");
 
-    let jobsData = [];
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    function renderJobs(jobs) {
-      jobsContainer.innerHTML = "";
-      if (jobs.length === 0) {
-        jobsContainer.innerHTML = "<p>لا توجد وظائف مطابقة.</p>";
-        return;
+      const job = {
+        title: form.title.value.trim(),
+        location: form.location.value.trim(),
+        duration: form.duration.value.trim(),
+        salary: form.salary.value.trim(),
+        description: form.description.value.trim()
+      };
+
+      try {
+        await addDoc(collection(db, "jobs"), job);
+        alert("تم حفظ الوظيفة بنجاح!");
+        form.reset();
+      } catch (error) {
+        alert("حدث خطأ أثناء الحفظ: " + error.message);
       }
-      jobs.forEach(job => {
-        const div = document.createElement("div");
-        div.classList.add("job-card");
-
-        div.innerHTML = `
-          <h3>${job.title}</h3>
-          <p>الموقع: ${job.location}</p>
-          <p>المدة: ${job.duration}</p>
-          <p>الراتب: ${job.salary}</p>
-          <button class="details-btn">عرض التفاصيل</button>
-        `;
-
-        const btn = div.querySelector(".details-btn");
-        btn.addEventListener("click", () => {
-          alert(`تفاصيل الوظيفة:\n${job.description}`);
-        });
-
-        jobsContainer.appendChild(div);
-      });
-    }
-
-    async function loadJobs() {
-      const querySnapshot = await getDocs(collection(db, "jobs"));
-      jobsData = [];
-      querySnapshot.forEach(doc => {
-        jobsData.push(doc.data());
-      });
-      renderJobs(jobsData);
-    }
-
-    searchInput.addEventListener("input", () => {
-      const searchTerm = searchInput.value.trim().toLowerCase();
-      if (!searchTerm) {
-        renderJobs(jobsData);
-        return;
-      }
-      const filtered = jobsData.filter(job => {
-        return (
-          job.title.toLowerCase().includes(searchTerm) ||
-          job.location.toLowerCase().includes(searchTerm) ||
-          job.duration.toLowerCase().includes(searchTerm) ||
-          job.salary.toLowerCase().includes(searchTerm)
-        );
-      });
-      renderJobs(filtered);
     });
-
-    loadJobs();
   </script>
 </body>
 </html>
