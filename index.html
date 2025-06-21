@@ -19,7 +19,156 @@
             overflow-x: auto;
             white-space: nowrap;
             background: linear-gradient(to right, #00C9FF, #0056b3); /* تدرج الأزرق */
+            padding: 12px<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - موقع  شغلني</title>
+    <style>
+        /* 🔹 إعدادات الصفحة */
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* 🔹 شريط التنقل (nav-container) */
+        .nav-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            background: linear-gradient(to right, #00C9FF, #0056b3); /* تدرج الأزرق */
             padding: 12px;
+            scrollbar-width: none;
+            cursor: grab;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .nav-container::-webkit-scrollbar {
+            display: none; /* إخفاء شريط التمرير في كروم وسفاري */
+        }
+
+        nav {
+            display: inline-block;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 24px;
+            display: inline-block;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.4s ease-in-out;
+            position: relative;
+            border-radius: 10px;
+        }
+
+        a::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: white;
+            transition: 0.4s ease-out;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        a:hover::before {
+            width: 100%;
+        }
+
+        a:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 🔹 الهيرو */
+        .hero {
+            text-align: center;
+            padding: 50px;
+            background-color: #e9ecef;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            color: #333;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        .hero button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .hero button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 🔹 تذييل الصفحة */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>مرحبا بك في موقع شغلني</h1>
+    </header>
+
+    <!-- شريط التنقل -->
+    <div class="nav-container">
+        <nav>
+            <a href="index.html">الرئيسية</a>
+            <a href="job_listing_page.html"> الوظائف المطلوبة</a>
+<a href="jop_posting_page.html">إضافة وظيفة</a>
+            
+                                                                            <a href="employee_listing_page.html">الموظفون</a>
+            <a href="contact-us.html">تواصل معنا</a>
+            <a href="Profile_page.html">حسابي</a>
+            <a href="login_page.html">تسجيل الدخول</a>
+            <a href="messaging_page.html">رسائلي </a>
+            <a href="manage_application_page.html">الطلبات </a>
+        </nav>
+    </div>
+
+    <div class="hero">
+        <h1>ابحث عن عمل أو موظف بكل سهولة</h1>
+        <p>نربط بين الشركات والموظفين على أرض الواقع بطريقة سهلة وسريعة.</p>
+       <a href="login_page.html"><button>أبدا الأن</button></a>
+    </div>
+
+    <footer>
+        <p>© 2025 موقع شغلني جميع الحقوق محفوظة</p>
+    </footer>
+
+</body>
+</html>
             scrollbar-width: none;
             cursor: grab;
             border-radius: 10px;
