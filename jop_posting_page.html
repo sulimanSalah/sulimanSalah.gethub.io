@@ -2,53 +2,84 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إضافة وظيفة جديدة</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
       padding: 20px;
-      margin: 0;
       background-color: #f9f9f9;
+      margin: 0;
+      box-sizing: border-box;
     }
-    form {
-      max-width: 600px;
-      margin: auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
+
     h1 {
       text-align: center;
+      margin-bottom: 30px;
+      color: #007BFF;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 16px;
       color: #333;
     }
-    label {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input, textarea {
-      display: block;
+
+    input, textarea, button {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+      padding: 12px;
+      font-size: 16px;
       border-radius: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box;
+      margin-bottom: 20px;
+      font-family: inherit;
+      resize: vertical;
     }
+
     button {
       background-color: #007BFF;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 5px;
-      font-size: 16px;
       cursor: pointer;
-      margin-top: 15px;
+      transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #0056b3;
+    }
+
+    /* تنسيق متجاوب للشاشات الصغيرة */
+    @media (max-width: 640px) {
+      body {
+        padding: 15px;
+      }
+
+      form {
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      input, textarea, button {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
     }
   </style>
 </head>
@@ -107,6 +138,8 @@
         await addDoc(collection(db, "jobs"), job);
         alert("تم حفظ الوظيفة بنجاح!");
         form.reset();
+        // توجيه لصفحة عرض الوظائف
+        window.location.href = "jobs.html";
       } catch (error) {
         alert("حدث خطأ أثناء الحفظ: " + error.message);
       }
