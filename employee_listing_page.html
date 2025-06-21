@@ -1,109 +1,108 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموظفون المتاحون - موقع التوظيف</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .employee-card {
-            background-color: white;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .employee-card h3 {
-            margin: 0;
-            color: #333;
-        }
-        .employee-card p {
-            margin: 5px 0;
-            color: #666;
-        }
-        .employee-card button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .employee-card button:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>عرض الوظائف - شغلني</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      direction: rtl;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .job-list {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 10px;
+    }
+    .job-card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .job-card h3 {
+      margin-top: 0;
+      color: #007BFF;
+    }
+    .job-card p {
+      margin: 5px 0;
+    }
+    .no-jobs {
+      text-align: center;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>الموظفون المتاحون</h1>
-    </header>
 
-    <div class="container">
-        <!-- بطاقة الموظف الأول -->
-        <div class="employee-card">
-            <div class="employee-info">
-                <h3>محمد أحمد</h3>
-                <p>المهارات: بناء، طلاء، تركيب السيراميك</p>
-                <p>الموقع: الخرطوم</p>
-                <p>التقييم: 4.5/5</p>
-            </div>
-            <button>تواصل</button>
-        </div>
+  <header>
+    <h1>قائمة الوظائف المتاحة</h1>
+  </header>
 
-        <!-- بطاقة الموظف الثاني -->
-        <div class="employee-card">
-            <div class="employee-info">
-                <h3>أحمد علي</h3>
-                <p>المهارات: مبيعات، تسويق، خدمة عملاء</p>
-                <p>الموقع: أم درمان</p>
-                <p>التقييم: 4.7/5</p>
-            </div>
-            <button>تواصل</button>
-        </div>
+  <div class="job-list" id="jobList">
+    <p class="no-jobs">جاري تحميل الوظائف...</p>
+  </div>
 
-        <!-- بطاقة الموظف الثالث -->
-        <div class="employee-card">
-            <div class="employee-info">
-                <h3>فاطمة محمود</h3>
-                <p>المهارات: مساعد إداري، كتابة تقارير، إدارة مكاتب</p>
-                <p>الموقع: بحري</p>
-                <p>التقييم: 4.8/5</p>
-            </div>
-            <button>تواصل</button>
-        </div>
-    </div>
-    <div><p> دي دايرة قاعدة بيانات للمواصلة </p></div>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-    <footer>
-        <p>© 2025 موقع التوظيف - جميع الحقوق محفوظة</p>
-    </footer>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+      authDomain: "shaglni-c64c0.firebaseapp.com",
+      projectId: "shaglni-c64c0",
+      storageBucket: "shaglni-c64c0.firebasestorage.app",
+      messagingSenderId: "768887356636",
+      appId: "1:768887356636:web:8a697d04b860eba89c8819",
+      measurementId: "G-QNRW412GZD"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const jobList = document.getElementById("jobList");
+
+    async function fetchJobs() {
+      const q = query(collection(db, "jobs"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+
+      jobList.innerHTML = "";
+
+      if (querySnapshot.empty) {
+        jobList.innerHTML = "<p class='no-jobs'>لا توجد وظائف حاليًا.</p>";
+        return;
+      }
+
+      querySnapshot.forEach(doc => {
+        const job = doc.data();
+        const jobCard = document.createElement("div");
+        jobCard.className = "job-card";
+
+        jobCard.innerHTML = `
+          <h3>${job.title}</h3>
+          <p><strong>الموقع:</strong> ${job.location}</p>
+          <p><strong>المدة:</strong> ${job.duration}</p>
+          <p><strong>الراتب:</strong> ${job.salary} جنيه</p>
+          <p><strong>الوصف:</strong> ${job.description}</p>
+        `;
+
+        jobList.appendChild(jobCard);
+      });
+    }
+
+    fetchJobs();
+  </script>
+
 </body>
 </html>
