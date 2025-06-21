@@ -1,163 +1,99 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الوظائف المتاحة - موقع التوظيف</title>
-    <style>
-    #search{ 
-      background-color: #ffffff;
-      border-radius:5px;
-      margin: 18px 100px 5px 10px;
-      width : 200px;
-      height: 30px;
-      
-      
-      }
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .job-card {
-            background-color: white;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .job-card h3 {
-            margin: 0;
-            color: #333;
-        }
-        .job-card p {
-            margin: 5px 0;
-            color: #666;
-        }
-        .job-card button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .job-card button:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
-        
-        
-    </style>
+  <meta charset="UTF-8" />
+  <title>إضافة وظيفة جديدة</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    label, input, textarea, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    input, textarea {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>الوظائف المتاحة</h1>
-    </header>
-    
-    <label  for="search"><h3>ابحث عن وظيفة</h3> </label>
-    <input placeholder="يمكنك البحث عن الوظيفة هنا" type="search" id="search">
-  
+  <h1>إضافة وظيفة جديدة</h1>
+  <form id="jobForm">
+    <label for="title">عنوان الوظيفة</label>
+    <input type="text" id="title" required />
 
-    <div class="container">
-        <!-- بطاقة الوظيفة الأولى -->
-         </div>
-        <div class="job-card">
-            <div class="job-info">
-                <h3> مطلوب صناعي باسطة</h3>
-                <p>الموقع : شندي </p>
-                <p>المدة: اكثر من  ثلاثة اشهر</p>
-                <p> الراتب : غير معلن</p>
-            </div>
-          <a href="Tfaseel.html"><button>عرض التفاصيل</butto></a>
-        </div>
-        <div class="job-card">
-            <div class="job-info">
-                <h3>مطلوب عامل بناء</h3>
-                <p>الموقع: الخرطوم</p>
-                <p>المدة: يوم واحد</p>
-                <p>الراتب/يومي: 17,000
-                سوداني</p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
+    <label for="location">الموقع</label>
+    <input type="text" id="location" required />
 
-        <!-- بطاقة الوظيفة الثانية -->
-        <div class="job-card">
-            <div class="job-info">
-                <h3>مطلوب مندوب مبيعات</h3>
-                <p>الموقع: أم درمان</p>
-                <p>المدة: أسبوع</p>
-                <p>الراتب/شهري: 120,000 جنيه  سوداني</p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
+    <label for="duration">مدة العمل</label>
+    <input type="text" id="duration" required />
 
-        <!-- بطاقة الوظيفة الثالثة -->
-            <div class="job-card">
-            <div class="job-info">
-                <h3>مطلوب  كاتب محتوئ</h3>
-                <p>الموقع: لا يشترض (عن بعد (</p>
-                <p
-                <p>الراتب/شهري: 500,000 جنيه  سوداني</p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
-        <div class="job-card">
-            <div class="job-info">
-                <h3>مطلوب مساعد إداري</h3>
-                <p>الموقع: بحري</p>
-                <p>المدة: شهر</p>
-                <p>الراتب/شهري : 800,000  جنيه سوداني</p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
-        <div class="job-card">
-            <div class="job-info">
-                <h3> مطلوب عامل سوبر ماركت</h3>
-                <p> الموقع : الخرطوم ,الرياض</p>
-                <p> المدة: ثلاثة اشهر </p>
-                <p> الراتب: غير معلن</p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
-         </div>
-        <div class="job-card">
-            <div class="job-info">
-              <h3>مطلوب عامل توصيل بيتزاء</h3>
-                <p> الموقع :بحري</p> 
-                <p>المدة : ستة أشهر</p>
-                <p>الراتب/يومي : 19,000 جنيه سوداني </p>
-            </div>
-            <button>عرض التفاصيل</button>
-        </div>
-    
-     <p > دي دايرة قاعدة بيانات للاكمال</p>
-    </div> 
-    
-    <footer>
-        <p>© 2025 موقع التوظيف - جميع الحقوق محفوظة</p>
-    </footer>
+    <label for="salary">الراتب</label>
+    <input type="text" id="salary" required />
+
+    <label for="description">وصف الوظيفة</label>
+    <textarea id="description" rows="4" required></textarea>
+
+    <button type="submit">حفظ الوظيفة</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+      authDomain: "shaglni-c64c0.firebaseapp.com",
+      projectId: "shaglni-c64c0",
+      storageBucket: "shaglni-c64c0.appspot.com",
+      messagingSenderId: "768887356636",
+      appId: "1:768887356636:web:8a697d04b860eba89c8819",
+      measurementId: "G-QNRW412GZD"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("jobForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const job = {
+        title: form.title.value.trim(),
+        location: form.location.value.trim(),
+        duration: form.duration.value.trim(),
+        salary: form.salary.value.trim(),
+        description: form.description.value.trim()
+      };
+
+      try {
+        await addDoc(collection(db, "jobs"), job);
+        alert("تم حفظ الوظيفة بنجاح!");
+        form.reset();
+      } catch (error) {
+        alert("حدث خطأ أثناء الحفظ: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
