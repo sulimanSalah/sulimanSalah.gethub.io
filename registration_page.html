@@ -1,173 +1,183 @@
-<!DOCTYPE html>
-<html lang="ar">
+<!-- 🔹 registration_page.html --><!DOCTYPE html><html lang="ar">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>تسجيل حساب جديد - موقع التوظيف</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        form {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        form h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin: 12px 0 6px;
-            font-weight: bold;
-            color: #333;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .form-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .form-footer a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-        .message {
-            text-align: center;
-            margin-top: 10px;
-            min-height: 24px;
-            font-weight: bold;
-        }
-        .error {
-            color: red;
-        }
-        .success {
-            color: green;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل حساب جديد - موقع التوظيف</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      appId: "YOUR_APP_ID"
+    };firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background-color: #f9f9f9;
+    }
+    form {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-footer {
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>إنشاء حساب جديد</h1>
-    </header>
+  <form onsubmit="return registerUser(event)">
+    <h2>معلومات الحساب</h2>
+    <label for="name">الاسم الكامل:</label>
+    <input type="text" id="name" required><label for="email">البريد الإلكتروني:</label>
+<input type="email" id="email" required>
 
-    <form id="registerForm" onsubmit="return registerUser(event)">
-        <h2>معلومات الحساب</h2>
+<label for="password">كلمة المرور:</label>
+<input type="password" id="password" required>
 
-        <label for="name">الاسم الكامل:</label>
-        <input type="text" id="name" name="name" placeholder="أدخل اسمك الكامل" required />
+<label for="role">نوع الحساب:</label>
+<select id="role" required>
+  <option value="employee">موظف</option>
+  <option value="employer">صاحب عمل</option>
+</select>
 
-        <label for="email">البريد الإلكتروني:</label>
-        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required />
+<button type="submit">تسجيل</button>
+<div class="form-footer">
+  <p>هل لديك حساب؟ <a href="login_page.html">تسجيل الدخول</a></p>
+</div>
 
-        <label for="password">كلمة المرور:</label>
-        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required />
+  </form>  <script>
+    function registerUser(event) {
+      event.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value;
 
-        <label for="role">نوع الحساب:</label>
-        <select id="role" name="role" required>
-            <option value="" disabled selected>اختر نوع الحساب</option>
-            <option value="employee">موظف</option>
-            <option value="employer">صاحب عمل</option>
-        </select>
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const user = userCredential.user;
+          return user.updateProfile({ displayName: name })
+            .then(() => {
+              return db.collection("users").doc(user.uid).set({
+                name,
+                email,
+                role,
+                uid: user.uid
+              });
+            });
+        })
+        .then(() => {
+          alert("تم إنشاء الحساب بنجاح");
+          window.location.href = "login_page.html";
+        })
+        .catch(error => {
+          alert("خطأ: " + error.message);
+        });
+    }
+  </script></body>
+</html><!-- 🔹 login_page.html --><!DOCTYPE html><html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - موقع التوظيف</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      appId: "YOUR_APP_ID"
+    };firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-        <button type="submit">تسجيل</button>
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background-color: #f9f9f9;
+    }
+    form {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+    }
+    input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-footer {
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="return loginUser(event)">
+    <h2>دخول</h2>
+    <label for="email">البريد الإلكتروني:</label>
+    <input type="email" id="email" required><label for="password">كلمة المرور:</label>
+<input type="password" id="password" required>
 
-        <div class="message" id="message"></div>
+<button type="submit">دخول</button>
+<div class="form-footer">
+  <p>ليس لديك حساب؟ <a href="registration_page.html">تسجيل حساب جديد</a></p>
+</div>
 
-        <div class="form-footer">
-            <p>هل لديك حساب؟ <a href="login_page.html">تسجيل الدخول</a></p>
-        </div>
-    </form>
+  </form>  <script>
+    function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-    <script>
-        function registerUser(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const role = document.getElementById('role').value;
-            const messageDiv = document.getElementById('message');
-
-            messageDiv.textContent = "";
-            messageDiv.className = "message";
-
-            // تحقق بسيط
-            if (!name || !email || !password || !role) {
-                messageDiv.textContent = "يرجى ملء جميع الحقول";
-                messageDiv.classList.add("error");
-                return false;
-            }
-
-            // مثال: تخزين بيانات التسجيل في localStorage (غير آمن للاستخدام الحقيقي)
-            const users = JSON.parse(localStorage.getItem('users') || "[]");
-
-            // تحقق من وجود البريد مسبقاً
-            if (users.some(user => user.email === email)) {
-                messageDiv.textContent = "هذا البريد الإلكتروني مستخدم مسبقاً";
-                messageDiv.classList.add("error");
-                return false;
-            }
-
-            // حفظ المستخدم الجديد
-            users.push({ name, email, password, role });
-            localStorage.setItem('users', JSON.stringify(users));
-
-            messageDiv.textContent = "تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.";
-            messageDiv.classList.add("success");
-
-            // إعادة تعيين النموذج بعد التسجيل
-            document.getElementById('registerForm').reset();
-
-            return false;
-        }
-    </script>
-</body>
+      auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          window.location.href = "account.html";
+        })
+        .catch(error => {
+          alert("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+        });
+    }
+  </script></body>
 </html>
