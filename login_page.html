@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>تسجيل الدخول - موقع شغلني</title>
+<title>إنشاء حساب - موقع شغلني</title>
 <style>
-  html, body {
+  /* إعدادات عامة */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
     height: 100%;
-    margin: 0; padding: 0;
+    margin: 0;
     font-family: Arial, sans-serif;
     direction: rtl;
     background-color: #f9f9f9;
@@ -15,137 +19,113 @@
     justify-content: center;
     align-items: center;
   }
+
+  /* الفورم */
   form {
-    background: white;
-    padding: 30px 35px;
+    background-color: white;
+    padding: 35px 40px;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 400px;
-    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 100%;
+    border: 2px solid #007BFF;
   }
+
   h2 {
-    margin-top: 0; margin-bottom: 25px;
     text-align: center;
-    color: #007BFF;
+    color: #333;
+    margin-bottom: 25px;
   }
+
   label {
     display: block;
+    margin: 12px 0 6px;
     font-weight: bold;
-    margin-top: 15px;
+    color: #333;
   }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
+
+  input, select {
     width: 100%;
     padding: 12px;
-    margin-top: 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
     border-radius: 8px;
+    border: 2px solid #007BFF;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s;
   }
+
+  input:focus, select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.5);
+  }
+
+  button {
+    width: 100%;
+    margin-top: 25px;
+    background-color: #007BFF;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
   button:hover {
     background-color: #0056b3;
   }
-  #error-message {
-    color: red;
-    margin-top: 12px;
+
+  .form-footer {
+    margin-top: 20px;
     text-align: center;
   }
-  .link {
-    margin-top: 15px;
-    text-align: center;
-  }
-  .link a {
+
+  .form-footer a {
     color: #007BFF;
     text-decoration: none;
+    font-weight: bold;
   }
-  .link a:hover {
+
+  .form-footer a:hover {
     text-decoration: underline;
   }
 </style>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
 </head>
 <body>
 
-<form id="loginForm">
-  <h2>تسجيل الدخول</h2>
+<form id="registerForm">
+  <h2>إنشاء حساب جديد</h2>
 
-  <label for="email">البريد الإلكتروني</label>
-  <input type="email" id="email" required placeholder="أدخل بريدك الإلكتروني" />
+  <label for="name">الاسم الكامل:</label>
+  <input type="text" id="name" name="name" placeholder="أدخل اسمك الكامل" required />
 
-  <label for="password">كلمة المرور</label>
-  <input type="password" id="password" required placeholder="أدخل كلمة المرور" />
+  <label for="email">البريد الإلكتروني:</label>
+  <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required />
 
-  <button type="submit">دخول</button>
+  <label for="password">كلمة المرور:</label>
+  <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required />
 
-  <div id="error-message"></div>
+  <label for="role">نوع الحساب:</label>
+  <select id="role" name="role" required>
+    <option value="" disabled selected>اختر نوع الحساب</option>
+    <option value="employee">موظف</option>
+    <option value="employer">صاحب عمل</option>
+  </select>
 
-  <div class="link">
-    <p>ليس لديك حساب؟ <a href="register.html">إنشاء حساب</a></p>
+  <button type="submit">تسجيل</button>
+
+  <div class="form-footer">
+    <p>هل لديك حساب؟ <a href="login_page.html">تسجيل الدخول</a></p>
   </div>
 </form>
 
 <script>
-  // إعداد Firebase
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    // أضف باقي الإعدادات الخاصة بك هنا
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  const loginForm = document.getElementById('loginForm');
-  const errorMessage = document.getElementById('error-message');
-
-  loginForm.addEventListener('submit', (e) => {
+  // مثال معالجة فورم التسجيل (يمكن تعديلها لاحقاً للربط مع Firebase)
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    errorMessage.textContent = '';
-
-    const email = loginForm.email.value.trim();
-    const password = loginForm.password.value;
-
-    auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const uid = userCredential.user.uid;
-        // جلب نوع المستخدم من Firestore
-        return db.collection('users').doc(uid).get();
-      })
-      .then(doc => {
-        if (!doc.exists) {
-          throw new Error("نوع الحساب غير موجود.");
-        }
-        const userData = doc.data();
-        if(userData.role === 'employer') {
-          window.location.href = "employee_listing_page.html";  // صاحب عمل => الموظفون
-        } else if(userData.role === 'employee') {
-          window.location.href = "job_listing_page.html";  // موظف => صفحة الوظائف
-        } else {
-          errorMessage.textContent = "نوع الحساب غير معروف.";
-        }
-      })
-      .catch((error) => {
-        errorMessage.textContent = "خطأ: " + error.message;
-      });
+    alert('تم إرسال بيانات التسجيل بنجاح!');
+    // هنا يمكن إضافة كود إرسال البيانات إلى السيرفر أو Firebase
   });
 </script>
 
