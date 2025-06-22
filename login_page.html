@@ -1,137 +1,153 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>تسجيل الدخول - موقع التوظيف</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        form {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        form h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin: 12px 0 6px;
-            font-weight: bold;
-            color: #333;
-        }
-        input {
-            width: 100%;
-            padding: 12px 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        input:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .form-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .form-footer a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-            font-weight: bold;
-            text-align: center;
-            min-height: 24px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>تسجيل الدخول - موقع شغلني</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  form {
+    background: white;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+    box-sizing: border-box;
+  }
+  h2 {
+    margin-top: 0; margin-bottom: 25px;
+    text-align: center;
+    color: #007BFF;
+  }
+  label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  #error-message {
+    color: red;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .link {
+    margin-top: 15px;
+    text-align: center;
+  }
+  .link a {
+    color: #007BFF;
+    text-decoration: none;
+  }
+  .link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
 </head>
 <body>
-    <header>
-        <h1>تسجيل الدخول إلى حسابك</h1>
-    </header>
 
-    <form id="loginForm" onsubmit="return loginUser(event)">
-        <h2>دخول</h2>
+<form id="loginForm">
+  <h2>تسجيل الدخول</h2>
 
-        <label for="email">البريد الإلكتروني:</label>
-        <input type="email" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required />
+  <label for="email">البريد الإلكتروني</label>
+  <input type="email" id="email" required placeholder="أدخل بريدك الإلكتروني" />
 
-        <label for="password">كلمة المرور:</label>
-        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required />
+  <label for="password">كلمة المرور</label>
+  <input type="password" id="password" required placeholder="أدخل كلمة المرور" />
 
-        <button type="submit">دخول</button>
+  <button type="submit">دخول</button>
 
-        <div class="error-message" id="errorMsg"></div>
+  <div id="error-message"></div>
 
-        <div class="form-footer">
-            <p>ليس لديك حساب؟ <a href="registration_page.html">تسجيل حساب جديد</a></p>
-            <p><a href="forgot-password.html">نسيت كلمة المرور؟</a></p>
-        </div>
-    </form>
+  <div class="link">
+    <p>ليس لديك حساب؟ <a href="register.html">إنشاء حساب</a></p>
+  </div>
+</form>
 
-    <script>
-        function loginUser(event) {
-            event.preventDefault();
+<script>
+  // إعداد Firebase
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    // أضف باقي الإعدادات الخاصة بك هنا
+  };
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-            // مسح رسالة الخطأ عند محاولة جديدة
-            errorMsg.textContent = "";
+  const loginForm = document.getElementById('loginForm');
+  const errorMessage = document.getElementById('error-message');
 
-            // تحقق بسيط (يمكن تغييره لاحقاً للاتصال بقاعدة بيانات أو Firebase)
-            if (email === "user@example.com" && password === "password123") {
-                localStorage.setItem('loggedIn', 'true');
-                window.location.href = 'account.html';
-            } else {
-                errorMsg.textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-            }
-            return false;
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errorMessage.textContent = '';
+
+    const email = loginForm.email.value.trim();
+    const password = loginForm.password.value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const uid = userCredential.user.uid;
+        // جلب نوع المستخدم من Firestore
+        return db.collection('users').doc(uid).get();
+      })
+      .then(doc => {
+        if (!doc.exists) {
+          throw new Error("نوع الحساب غير موجود.");
         }
-    </script>
+        const userData = doc.data();
+        if(userData.role === 'employer') {
+          window.location.href = "employee_listing_page.html";  // صاحب عمل => الموظفون
+        } else if(userData.role === 'employee') {
+          window.location.href = "job_listing_page.html";  // موظف => صفحة الوظائف
+        } else {
+          errorMessage.textContent = "نوع الحساب غير معروف.";
+        }
+      })
+      .catch((error) => {
+        errorMessage.textContent = "خطأ: " + error.message;
+      });
+  });
+</script>
+
 </body>
 </html>
