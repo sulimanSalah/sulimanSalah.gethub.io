@@ -3,7 +3,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>إعلان عن وظيفة - شغلني</title>  
+    <title>شغلني - منصة التوظيف السودانية</title>  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
     <script src="https://cdn.tailwindcss.com"></script>  
     <style>  
@@ -14,6 +14,11 @@
       
     .gradient-bg {  
         background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);  
+    }  
+      
+    .job-card:hover {  
+        transform: translateY(-5px);  
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);  
     }  
       
     .nav-link {  
@@ -36,62 +41,23 @@
         left: 0;  
     }  
       
-    .job-form-section {  
-        background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),   
-                    url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');  
-        background-size: cover;  
-        background-position: center;  
+    .animate-float {  
+        animation: float 6s ease-in-out infinite;  
     }  
       
-    .form-step {  
-        display: none;  
+    @keyframes float {  
+        0% { transform: translateY(0px); }  
+        50% { transform: translateY(-20px); }  
+        100% { transform: translateY(0px); }  
     }  
       
-    .form-step.active {  
-        display: block;  
-        animation: fadeIn 0.5s ease;  
+    .feature-icon {  
+        transition: all 0.3s ease;  
     }  
       
-    @keyframes fadeIn {  
-        from { opacity: 0; transform: translateY(10px); }  
-        to { opacity: 1; transform: translateY(0); }  
-    }  
-      
-    .step-indicator {  
-        position: relative;  
-    }  
-      
-    .step-indicator::after {  
-        content: '';  
-        position: absolute;  
-        top: 50%;  
-        right: 0;  
-        width: 100%;  
-        height: 2px;  
-        background-color: #e5e7eb;  
-        z-index: -1;  
-    }  
-      
-    .step-indicator .step {  
-        width: 40px;  
-        height: 40px;  
-        border-radius: 50%;  
-        background-color: #e5e7eb;  
-        color: #6b7280;  
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
-        font-weight: bold;  
-    }  
-      
-    .step-indicator .step.active {  
-        background-color: #2563eb;  
-        color: white;  
-    }  
-      
-    .step-indicator .step.completed {  
-        background-color: #10b981;  
-        color: white;  
+    .feature-card:hover .feature-icon {  
+        transform: scale(1.1);  
+        color: #f59e0b;  
     }  
 </style>
 
@@ -121,195 +87,248 @@
     </div>  
 </nav>  
 
-<!-- Job Posting Form Section -->  
-<section class="job-form-section py-16" id="add-job">  
+<!-- Hero Section -->  
+<section class="gradient-bg text-white py-20">  
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">  
+        <div class="md:w-1/2 mb-10 md:mb-0">  
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">  
+                نوفر لك أفضل الفرص الوظيفية في السودان  
+            </h1>  
+            <p class="text-xl mb-8">  
+                منصة "شغلني" تربط بين أصحاب العمل والموظفين المؤهلين بطريقة سهلة وآمنة  
+            </p>  
+            <div class="flex flex-col sm:flex-row gap-4">  
+                <a href="#" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-lg text-center transition">  
+                    ابحث عن وظيفة  
+                </a>  
+                <a href="#" class="bg-white hover:bg-gray-100 text-blue-600 font-bold py-3 px-8 rounded-lg text-center transition">  
+                    أعلن عن وظيفة  
+                </a>  
+            </div>  
+        </div>  
+        <div class="md:w-1/2 flex justify-center">  
+            <img src="https://cdn-icons-png.flaticon.com/512/3800/3800024.png" alt="توظيف" class="w-64 h-64 md:w-80 md:h-80 animate-float">  
+        </div>  
+    </div>  
+</section>  
+
+<!-- Stats Section -->  
+<section class="py-16 bg-white">  
     <div class="container mx-auto px-6">  
-        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">  
-            <div class="p-8">  
-                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">إعلان عن وظيفة جديدة</h2>  
-                  
-                <!-- Form Steps Indicator -->  
-                <div class="step-indicator flex justify-between mb-12">  
-                    <div class="flex flex-col items-center">  
-                        <div class="step active">1</div>  
-                        <div class="text-sm mt-2 font-medium">معلومات الوظيفة</div>  
-                    </div>  
-                    <div class="flex flex-col items-center">  
-                        <div class="step">2</div>  
-                        <div class="text-sm mt-2 font-medium text-gray-500">متطلبات الوظيفة</div>  
-                    </div>  
-                    <div class="flex flex-col items-center">  
-                        <div class="step">3</div>  
-                        <div class="text-sm mt-2 font-medium text-gray-500">تفاصيل الشركة</div>  
-                    </div>  
-                    <div class="flex flex-col items-center">  
-                        <div class="step">4</div>  
-                        <div class="text-sm mt-2 font-medium text-gray-500">مراجعة النشر</div>  
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">  
+            <div class="p-6">  
+                <div class="text-4xl font-bold text-blue-600 mb-2">5,000+</div>  
+                <div class="text-gray-600">وظيفة متاحة</div>  
+            </div>  
+            <div class="p-6">  
+                <div class="text-4xl font-bold text-blue-600 mb-2">3,000+</div>  
+                <div class="text-gray-600">شركة مسجلة</div>  
+            </div>  
+            <div class="p-6">  
+                <div class="text-4xl font-bold text-blue-600 mb-2">50,000+</div>  
+                <div class="text-gray-600">باحث عن عمل</div>  
+            </div>  
+            <div class="p-6">  
+                <div class="text-4xl font-bold text-blue-600 mb-2">30+</div>  
+                <div class="text-gray-600">مجال وظيفي</div>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- Features Section -->  
+<section class="py-16 bg-gray-50" id="features">  
+    <div class="container mx-auto px-6">  
+        <div class="text-center mb-16">  
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">لماذا تختار منصة شغلني؟</h2>  
+            <p class="text-gray-600 max-w-2xl mx-auto">نقدم حلولاً مبتكرة لتسهيل عملية التوظيف في السودان</p>  
+        </div>  
+          
+        <div class="grid md:grid-cols-3 gap-8">  
+            <div class="feature-card bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">  
+                <div class="feature-icon text-blue-600 text-4xl mb-6">  
+                    <i class="fas fa-bolt"></i>  
+                </div>  
+                <h3 class="text-xl font-bold mb-3">سرعة في التوظيف</h3>  
+                <p class="text-gray-600">وصل إلى آلاف المتقدمين للوظائف في دقائق معدودة واختر الأفضل منهم</p>  
+            </div>  
+              
+            <div class="feature-card bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">  
+                <div class="feature-icon text-blue-600 text-4xl mb-6">  
+                    <i class="fas fa-shield-alt"></i>  
+                </div>  
+                <h3 class="text-xl font-bold mb-3">موثوقية عالية</h3>  
+                <p class="text-gray-600">جميع الوظائف والشركات تمر بعملية تحقق لضمان الجودة والمصداقية</p>  
+            </div>  
+              
+            <div class="feature-card bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">  
+                <div class="feature-icon text-blue-600 text-4xl mb-6">  
+                    <i class="fas fa-headset"></i>  
+                </div>  
+                <h3 class="text-xl font-bold mb-3">دعم فني متكامل</h3>  
+                <p class="text-gray-600">فريق دعم فني متاح على مدار الساعة لمساعدتك في أي استفسار</p>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- Job Categories -->  
+<section class="py-16 bg-white" id="jobs">  
+    <div class="container mx-auto px-6">  
+        <div class="text-center mb-16">  
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">تصفح الوظائف حسب التخصص</h2>  
+            <p class="text-gray-600 max-w-2xl mx-auto">اختر من بين عشرات التخصصات الوظيفية المختلفة</p>  
+        </div>  
+          
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">  
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-laptop-code text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">تكنولوجيا المعلومات</h3>  
+                    <p class="text-sm text-gray-500">320 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-chart-line text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">المالية والمحاسبة</h3>  
+                    <p class="text-sm text-gray-500">280 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-stethoscope text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">القطاع الصحي</h3>  
+                    <p class="text-sm text-gray-500">190 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-graduation-cap text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">التعليم والتدريس</h3>  
+                    <p class="text-sm text-gray-500">150 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-hammer text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">الهندسة</h3>  
+                    <p class="text-sm text-gray-500">210 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-utensils text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">المطاعم والضيافة</h3>  
+                    <p class="text-sm text-gray-500">120 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-truck text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">اللوجستيات</h3>  
+                    <p class="text-sm text-gray-500">90 وظيفة</p>  
+                </div>  
+            </a>  
+              
+            <a href="#" class="job-card bg-gray-50 hover:bg-blue-50 p-6 rounded-lg border border-gray-200 transition flex items-center">  
+                <div class="bg-blue-100 p-3 rounded-full mr-4">  
+                    <i class="fas fa-paint-brush text-blue-600"></i>  
+                </div>  
+                <div>  
+                    <h3 class="font-bold">التصميم والإبداع</h3>  
+                    <p class="text-sm text-gray-500">85 وظيفة</p>  
+                </div>  
+            </a>  
+        </div>  
+          
+        <div class="text-center mt-12">  
+            <a href="#" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">  
+                عرض جميع الوظائف  
+            </a>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- Testimonials -->  
+<section class="py-16 bg-gray-50">  
+    <div class="container mx-auto px-6">  
+        <div class="text-center mb-16">  
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">آراء عملائنا</h2>  
+            <p class="text-gray-600 max-w-2xl mx-auto">ما يقوله عنا أصحاب العمل والموظفون</p>  
+        </div>  
+          
+        <div class="grid md:grid-cols-3 gap-8">  
+            <div class="bg-white p-8 rounded-xl shadow-md">  
+                <div class="flex items-center mb-4">  
+                    <div class="text-yellow-400 mr-2">  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
                     </div>  
                 </div>  
-                  
-                <!-- Multi-Step Form -->  
-                <form id="jobPostForm">  
-                    <!-- Step 1: Job Information -->  
-                    <div class="form-step active" id="step1">  
-                        <h3 class="text-xl font-semibold mb-6 text-blue-600">معلومات الوظيفة الأساسية</h3>  
-                          
-                        <div class="grid md:grid-cols-2 gap-6">  
-                            <div>  
-                                <label for="jobTitle" class="block text-sm font-medium text-gray-700 mb-1">عنوان الوظيفة *</label>  
-                                <input type="text" id="jobTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="مثال: مبرمج ويب" required>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="jobType" class="block text-sm font-medium text-gray-700 mb-1">نوع الوظيفة *</label>  
-                                <select id="jobType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                                    <option value="">اختر نوع الوظيفة</option>  
-                                    <option value="full-time">دوام كامل</option>  
-                                    <option value="part-time">دوام جزئي</option>  
-                                    <option value="contract">عقد</option>  
-                                    <option value="freelance">عمل حر</option>  
-                                    <option value="internship">تدريب</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="jobCategory" class="block text-sm font-medium text-gray-700 mb-1">التصنيف الوظيفي *</label>  
-                                <select id="jobCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                                    <option value="">اختر التصنيف</option>  
-                                    <option value="it">تكنولوجيا المعلومات</option>  
-                                    <option value="finance">المالية والمحاسبة</option>  
-                                    <option value="healthcare">القطاع الصحي</option>  
-                                    <option value="education">التعليم والتدريس</option>  
-                                    <option value="engineering">الهندسة</option>  
-                                    <option value="marketing">التسويق</option>  
-                                    <option value="design">التصميم</option>  
-                                    <option value="hr">الموارد البشرية</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="jobLocation" class="block text-sm font-medium text-gray-700 mb-1">الموقع *</label>  
-                                <select id="jobLocation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                                    <option value="">اختر الموقع</option>  
-                                    <option value="khartoum">الخرطوم</option>  
-                                    <option value="bahri">بحري</option>  
-                                    <option value="omdurman">أم درمان</option>  
-                                    <option value="port-sudan">بورتسودان</option>  
-                                    <option value="medani">الجزيرة</option>  
-                                    <option value="nyala">نيالا</option>  
-                                    <option value="remote">عمل عن بعد</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div class="md:col-span-2">  
-                                <label for="jobDescription" class="block text-sm font-medium text-gray-700 mb-1">وصف الوظيفة *</label>  
-                                <textarea id="jobDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="صف الوظيفة والمهام المطلوبة..." required></textarea>  
-                            </div>  
-                        </div>  
-                          
-                        <div class="flex justify-end mt-8">  
-                            <button type="button" onclick="nextStep(1, 2)" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">  
-                                التالي <i class="fas fa-arrow-left ml-2"></i>  
-                            </button>  
-                        </div>  
+                <p class="text-gray-600 mb-6">"وجدت أفضل الموظفين لشركتي من خلال منصة شغلني، العملية كانت سلسة وفعالة جدًا."</p>  
+                <div class="flex items-center">  
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="عميل" class="w-12 h-12 rounded-full mr-4">  
+                    <div>  
+                        <h4 class="font-bold">أحمد محمد</h4>  
+                        <p class="text-sm text-gray-500">مدير موارد بشرية</p>  
                     </div>  
-                      
-                    <!-- Step 2: Job Requirements -->  
-                    <div class="form-step" id="step2">  
-                        <h3 class="text-xl font-semibold mb-6 text-blue-600">متطلبات الوظيفة</h3>  
-                          
-                        <div class="grid md:grid-cols-2 gap-6">  
-                            <div>  
-                                <label for="experienceLevel" class="block text-sm font-medium text-gray-700 mb-1">مستوى الخبرة *</label>  
-                                <select id="experienceLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                                    <option value="">اختر مستوى الخبرة</option>  
-                                    <option value="fresh">خريج جديد</option>  
-                                    <option value="1-3">1-3 سنوات</option>  
-                                    <option value="3-5">3-5 سنوات</option>  
-                                    <option value="5+">أكثر من 5 سنوات</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="educationLevel" class="block text-sm font-medium text-gray-700 mb-1">المؤهل العلمي *</label>  
-                                <select id="educationLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                                    <option value="">اختر المؤهل</option>  
-                                    <option value="high-school">ثانوية عامة</option>  
-                                    <option value="diploma">دبلوم</option>  
-                                    <option value="bachelor">بكالوريوس</option>  
-                                    <option value="master">ماجستير</option>  
-                                    <option value="phd">دكتوراه</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div class="md:col-span-2">  
-                                <label class="block text-sm font-medium text-gray-700 mb-1">المهارات المطلوبة *</label>  
-                                <div class="flex flex-wrap gap-2 mb-2" id="skillsContainer"></div>  
-                                <div class="flex">  
-                                    <input type="text" id="skillInput" class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-blue-500 focus:border-blue-500" placeholder="أضف مهارة ثم اضغط Enter">  
-                                    <button type="button" onclick="addSkill()" class="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition">  
-                                        <i class="fas fa-plus"></i>  
-                                    </button>  
-                                </div>  
-                            </div>  
-                              
-                            <div class="md:col-span-2">  
-                                <label for="benefits" class="block text-sm font-medium text-gray-700 mb-1">مميزات الوظيفة</label>  
-                                <textarea id="benefits" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="مثل: تأمين صحي، مواصلات، حوافز..."></textarea>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="salaryRange" class="block text-sm font-medium text-gray-700 mb-1">نطاق الراتب (اختياري)</label>  
-                                <select id="salaryRange" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">  
-                                    <option value="">اختر نطاق الراتب</option>  
-                                    <option value="0-1000">0 - 1,000 SDG</option>  
-                                    <option value="1000-3000">1,000 - 3,000 SDG</option>  
-                                    <option value="3000-5000">3,000 - 5,000 SDG</option>  
-                                    <option value="5000-10000">5,000 - 10,000 SDG</option>  
-                                    <option value="10000+">أكثر من 10,000 SDG</option>  
-                                    <option value="negotiable">قابل للتفاوض</option>  
-                                </select>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="vacancies" class="block text-sm font-medium text-gray-700 mb-1">عدد الشواغر</label>  
-                                <input type="number" id="vacancies" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" value="1">  
-                            </div>  
-                        </div>  
-                          
-                        <div class="flex justify-between mt-8">  
-                            <button type="button" onclick="prevStep(2, 1)" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">  
-                                <i class="fas fa-arrow-right mr-2"></i> السابق  
-                            </button>  
-                            <button type="button" onclick="nextStep(2, 3)" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">  
-                                التالي <i class="fas fa-arrow-left ml-2"></i>  
-                            </button>  
-                        </div>  
+                </div>  
+            </div>  
+              
+            <div class="bg-white p-8 rounded-xl shadow-md">  
+                <div class="flex items-center mb-4">  
+                    <div class="text-yellow-400 mr-2">  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
                     </div>  
-                      
-                    <!-- Step 3: Company Details -->  
-                    <div class="form-step" id="step3">  
-                        <h3 class="text-xl font-semibold mb-6 text-blue-600">معلومات الشركة</h3>  
-                          
-                        <div class="grid md:grid-cols-2 gap-6">  
-                            <div>  
-                                <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">اسم الشركة *</label>  
-                                <input type="text" id="companyName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="companyWebsite" class="block text-sm font-medium text-gray-700 mb-1">موقع الشركة (اختياري)</label>  
-                                <input type="url" id="companyWebsite" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="https://example.com">  
-                            </div>  
-                              
-                            <div class="md:col-span-2">  
-                                <label for="companyDescription" class="block text-sm font-medium text-gray-700 mb-1">وصف مختصر عن الشركة</label>  
-                                <textarea id="companyDescription" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>  
-                            </div>  
-                              
-                            <div>  
-                                <label for="companyLogo" class="block text-sm font-medium text-gray-700 mb-1">شعار الشركة (اختياري)</label>  
-                                <div class="flex items-center">  
-                                    <label for="companyLogoUpload" class="cursor-pointer">  
-                                        <div class="w-16 h-16 border-2 border-dashed border-gray
+                </div>  
+                <p class="text-gray-600 mb-6">"حصلت على وظيفة أحلامي في أقل من أسبوع بعد تسجيلي في المنصة، شكرًا لفريق شغلني."</p>  
+                <div class="flex items-center">  
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="عميل" class="w-12 h-12 rounded-full mr-4">  
+                    <div>  
+                        <h4 class="font-bold">سارة عبد الله</h4>  
+                        <p class="text-sm text-gray-500">مصممة جرافيك</p>  
+                    </div>  
+                </div>  
+            </div>  
+              
+            <div class="bg-white p-8 rounded-xl shadow-md">  
+                <div class="flex items-center mb-4">  
+                    <div class="text-yellow-400 mr-2">  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star"></i>  
+                        <i class="fas fa-star-half-alt"></i>  
+                    </div>  
+                </div>  
+                <p class="text-gray-600 mb-6">"المنصة وفرت علينا الكثير من الوقت والجهد في عملية التوظيف، ننصح بها كل الشركات."</p>  
+                <div class="flex items-center
 
