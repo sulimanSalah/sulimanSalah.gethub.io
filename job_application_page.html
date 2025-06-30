@@ -1,95 +1,123 @@
 <!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شغلني - تسجيل موظف جديد</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script type="module">
-    // Firebase config
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إضافة موظف - شغلني</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background-color: #f9fafb; }
+    input, select, textarea { direction: rtl; }
+  </style>
+</head>
+<body class="p-4">
+  <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+    <h1 class="text-2xl font-bold text-center mb-4 text-gray-800">📥 إضافة موظف جديد</h1><form id="employeeForm">
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">👤 الاسم الكامل</label>
+    <input type="text" id="name" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">💼 التخصص</label>
+    <input type="text" id="specialty" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">📍 العنوان (المدينة، المنطقة)</label>
+    <input type="text" id="location" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">📆 سنوات الخبرة</label>
+    <input type="number" id="experience" required min="0" class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">💰 السعر (من - إلى)</label>
+    <div class="flex gap-2">
+      <input type="number" id="minPrice" placeholder="أقل سعر" required class="w-1/2 p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="number" id="maxPrice" placeholder="أعلى سعر" required class="w-1/2 p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">🎯 المهارات (افصل بينها بفاصلة)</label>
+    <input type="text" id="skills" placeholder="مثال: سباكة, دهان, بناء" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">📷 الصورة الشخصية</label>
+    <input type="file" id="profileImage" accept="image/*" required class="w-full" />
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-1">🖼️ صور من أعمال سابقة</label>
+    <input type="file" id="workImages" accept="image/*" multiple required class="w-full" />
+  </div>
+
+  <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-200">
+    ➕ إضافة الموظف
+  </button>
+</form>
+
+  </div>  <!-- Firebase SDK -->  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";const firebaseConfig = {
-  apiKey: "AIzaSyBRnKtJxWSA1Btdj1w8OP3LCMBfuP-iFCM",
-  authDomain: "shaglni-c64c0.firebaseapp.com",
-  projectId: "shaglni-c64c0",
-  storageBucket: "shaglni-c64c0.appspot.com",
-  messagingSenderId: "1093251098577",
-  appId: "1:1093251098577:web:5fa52b85cbb604d8d3e769"
-};
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+      authDomain: "shaglni-c64c0.firebaseapp.com",
+      projectId: "shaglni-c64c0",
+      storageBucket: "shaglni-c64c0.appspot.com",
+      messagingSenderId: "768887356636",
+      appId: "1:768887356636:web:7746666c5d007daf9c8819"
+    };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('employeeRegistrationForm');
-  const nextBtn = document.getElementById('nextBtn');
-  const sections = document.querySelectorAll('.form-section');
-  let currentSection = 0;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-  nextBtn.addEventListener('click', async () => {
-    if (currentSection < sections.length - 1) {
-      sections[currentSection].style.display = 'none';
-      currentSection++;
-      sections[currentSection].style.display = 'block';
-      updateStepper();
-    } else {
-      nextBtn.disabled = true;
-      nextBtn.innerText = 'جارٍ الحفظ...';
+    const form = document.getElementById("employeeForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-      const galleryFiles = document.getElementById('gallery').files;
-      const galleryUrls = [];
+      const name = form.name.value;
+      const specialty = form.specialty.value;
+      const location = form.location.value;
+      const experience = form.experience.value;
+      const minPrice = form.minPrice.value;
+      const maxPrice = form.maxPrice.value;
+      const skills = form.skills.value.split(",").map(skill => skill.trim());
+      const profileFile = form.profileImage.files[0];
+      const workFiles = form.workImages.files;
 
-      for (let i = 0; i < galleryFiles.length; i++) {
-        const imageRef = ref(storage, `gallery/${Date.now()}_${galleryFiles[i].name}`);
-        await uploadBytes(imageRef, galleryFiles[i]);
-        const downloadURL = await getDownloadURL(imageRef);
-        galleryUrls.push(downloadURL);
+      const profileRef = ref(storage, `employees/${Date.now()}_${profileFile.name}`);
+      await uploadBytes(profileRef, profileFile);
+      const profileURL = await getDownloadURL(profileRef);
+
+      const workImageURLs = [];
+      for (const file of workFiles) {
+        const workRef = ref(storage, `employees/works/${Date.now()}_${file.name}`);
+        await uploadBytes(workRef, file);
+        const url = await getDownloadURL(workRef);
+        workImageURLs.push(url);
       }
 
-      const data = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        jobTitle: document.getElementById('jobTitle').value,
-        experience: document.getElementById('experience').value,
-        skills: document.getElementById('skills').value,
-        gallery: galleryUrls,
-        timestamp: new Date()
-      };
+      await addDoc(collection(db, "employees"), {
+        name, specialty, location,
+        experience: +experience,
+        minPrice: +minPrice,
+        maxPrice: +maxPrice,
+        skills,
+        profileURL,
+        workImageURLs,
+        createdAt: new Date()
+      });
 
-      try {
-        await addDoc(collection(db, 'employees'), data);
-        alert('تم تسجيل الموظف بنجاح!');
-        form.reset();
-        sections.forEach(section => section.style.display = 'none');
-        sections[0].style.display = 'block';
-        currentSection = 0;
-        updateStepper();
-      } catch (error) {
-        console.error("فشل الإرسال:", error);
-        alert("حدث خطأ أثناء إرسال البيانات.");
-      }
-
-      nextBtn.disabled = false;
-      nextBtn.innerText = 'التالي';
-    }
-  });
-
-  function updateStepper() {
-    const steps = document.querySelectorAll('.step');
-    steps.forEach((step, index) => {
-      step.classList.remove('active');
-      if (index === currentSection) step.classList.add('active');
+      alert("✅ تم إضافة الموظف بنجاح!");
+      form.reset();
     });
-  }
-});
-
-  </script>
-</head>
-<body>
-<!-- (نفس كود HTML الذي أرسلته أنت أعلاه، بنفس التنسيق الكامل، مع التأكد أن الـ id لكل input كما هو في سكربت JavaScript) -->
-<!-- يفضل لصقه كاملاً داخل <body> هنا مع الاحتفاظ بالتنسيق -->
-</body>
+  </script></body>
 </html>
