@@ -1,123 +1,289 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>إضافة موظف - شغلني</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Cairo', sans-serif; background-color: #f9fafb; }
-    input, select, textarea { direction: rtl; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدخال الوظائف - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .step.active {
+            background-color: var(--success);
+        }
+
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .form-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .error-message {
+            color: var(--danger);
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body class="p-4">
-  <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-    <h1 class="text-2xl font-bold text-center mb-4 text-gray-800">📥 إضافة موظف جديد</h1><form id="employeeForm">
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">👤 الاسم الكامل</label>
-    <input type="text" id="name" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
+                    <a href="#" class="text-blue-600 font-medium">إدخال الوظائف</a>
+                </div>
+                
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">💼 التخصص</label>
-    <input type="text" id="specialty" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
+    <!-- محتوى الصفحة -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- خطوات إدخال الوظائف -->
+        <div class="step-container">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+            <div class="step">4</div>
+            <div class="step">5</div>
+        </div>
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">📍 العنوان (المدينة، المنطقة)</label>
-    <input type="text" id="location" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
+        <!-- نموذج إدخال الوظائف -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
+            <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>
+            <form id="jobForm">
+                <div class="mb-4">
+                    <label for="profileImage" class="block text-sm font-medium text-gray-700">رفع صورة الملف الشخصي</label>
+                    <input type="file" id="profileImage" accept="image/*" 
+                           class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>
+                    <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل" 
+                           class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="jobTitle" class="block text-sm font-medium text-gray-700">الوظيفة</label>
+                    <input type="text" id="jobTitle" placeholder="أدخل الوظيفة" 
+                           class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(1)">
+                    التالي
+                </button>
+            </form>
+        </div>
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">📆 سنوات الخبرة</label>
-    <input type="number" id="experience" required min="0" class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+            <h2 class="text-lg font-bold mb-4">الخطوة 2: تفاصيل الموقع والخبرة</h2>
+            <div class="mb-4">
+                <label for="jobLocation" class="block text-sm font-medium text-gray-700">الموقع</label>
+                <input type="text" id="jobLocation" placeholder="أدخل الموقع" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <div class="mb-4">
+                <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>
+                <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(2)">
+                السابق
+            </button>
+            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(2)">
+                التالي
+            </button>
+        </div>
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">💰 السعر (من - إلى)</label>
-    <div class="flex gap-2">
-      <input type="number" id="minPrice" placeholder="أقل سعر" required class="w-1/2 p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <input type="number" id="maxPrice" placeholder="أعلى سعر" required class="w-1/2 p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+            <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات</h2>
+            <div class="mb-4">
+                <label for="skill1" class="block text-sm font-medium text-gray-700">المهارة 1</label>
+                <input type="text" id="skill1" placeholder="أدخل المهارة" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill2" class="block text-sm font-medium text-gray-700">المهارة 2</label>
+                <input type="text" id="skill2" placeholder="أدخل المهارة" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill3" class="block text-sm font-medium text-gray-700">المهارة 3</label>
+                <input type="text" id="skill3" placeholder="أدخل المهارة" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill4" class="block text-sm font-medium text-gray-700">المهارة 4</label>
+                <input type="text" id="skill4" placeholder="أدخل المهارة" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill5" class="block text-sm font-medium text-gray-700">المهارة 5</label>
+                <input type="text" id="skill5" placeholder="أدخل المهارة" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="error-message hidden" id="skillError">يرجى إدخال مهارات تتعلق بالوظيفة المحددة.</div>
+            
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(3)">
+                السابق
+            </button>
+            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="validateSkills()">
+                التالي
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+            <h2 class="text-lg font-bold mb-4">الخطوة 4: الأعمال السابقة</h2>
+            <div class="mb-4">
+                <label for="previousWorks" class="block text-sm font-medium text-gray-700">رفع صور الأعمال السابقة</label>
+                <input type="file" id="previousWorks" multiple 
+                       class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(4)">
+                السابق
+            </button>
+            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(4)">
+                التالي
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
+            <h2 class="text-lg font-bold mb-4">الخطوة 5: تأكيد المعلومات</h2>
+            <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>
+            <div class="mb-4">
+                <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>
+                <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="salaryTo" class="block text-sm font-medium text-gray-700">إلى</label>
+                <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" 
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(5)">
+                السابق
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="submitForm()">
+                إرسال
+            </button>
+        </div>
     </div>
-  </div>
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">🎯 المهارات (افصل بينها بفاصلة)</label>
-    <input type="text" id="skills" placeholder="مثال: سباكة, دهان, بناء" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
+    <script>
+        let currentStep = 1;
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">📷 الصورة الشخصية</label>
-    <input type="file" id="profileImage" accept="image/*" required class="w-full" />
-  </div>
+        function nextStep(step) {
+            document.getElementById(`step${step}`).classList.add('hidden');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            updateSteps();
+        }
 
-  <div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-1">🖼️ صور من أعمال سابقة</label>
-    <input type="file" id="workImages" accept="image/*" multiple required class="w-full" />
-  </div>
+        function prevStep(step) {
+            document.getElementById(`step${step}`).classList.add('hidden');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            updateSteps();
+        }
 
-  <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition duration-200">
-    ➕ إضافة الموظف
-  </button>
-</form>
+        function updateSteps() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active');
+                if (index < currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
 
-  </div>  <!-- Firebase SDK -->  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+        function validateSkills() {
+            const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
+            const skills = [
+                document.getElementById('skill1').value.toLowerCase(),
+                document.getElementById('skill2').value.toLowerCase(),
+                document.getElementById('skill3').value.toLowerCase(),
+                document.getElementById('skill4').value.toLowerCase(),
+                document.getElementById('skill5').value.toLowerCase()
+            ];
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-      authDomain: "shaglni-c64c0.firebaseapp.com",
-      projectId: "shaglni-c64c0",
-      storageBucket: "shaglni-c64c0.appspot.com",
-      messagingSenderId: "768887356636",
-      appId: "1:768887356636:web:7746666c5d007daf9c8819"
-    };
+            const relevantSkills = skills.filter(skill => skill.includes(jobTitle));
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+            if (relevantSkills.length === 0) {
+                document.getElementById('skillError').classList.remove('hidden');
+            } else {
+                document.getElementById('skillError').classList.add('hidden');
+                nextStep(3);
+            }
+        }
 
-    const form = document.getElementById("employeeForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = form.name.value;
-      const specialty = form.specialty.value;
-      const location = form.location.value;
-      const experience = form.experience.value;
-      const minPrice = form.minPrice.value;
-      const maxPrice = form.maxPrice.value;
-      const skills = form.skills.value.split(",").map(skill => skill.trim());
-      const profileFile = form.profileImage.files[0];
-      const workFiles = form.workImages.files;
-
-      const profileRef = ref(storage, `employees/${Date.now()}_${profileFile.name}`);
-      await uploadBytes(profileRef, profileFile);
-      const profileURL = await getDownloadURL(profileRef);
-
-      const workImageURLs = [];
-      for (const file of workFiles) {
-        const workRef = ref(storage, `employees/works/${Date.now()}_${file.name}`);
-        await uploadBytes(workRef, file);
-        const url = await getDownloadURL(workRef);
-        workImageURLs.push(url);
-      }
-
-      await addDoc(collection(db, "employees"), {
-        name, specialty, location,
-        experience: +experience,
-        minPrice: +minPrice,
-        maxPrice: +maxPrice,
-        skills,
-        profileURL,
-        workImageURLs,
-        createdAt: new Date()
-      });
-
-      alert("✅ تم إضافة الموظف بنجاح!");
-      form.reset();
-    });
-  </script></body>
+        function submitForm() {
+            // هنا يمكنك إضافة الكود لإرسال البيانات إلى الخادم
+            alert('تم إرسال الوظيفة بنجاح! تأكد من مراجعة المعلومات المدخلة.');
+            // يمكنك توجيه المستخدم إلى صفحة الموظفين المتاحين هنا
+            window.location.href = 'available_employees.html'; // استبدل هذا بالرابط الصحيح
+        }
+    </script>
+</body>
 </html>
