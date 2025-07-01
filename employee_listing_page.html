@@ -1,60 +1,356 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>عرض الموظفين - شغلني</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body { font-family: 'Cairo', sans-serif; background-color: #f9fafb; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الموظفين - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .employee-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .badge-primary {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #eef2ff;
+            color: #4338ca;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            margin: 0.125rem;
+        }
+
+        .work-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .work-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        /* نافذة معرض الأعمال */
+        .work-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .work-gallery-content {
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+        }
+
+        .work-gallery-slide {
+            display: none;
+            text-align: center;
+        }
+
+        .work-gallery-slide.active {
+            display: block;
+        }
+
+        .work-gallery-slide img {
+            max-height: 70vh;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .work-gallery-caption {
+            color: white;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .work-gallery-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .work-gallery-prev,
+        .work-gallery-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 1rem;
+            user-select: none;
+        }
+
+        .work-gallery-prev {
+            left: 0;
+        }
+
+        .work-gallery-next {
+            right: 0;
+        }
+    </style>
 </head>
-<body class="p-4">
-  <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">👷‍♂️ الموظفون المتاحون</h1>
-  <div id="employeesContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<body>
+    <!-- شريط التنقل -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
+                </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-      authDomain: "shaglni-c64c0.firebaseapp.com",
-      projectId: "shaglni-c64c0",
-      storageBucket: "shaglni-c64c0.appspot.com",
-      messagingSenderId: "768887356636",
-      appId: "1:768887356636:web:7746666c5d007daf9c8819",
-    };
+                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
+                    <a href="#" class="text-blue-600 font-medium">عرض الموظفين</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600">إدارة الشركات</a>
+                </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const employeesContainer = document.getElementById("employeesContainer");
-
-    const renderEmployee = (data) => {
-      const div = document.createElement("div");
-      div.className = "bg-white rounded-2xl shadow-md p-4";
-      div.innerHTML = `
-        <img src="${data.profileURL}" alt="الصورة الشخصية" class="w-full h-48 object-cover rounded-xl mb-3" />
-        <h2 class="text-lg font-bold text-blue-700">${data.name}</h2>
-        <p class="text-sm text-gray-600">💼 التخصص: ${data.specialty}</p>
-        <p class="text-sm text-gray-600">📍 العنوان: ${data.location}</p>
-        <p class="text-sm text-gray-600">📆 الخبرة: ${data.experience} سنوات</p>
-        <p class="text-sm text-gray-600">💰 السعر: ${data.minPrice} - ${data.maxPrice} ج</p>
-        <p class="text-sm text-gray-600 mt-2">🎯 المهارات:</p>
-        <div class="flex flex-wrap gap-1 mb-2">
-          ${data.skills.map(skill => `<span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">${skill}</span>`).join('')}
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
         </div>
-        <p class="text-sm text-gray-600">🖼️ أعمال سابقة:</p>
-        <div class="grid grid-cols-3 gap-1 mt-1">
-          ${data.workImageURLs.map(url => `<img src="${url}" class="h-16 w-full object-cover rounded-md" />`).join('')}
+    </nav>
+
+    <!-- محتوى الصفحة -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- شريط البحث والفلاتر -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex-1">
+                    <div class="relative">
+                        <input type="text" placeholder="ابحث عن موظف بالاسم، المهارات أو التخصص..." 
+                               class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button class="absolute left-3 top-2 text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 rtl:space-x-reverse">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option>جميع التخصصات</option>
+                        <option>تكنولوجيا المعلومات</option>
+                        <option>المالية والمحاسبة</option>
+                        <option>الهندسة</option>
+                        <option>التصميم</option>
+                    </select>
+
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option>جميع المدن</option>
+                        <option>الخرطوم</option>
+                        <option>أم درمان</option>
+                        <option>بحري</option>
+                        <option>بورتسودان</option>
+                    </select>
+
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
+                        <i class="fas fa-filter mr-2"></i> فلترة
+                    </button>
+                </div>
+            </div>
         </div>
-      `;
-      employeesContainer.appendChild(div);
-    };
 
-    const fetchEmployees = async () => {
-      const snapshot = await getDocs(collection(db, "employees"));
-      snapshot.forEach(doc => renderEmployee(doc.data()));
-    };
+        <!-- قائمة الموظفين -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- بطاقة موظف 1 -->
+            <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="صورة الموظف" class="w-16 h-16 rounded-full border-2 border-white shadow">
+                            <div>
+                                <h3 class="font-bold text-lg">محمد أحمد</h3>
+                                <p class="text-gray-600">مطور ويب</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full badge-primary text-xs font-semibold">مُتاح</span>
+                    </div>
 
-    fetchEmployees();
-  </script></body>
-</html>
+                    <div class="mt-4">
+                        <div class="flex items-center text-gray-600 text-sm mb-2">
+                            <i class="fas fa-map-marker-alt ml-1"></i>
+                            <span>الخرطوم، السودان</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 text-sm mb-3">
+                            <i class="fas fa-briefcase ml-1"></i>
+                            <span>3 سنوات خبرة</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                            <div class="flex flex-wrap">
+                                <span class="skill-tag">HTML</span>
+                                <span class="skill-tag">CSS</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">React</span>
+                            </div>
+                        </div>
+
+                        <!-- معرض الأعمال السابقة -->
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
+                            <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto py-2">
+                                <img src="https://via.placeholder.com/300x200/3b82f6/ffffff?text=Project+1" 
+                                     alt="عمل سابق 1" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(0)">
+                                <img src="https://via.placeholder.com/300x200/10b981/ffffff?text=Project+2" 
+                                     alt="عمل سابق 2" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(1)">
+                                <img src="https://via.placeholder.com/300x200/f59e0b/ffffff?text=Project+3" 
+                                     alt="عمل سابق 3" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(2)">
+                                <img src="https://via.placeholder.com/300x200/ef4444/ffffff?text=Project+4" 
+                                     alt="عمل سابق 4" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(3)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                        <div>
+                            <span class="text-gray-600 text-sm">السعر:</span>
+                            <span class="font-bold">1,500 - 2,000 جنيه</span>
+                        </div>
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                            <i class="fas fa-envelope ml-1"></i> التواصل
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بطاقة موظف 2 -->
+            <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="صورة الموظف" class="w-16 h-16 rounded-full border-2 border-white shadow">
+                            <div>
+                                <h3 class="font-bold text-lg">سارة خالد</h3>
+                                <p class="text-gray-600">مصممة جرافيك</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full badge-success text-xs font-semibold">مُوظف</span>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center text-gray-600 text-sm mb-2">
+                            <i class="fas fa-map-marker-alt ml-1"></i>
+                            <span>أم درمان، السودان</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 text-sm mb-3">
+                            <i class="fas fa-briefcase ml-1"></i>
+                            <span>5 سنوات خبرة</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                            <div class="flex flex-wrap">
+                                <span class="skill-tag">Photoshop</span>
+                                <span class="skill-tag">Illustrator</span>
+                                <span class="skill-tag">UI/UX</span>
+                                <span class="skill-tag">Figma</span>
+                            </div>
+                        </div>
+
+                        <!-- معرض الأعمال السابقة -->
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
+                            <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto py-2">
+                                <img src="https://via.placeholder.com/300x200/3b82f6/ffffff?text=Design+1" 
+                                     alt="عمل سابق 1" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(4)">
+                                <img src="https://via.placeholder.com/300x200/10b981/ffffff?text=Design+2" 
+                                     alt="عمل سابق 2" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(5)">
+                                <img src="https://via.placeholder.com/300x200/f59e0b/ffffff?text=Design+3" 
+                                     alt="عمل سابق 3" 
+                                     class="work-thumbnail"
+                                     onclick="openWorkGallery(6)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                        <div>
+                            <span class="text-gray-600 text-sm">السعر:</span>
+                            <span class="font-bold">2,000 - 3,000 جنيه</span>
+                        </div>
+                        <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm">
+                            <i class="fas fa-user-check ml-1"></i> موظف حالياً
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بطاقة موظف 3 -->
