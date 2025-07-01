@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
+
         :root {
             --primary: #2563eb;
             --primary-dark: #1e40af;
@@ -19,12 +19,12 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
-        
+
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
         }
-        
+
         .step {
             width: 40px;
             height: 40px;
@@ -74,14 +74,14 @@
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
-                
+
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
                     <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
                     <a href="#" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
                     <a href="#" class="text-blue-600 font-medium">إدخال الوظائف</a>
                 </div>
-                
+
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="relative">
                         <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
@@ -120,13 +120,13 @@
                     <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل" 
                            class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="jobTitle" class="block text-sm font-medium text-gray-700">الوظيفة</label>
                     <input type="text" id="jobTitle" placeholder="أدخل الوظيفة" 
                            class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                
+
                 <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(1)">
                     التالي
                 </button>
@@ -140,13 +140,13 @@
                 <input type="text" id="jobLocation" placeholder="أدخل الموقع" 
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
-            
+
             <div class="mb-4">
                 <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>
                 <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" 
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
-            
+
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(2)">
                 السابق
             </button>
@@ -174,7 +174,7 @@
             </div>
             <div class="mb-4">
                 <label for="skill4" class="block text-sm font-medium text-gray-700">المهارة 4</label>
-                <input type="text" id="skill4" placeholder="أدخل المهارة" 
+                <input type="text" id="skill4" placeholder="أдخل المهارة" 
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
             <div class="mb-4">
@@ -183,7 +183,7 @@
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
             <div class="error-message hidden" id="skillError">يرجى إدخال مهارات تتعلق بالوظيفة المحددة.</div>
-            
+
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(3)">
                 السابق
             </button>
@@ -199,7 +199,7 @@
                 <input type="file" id="previousWorks" multiple 
                        class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
-            
+
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(4)">
                 السابق
             </button>
@@ -221,7 +221,7 @@
                 <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" 
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
-            
+
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(5)">
                 السابق
             </button>
@@ -260,21 +260,39 @@
 
         function validateSkills() {
             const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
-            const skills = [
-                document.getElementById('skill1').value.toLowerCase(),
-                document.getElementById('skill2').value.toLowerCase(),
-                document.getElementById('skill3').value.toLowerCase(),
-                document.getElementById('skill4').value.toLowerCase(),
-                document.getElementById('skill5').value.toLowerCase()
+            const skillInputs = [
+                document.getElementById('skill1'),
+                document.getElementById('skill2'),
+                document.getElementById('skill3'),
+                document.getElementById('skill4'),
+                document.getElementById('skill5')
             ];
+            
+            // التحقق من وجود نصوص فارغة
+            for (let input of skillInputs) {
+                if (!input.value.trim()) {
+                    document.getElementById('skillError').textContent = 'يرجى إدخال جميع المهارات المطلوبة';
+                    document.getElementById('skillError').classList.remove('hidden');
+                    return;
+                }
+            }
 
-            const relevantSkills = skills.filter(skill => skill.includes(jobTitle));
+            const skills = skillInputs.map(input => input.value.toLowerCase());
+            let relevantSkillsCount = 0;
+            const minRelatedSkills = 2; // العدد الأدنى للمهارات ذات الصلة
+            
+            for (let skill of skills) {
+                if (skill.includes(jobTitle) || jobTitle.includes(skill)) {
+                    relevantSkillsCount++;
+                }
+            }
 
-            if (relevantSkills.length === 0) {
+            if (relevantSkillsCount < minRelatedSkills) {
+                document.getElementById('skillError').textContent = `يجب أن يكون لديك ${minRelatedSkills} مهارات على الأقل ذات صلة بالوظيفة`;
                 document.getElementById('skillError').classList.remove('hidden');
             } else {
                 document.getElementById('skillError').classList.add('hidden');
-                nextStep(3);
+                nextStep(3); // نستخدم رقم الخطوة الحالية لننتقل للخطوة التالية
             }
         }
 
