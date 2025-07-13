@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,391 +7,88 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --light: #f9fafb;
-            --dark: #1f2937;
-            --gray: #6b7280;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
-        }
-
-        .employee-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
-        }
-
-        .employee-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
-        }
-
-        .badge-primary {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .skill-tag {
-            display: inline-flex;
-            align-items: center;
-            background-color: #eef2ff;
-            color: #4338ca;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            margin: 0.125rem;
-        }
-
-        .work-thumbnail {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .work-thumbnail:hover {
-            transform: scale(1.1);
-        }
-
-        /* نافذة معرض الأعمال */
-        .work-gallery-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .work-gallery-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .work-gallery-content {
-            max-width: 800px;
-            width: 90%;
-            position: relative;
-        }
-
-        .work-gallery-slide {
-            display: none;
-            text-align: center;
-        }
-
-        .work-gallery-slide.active {
-            display: block;
-        }
-
-        .work-gallery-slide img {
-            max-height: 70vh;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-
-        .work-gallery-caption {
-            color: white;
-            margin-top: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .work-gallery-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-
-        .work-gallery-prev,
-        .work-gallery-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            padding: 1rem;
-            user-select: none;
-        }
-
-        .work-gallery-prev {
-            left: 0;
-        }
-
-        .work-gallery-next {
-            right: 0;
-        }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f5f7fa; }
+        .employee-card { transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 2px solid transparent; }
+        .employee-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); border-color: #2563eb; }
+        .badge-primary { background-color: #dbeafe; color: #1e40af; }
+        .skill-tag { background-color: #eef2ff; color: #4338ca; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; margin: 0.125rem; }
+        .work-thumbnail { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s; }
+        .work-thumbnail:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
-                </div>
-
-                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-blue-600 font-medium">عرض الموظفين</a>
-                    <a href="employee_registration.html" class="text-gray-700 hover:text-blue-600">إدخال الوظائف</a>
-                </div>
-
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="relative">
-                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-                    </div>
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 sticky top-16 z-40">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex-1">
-                    <div class="relative">
-                        <input type="text" placeholder="ابحث عن موظف بالاسم، المهارات أو التخصص..." 
-                               class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button class="absolute left-3 top-2 text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3 rtl:space-x-reverse overflow-x-auto whitespace-nowrap py-2">
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع التخصصات</option>
-                        <option>تكنولوجيا المعلومات</option>
-                        <option>المالية والمحاسبة</option>
-                        <option>الهندسة</option>
-                        <option>التصميم</option>
-                    </select>
-
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع المدن</option>
-                        <option>الخرطوم</option>
-                        <option>أم درمان</option>
-                        <option>بحري</option>
-                        <option>بورتسودان</option>
-                    </select>
-
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
-                        <i class="fas fa-filter mr-2"></i> فلترة
-                    </button>
-                </div>
-            </div>
-        </div>
-
+        <h1 class="text-2xl font-bold mb-6">عرض الموظفين</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="employeeCardsContainer">
             <p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>
         </div>
-    </div>
+    </div><script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebase/9.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebase/9.0.0/firebase-firestore.js";
 
-    <div class="work-gallery-modal" onclick="closeWorkGallery(event)">
-        <div class="work-gallery-content" onclick="event.stopPropagation()">
-            <span class="work-gallery-close" onclick="closeWorkGallery()">&times;</span>
-            <div id="gallerySlides"></div>
-            <a class="work-gallery-prev" onclick="changeSlide(-1)">&#10094;</a>
-            <a class="work-gallery-next" onclick="changeSlide(1)">&#10095;</a>
-        </div>
-    </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+      authDomain: "shaglni-c64c0.firebaseapp.com",
+      projectId: "shaglni-c64c0",
+      storageBucket: "shaglni-c64c0.appspot.com",
+      messagingSenderId: "768887356636",
+      appId: "1:768887356636:web:11ec1d6991add3309c8819"
+    };
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebase/9.0.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebase/9.0.0/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebase/9.0.0/firebase-firestore.js";
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
-        };
+    async function fetchAndDisplayEmployees() {
+        const container = document.getElementById('employeeCardsContainer');
+        container.innerHTML = '';
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app); // Get Firestore instance
+        const q = query(collection(db, "employees"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
 
-        let allEmployeeData = []; // To store all fetched employee data for the gallery
-
-        // Function to fetch and display employees
-        async function fetchAndDisplayEmployees() {
-            const employeeCardsContainer = document.getElementById('employeeCardsContainer');
-            employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>'; // Loading message
-
-            try {
-                const employeesCollectionRef = collection(db, "employees");
-                const q = query(employeesCollectionRef, orderBy("createdAt", "desc")); // Order by creation date, newest first
-                const querySnapshot = await getDocs(q);
-
-                allEmployeeData = []; // Reset stored data
-                employeeCardsContainer.innerHTML = ''; // Clear loading message / existing cards
-
-                if (querySnapshot.empty) {
-                    employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">لا يوجد موظفون متاحون حاليًا.</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const employeeData = doc.data();
-                    allEmployeeData.push(employeeData); // Store data for gallery
-                    const employeeIndex = allEmployeeData.length - 1; // Get current index for the gallery function
-
-                    const employeeCardHTML = `
-                        <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
-                            <div class="p-6">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <img src="${employeeData.profileImageUrl || 'https://via.placeholder.com/150?text=No+Image'}" alt="صورة الموظف" class="w-16 h-16 rounded-full border-2 border-white shadow">
-                                        <div>
-                                            <h3 class="font-bold text-lg">${employeeData.fullName}</h3>
-                                            <p class="text-gray-600">${employeeData.jobTitle}</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full ${employeeData.status === 'مُتاح' ? 'badge-primary' : 'badge-success'} text-xs font-semibold">${employeeData.status}</span>
-                                </div>
-
-                                <div class="mt-4">
-                                    <div class="flex items-center text-gray-600 text-sm mb-2">
-                                        <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${employeeData.jobLocation}، السودان</span>
-                                    </div>
-                                    <div class="flex items-center text-gray-600 text-sm mb-3">
-                                        <i class="fas fa-briefcase ml-1"></i>
-                                        <span>${employeeData.experienceYears} سنوات خبرة</span>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                        <div class="flex flex-wrap">
-                                            ${employeeData.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
-                                        <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto py-2">
-                                            ${employeeData.previousWorksUrls.map((url, index) => `
-                                                <img src="${url}" 
-                                                     alt="عمل سابق ${index + 1}" 
-                                                     class="work-thumbnail"
-                                                     onclick="openWorkGallery(${employeeIndex}, ${index})">
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex justify-between items-center pt-4 border-t border-gray-100">
-                                    <div>
-                                        <span class="text-gray-600 text-sm">السعر:</span>
-                                        <span class="font-bold">${employeeData.salaryFrom} - ${employeeData.salaryTo} جنيه</span>
-                                    </div>
-                                    <button class="px-4 py-2 ${employeeData.status === 'مُتاح' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-800 cursor-not-allowed'} rounded-lg text-sm" ${employeeData.status === 'مُوظف' ? 'disabled' : ''}>
-                                        <i class="fas fa-envelope ml-1"></i> ${employeeData.status === 'مُتاح' ? 'التواصل' : 'موظف حالياً'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    employeeCardsContainer.insertAdjacentHTML('beforeend', employeeCardHTML);
-                });
-            } catch (error) {
-                console.error("Error fetching employees: ", error);
-                employeeCardsContainer.innerHTML = '<p class="text-red-600 text-center col-span-full">حدث خطأ أثناء تحميل الموظفين.</p>';
-            }
+        if (querySnapshot.empty) {
+            container.innerHTML = '<p class="text-gray-600 text-center col-span-full">لا يوجد موظفون متاحون حالياً.</p>';
+            return;
         }
 
-        // Gallery Functions
-        let currentEmployeeIndex = 0;
-        let currentWorkIndex = 0;
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6";
+            card.innerHTML = `
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <img src="${data.profileImageUrl || 'https://via.placeholder.com/150'}" class="w-16 h-16 rounded-full border shadow">
+                    <div>
+                        <h3 class="font-bold text-lg">${data.fullName}</h3>
+                        <p class="text-gray-600">${data.jobTitle}</p>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-gray-700">
+                    <p><i class="fas fa-map-marker-alt ml-1"></i>${data.jobLocation}، السودان</p>
+                    <p><i class="fas fa-briefcase ml-1"></i>${data.experienceYears} سنوات خبرة</p>
+                </div>
+                <div class="mt-2">
+                    <h4 class="font-semibold text-sm">المهارات:</h4>
+                    <div class="flex flex-wrap">
+                        ${data.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-semibold text-sm">أعمال سابقة:</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${data.previousWorksUrls.map(url => `<img src="${url}" class="work-thumbnail">`).join('')}
+                    </div>
+                </div>
+                <div class="mt-4 text-sm">
+                    <span class="text-gray-600">السعر:</span>
+                    <span class="font-bold">${data.salaryFrom} - ${data.salaryTo} جنيه</span>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
 
-        function openWorkGallery(empIndex, workIdx) {
-            currentEmployeeIndex = empIndex;
-            currentWorkIndex = workIdx;
+    document.addEventListener('DOMContentLoaded', fetchAndDisplayEmployees);
+</script>
 
-            const modal = document.querySelector('.work-gallery-modal');
-            const slidesContainer = modal.querySelector('#gallerySlides');
-
-            slidesContainer.innerHTML = ''; // Clear previous content
-
-            if (allEmployeeData[currentEmployeeIndex] && allEmployeeData[currentEmployeeIndex].previousWorksUrls.length > 0) {
-                allEmployeeData[currentEmployeeIndex].previousWorksUrls.forEach((url, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'work-gallery-slide ' + (idx === currentWorkIndex ? 'active' : '');
-                    slide.innerHTML = `<img src="${url}" alt="Work Image ${idx + 1}">`;
-                    slidesContainer.appendChild(slide);
-                });
-                modal.classList.add('show'); // Show modal
-                showSlide(currentWorkIndex); // Display selected slide
-            }
-        }
-
-        function closeWorkGallery(event) {
-            // Close only if clicked on the modal background or close button
-            if (event.target.classList.contains('work-gallery-modal') || event.target.classList.contains('work-gallery-close')) {
-                document.querySelector('.work-gallery-modal').classList.remove('show');
-            }
-        }
-
-        function changeSlide(n) {
-            if (allEmployeeData[currentEmployeeIndex] && allEmployeeData[currentEmployeeIndex].previousWorksUrls) {
-                const numSlides = allEmployeeData[currentEmployeeIndex].previousWorksUrls.length;
-                currentWorkIndex = (currentWorkIndex + n + numSlides) % numSlides;
-                showSlide(currentWorkIndex);
-            }
-        }
-
-        function showSlide(n) {
-            const slides = document.querySelectorAll('#gallerySlides .work-gallery-slide');
-            slides.forEach((slide, index) => {
-                slide.classList.toggle('active', index === n);
-            });
-        }
-
-        // Fetch employees when the page loads
-        document.addEventListener('DOMContentLoaded', fetchAndDisplayEmployees);
-    </script>
 </body>
 </html>
