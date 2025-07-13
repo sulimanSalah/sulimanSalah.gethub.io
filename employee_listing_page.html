@@ -19,7 +19,7 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
- 
+
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
@@ -88,6 +88,13 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .work-gallery-modal.show {
+            display: flex;
+            opacity: 1;
         }
 
         .work-gallery-content {
@@ -176,7 +183,7 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 sticky top-16 z-40">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="flex-1">
                     <div class="relative">
@@ -188,8 +195,8 @@
                     </div>
                 </div>
 
-                <div class="flex space-x-3 rtl:space-x-reverse">
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div class="flex space-x-3 rtl:space-x-reverse overflow-x-auto whitespace-nowrap py-2">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
                         <option>جميع التخصصات</option>
                         <option>تكنولوجيا المعلومات</option>
                         <option>المالية والمحاسبة</option>
@@ -197,7 +204,7 @@
                         <option>التصميم</option>
                     </select>
 
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
                         <option>جميع المدن</option>
                         <option>الخرطوم</option>
                         <option>أم درمان</option>
@@ -220,8 +227,7 @@
     <div class="work-gallery-modal" onclick="closeWorkGallery(event)">
         <div class="work-gallery-content" onclick="event.stopPropagation()">
             <span class="work-gallery-close" onclick="closeWorkGallery()">&times;</span>
-            <div id="gallerySlides">
-                </div>
+            <div id="gallerySlides"></div>
             <a class="work-gallery-prev" onclick="changeSlide(-1)">&#10094;</a>
             <a class="work-gallery-next" onclick="changeSlide(1)">&#10095;</a>
         </div>
@@ -358,7 +364,7 @@
                     slide.innerHTML = `<img src="${url}" alt="Work Image ${idx + 1}">`;
                     slidesContainer.appendChild(slide);
                 });
-                modal.style.display = 'flex'; // Show modal
+                modal.classList.add('show'); // Show modal
                 showSlide(currentWorkIndex); // Display selected slide
             }
         }
@@ -366,7 +372,7 @@
         function closeWorkGallery(event) {
             // Close only if clicked on the modal background or close button
             if (event.target.classList.contains('work-gallery-modal') || event.target.classList.contains('work-gallery-close')) {
-                document.querySelector('.work-gallery-modal').style.display = 'none';
+                document.querySelector('.work-gallery-modal').classList.remove('show');
             }
         }
 
