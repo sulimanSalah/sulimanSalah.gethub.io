@@ -113,7 +113,7 @@
                 <div class="mb-4">
                     <label for="profileImage" class="block text-sm font-medium text-gray-700">رفع صورة الملف الشخصي</label>
                     <input type="file" id="profileImage" accept="image/*" 
-                           class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                           class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صورة الملف الشخصي')" oninput="setCustomValidity('')">
                 </div>
                 <div class="mb-4">
                     <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>
@@ -138,13 +138,13 @@
             <div class="mb-4">
                 <label for="jobLocation" class="block text-sm font-medium text-gray-700">الموقع</label>
                 <input type="text" id="jobLocation" placeholder="أدخل الموقع" 
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال الموقع')" oninput="setCustomValidity('')">
             </div>
 
             <div class="mb-4">
                 <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>
-                <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" 
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال عدد سنوات الخبرة')" oninput="setCustomValidity('')">
             </div>
 
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(2)">
@@ -197,7 +197,7 @@
             <div class="mb-4">
                 <label for="previousWorks" class="block text-sm font-medium text-gray-700">رفع صور الأعمال السابقة</label>
                 <input type="file" id="previousWorks" multiple 
-                       class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                       class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صور الأعمال السابقة')" oninput="setCustomValidity('')">
             </div>
 
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(4)">
@@ -213,13 +213,13 @@
             <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>
             <div class="mb-4">
                 <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>
-                <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" 
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأدنى')" oninput="setCustomValidity('')">
             </div>
             <div class="mb-4">
                 <label for="salaryTo" class="block text-sm font-medium text-gray-700">إلى</label>
-                <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" 
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأعلى')" oninput="setCustomValidity('')">
             </div>
 
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(5)">
@@ -267,7 +267,7 @@
                 document.getElementById('skill4'),
                 document.getElementById('skill5')
             ];
-            
+
             // التحقق من وجود نصوص فارغة
             for (let input of skillInputs) {
                 if (!input.value.trim()) {
@@ -280,7 +280,7 @@
             const skills = skillInputs.map(input => input.value.toLowerCase());
             let relevantSkillsCount = 0;
             const minRelatedSkills = 2; // العدد الأدنى للمهارات ذات الصلة
-            
+
             for (let skill of skills) {
                 if (skill.includes(jobTitle) || jobTitle.includes(skill)) {
                     relevantSkillsCount++;
