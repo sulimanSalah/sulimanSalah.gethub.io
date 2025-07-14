@@ -1,192 +1,141 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدخال الوظائف - شغلني</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
-        }
-        .step { width: 40px; height: 40px; border-radius: 50%; background-color: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-weight: bold; }
-        .step.active { background-color: #10b981; }
-        .step-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .form-card { transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 2px solid transparent; }
-        .form-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-color: #2563eb; }
-        .error-message { color: #ef4444; margin-top: 10px; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>إدخال الوظائف - شغلني</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f5f7fa; margin: 0; padding: 20px; }
+  .step-container { display: flex; justify-content: space-between; margin-bottom: 20px; max-width: 400px; margin: auto;}
+  .step { width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold;}
+  .step.active { background: #10b981; }
+  .form-step { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+  .form-step.hidden { display: none; }
+  label { display: block; margin: 12px 0 6px; }
+  input[type=text], input[type=number], input[type=file] { width: 100%; padding: 8px; box-sizing: border-box; }
+  button { padding: 10px 20px; margin: 10px 5px 0 0; border: none; border-radius: 5px; cursor: pointer;}
+  .btn-next { background-color: #2563eb; color: white;}
+  .btn-prev { background-color: #ccc; }
+  .error { color: red; font-size: 0.9em; display: none; margin-top: 6px;}
+</style>
 </head>
 <body>
 
-<div class="container mx-auto px-4 py-8">
-    <div class="step-container">
-        <div class="step active">1</div>
-        <div class="step">2</div>
-        <div class="step">3</div>
-        <div class="step">4</div>
-        <div class="step">5</div>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-        <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>
-        <form id="jobForm">
-            <input type="file" id="profileImage" accept="image/*" required class="mb-4 block w-full border rounded p-2">
-            <input type="text" id="fullName" placeholder="الاسم بالكامل" required class="mb-4 block w-full border rounded p-2">
-            <input type="text" id="jobTitle" placeholder="المسمى الوظيفي" required class="mb-4 block w-full border rounded p-2">
-            <button type="button" onclick="nextStep(1)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
-        </form>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-        <h2 class="text-lg font-bold mb-4">الخطوة 2: تفاصيل الموقع والخبرة</h2>
-        <input type="text" id="jobLocation" placeholder="الموقع" required class="mb-4 block w-full border rounded p-2">
-        <input type="number" id="experienceYears" placeholder="عدد سنوات الخبرة" required class="mb-4 block w-full border rounded p-2">
-        <button type="button" onclick="prevStep(2)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
-        <button type="button" onclick="nextStep(2)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-        <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات</h2>
-        <input type="text" id="skill1" placeholder="مهارة 1" required class="mb-2 block w-full border rounded p-2">
-        <input type="text" id="skill2" placeholder="مهارة 2" required class="mb-2 block w-full border rounded p-2">
-        <input type="text" id="skill3" placeholder="مهارة 3" required class="mb-2 block w-full border rounded p-2">
-        <input type="text" id="skill4" placeholder="مهارة 4" required class="mb-2 block w-full border rounded p-2">
-        <input type="text" id="skill5" placeholder="مهارة 5" required class="mb-2 block w-full border rounded p-2">
-        <div id="skillError" class="error-message hidden"></div>
-        <button type="button" onclick="prevStep(3)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
-        <button type="button" onclick="validateSkills()" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-        <h2 class="text-lg font-bold mb-4">الخطوة 4: الأعمال السابقة</h2>
-        <input type="file" id="previousWorks" multiple required class="mb-4 block w-full border rounded p-2">
-        <button type="button" onclick="prevStep(4)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
-        <button type="button" onclick="nextStep(4)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
-        <h2 class="text-lg font-bold mb-4">الخطوة 5: السعر وتأكيد البيانات</h2>
-        <input type="number" id="salaryFrom" placeholder="السعر من" required class="mb-2 block w-full border rounded p-2">
-        <input type="number" id="salaryTo" placeholder="السعر إلى" required class="mb-4 block w-full border rounded p-2">
-        <button type="button" onclick="prevStep(5)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
-        <button type="submit" onclick="submitForm()" class="bg-green-600 text-white px-4 py-2 rounded">إرسال</button>
-    </div>
+<div class="step-container">
+  <div class="step active" id="indicator1">1</div>
+  <div class="step" id="indicator2">2</div>
+  <div class="step" id="indicator3">3</div>
+  <div class="step" id="indicator4">4</div>
+  <div class="step" id="indicator5">5</div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+<form id="jobForm" enctype="multipart/form-data">
+  <!-- خطوة 1 -->
+  <div class="form-step" id="step1">
+    <label for="profileImage">رفع صورة الملف الشخصي *</label>
+    <input type="file" id="profileImage" accept="image/*" required />
+    <label for="fullName">الاسم بالكامل *</label>
+    <input type="text" id="fullName" required />
+    <label for="jobTitle">الوظيفة *</label>
+    <input type="text" id="jobTitle" required />
+    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+  </div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-        authDomain: "shaglni-c64c0.firebaseapp.com",
-        projectId: "shaglni-c64c0",
-        storageBucket: "shaglni-c64c0.appspot.com",
-        messagingSenderId: "768887356636",
-        appId: "1:768887356636:web:11ec1d6991add3309c8819",
-        measurementId: "G-98GQGZS09W"
-    };
+  <!-- خطوة 2 -->
+  <div class="form-step hidden" id="step2">
+    <label for="jobLocation">الموقع *</label>
+    <input type="text" id="jobLocation" required />
+    <label for="experienceYears">عدد سنوات الخبرة *</label>
+    <input type="number" id="experienceYears" min="0" required />
+    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+  <!-- خطوة 3 -->
+  <div class="form-step hidden" id="step3">
+    <label>المهارات *</label>
+    <input type="text" id="skill1" placeholder="المهارة 1" required />
+    <input type="text" id="skill2" placeholder="المهارة 2" required />
+    <input type="text" id="skill3" placeholder="المهارة 3" required />
+    <input type="text" id="skill4" placeholder="المهارة 4" required />
+    <input type="text" id="skill5" placeholder="المهارة 5" required />
+    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+  </div>
 
-    let currentStep = 1;
+  <!-- خطوة 4 -->
+  <div class="form-step hidden" id="step4">
+    <label for="previousWorks">رفع صور الأعمال السابقة *</label>
+    <input type="file" id="previousWorks" multiple required />
+    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+  </div>
 
-    function nextStep(step) {
-        const stepElement = document.getElementById(`step${step}`);
-        const currentForm = stepElement.querySelector('form');
-        if (currentForm && !currentForm.checkValidity()) {
-            currentForm.reportValidity();
-            return;
+  <!-- خطوة 5 -->
+  <div class="form-step hidden" id="step5">
+    <label for="salaryFrom">السعر من *</label>
+    <input type="number" id="salaryFrom" min="0" required />
+    <label for="salaryTo">السعر إلى *</label>
+    <input type="number" id="salaryTo" min="0" required />
+    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+    <button type="submit" class="btn-next">إرسال</button>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('jobForm');
+  const steps = Array.from(document.querySelectorAll('.form-step'));
+  const indicators = Array.from(document.querySelectorAll('.step'));
+  let currentStep = 0;
+
+  function updateStepsUI() {
+    steps.forEach((step, i) => step.classList.toggle('hidden', i !== currentStep));
+    indicators.forEach((ind, i) => ind.classList.toggle('active', i <= currentStep));
+  }
+
+  function validateCurrentStep() {
+    const inputs = steps[currentStep].querySelectorAll('input[required]');
+    for (let input of inputs) {
+      if (input.type === 'file') {
+        if (input.files.length === 0) {
+          input.reportValidity();
+          return false;
         }
-        stepElement.classList.add('hidden');
-        currentStep++;
-        document.getElementById(`step${currentStep}`).classList.remove('hidden');
-        updateSteps();
+      } else if (!input.value.trim()) {
+        input.reportValidity();
+        return false;
+      }
     }
+    return true;
+  }
 
-    function prevStep(step) {
-        document.getElementById(`step${step}`).classList.add('hidden');
-        currentStep--;
-        document.getElementById(`step${currentStep}`).classList.remove('hidden');
-        updateSteps();
+  function nextStep() {
+    if (!validateCurrentStep()) return;
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      updateStepsUI();
     }
+  }
 
-    function updateSteps() {
-        document.querySelectorAll('.step').forEach((step, index) => {
-            step.classList.toggle('active', index < currentStep);
-        });
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      updateStepsUI();
     }
+  }
 
-    function validateSkills() {
-        const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
-        const skills = [
-            document.getElementById('skill1').value.toLowerCase(),
-            document.getElementById('skill2').value.toLowerCase(),
-            document.getElementById('skill3').value.toLowerCase(),
-            document.getElementById('skill4').value.toLowerCase(),
-            document.getElementById('skill5').value.toLowerCase()
-        ];
-        const relatedCount = skills.filter(skill => skill.includes(jobTitle) || jobTitle.includes(skill)).length;
-        const skillError = document.getElementById('skillError');
-        if (relatedCount < 2) {
-            skillError.textContent = 'يجب إدخال على الأقل مهارتين متعلقتين بالوظيفة.';
-            skillError.classList.remove('hidden');
-        } else {
-            skillError.classList.add('hidden');
-            nextStep(3);
-        }
-    }
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!validateCurrentStep()) return;
 
-    async function submitForm() {
-        const profileImageFile = document.getElementById('profileImage').files[0];
-        const previousWorksFiles = document.getElementById('previousWorks').files;
-        const profileImageRef = ref(storage, `profileImages/${Date.now()}-${profileImageFile.name}`);
-        const profileSnapshot = await uploadBytes(profileImageRef, profileImageFile);
-        const profileImageUrl = await getDownloadURL(profileSnapshot.ref);
+    // هنا تضيف كود الإرسال إلى Firebase أو أي مكان آخر
+    alert('تم إرسال النموذج بنجاح!');
+    form.reset();
+    currentStep = 0;
+    updateStepsUI();
+  });
 
-        const previousWorksUrls = [];
-        for (const file of previousWorksFiles) {
-            const refWork = ref(storage, `previousWorks/${Date.now()}-${file.name}`);
-            const snapshotWork = await uploadBytes(refWork, file);
-            previousWorksUrls.push(await getDownloadURL(snapshotWork.ref));
-        }
-
-        const employeeData = {
-            fullName: document.getElementById('fullName').value,
-            jobTitle: document.getElementById('jobTitle').value,
-            jobLocation: document.getElementById('jobLocation').value,
-            experienceYears: parseInt(document.getElementById('experienceYears').value),
-            skills: [
-                document.getElementById('skill1').value,
-                document.getElementById('skill2').value,
-                document.getElementById('skill3').value,
-                document.getElementById('skill4').value,
-                document.getElementById('skill5').value
-            ],
-            salaryRange: {
-                from: parseInt(document.getElementById('salaryFrom').value),
-                to: parseInt(document.getElementById('salaryTo').value)
-            },
-            profileImageUrl: profileImageUrl,
-            previousWorksUrls: previousWorksUrls,
-            timestamp: new Date().toISOString()
-        };
-
-        await addDoc(collection(db, "employees"), employeeData);
-
-        alert('تم الحفظ بنجاح.');
-        location.reload();
-    }
-
-    window.nextStep = nextStep;
-    window.prevStep = prevStep;
-    window.validateSkills = validateSkills;
-    window.submitForm = submitForm;
+  updateStepsUI();
 </script>
 
 </body>
