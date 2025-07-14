@@ -1,433 +1,193 @@
-<!DOCTYPE html>  <html lang="ar" dir="rtl">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>إدخال الوظائف - شغلني</title>  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
-    <script src="https://cdn.tailwindcss.com"></script>  
-    <style>  
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');  :root {  
-        --primary: #2563eb;  
-        --primary-dark: #1e40af;  
-        --secondary: #f59e0b;  
-        --success: #10b981;  
-        --danger: #ef4444;  
-        --light: #f9fafb;  
-        --dark: #1f2937;  
-        --gray: #6b7280;  
-    }  
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدخال الوظائف - شغلني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        .step { width: 40px; height: 40px; border-radius: 50%; background-color: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-weight: bold; }
+        .step.active { background-color: #10b981; }
+        .step-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .form-card { transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 2px solid transparent; }
+        .form-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-color: #2563eb; }
+        .error-message { color: #ef4444; margin-top: 10px; }
+    </style>
+</head>
+<body>
 
-    body {  
-        font-family: 'Tajawal', sans-serif;  
-        background-color: #f5f7fa;  
-    }  
+<div class="container mx-auto px-4 py-8">
+    <div class="step-container">
+        <div class="step active">1</div>
+        <div class="step">2</div>
+        <div class="step">3</div>
+        <div class="step">4</div>
+        <div class="step">5</div>
+    </div>
 
-    .step {  
-        width: 40px;  
-        height: 40px;  
-        border-radius: 50%;  
-        background-color: var(--primary);  
-        color: white;  
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
-        margin: 0 auto;  
-        font-weight: bold;  
-    }  
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
+        <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>
+        <form id="jobForm">
+            <input type="file" id="profileImage" accept="image/*" required class="mb-4 block w-full border rounded p-2">
+            <input type="text" id="fullName" placeholder="الاسم بالكامل" required class="mb-4 block w-full border rounded p-2">
+            <input type="text" id="jobTitle" placeholder="المسمى الوظيفي" required class="mb-4 block w-full border rounded p-2">
+            <button type="button" onclick="nextStep(1)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
+        </form>
+    </div>
 
-    .step.active {  
-        background-color: var(--success);  
-    }  
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+        <h2 class="text-lg font-bold mb-4">الخطوة 2: تفاصيل الموقع والخبرة</h2>
+        <input type="text" id="jobLocation" placeholder="الموقع" required class="mb-4 block w-full border rounded p-2">
+        <input type="number" id="experienceYears" placeholder="عدد سنوات الخبرة" required class="mb-4 block w-full border rounded p-2">
+        <button type="button" onclick="prevStep(2)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
+        <button type="button" onclick="nextStep(2)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
+    </div>
 
-    .step-container {  
-        display: flex;  
-        justify-content: space-between;  
-        margin-bottom: 20px;  
-    }  
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+        <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات</h2>
+        <input type="text" id="skill1" placeholder="مهارة 1" required class="mb-2 block w-full border rounded p-2">
+        <input type="text" id="skill2" placeholder="مهارة 2" required class="mb-2 block w-full border rounded p-2">
+        <input type="text" id="skill3" placeholder="مهارة 3" required class="mb-2 block w-full border rounded p-2">
+        <input type="text" id="skill4" placeholder="مهارة 4" required class="mb-2 block w-full border rounded p-2">
+        <input type="text" id="skill5" placeholder="مهارة 5" required class="mb-2 block w-full border rounded p-2">
+        <div id="skillError" class="error-message hidden"></div>
+        <button type="button" onclick="prevStep(3)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
+        <button type="button" onclick="validateSkills()" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
+    </div>
 
-    .form-card {  
-        transition: all 0.3s ease;  
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);  
-        border: 2px solid transparent;  
-    }  
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+        <h2 class="text-lg font-bold mb-4">الخطوة 4: الأعمال السابقة</h2>
+        <input type="file" id="previousWorks" multiple required class="mb-4 block w-full border rounded p-2">
+        <button type="button" onclick="prevStep(4)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
+        <button type="button" onclick="nextStep(4)" class="bg-blue-600 text-white px-4 py-2 rounded">التالي</button>
+    </div>
 
-    .form-card:hover {  
-        transform: translateY(-5px);  
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);  
-        border-color: var(--primary);  
-    }  
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
+        <h2 class="text-lg font-bold mb-4">الخطوة 5: السعر وتأكيد البيانات</h2>
+        <input type="number" id="salaryFrom" placeholder="السعر من" required class="mb-2 block w-full border rounded p-2">
+        <input type="number" id="salaryTo" placeholder="السعر إلى" required class="mb-4 block w-full border rounded p-2">
+        <button type="button" onclick="prevStep(5)" class="bg-gray-400 text-white px-4 py-2 rounded">السابق</button>
+        <button type="submit" onclick="submitForm()" class="bg-green-600 text-white px-4 py-2 rounded">إرسال</button>
+    </div>
+</div>
 
-    .error-message {  
-        color: var(--danger);  
-        margin-top: 10px;  
-    }  
-</style>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-</head>  
-<body>  
-    <!-- شريط التنقل -->  
-    <nav class="bg-white shadow-lg sticky top-0 z-50">  
-        <div class="container mx-auto px-4 py-3">  
-            <div class="flex justify-between items-center">  
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">  
-                    <div class="text-2xl font-bold text-blue-600">شغلني</div>  
-                </div>  <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">  
-                <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>  
-                <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>  
-                <a href="#" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>  
-                <a href="#" class="text-blue-600 font-medium">إدخال الوظائف</a>  
-            </div>  
-
-            <div class="flex items-center space-x-4 rtl:space-x-reverse">  
-                <div class="relative">  
-                    <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">  
-                        <i class="fas fa-bell text-xl"></i>  
-                        <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>  
-                    </button>  
-                </div>  
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">  
-            </div>  
-        </div>  
-    </div>  
-</nav>  
-
-<!-- محتوى الصفحة -->  
-<div class="container mx-auto px-4 py-8">  
-    <!-- خطوات إدخال الوظائف -->  
-    <div class="step-container">  
-        <div class="step active">1</div>  
-        <div class="step">2</div>  
-        <div class="step">3</div>  
-        <div class="step">4</div>  
-        <div class="step">5</div>  
-    </div>  
-
-    <!-- نموذج إدخال الوظائف -->  
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">  
-        <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>  
-        <form id="jobForm">  
-            <div class="mb-4">  
-                <label for="profileImage" class="block text-sm font-medium text-gray-700">رفع صورة الملف الشخصي</label>  
-                <input type="file" id="profileImage" accept="image/*"   
-                       class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صورة الملف الشخصي')" oninput="setCustomValidity('')">  
-            </div>  
-            <div class="mb-4">  
-                <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>  
-                <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل"   
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-            </div>  
-
-            <div class="mb-4">  
-                <label for="jobTitle" class="block text-sm font-medium text-gray-700">الوظيفة</label>  
-                <input type="text" id="jobTitle" placeholder="أدخل الوظيفة"   
-                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-            </div>  
-
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(1)">  
-                التالي  
-            </button>  
-        </form>  
-    </div>  
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">  
-        <h2 class="text-lg font-bold mb-4">الخطوة 2: تفاصيل الموقع والخبرة</h2>  
-        <div class="mb-4">  
-            <label for="jobLocation" class="block text-sm font-medium text-gray-700">الموقع</label>  
-            <input type="text" id="jobLocation" placeholder="أدخل الموقع"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال الموقع')" oninput="setCustomValidity('')">  
-        </div>  
-
-        <div class="mb-4">  
-            <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>  
-            <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" min="0"  
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال عدد سنوات الخبرة')" oninput="setCustomValidity('')">  
-        </div>  
-
-        <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(2)">  
-            السابق  
-        </button>  
-        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(2)">  
-            التالي  
-        </button>  
-    </div>  
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">  
-        <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات</h2>  
-        <div class="mb-4">  
-            <label for="skill1" class="block text-sm font-medium text-gray-700">المهارة 1</label>  
-            <input type="text" id="skill1" placeholder="أدخل المهارة"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-        </div>  
-        <div class="mb-4">  
-            <label for="skill2" class="block text-sm font-medium text-gray-700">المهارة 2</label>  
-            <input type="text" id="skill2" placeholder="أدخل المهارة"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-        </div>  
-        <div class="mb-4">  
-            <label for="skill3" class="block text-sm font-medium text-gray-700">المهارة 3</label>  
-            <input type="text" id="skill3" placeholder="أدخل المهارة"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-        </div>  
-        <div class="mb-4">  
-            <label for="skill4" class="block text-sm font-medium text-gray-700">المهارة 4</label>  
-            <input type="text" id="skill4" placeholder="أدخل المهارة"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-        </div>  
-        <div class="mb-4">  
-            <label for="skill5" class="block text-sm font-medium text-gray-700">المهارة 5</label>  
-            <input type="text" id="skill5" placeholder="أدخل المهارة"   
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
-        </div>  
-        <div class="error-message hidden" id="skillError">يرجى إدخال مهارات تتعلق بالوظيفة المحددة.</div>  
-
-        <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(3)">  
-            السابق  
-        </button>  
-        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="validateSkills()">  
-            التالي  
-        </button>  
-    </div>  
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">  
-        <h2 class="text-lg font-bold mb-4">الخطوة 4: الأعمال السابقة</h2>  
-        <div class="mb-4">  
-            <label for="previousWorks" class="block text-sm font-medium text-gray-700">رفع صور الأعمال السابقة</label>  
-            <input type="file" id="previousWorks" multiple   
-                   class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صور الأعمال السابقة')" oninput="setCustomValidity('')">  
-        </div>  
-
-        <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(4)">  
-            السابق  
-        </button>  
-        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(4)">  
-            التالي  
-        </button>  
-    </div>  
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">  
-        <h2 class="text-lg font-bold mb-4">الخطوة 5: تأكيد المعلومات</h2>  
-        <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>  
-        <div class="mb-4">  
-            <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>  
-            <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" min="0"  
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأدنى')" oninput="setCustomValidity('')">  
-        </div>  
-        <div class="mb-4">  
-            <label for="salaryTo" class="block text-sm font-medium text-gray-700">إلى</label>  
-            <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" min="0"  
-                   class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأعلى')" oninput="setCustomValidity('')">  
-        </div>  
-
-        <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(5)">  
-            السابق  
-        </button>  
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="submitForm()">  
-            إرسال  
-        </button>  
-    </div>  
-</div>  
-
-<!-- Firebase SDKs و تهيئة Firebase -->  
-<script type="module">  
-    // استيراد الدوال اللازمة من Firebase SDKs  
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";  
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";  
-
-    // تهيئة Firebase: هذه هي معلومات مشروعك  
-    // **هام:** استبدل "YOUR_API_KEY" و "YOUR_APP_ID" و "YOUR_MEASUREMENT_ID"  
-    // بالقيم الفعلية من إعدادات مشروعك في Firebase Console.  
     const firebaseConfig = {
-apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-authDomain: "shaglni-c64c0.firebaseapp.com",
-projectId: "shaglni-c64c0",
-storageBucket: "shaglni-c64c0.firebasestorage.app",
-messagingSenderId: "768887356636",
-appId: "1:768887356636:web:11ec1d6991add3309c8819",
-measurementId: "G-98GQGZS09W"
-};
+        apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+        authDomain: "shaglni-c64c0.firebaseapp.com",
+        projectId: "shaglni-c64c0",
+        storageBucket: "shaglni-c64c0.appspot.com",
+        messagingSenderId: "768887356636",
+        appId: "1:768887356636:web:11ec1d6991add3309c8819",
+        measurementId: "G-98GQGZS09W"
+    };
 
-    // تهيئة Firebase App  
-    const app = initializeApp(firebaseConfig);  
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    // الحصول على كائنات Firestore و Storage  
-    const db = getFirestore(app);  
-    const storage = getStorage(app);  
+    let currentStep = 1;
 
-    // جعل `db` و `storage` متاحين عالمياً لدوال JavaScript الأخرى  
-    window.db = db;  
-    window.storage = storage;  
-
-    let currentStep = 1;  
-
-    function nextStep(step) {  
-    const stepElement = document.getElementById(`step${step}`);  
-    const currentForm = stepElement.querySelector('form');
-
-    if (currentForm) {
-        if (!currentForm.checkValidity()) {  
-            currentForm.reportValidity();  
-            return;  
-        }  
+    function nextStep(step) {
+        const stepElement = document.getElementById(`step${step}`);
+        const currentForm = stepElement.querySelector('form');
+        if (currentForm && !currentForm.checkValidity()) {
+            currentForm.reportValidity();
+            return;
+        }
+        stepElement.classList.add('hidden');
+        currentStep++;
+        document.getElementById(`step${currentStep}`).classList.remove('hidden');
+        updateSteps();
     }
 
-    stepElement.classList.add('hidden');  
-    currentStep++;  
-    document.getElementById(`step${currentStep}`).classList.remove('hidden');  
-    updateSteps();  
-}
+    function prevStep(step) {
+        document.getElementById(`step${step}`).classList.add('hidden');
+        currentStep--;
+        document.getElementById(`step${currentStep}`).classList.remove('hidden');
+        updateSteps();
+    }
 
-    function prevStep(step) {  
-        document.getElementById(`step${step}`).classList.add('hidden');  
-        currentStep--;  
-        document.getElementById(`step${currentStep}`).classList.remove('hidden');  
-        updateSteps();  
-    }  
+    function updateSteps() {
+        document.querySelectorAll('.step').forEach((step, index) => {
+            step.classList.toggle('active', index < currentStep);
+        });
+    }
 
-    function updateSteps() {  
-        const steps = document.querySelectorAll('.step');  
-        steps.forEach((step, index) => {  
-            step.classList.remove('active');  
-            if (index < currentStep) {  
-                step.classList.add('active');  
-            }  
-        });  
-    }  
+    function validateSkills() {
+        const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
+        const skills = [
+            document.getElementById('skill1').value.toLowerCase(),
+            document.getElementById('skill2').value.toLowerCase(),
+            document.getElementById('skill3').value.toLowerCase(),
+            document.getElementById('skill4').value.toLowerCase(),
+            document.getElementById('skill5').value.toLowerCase()
+        ];
+        const relatedCount = skills.filter(skill => skill.includes(jobTitle) || jobTitle.includes(skill)).length;
+        const skillError = document.getElementById('skillError');
+        if (relatedCount < 2) {
+            skillError.textContent = 'يجب إدخال على الأقل مهارتين متعلقتين بالوظيفة.';
+            skillError.classList.remove('hidden');
+        } else {
+            skillError.classList.add('hidden');
+            nextStep(3);
+        }
+    }
 
-    function validateSkills() {  
-        const jobTitle = document.getElementById('jobTitle').value.toLowerCase();  
-        const skillInputs = [  
-            document.getElementById('skill1'),  
-            document.getElementById('skill2'),  
-            document.getElementById('skill3'),  
-            document.getElementById('skill4'),  
-            document.getElementById('skill5')  
-        ];  
+    async function submitForm() {
+        const profileImageFile = document.getElementById('profileImage').files[0];
+        const previousWorksFiles = document.getElementById('previousWorks').files;
+        const profileImageRef = ref(storage, `profileImages/${Date.now()}-${profileImageFile.name}`);
+        const profileSnapshot = await uploadBytes(profileImageRef, profileImageFile);
+        const profileImageUrl = await getDownloadURL(profileSnapshot.ref);
 
-        // التحقق من وجود نصوص فارغة  
-        for (let input of skillInputs) {  
-            if (!input.value.trim()) {  
-                document.getElementById('skillError').textContent = 'يرجى إدخال جميع المهارات المطلوبة.';  
-                document.getElementById('skillError').classList.remove('hidden');  
-                return;  
-            }  
-        }  
+        const previousWorksUrls = [];
+        for (const file of previousWorksFiles) {
+            const refWork = ref(storage, `previousWorks/${Date.now()}-${file.name}`);
+            const snapshotWork = await uploadBytes(refWork, file);
+            previousWorksUrls.push(await getDownloadURL(snapshotWork.ref));
+        }
 
-        const skills = skillInputs.map(input => input.value.toLowerCase());  
-        let relevantSkillsCount = 0;  
-        const minRelatedSkills = 2; // العدد الأدنى للمهارات ذات الصلة  
+        const employeeData = {
+            fullName: document.getElementById('fullName').value,
+            jobTitle: document.getElementById('jobTitle').value,
+            jobLocation: document.getElementById('jobLocation').value,
+            experienceYears: parseInt(document.getElementById('experienceYears').value),
+            skills: [
+                document.getElementById('skill1').value,
+                document.getElementById('skill2').value,
+                document.getElementById('skill3').value,
+                document.getElementById('skill4').value,
+                document.getElementById('skill5').value
+            ],
+            salaryRange: {
+                from: parseInt(document.getElementById('salaryFrom').value),
+                to: parseInt(document.getElementById('salaryTo').value)
+            },
+            profileImageUrl: profileImageUrl,
+            previousWorksUrls: previousWorksUrls,
+            timestamp: new Date().toISOString()
+        };
 
-        // يمكن تحسين هذا المنطق ليكون أكثر مرونة  
-        // مثال بسيط للتحقق من وجود الكلمة المفتاحية في المهارات أو العكس  
-        for (let skill of skills) {  
-            if (skill.includes(jobTitle) || jobTitle.includes(skill)) {  
-                relevantSkillsCount++;  
-            }  
-        }  
+        await addDoc(collection(db, "employees"), employeeData);
 
-        if (relevantSkillsCount < minRelatedSkills) {  
-            document.getElementById('skillError').textContent = `يجب أن يكون لديك ${minRelatedSkills} مهارات على الأقل ذات صلة بالوظيفة المحددة.`;  
-            document.getElementById('skillError').classList.remove('hidden');  
-        } else {  
-            document.getElementById('skillError').classList.add('hidden');  
-            nextStep(3); // نستخدم رقم الخطوة الحالية لننتقل للخطوة التالية  
-        }  
-    }  
+        alert('تم الحفظ بنجاح.');
+        location.reload();
+    }
 
-    // دالة إرسال النموذج المحدثة لربطها بـ Firebase  
-    async function submitForm() {  
-        // تحقق من صلاحية حقول الخطوة الأخيرة // لقد حذفت الخطوة تم التعديل سليمان
-
-        // إضافة مؤشر تحميل أو تعطيل الزر لمنع الإرسال المتعدد  
-        const submitButton = document.querySelector('#step5 button[type="submit"]');  
-        submitButton.disabled = true;  
-        const originalButtonText = submitButton.textContent;  
-        submitButton.textContent = 'جاري الإرسال...';   
-
-        try {  
-            // 1. جمع بيانات النموذج  
-            const profileImageFile = document.getElementById('profileImage').files[0];  
-            const fullName = document.getElementById('fullName').value;  
-            const jobTitle = document.getElementById('jobTitle').value;  
-            const jobLocation = document.getElementById('jobLocation').value;  
-            const experienceYears = parseInt(document.getElementById('experienceYears').value);  
-            const skills = [  
-                document.getElementById('skill1').value,  
-                document.getElementById('skill2').value,  
-                document.getElementById('skill3').value,  
-                document.getElementById('skill4').value,  
-                document.getElementById('skill5').value  
-            ];  
-            const previousWorksFiles = document.getElementById('previousWorks').files;  
-            const salaryFrom = parseInt(document.getElementById('salaryFrom').value);  
-            const salaryTo = parseInt(document.getElementById('salaryTo').value);  
-
-            let profileImageUrl = null;  
-            const previousWorksUrls = [];  
-
-            // 2. رفع صورة الملف الشخصي إلى Cloud Storage (إذا وُجدت)  
-            if (profileImageFile) {  
-                const profileImageRef = ref(window.storage, `profileImages/${Date.now()}-${profileImageFile.name}`);  
-                const snapshot = await uploadBytes(profileImageRef, profileImageFile);  
-                profileImageUrl = await getDownloadURL(snapshot.ref);  
-                console.log('تم رفع صورة الملف الشخصي:', profileImageUrl);  
-            }  
-
-            // 3. رفع صور الأعمال السابقة إلى Cloud Storage (إذا وُجدت)  
-            if (previousWorksFiles.length > 0) {  
-                for (let i = 0; i < previousWorksFiles.length; i++) {  
-                    const file = previousWorksFiles[i];  
-                    const previousWorkRef = ref(window.storage, `previousWorks/${Date.now()}-${file.name}`);  
-                    const snapshot = await uploadBytes(previousWorkRef, file);  
-                    const url = await getDownloadURL(snapshot.ref);  
-                    previousWorksUrls.push(url);  
-                    console.log(`تم رفع صورة العمل السابق ${i+1}:`, url);  
-                }  
-            }  
-
-            // 4. بناء كائن بيانات الموظف  
-            const employeeData = {  
-                fullName: fullName,  
-                jobTitle: jobTitle,  
-                jobLocation: jobLocation,  
-                experienceYears: experienceYears,  
-                skills: skills,  
-                salaryRange: {  
-                    from: salaryFrom,  
-                    to: salaryTo  
-                },  
-                profileImageUrl: profileImageUrl, // رابط صورة الملف الشخصي المرفوعة  
-                previousWorksUrls: previousWorksUrls, // قائمة روابط صور الأعمال السابقة المرفوعة  
-                timestamp: new Date().toISOString() // تسجيل وقت الإضافة بتنسيق ISO  
-            };  
-
-            // 5. حفظ بيانات الموظف في Cloud Firestore في مجموعة 'employees'  
-            const docRef = await addDoc(collection(window.db, "employees"), employeeData);  
-            console.log("تم إضافة الموظف بنجاح بمعرف:", docRef.id);  
-
-            // 6. إظهار رسالة نجاح وإعادة تعيين النموذج  
-            alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');  
-            document.getElementById('jobForm').reset(); // مسح النموذج بالكامل  
-              
-            // إعادة واجهة المستخدم للخطوة الأولى  
-            document.getElementById('step5').classList.add('hidden');  
-            currentStep = 1;   
-            document.getElementById('step1').classList.remove('hidden');  
-            updateSteps(); // تحديث مؤشرات الخطوات  
-
-            // يمكنك توجيه المستخدم لصفحة عرض الموظفين بعد النجاح  
-            // window.location.href = 'available_employees.html';   
-
-        } catch (error) {  
-            console.error("حدث خطأ أثناء تسجيل الموظف:", error);  
-            alert(`حدث خطأ أثناء تسجيل الموظف: ${error.message}`);  
-        } finally {  
-            // إعادة الزر لحالته الأصلية بغض النظر عن النجاح أو الفشل  
-            submitButton.disabled = false;  
-            submitButton.textContent = originalButtonText;  
-        }  
-    }  
+    window.nextStep = nextStep;
+    window.prevStep = prevStep;
+    window.validateSkills = validateSkills;
+    window.submitForm = submitForm;
 </script>
 
-</body>  
+</body>
 </html>
