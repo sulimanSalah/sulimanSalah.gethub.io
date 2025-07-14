@@ -105,7 +105,7 @@
     <!-- نموذج إدخال الوظائف -->  
     <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">  
         <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>  
-        <form id="jobForm">  
+        <form id="jobForm" onsubmit="event.preventDefault(); nextStep(1);">
             <div class="mb-4">  
                 <label for="profileImage" class="block text-sm font-medium text-gray-700">رفع صورة الملف الشخصي</label>  
                 <input type="file" id="profileImage" accept="image/*"   
@@ -123,9 +123,9 @@
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>  
             </div>  
 
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="nextStep(1)">  
-                التالي  
-            </button>  
+<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+    التالي
+</button>
         </form>  
     </div>  
 
@@ -182,6 +182,9 @@
 
         <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="prevStep(3)">  
             السابق  
+
+
+
         </button>  
         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="validateSkills()">  
             التالي  
@@ -241,7 +244,7 @@
 apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
 authDomain: "shaglni-c64c0.firebaseapp.com",
 projectId: "shaglni-c64c0",
-storageBucket: "shaglni-c64c0.appspot.com", // ✅ الصحيح من Firebase
+storageBucket: "shaglni-c64c0.firebasestorage.app",
 messagingSenderId: "768887356636",
 appId: "1:768887356636:web:11ec1d6991add3309c8819",
 measurementId: "G-98GQGZS09W"
@@ -407,27 +410,4 @@ measurementId: "G-98GQGZS09W"
 
             // 6. إظهار رسالة نجاح وإعادة تعيين النموذج  
             alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');  
-            document.getElementById('jobForm').reset(); // مسح النموذج بالكامل  
-
-            // إعادة واجهة المستخدم للخطوة الأولى  
-            document.getElementById('step5').classList.add('hidden');  
-            currentStep = 1;   
-            document.getElementById('step1').classList.remove('hidden');  
-            updateSteps(); // تحديث مؤشرات الخطوات  
-
-            // يمكنك توجيه المستخدم لصفحة عرض الموظفين بعد النجاح  
-            // window.location.href = 'available_employees.html';   
-
-        } catch (error) {  
-            console.error("حدث خطأ أثناء تسجيل الموظف:", error);  
-            alert(`حدث خطأ أثناء تسجيل الموظف: ${error.message}`);  
-        } finally {  
-            // إعادة الزر لحالته الأصلية بغض النظر عن النجاح أو الفشل  
-            submitButton.disabled = false;  
-            submitButton.textContent = originalButtonText;  
-        }  
-    }  
-</script>
-
-</body>  
-</html>
+            document.getElementById('jobForm').reset(); // مسح النموذج 
