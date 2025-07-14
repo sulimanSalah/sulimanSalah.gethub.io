@@ -261,18 +261,21 @@ measurementId: "G-98GQGZS09W"
     let currentStep = 1;  
 
     function nextStep(step) {  
-        // تحقق من صلاحية حقول الخطوة الحالية قبل الانتقال  
-        const currentForm = document.getElementById(`step${step}`).querySelector('form');  
-        if (currentForm && !currentForm.checkValidity()) {  
-            currentForm.reportValidity(); // يعرض رسائل الأخطاء الافتراضية للمتصفح  
-            return; // يمنع الانتقال إذا كانت هناك حقول غير صالحة  
-        }  
+    const stepElement = document.getElementById(`step${step}`);  
+    const currentForm = stepElement.querySelector('form');
 
-        document.getElementById(`step${step}`).classList.add('hidden');  
-        currentStep++;  
-        document.getElementById(`step${currentStep}`).classList.remove('hidden');  
-        updateSteps();  
-    }  
+    if (currentForm) {
+        if (!currentForm.checkValidity()) {  
+            currentForm.reportValidity();  
+            return;  
+        }  
+    }
+
+    stepElement.classList.add('hidden');  
+    currentStep++;  
+    document.getElementById(`step${currentStep}`).classList.remove('hidden');  
+    updateSteps();  
+}
 
     function prevStep(step) {  
         document.getElementById(`step${step}`).classList.add('hidden');  
@@ -333,12 +336,7 @@ measurementId: "G-98GQGZS09W"
 
     // دالة إرسال النموذج المحدثة لربطها بـ Firebase  
     async function submitForm() {  
-        // تحقق من صلاحية حقول الخطوة الأخيرة (خطوة التأكيد)  
-        const lastStepForm = document.getElementById(`step5`).querySelector('form');  
-        if (lastStepForm && !lastStepForm.checkValidity()) {  
-            lastStepForm.reportValidity();  
-            return;  
-        }  
+        // تحقق من صلاحية حقول الخطوة الأخيرة // لقد حذفت الخطوة تم التعديل سليمان
 
         // إضافة مؤشر تحميل أو تعطيل الزر لمنع الإرسال المتعدد  
         const submitButton = document.querySelector('#step5 button[type="submit"]');  
