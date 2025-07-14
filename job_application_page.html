@@ -377,7 +377,7 @@ measurementId: "G-98GQGZS09W"
             // 2. رفع صورة الملف الشخصي إلى Cloud Storage (إذا وُجدت)
             if (profileImageFile) {
                 const profileImageRef = ref(window.storage, `profileImages/${Date.now()}-${profileImageFile.name}`);
-                const snapshot = await uploadBytes(profileImageRef, profileImageRef); // يجب أن يكون file بدلاً من profileImageRef
+                const snapshot = await uploadBytes(profileImageRef, profileImageFile);// يجب أن يكون file بدلاً من profileImageRef
                 profileImageUrl = await getDownloadURL(snapshot.ref);
                 console.log('تم رفع صورة الملف الشخصي:', profileImageUrl);
             }
