@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض الموظفين - شغلني</title>
+    <title>إدخال الموظفين - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -24,47 +24,46 @@
             background-color: #f5f7fa;
         }
 
-        .employee-card {
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .step.active {
+            background-color: var(--success);
+        }
+
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .form-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             border: 2px solid transparent;
         }
 
-        .employee-card:hover {
+        .form-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
 
-        .badge-primary {
-            background-color: #dbeafe;
-            color: #1e40af;
+        .error-message {
+            color: var(--danger);
+            margin-top: 10px;
         }
-
-        .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .skill-tag {
-            display: inline-flex;
-            align-items: center;
-            background-color: #eef2ff;
-            color: #4338ca;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            margin: 0.125rem;
-        }
-
-        /* تمت إزالة أنماط معرض الصور لأننا لم نعد نتعامل مع الصور */
     </style>
-
 </head>
 <body>
     <nav class="bg-white shadow-lg sticky top-0 z-50">
@@ -76,8 +75,8 @@
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
                     <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-blue-600 font-medium">عرض الموظفين</a>
-                    <a href="employee_registration.html" class="text-gray-700 hover:text-blue-600">إدخال الوظائف</a>
+                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
+                    <a href="employee_registration.html" class="text-blue-600 font-medium">إدخال الموظفين</a>
                 </div>
 
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
@@ -96,56 +95,123 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 sticky top-16 z-40">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex-1">
-                    <div class="relative">
-                        <input type="text" placeholder="ابحث عن موظف بالاسم، المهارات أو التخصص..."
-                               class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button class="absolute left-3 top-2 text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3 rtl:space-x-reverse overflow-x-auto whitespace-nowrap py-2">
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع التخصصات</option>
-                        <option>تكنولوجيا المعلومات</option>
-                        <option>المالية والمحاسبة</option>
-                        <option>الهندسة</option>
-                        <option>التصميم</option>
-                    </select>
-
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع المدن</option>
-                        <option>الخرطوم</option>
-                        <option>أم درمان</option>
-                        <option>بحري</option>
-                        <option>بورتسودان</option>
-                    </select>
-
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
-                        <i class="fas fa-filter mr-2"></i> فلترة
-                    </button>
-                </div>
-            </div>
+        <div class="step-container">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+            <div class="step">4</div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="employeeCardsContainer">
-            <p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
+            <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>
+            <form id="employeeForm" onsubmit="event.preventDefault(); window.nextStep(1);">
+                <div class="mb-4">
+                    <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>
+                    <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل"
+                           class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="jobTitle" class="block text-sm font-medium text-gray-700">المسمى الوظيفي</label>
+                    <input type="text" id="jobTitle" placeholder="أدخل المسمى الوظيفي"
+                           class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    التالي
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+            <h2 class="text-lg font-bold mb-4">الخطوة 2: تفاصيل الموقع والخبرة</h2>
+            <div class="mb-4">
+                <label for="jobLocation" class="block text-sm font-medium text-gray-700">الموقع</label>
+                <input type="text" id="jobLocation" placeholder="أدخل الموقع"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال الموقع')" oninput="setCustomValidity('')">
+            </div>
+
+            <div class="mb-4">
+                <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>
+                <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال عدد سنوات الخبرة')" oninput="setCustomValidity('')">
+            </div>
+
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
+                السابق
+            </button>
+            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
+                التالي
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+            <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات</h2>
+            <div class="mb-4">
+                <label for="skill1" class="block text-sm font-medium text-gray-700">المهارة 1</label>
+                <input type="text" id="skill1" placeholder="أدخل المهارة"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill2" class="block text-sm font-medium text-gray-700">المهارة 2</label>
+                <input type="text" id="skill2" placeholder="أدخل المهارة"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill3" class="block text-sm font-medium text-gray-700">المهارة 3</label>
+                <input type="text" id="skill3" placeholder="أدخل المهارة"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill4" class="block text-sm font-medium text-gray-700">المهارة 4</label>
+                <input type="text" id="skill4" placeholder="أدخل المهارة"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="skill5" class="block text-sm font-medium text-gray-700">المهارة 5</label>
+                <input type="text" id="skill5" placeholder="أدخل المهارة"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div class="error-message hidden" id="skillError">يرجى إدخال مهارات تتعلق بالوظيفة المحددة.</div>
+
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
+                السابق
+            </button>
+            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.validateSkills()">
+                التالي
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+            <h2 class="text-lg font-bold mb-4">الخطوة 4: تأكيد المعلومات وتحديد السعر</h2>
+            <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>
+            <div class="mb-4">
+                <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>
+                <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأدنى')" oninput="setCustomValidity('')">
+            </div>
+            <div class="mb-4">
+                <label for="salaryTo" class="block text-sm font-medium text-gray-700">إلى</label>
+                <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" min="0"
+                       class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأعلى')" oninput="setCustomValidity('')">
+            </div>
+
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
+                السابق
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
+                إرسال
+            </button>
         </div>
     </div>
 
     <script type="module">
         // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // تم إزالة استيراد getStorage و ref و uploadBytes و getDownloadURL
 
         // تهيئة Firebase: هذه هي معلومات مشروعك
-        // **هام:** استبدل "YOUR_API_KEY" و "YOUR_APP_ID" و "YOUR_MEASUREMENT_ID"
-        // بالقيم الفعلية من إعدادات مشروعك في Firebase Console.
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -156,100 +222,170 @@
             measurementId: "G-98GQGZS09W"
         };
 
-        // تهيئة Firebase
+        // تهيئة Firebase App
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app); // إذا كنت تستخدم Google Analytics
-        const db = getFirestore(app); // الحصول على نسخة من Firestore
 
-        // دالة لجلب وعرض الموظفين
-        async function fetchAndDisplayEmployees() {
-            const employeeCardsContainer = document.getElementById('employeeCardsContainer');
-            employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>'; // رسالة التحميل
+        // الحصول على كائن Firestore
+        const db = getFirestore(app);
+        // تم إزالة تعيين window.storage
 
-            try {
-                const employeesCollectionRef = collection(db, "employees");
-                // جلب الموظفين وترتيبهم حسب حقل 'timestamp' تنازلياً (الأحدث أولاً)
-                const q = query(employeesCollectionRef, orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
+        window.db = db;
 
-                employeeCardsContainer.innerHTML = ''; // مسح رسالة التحميل / البطاقات الموجودة
+        let currentStep = 1;
 
-                if (querySnapshot.empty) {
-                    employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">لا يوجد موظفون متاحون حاليًا.</p>';
+        // دالة للانتقال للخطوة التالية
+        window.nextStep = function(step) {
+            const stepElement = document.getElementById(`step${step}`);
+            const currentForm = stepElement.querySelector('form');
+
+            if (currentForm) {
+                if (!currentForm.checkValidity()) {
+                    currentForm.reportValidity();
                     return;
                 }
-
-                querySnapshot.forEach((doc) => {
-                    const employeeData = doc.data();
-
-                    // افتراض أن حالة الموظف 'مُتاح' إذا لم يتم تحديدها
-                    const employeeStatus = employeeData.status || 'مُتاح';
-                    const statusBadgeClass = employeeStatus === 'مُتاح' ? 'badge-primary' : 'badge-success';
-                    const contactButtonClass = employeeStatus === 'مُتاح' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-800 cursor-not-allowed';
-                    const contactButtonDisabled = employeeStatus !== 'مُتاح' ? 'disabled' : '';
-                    const contactButtonText = employeeStatus === 'مُتاح' ? 'التواصل' : 'موظف حالياً';
-
-                    const employeeCardHTML = `
-                        <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
-                            <div class="p-6">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <div class="w-16 h-16 rounded-full border-2 border-white shadow bg-gray-200 flex items-center justify-center text-gray-600 text-2xl">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="font-bold text-lg">${employeeData.fullName || 'غير معروف'}</h3>
-                                            <p class="text-gray-600">${employeeData.jobTitle || 'غير محدد'}</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full ${statusBadgeClass} text-xs font-semibold">${employeeStatus}</span>
-                                </div>
-
-                                <div class="mt-4">
-                                    <div class="flex items-center text-gray-600 text-sm mb-2">
-                                        <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${employeeData.jobLocation || 'غير محدد'}، السودان</span>
-                                    </div>
-                                    <div class="flex items-center text-gray-600 text-sm mb-3">
-                                        <i class="fas fa-briefcase ml-1"></i>
-                                        <span>${employeeData.experienceYears || '0'} سنوات خبرة</span>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                        <div class="flex flex-wrap">
-                                            ${(Array.isArray(employeeData.skills) ? employeeData.skills : []).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">وصف إضافي:</h4>
-                                        <p class="text-gray-700 text-sm">${employeeData.description || 'لا يوجد وصف إضافي.'}</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex justify-between items-center pt-4 border-t border-gray-100">
-                                    <div>
-                                        <span class="text-gray-600 text-sm">السعر:</span>
-                                        <span class="font-bold">${employeeData.salaryRange?.from || '0'} - ${employeeData.salaryRange?.to || '0'} جنيه</span>
-                                    </div>
-                                    <button class="px-4 py-2 ${contactButtonClass} rounded-lg text-sm" ${contactButtonDisabled}>
-                                        <i class="fas fa-envelope ml-1"></i> ${contactButtonText}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    employeeCardsContainer.insertAdjacentHTML('beforeend', employeeCardHTML);
-                });
-            } catch (error) {
-                console.error("خطأ أثناء جلب الموظفين:", error);
-                employeeCardsContainer.innerHTML = '<p class="text-red-600 text-center col-span-full">حدث خطأ أثناء تحميل الموظفين.</p>';
             }
-        }
 
-        // جلب الموظفين عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', fetchAndDisplayEmployees);
+            stepElement.classList.add('hidden');
+            currentStep++;
+            // إذا كانت الخطوة الحالية هي 4، تخطى إلى 5 (التي أصبحت الآن 4 في التسلسل الجديد)
+            // بما أننا أزلنا خطوة 4، فإن الخطوة 5 الأصلية أصبحت 4.
+            // إذا كان `step` هو 3 (المهارات)، فالخطوة التالية (بعد التخطي) هي 4.
+            if (step === 3 && currentStep === 4) { // هذا الشرط للتأكد من أننا قادمون من خطوة المهارات
+                // لا نحتاج لتغيير currentStep هنا لأنه يزيد تلقائيا
+            }
+
+
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            window.updateSteps();
+        };
+
+        // دالة للانتقال للخطوة السابقة
+        window.prevStep = function(step) {
+            document.getElementById(`step${step}`).classList.add('hidden');
+            currentStep--;
+            // إذا كانت الخطوة الحالية 4 (بعد التعديل) ونحن نعود، فتكون الخطوة السابقة هي 3
+            if (step === 4 && currentStep === 3) {
+                // لا نحتاج لتغيير currentStep هنا
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            window.updateSteps();
+        };
+
+        // دالة لتحديث مؤشرات الخطوات
+        window.updateSteps = function() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active');
+                if (index < currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        };
+
+        // دالة للتحقق من المهارات
+        window.validateSkills = function() {
+            const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
+            const skillInputs = [
+                document.getElementById('skill1'),
+                document.getElementById('skill2'),
+                document.getElementById('skill3'),
+                document.getElementById('skill4'),
+                document.getElementById('skill5')
+            ];
+
+            // التحقق من وجود نصوص فارغة
+            for (let input of skillInputs) {
+                if (!input.value.trim()) {
+                    document.getElementById('skillError').textContent = 'يرجى إدخال جميع المهارات المطلوبة.';
+                    document.getElementById('skillError').classList.remove('hidden');
+                    return;
+                }
+            }
+
+            const skills = skillInputs.map(input => input.value.toLowerCase());
+            let relevantSkillsCount = 0;
+            const minRelatedSkills = 2; // العدد الأدنى للمهارات ذات الصلة
+
+            for (let skill of skills) {
+                if (skill.includes(jobTitle) || jobTitle.includes(skill)) {
+                    relevantSkillsCount++;
+                }
+            }
+
+            if (relevantSkillsCount < minRelatedSkills) {
+                document.getElementById('skillError').textContent = `يجب أن يكون لديك ${minRelatedSkills} مهارات على الأقل ذات صلة بالمسمى الوظيفي.`;
+                document.getElementById('skillError').classList.remove('hidden');
+            } else {
+                document.getElementById('skillError').classList.add('hidden');
+                window.nextStep(3); // الانتقال إلى الخطوة التالية
+            }
+        };
+
+        // دالة إرسال النموذج المحدثة لربطها بـ Firebase
+        window.submitForm = async function() {
+            // إضافة مؤشر تحميل أو تعطيل الزر لمنع الإرسال المتعدد
+            const submitButton = document.querySelector('#step4 button[type="submit"]');
+            submitButton.disabled = true;
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'جاري الإرسال...';
+
+            try {
+                // 1. جمع بيانات النموذج
+                const fullName = document.getElementById('fullName').value;
+                const jobTitle = document.getElementById('jobTitle').value;
+                const jobLocation = document.getElementById('jobLocation').value;
+                const experienceYears = parseInt(document.getElementById('experienceYears').value);
+                const skills = [
+                    document.getElementById('skill1').value,
+                    document.getElementById('skill2').value,
+                    document.getElementById('skill3').value,
+                    document.getElementById('skill4').value,
+                    document.getElementById('skill5').value
+                ];
+                const salaryFrom = parseInt(document.getElementById('salaryFrom').value);
+                const salaryTo = parseInt(document.getElementById('salaryTo').value);
+
+                // 2. بناء كائن بيانات الموظف
+                const employeeData = {
+                    fullName: fullName,
+                    jobTitle: jobTitle,
+                    jobLocation: jobLocation,
+                    experienceYears: experienceYears,
+                    skills: skills,
+                    salaryRange: {
+                        from: salaryFrom,
+                        to: salaryTo
+                    },
+                    timestamp: new Date().toISOString() // تسجيل وقت الإضافة بتنسيق ISO
+                };
+
+                // 3. حفظ بيانات الموظف في Cloud Firestore في مجموعة 'employees'
+                const docRef = await addDoc(collection(window.db, "employees"), employeeData);
+                console.log("تم إضافة الموظف بنجاح بمعرف:", docRef.id);
+
+                // 4. إظهار رسالة نجاح وإعادة تعيين النموذج
+                alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');
+                document.getElementById('employeeForm').reset(); // مسح النموذج بالكامل
+
+                // إعادة واجهة المستخدم للخطوة الأولى
+                document.getElementById('step4').classList.add('hidden');
+                currentStep = 1;
+                document.getElementById('step1').classList.remove('hidden');
+                window.updateSteps();
+
+            } catch (error) {
+                console.error("خطأ أثناء إرسال النموذج:", error);
+                alert('حدث خطأ أثناء تسجيل الموظف. الرجاء المحاولة مرة أخرى.');
+            } finally {
+                // إعادة الزر لحالته الأصلية بعد الانتهاء (سواء نجح أو فشل)
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        };
+
+        // تحديث الخطوات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', window.updateSteps);
     </script>
 </body>
 </html>
