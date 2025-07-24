@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تسجيل موظف</title>
+</head>
+<body>
+  <h1>تسجيل موظف</h1>
+  <form id="registerForm">
+    <label>الاسم بالكامل:</label><br />
+    <input type="text" id="fullName" required /><br /><br />
+
+    <label>رقم الهاتف:</label><br />
+    <input type="text" id="phoneNumber" required /><br /><br />
+
+    <label>رفع صورة الملف الشخصي:</label><br />
+    <input type="file" id="profileImage" accept="image/*" required /><br /><br />
+
+    <button type="submit">تسجيل</button>
+  </form>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
       authDomain: "shaglni-c64c0.firebaseapp.com",
       projectId: "shaglni-c64c0",
-      storageBucket: "shaglni-c64c0.firebasestorage.app",
+      storageBucket: "shaglni-c64c0.appspot.com",
       messagingSenderId: "768887356636",
       appId: "1:768887356636:web:11ec1d6991add3309c8819",
       measurementId: "G-98GQGZS09W"
@@ -19,39 +37,42 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("employeeForm");
-      const message = document.getElementById("message");
+    const form = document.getElementById("registerForm");
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("name").value.trim();
-        const idNumber = document.getElementById("idNumber").value.trim();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-        if (!name || !idNumber) {
-          message.textContent = "الرجاء إدخال الاسم والرقم.";
-          return;
-        }
+      const fullName = document.getElementById("fullName").value.trim();
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const profileImageFile = document.getElementById("profileImage").files[0];
 
-        try {
-          await addDoc(collection(db, "employees"), { name, idNumber });
-          message.textContent = "تم حفظ البيانات ✅";
-          form.reset();
-        } catch (err) {
-          message.textContent = "خطأ أثناء الحفظ: " + err.message;
-        }
-      });
+      if (!profileImageFile) {
+        alert("يرجى رفع صورة الملف الشخصي");
+        return;
+      }
+
+      try {
+        const imageRef = ref(storage, `profileImages/${Date.now()}_${profileImageFile.name}`);
+        const snapshot = await uploadBytes(imageRef, profileImageFile);
+        const imageUrl = await getDownloadURL(snapshot.ref);
+
+        await addDoc(collection(db, "employees"), {
+          fullName,
+          phoneNumber,
+          profileImageUrl: imageUrl,
+          timestamp: new Date()
+        });
+
+        alert("تم التسجيل بنجاح!");
+        form.reset();
+
+      } catch (error) {
+        console.error("خطأ في التسجيل:", error);
+        alert("حدث خطأ أثناء التسجيل، حاول مرة أخرى.");
+      }
     });
   </script>
-</head>
-<body>
-  <h2>تسجيل موظف</h2>
-  <form id="employeeForm">
-    <input type="text" id="name" placeholder="الاسم"><br>
-    <input type="text" id="idNumber" placeholder="الرقم"><br>
-    <button type="submit">تسجيل</button>
-  </form>
-  <p id="message"></p>
 </body>
 </html>
