@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>عرض الموظفين</title>
+</head>
+<body>
+  <h1>قائمة الموظفين</h1>
+  <div id="employeesList">جارٍ تحميل البيانات...</div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
       authDomain: "shaglni-c64c0.firebaseapp.com",
       projectId: "shaglni-c64c0",
-      storageBucket: "shaglni-c64c0.firebasestorage.app",
+      storageBucket: "shaglni-c64c0.appspot.com",
       messagingSenderId: "768887356636",
       appId: "1:768887356636:web:11ec1d6991add3309c8819",
       measurementId: "G-98GQGZS09W"
@@ -20,23 +26,39 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    async function fetchEmployees() {
-      const list = document.getElementById("employeeList");
-      const querySnapshot = await getDocs(collection(db, "employees"));
+    const employeesList = document.getElementById("employeesList");
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const li = document.createElement("li");
-        li.textContent = `👤 الاسم: ${data.name} | الرقم: ${data.idNumber}`;
-        list.appendChild(li);
-      });
+    async function displayEmployees() {
+      try {
+        const q = query(collection(db, "employees"), orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          employeesList.innerHTML = "لا يوجد موظفين مسجلين.";
+          return;
+        }
+
+        let html = "";
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          html += `
+            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px; max-width:300px;">
+              <img src="${data.profileImageUrl}" alt="صورة ${data.fullName}" style="width:100px; height:100px; object-fit:cover; border-radius:50%;" />
+              <h3>${data.fullName}</h3>
+              <p>رقم الهاتف: ${data.phoneNumber}</p>
+            </div>
+          `;
+        });
+
+        employeesList.innerHTML = html;
+
+      } catch (error) {
+        console.error("خطأ في جلب البيانات:", error);
+        employeesList.innerHTML = "حدث خطأ أثناء تحميل البيانات.";
+      }
     }
 
-    window.addEventListener("DOMContentLoaded", fetchEmployees);
+    displayEmployees();
   </script>
-</head>
-<body>
-  <h2>قائمة الموظفين</h2>
-  <ul id="employeeList"></ul>
 </body>
 </html>
