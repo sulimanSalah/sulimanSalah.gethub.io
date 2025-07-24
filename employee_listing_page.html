@@ -62,7 +62,95 @@
             margin: 0.125rem;
         }
 
-        /* تمت إزالة أنماط معرض الصور لأننا لم نعد نتعامل مع الصور */
+        .work-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .work-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        /* نافذة معرض الأعمال */
+        .work-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .work-gallery-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .work-gallery-content {
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+        }
+
+        .work-gallery-slide {
+            display: none;
+            text-align: center;
+        }
+
+        .work-gallery-slide.active {
+            display: block;
+        }
+
+        .work-gallery-slide img {
+            max-height: 70vh;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .work-gallery-caption {
+            color: white;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .work-gallery-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .work-gallery-prev,
+        .work-gallery-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 1rem;
+            user-select: none;
+        }
+
+        .work-gallery-prev {
+            left: 0;
+        }
+
+        .work-gallery-next {
+            right: 0;
+        }
     </style>
 
 </head>
@@ -87,9 +175,7 @@
                             <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-sm">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
                 </div>
             </div>
         </div>
@@ -137,6 +223,15 @@
         </div>
     </div>
 
+    <div class="work-gallery-modal" onclick="closeWorkGallery(event)">
+        <div class="work-gallery-content" onclick="event.stopPropagation()">
+            <span class="work-gallery-close" onclick="closeWorkGallery(event)">&times;</span>
+            <div id="gallerySlides"></div>
+            <a class="work-gallery-prev" onclick="changeSlide(-1)">&#10094;</a>
+            <a class="work-gallery-next" onclick="changeSlide(1)">&#10095;</a>
+        </div>
+    </div>
+
     <script type="module">
         // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -144,8 +239,6 @@
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // تهيئة Firebase: هذه هي معلومات مشروعك
-        // **هام:** استبدل "YOUR_API_KEY" و "YOUR_APP_ID" و "YOUR_MEASUREMENT_ID"
-        // بالقيم الفعلية من إعدادات مشروعك في Firebase Console.
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -161,6 +254,8 @@
         const analytics = getAnalytics(app); // إذا كنت تستخدم Google Analytics
         const db = getFirestore(app); // الحصول على نسخة من Firestore
 
+        let allEmployeeData = []; // لتخزين جميع بيانات الموظفين التي تم جلبها لمعرض الصور
+
         // دالة لجلب وعرض الموظفين
         async function fetchAndDisplayEmployees() {
             const employeeCardsContainer = document.getElementById('employeeCardsContainer');
@@ -172,6 +267,7 @@
                 const q = query(employeesCollectionRef, orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
 
+                allEmployeeData = []; // إعادة تعيين البيانات المخزنة
                 employeeCardsContainer.innerHTML = ''; // مسح رسالة التحميل / البطاقات الموجودة
 
                 if (querySnapshot.empty) {
@@ -181,6 +277,10 @@
 
                 querySnapshot.forEach((doc) => {
                     const employeeData = doc.data();
+                    // تخزين بيانات الموظف في allEmployeeData لاستخدامها في معرض الصور
+                    allEmployeeData.push(employeeData);
+                    // الحصول على الفهرس الحالي للموظف في allEmployeeData لاستخدامه في دالة المعرض
+                    const employeeIndex = allEmployeeData.length - 1;
 
                     // افتراض أن حالة الموظف 'مُتاح' إذا لم يتم تحديدها
                     const employeeStatus = employeeData.status || 'مُتاح';
@@ -189,14 +289,21 @@
                     const contactButtonDisabled = employeeStatus !== 'مُتاح' ? 'disabled' : '';
                     const contactButtonText = employeeStatus === 'مُتاح' ? 'التواصل' : 'موظف حالياً';
 
+                    // معالجة صور الأعمال السابقة: التأكد من وجودها وأنها مصفوفة
+                    const previousWorks = Array.isArray(employeeData.previousWorksUrls) ? employeeData.previousWorksUrls : [];
+                    const previousWorksHTML = previousWorks.length > 0 ? previousWorks.map((url, index) => `
+                        <img src="${url}"
+                             alt="عمل سابق ${index + 1}"
+                             class="work-thumbnail"
+                             onclick="openWorkGallery(${employeeIndex}, ${index})">
+                    `).join('') : '<p class="text-gray-500 text-xs">لا توجد أعمال سابقة مرفقة.</p>';
+
                     const employeeCardHTML = `
                         <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
                             <div class="p-6">
                                 <div class="flex items-start justify-between">
                                     <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <div class="w-16 h-16 rounded-full border-2 border-white shadow bg-gray-200 flex items-center justify-center text-gray-600 text-2xl">
-                                            <i class="fas fa-user"></i>
-                                        </div>
+                                        <img src="${employeeData.profileImageUrl || 'https://via.placeholder.com/150?text=No+Image'}" alt="صورة الموظف" class="w-16 h-16 rounded-full border-2 border-white shadow">
                                         <div>
                                             <h3 class="font-bold text-lg">${employeeData.fullName || 'غير معروف'}</h3>
                                             <p class="text-gray-600">${employeeData.jobTitle || 'غير محدد'}</p>
@@ -223,8 +330,10 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">وصف إضافي:</h4>
-                                        <p class="text-gray-700 text-sm">${employeeData.description || 'لا يوجد وصف إضافي.'}</p>
+                                        <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
+                                        <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto py-2">
+                                            ${previousWorksHTML}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -246,6 +355,56 @@
                 console.error("خطأ أثناء جلب الموظفين:", error);
                 employeeCardsContainer.innerHTML = '<p class="text-red-600 text-center col-span-full">حدث خطأ أثناء تحميل الموظفين.</p>';
             }
+        }
+
+        // Gallery Functions
+        let currentEmployeeIndex = 0;
+        let currentWorkIndex = 0;
+
+        window.openWorkGallery = function(empIndex, workIdx) {
+            currentEmployeeIndex = empIndex;
+            currentWorkIndex = workIdx;
+
+            const modal = document.querySelector('.work-gallery-modal');
+            const slidesContainer = modal.querySelector('#gallerySlides');
+
+            slidesContainer.innerHTML = ''; // مسح المحتوى السابق
+
+            // التأكد من وجود بيانات الموظف وصور الأعمال السابقة
+            if (allEmployeeData[currentEmployeeIndex] && Array.isArray(allEmployeeData[currentEmployeeIndex].previousWorksUrls) && allEmployeeData[currentEmployeeIndex].previousWorksUrls.length > 0) {
+                allEmployeeData[currentEmployeeIndex].previousWorksUrls.forEach((url, idx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'work-gallery-slide ' + (idx === currentWorkIndex ? 'active' : '');
+                    slide.innerHTML = `<img src="${url}" alt="Work Image ${idx + 1}">`;
+                    slidesContainer.appendChild(slide);
+                });
+                modal.classList.add('show'); // إظهار النافذة
+                showSlide(currentWorkIndex); // عرض الشريحة المحددة
+            }
+        };
+
+        window.closeWorkGallery = function(event) {
+            // الإغلاق فقط إذا تم النقر على خلفية النافذة أو زر الإغلاق
+            if (event && (event.target.classList.contains('work-gallery-modal') || event.target.classList.contains('work-gallery-close'))) {
+                document.querySelector('.work-gallery-modal').classList.remove('show');
+            }
+        };
+
+        window.changeSlide = function(n) {
+            if (allEmployeeData[currentEmployeeIndex] && Array.isArray(allEmployeeData[currentEmployeeIndex].previousWorksUrls)) {
+                const numSlides = allEmployeeData[currentEmployeeIndex].previousWorksUrls.length;
+                if (numSlides > 0) { // التأكد من وجود شرائح لتجنب الأخطاء
+                    currentWorkIndex = (currentWorkIndex + n + numSlides) % numSlides;
+                    showSlide(currentWorkIndex);
+                }
+            }
+        };
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('#gallerySlides .work-gallery-slide');
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === n);
+            });
         }
 
         // جلب الموظفين عند تحميل الصفحة
