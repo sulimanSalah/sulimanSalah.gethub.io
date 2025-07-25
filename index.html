@@ -12,9 +12,8 @@
         :root {
             --primary: #2563eb; /* Blue 600 */
             --primary-dark: #1e40af; /* Blue 800 */
-            --secondary: #f59e0b; /* Amber 500 */
-            --success: #10b981; /* Green 500 */
-            --danger: #ef4444; /* Red 500 */
+            --secondary: #10b981; /* Green 500 */
+            --secondary-dark: #047857; /* Green 700 */
             --light-gray: #f9fafb; /* Gray 50 */
             --dark-gray: #1f2937; /* Gray 800 */
             --text-gray: #6b7280; /* Gray 500 */
@@ -27,7 +26,15 @@
             background-color: var(--light-gray);
         }
 
-       .hero-section {
+        .navbar {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-hidden {
+            transform: translateY(-100%);
+        }
+
+        .hero-section {
             background-color: var(--purple-bg);
             background-image: linear-gradient(to bottom right, var(--purple-dark), var(--purple-bg));
             color: white;
@@ -38,68 +45,37 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-       .category-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            cursor: pointer;
-        }
-       .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-       .stat-card {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-       .stat-card:hover {
-            transform: translateY(-3px);
-        }
-       .stat-value {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-       .stat-label {
-            font-size: 1rem;
-            color: var(--text-gray);
-            margin-top: 0.5rem;
-        }
-
-       .footer-bg {
-            background-color: var(--purple-bg);
-            color: white;
-        }
-
-        /* Hero search input styling */
-       .hero-search-input {
+        .hero-search-input {
             width: 100%;
             padding: 1rem 1.5rem;
-            padding-right: 3.5rem; /* Space for icon */
+            padding-right: 3rem; /* Space for icon */
             border-radius: 9999px; /* Full pill shape */
-            border: none;
+            border: 2px solid var(--primary);
             outline: none;
             font-size: 1rem;
             color: var(--dark-gray);
+            transition: border-color 0.3s;
         }
 
-       .hero-search-input::placeholder {
-            color: #a0aec0; /* Lighter gray for placeholder */
+        .hero-search-input:focus {
+            border-color: var(--secondary);
         }
 
-       .hero-search-icon {
+        .hero-search-icon {
             position: absolute;
-            right: 1.5rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-gray);
         }
 
-        /* Button styles */
-       .button {
+        .button {
             display: inline-flex;
             align-items: center;
             padding: 0.75rem 1.5rem;
@@ -110,32 +86,30 @@
             transition: background-color 0.3s, transform 0.3s;
         }
 
-       .button-primary {
+        .button-primary {
             background-color: var(--primary);
             color: white;
         }
 
-       .button-primary:hover {
+        .button-primary:hover {
             background-color: var(--primary-dark);
             transform: translateY(-2px);
         }
 
-       .button-secondary {
-            background-color: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+        .button-secondary {
+            background-color: var(--secondary);
+            color: white;
         }
 
-       .button-secondary:hover {
-            background-color: var(--primary);
-            color: white;
+        .button-secondary:hover {
+            background-color: var(--secondary-dark);
             transform: translateY(-2px);
         }
     </style>
 </head>
 <body class="relative">
 
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <nav class="navbar bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
@@ -147,13 +121,13 @@
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="index.html" class="text-blue-600 font-medium">الرئيسية</a>
                     <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="employee_listing_page.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
-                    <a href="job_application_page.html" class="text-gray-700 hover:text-blue-600">إدخال الموظفين</a>
+                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
+                    <a href="employee_registration.html" class="text-gray-700 hover:text-blue-600">إدخال الموظفين</a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
-                    <a href="auth.html" class="button button-secondary">تسجيل الدخول</a>
-                    <a href="auth.html" class="button button-primary">حساب جديد</a>
+                    <button class="button button-secondary">تسجيل الدخول</button>
+                    <button class="button button-primary">حساب جديد</button>
                 </div>
 
                 <div class="md:hidden flex items-center">
@@ -167,11 +141,11 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white py-4">
             <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">الرئيسية</a>
             <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الوظائف</a>
-            <a href="available_employees.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الموظفين</a>
-            <a href="employee_registration.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">إدخال الموظفين</a>
+            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الموظفين</a>
+            <a href="job_application_page.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">إدخال الموظفين</a>
             <div class="border-t border-gray-200 mt-2 pt-2">
-                <a href="auth.html" class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">تسجيل الدخول</a>
-                <a href="auth.html" class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">حساب جديد</a>
+                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">تسجيل الدخول</button>
+                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">حساب جديد</button>
             </div>
         </div>
     </nav>
@@ -184,14 +158,10 @@
             <p class="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">
                 نوفر لك حرفيين مهرة في جميع المجالات مع ضمان الجودة والاحترافية.
             </p>
-            <div class="relative max-w-xl mx-auto mb-8">
+            <div class="search-container mb-8">
                 <input type="text" placeholder="ابحث عن حرفي" class="hero-search-input shadow-lg">
                 <i class="fas fa-search hero-search-icon"></i>
             </div>
-            <a href="#" class="button button-primary">
-                <i class="fas fa-briefcase ml-3"></i>
-                عرض وظيفة
-            </a>
         </div>
     </header>
 
@@ -252,7 +222,7 @@
                 وظائف مطلوبة حالياً
             </h2>
             <div class="text-center mb-12">
-                <a href="#" class="inline-flex items-center text-blue-600 font-semibold hover:underline">
+                <a href="available_employees.html" class="inline-flex items-center text-blue-600 font-semibold hover:underline">
                     عرض جميع الوظائف <i class="fas fa-arrow-left mr-2"></i>
                 </a>
             </div>
@@ -269,9 +239,9 @@
                         <i class="fas fa-dollar-sign ml-1"></i>
                         <span>الراتب: 80,000 - 120,000 جنيه سوداني</span>
                     </div>
-                    <a href="#" class="button button-primary w-full">
+                    <button class="button button-primary w-full">
                         التقديم الآن
-                    </a>
+                    </button>
                 </div>
             </div>
         </section>
@@ -303,7 +273,7 @@
             </div>
         </section>
 
-        <section id="how-it-works" class="mb-16">
+        <section class="mb-16">
             <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
                 كيف تعمل منصة "شغلني"؟
             </h2>
@@ -332,27 +302,6 @@
             </div>
         </section>
 
-        <section class="mb-16">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="stat-card">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">حرفي مسجل</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">عمل منجز</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">0%</div>
-                    <div class="stat-label">رضا العملاء</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">مجال عمل</div>
-                </div>
-            </div>
-        </section>
-
         <section class="mb-16 text-center bg-white rounded-xl shadow-lg p-8">
             <h2 class="text-3xl font-extrabold text-gray-800 mb-6">
                 هل أنت مستعد للبدء؟
@@ -364,7 +313,7 @@
                 <a href="#" class="button button-primary">
                     <i class="fas fa-users ml-3"></i> انضم كصاحب عمل
                 </a>
-                <a href="employee_registration.html" class="button button-primary" style="background-color: var(--purple-bg); hover:background-color: var(--purple-dark);">
+                <a href="employee_registration.html" class="button button-secondary">
                     <i class="fas fa-wrench ml-3"></i> انضم كحرفي
                 </a>
             </div>
@@ -389,44 +338,5 @@
             <div>
                 <h3 class="text-xl font-bold mb-4">روابط سريعة</h3>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="index.html" class="hover:underline">الرئيسية</a></li>
-                    <li><a href="#" class="hover:underline">وظائف متاحة</a></li>
-                    <li><a href="available_employees.html" class="hover:underline">عمال مهرة</a></li>
-                    <li><a href="#how-it-works" class="hover:underline">كيف يعمل؟</a></li>
-                    <li><a href="#" class="hover:underline">اتصل بنا</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-xl font-bold mb-4">حسابك</h3>
-                <ul class="space-y-2 text-sm mb-6">
-                    <li><a href="auth.html" class="hover:underline">تسجيل الدخول</a></li>
-                    <li><a href="auth.html" class="hover:underline">إنشاء حساب</a></li>
-                    <li><a href="#" class="hover:underline">لوحة التحكم</a></li>
-                    <li><a href="#" class="hover:underline">سياسة الخصوصية</a></li>
-                    <li><a href="#" class="hover:underline">الشروط والأحكام</a></li>
-                </ul>
-                <h3 class="text-xl font-bold mb-4">تواصل معنا</h3>
-                <div class="space-y-2 text-sm">
-                    <p class="flex items-center justify-center md:justify-end"><i class="fas fa-map-marker-alt ml-2"></i> الخرطوم، شارع النيل، السودان</p>
-                    <p class="flex items-center justify-center md:justify-end"><i class="fas fa-phone ml-2"></i> +249 123 456 789</p>
-                    <p class="flex items-center justify-center md:justify-end"><i class="fas fa-envelope ml-2"></i> info@shghlny.com</p>
-                </div>
-            </div>
-        </div>
-        <div class="container mx-auto px-4 mt-8 pt-6 border-t border-gray-700 text-center text-sm opacity-80">
-            &copy; 2025 شغلني. جميع الحقوق محفوظة.
-        </div>
-    </footer>
-
-    <script>
-        // JavaScript for mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-    </script>
-</body>
-</html>
+                    <li><a href="#" class="hover:underline">الرئيسية</a></li>
+                    <li><a href="#" class="hover:underline">وظائف متاحة
