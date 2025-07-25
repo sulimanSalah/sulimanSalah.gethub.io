@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
+
         :root {
             --primary: #2563eb; /* Blue 600 */
             --primary-dark: #1e40af; /* Blue 800 */
@@ -27,7 +27,7 @@
             background-color: var(--light-gray);
         }
 
-        .hero-section {
+       .hero-section {
             background-color: var(--purple-bg);
             background-image: linear-gradient(to bottom right, var(--purple-dark), var(--purple-bg));
             color: white;
@@ -38,16 +38,16 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .category-card {
+       .category-card {
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             cursor: pointer;
         }
-        .category-card:hover {
+       .category-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .stat-card {
+       .stat-card {
             background-color: white;
             padding: 2rem;
             border-radius: 12px;
@@ -55,27 +55,27 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: transform 0.2s;
         }
-        .stat-card:hover {
+       .stat-card:hover {
             transform: translateY(-3px);
         }
-        .stat-value {
+       .stat-value {
             font-size: 2.5rem;
             font-weight: 900;
             color: var(--primary);
         }
-        .stat-label {
+       .stat-label {
             font-size: 1rem;
             color: var(--text-gray);
             margin-top: 0.5rem;
         }
 
-        .footer-bg {
+       .footer-bg {
             background-color: var(--purple-bg);
             color: white;
         }
 
         /* Hero search input styling */
-        .hero-search-input {
+       .hero-search-input {
             width: 100%;
             padding: 1rem 1.5rem;
             padding-right: 3.5rem; /* Space for icon */
@@ -86,16 +86,50 @@
             color: var(--dark-gray);
         }
 
-        .hero-search-input::placeholder {
+       .hero-search-input::placeholder {
             color: #a0aec0; /* Lighter gray for placeholder */
         }
 
-        .hero-search-icon {
+       .hero-search-icon {
             position: absolute;
             right: 1.5rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-gray);
+        }
+
+        /* Button styles */
+       .button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Full pill shape */
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+       .button-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+       .button-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+       .button-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+       .button-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -111,15 +145,15 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-blue-600 font-medium">الرئيسية</a>
+                    <a href="index.html" class="text-blue-600 font-medium">الرئيسية</a>
                     <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
                     <a href="employee_listing_page.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
                     <a href="job_application_page.html" class="text-gray-700 hover:text-blue-600">إدخال الموظفين</a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
-                    <button class="px-5 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition duration-300">تسجيل الدخول</button>
-                    <button class="px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300">حساب جديد</button>
+                    <a href="auth.html" class="button button-secondary">تسجيل الدخول</a>
+                    <a href="auth.html" class="button button-primary">حساب جديد</a>
                 </div>
 
                 <div class="md:hidden flex items-center">
@@ -131,13 +165,13 @@
         </div>
 
         <div id="mobile-menu" class="hidden md:hidden bg-white py-4">
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">الرئيسية</a>
+            <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">الرئيسية</a>
             <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الوظائف</a>
             <a href="available_employees.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الموظفين</a>
             <a href="employee_registration.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">إدخال الموظفين</a>
             <div class="border-t border-gray-200 mt-2 pt-2">
-                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">تسجيل الدخول</button>
-                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">حساب جديد</button>
+                <a href="auth.html" class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">تسجيل الدخول</a>
+                <a href="auth.html" class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">حساب جديد</a>
             </div>
         </div>
     </nav>
@@ -154,7 +188,7 @@
                 <input type="text" placeholder="ابحث عن حرفي" class="hero-search-input shadow-lg">
                 <i class="fas fa-search hero-search-icon"></i>
             </div>
-            <a href="#" class="inline-flex items-center px-8 py-4 bg-white text-blue-600 rounded-full text-lg font-semibold shadow-xl hover:bg-gray-100 transition duration-300">
+            <a href="#" class="button button-primary">
                 <i class="fas fa-briefcase ml-3"></i>
                 عرض وظيفة
             </a>
@@ -210,8 +244,7 @@
                         <li>نظافة - تركيب - نقل - تركيب أجهزة</li>
                     </ul>
                 </div>
-
-                </div>
+            </div>
         </section>
 
         <section class="mb-16">
@@ -236,11 +269,11 @@
                         <i class="fas fa-dollar-sign ml-1"></i>
                         <span>الراتب: 80,000 - 120,000 جنيه سوداني</span>
                     </div>
-                    <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
+                    <a href="#" class="button button-primary w-full">
                         التقديم الآن
-                    </button>
+                    </a>
                 </div>
-                </div>
+            </div>
         </section>
 
         <section class="mb-16">
@@ -263,12 +296,14 @@
                         <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">صيانة</span>
                         <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">إصلاح أعطال</span>
                     </div>
-                    <a href="#" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 inline-block">تواصل</a>
+                    <a href="#" class="button button-primary">
+                        تواصل
+                    </a>
                 </div>
-                </div>
+            </div>
         </section>
 
-        <section class="mb-16">
+        <section id="how-it-works" class="mb-16">
             <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
                 كيف تعمل منصة "شغلني"؟
             </h2>
@@ -326,10 +361,10 @@
                 انضم إلى منصة شغلني اليوم سواء كصاحب عمل أو كحرفي محترف.
             </p>
             <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white rounded-full text-lg font-semibold shadow-xl hover:bg-blue-700 transition duration-300">
+                <a href="#" class="button button-primary">
                     <i class="fas fa-users ml-3"></i> انضم كصاحب عمل
                 </a>
-                <a href="employee_registration.html" class="inline-flex items-center px-8 py-4 bg-purple-600 text-white rounded-full text-lg font-semibold shadow-xl hover:bg-purple-700 transition duration-300">
+                <a href="employee_registration.html" class="button button-primary" style="background-color: var(--purple-bg); hover:background-color: var(--purple-dark);">
                     <i class="fas fa-wrench ml-3"></i> انضم كحرفي
                 </a>
             </div>
@@ -354,10 +389,10 @@
             <div>
                 <h3 class="text-xl font-bold mb-4">روابط سريعة</h3>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:underline">الرئيسية</a></li>
+                    <li><a href="index.html" class="hover:underline">الرئيسية</a></li>
                     <li><a href="#" class="hover:underline">وظائف متاحة</a></li>
                     <li><a href="available_employees.html" class="hover:underline">عمال مهرة</a></li>
-                    <li><a href="#" class="hover:underline">كيف يعمل؟</a></li>
+                    <li><a href="#how-it-works" class="hover:underline">كيف يعمل؟</a></li>
                     <li><a href="#" class="hover:underline">اتصل بنا</a></li>
                 </ul>
             </div>
@@ -365,8 +400,8 @@
             <div>
                 <h3 class="text-xl font-bold mb-4">حسابك</h3>
                 <ul class="space-y-2 text-sm mb-6">
-                    <li><a href="#" class="hover:underline">تسجيل الدخول</a></li>
-                    <li><a href="#" class="hover:underline">إنشاء حساب</a></li>
+                    <li><a href="auth.html" class="hover:underline">تسجيل الدخول</a></li>
+                    <li><a href="auth.html" class="hover:underline">إنشاء حساب</a></li>
                     <li><a href="#" class="hover:underline">لوحة التحكم</a></li>
                     <li><a href="#" class="hover:underline">سياسة الخصوصية</a></li>
                     <li><a href="#" class="hover:underline">الشروط والأحكام</a></li>
