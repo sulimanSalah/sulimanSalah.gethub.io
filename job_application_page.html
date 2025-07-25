@@ -6,6 +6,7 @@
     <title>إدخال الموظفين - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/compressorjs/dist/compressor.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root {
@@ -24,7 +25,7 @@
             background-color: #f5f7fa;
         }
 
-        .step {
+       .step {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -37,29 +38,29 @@
             font-weight: bold;
         }
 
-        .step.active {
+       .step.active {
             background-color: var(--success);
         }
 
-        .step-container {
+       .step-container {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
 
-        .form-card {
+       .form-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             border: 2px solid transparent;
         }
 
-        .form-card:hover {
+       .form-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
 
-        .error-message {
+       .error-message {
             color: var(--danger);
             margin-top: 10px;
         }
@@ -203,8 +204,16 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
-            <h2 class="text-lg font-bold mb-4">الخطوة 5: تأكيد المعلومات وتحديد السعر</h2>
+            <h2 class="text-lg font-bold mb-4">الخطوة 5: تأكيد المعلومات</h2>
             <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>
+
+            <div class="mb-4">
+                <div id="uploadProgressBarContainer" class="w-full bg-gray-200 rounded-full h-2.5 hidden">
+                    <div id="uploadProgressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="uploadProgressText" class="text-sm text-gray-600 mt-2 hidden text-right"></p>
+            </div>
+
             <div class="mb-4">
                 <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>
                 <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" min="0"
@@ -229,8 +238,7 @@
         // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        // إعادة استيراد Storage
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         // تهيئة Firebase: هذه هي معلومات مشروعك
         const firebaseConfig = {
@@ -257,16 +265,51 @@
         let currentStep = 1;
         const totalSteps = 5; // تم تحديث العدد الكلي للخطوات
 
+        // عناصر شريط التقدم
+        const uploadProgressBarContainer = document.getElementById('uploadProgressBarContainer');
+        const uploadProgressBar = document.getElementById('uploadProgressBar');
+        const uploadProgressText = document.getElementById('uploadProgressText');
+
+        // متغيرات لتتبع التقدم الكلي للرفع
+        let totalBytesToUpload = 0;
+        let totalBytesUploaded = 0;
+        let uploadTasks =; // لتخزين جميع مهام الرفع
+
+        // دالة لتحديث شريط التقدم الكلي
+        function updateOverallProgressBar() {
+            if (totalBytesToUpload === 0) return;
+            const overallProgress = (totalBytesUploaded / totalBytesToUpload) * 100;
+            uploadProgressBar.style.width = `${overallProgress.toFixed(0)}%`;
+            uploadProgressText.textContent = `جاري الرفع: ${overallProgress.toFixed(0)}%`;
+        }
+
+        // دالة لضغط ملف واحد
+        async function compressFile(file) {
+            return new Promise((resolve, reject) => {
+                new Compressor(file, {
+                    quality: 0.6, // جودة الضغط (0 إلى 1)
+                    maxWidth: 1280, // أقصى عرض للصورة
+                    maxHeight: 720, // أقصى ارتفاع للصورة
+                    convertSize: 200000, // تحويل الملفات الأكبر من 200 كيلوبايت إلى JPEG
+                    success(result) {
+                        resolve(result); // result هو كائن Blob مضغوط
+                    },
+                    error(err) {
+                        reject(err);
+                    },
+                });
+            });
+        }
+
         // دالة للانتقال للخطوة التالية
         window.nextStep = function(step) {
             const stepElement = document.getElementById(`step${step}`);
-            const currentForm = stepElement.querySelector('form'); // محاولة الحصول على النموذج داخل الخطوة
+            const currentForm = stepElement.querySelector('form');
 
-            // التحقق من صلاحية النموذج فقط إذا كان موجودًا في الخطوة الحالية
             if (currentForm) {
                 if (!currentForm.checkValidity()) {
                     currentForm.reportValidity();
-                    return; // إيقاف التنفيذ إذا كان النموذج غير صالح
+                    return;
                 }
             } else if (step === 4) { // الخطوة 4 (رفع الصور) لا تحتوي على <form> مباشر
                 const previousWorksInput = document.getElementById('previousWorks');
@@ -275,21 +318,17 @@
                     previousWorksInput.reportValidity();
                     return;
                 } else {
-                    previousWorksInput.setCustomValidity(''); // مسح رسالة التحقق إذا كانت صالحة
+                    previousWorksInput.setCustomValidity('');
                 }
             }
 
-
-            // إخفاء الخطوة الحالية
             stepElement.classList.add('hidden');
-
-            // الانتقال إلى الخطوة التالية
             currentStep++;
             if (currentStep > totalSteps) {
-                currentStep = totalSteps; // التأكد من عدم تجاوز الحد الأقصى للخطوات
+                currentStep = totalSteps;
             }
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps(); // تحديث مؤشرات الخطوات
+            window.updateSteps();
         };
 
         // دالة للانتقال للخطوة السابقة
@@ -297,10 +336,10 @@
             document.getElementById(`step${step}`).classList.add('hidden');
             currentStep--;
             if (currentStep < 1) {
-                currentStep = 1; // التأكد من عدم النزول عن الخطوة الأولى
+                currentStep = 1;
             }
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps(); // تحديث مؤشرات الخطوات
+            window.updateSteps();
         };
 
         // دالة لتحديث مؤشرات الخطوات
@@ -317,15 +356,8 @@
         // دالة للتحقق من المهارات
         window.validateSkills = function() {
             const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
-            const skillInputs = [
-                document.getElementById('skill1'),
-                document.getElementById('skill2'),
-                document.getElementById('skill3'),
-                document.getElementById('skill4'),
-                document.getElementById('skill5')
-            ];
+            const skillInputs =;
 
-            // التحقق من وجود نصوص فارغة
             for (let input of skillInputs) {
                 if (!input.value.trim()) {
                     document.getElementById('skillError').textContent = 'يرجى إدخال جميع المهارات المطلوبة.';
@@ -336,10 +368,12 @@
 
             const skills = skillInputs.map(input => input.value.toLowerCase());
             let relevantSkillsCount = 0;
-            const minRelatedSkills = 2; // العدد الأدنى للمهارات ذات الصلة
+            const minRelatedSkills = 2;
 
             for (let skill of skills) {
-                if (skill.includes(jobTitle) || jobTitle.includes(skill)) {
+                if (skill.includes(jobTitle) |
+
+| jobTitle.includes(skill)) {
                     relevantSkillsCount++;
                 }
             }
@@ -349,68 +383,110 @@
                 document.getElementById('skillError').classList.remove('hidden');
             } else {
                 document.getElementById('skillError').classList.add('hidden');
-                window.nextStep(3); // الانتقال إلى الخطوة التالية (الخطوة 4 الجديدة)
+                window.nextStep(3);
             }
         };
 
         // دالة إرسال النموذج المحدثة لربطها بـ Firebase
         window.submitForm = async function() {
-            // تحقق من صلاحية حقول الخطوة الأخيرة قبل الإرسال الفعلي
             const salaryFromInput = document.getElementById('salaryFrom');
             const salaryToInput = document.getElementById('salaryTo');
 
-            if (!salaryFromInput.checkValidity() || !salaryToInput.checkValidity()) {
+            if (!salaryFromInput.checkValidity() ||!salaryToInput.checkValidity()) {
                 salaryFromInput.reportValidity();
                 salaryToInput.reportValidity();
                 return;
             }
 
-            // إضافة مؤشر تحميل أو تعطيل الزر لمنع الإرسال المتعدد
             const submitButton = document.querySelector('#step5 button[type="submit"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
             submitButton.textContent = 'جاري الإرسال...';
 
             try {
-                // 1. جمع بيانات النموذج
-                const profileImageFile = document.getElementById('profileImage').files[0];
+                const profileImageFile = document.getElementById('profileImage').files;
                 const fullName = document.getElementById('fullName').value;
                 const jobTitle = document.getElementById('jobTitle').value;
                 const jobLocation = document.getElementById('jobLocation').value;
                 const experienceYears = parseInt(document.getElementById('experienceYears').value);
-                const skills = [
-                    document.getElementById('skill1').value,
-                    document.getElementById('skill2').value,
-                    document.getElementById('skill3').value,
-                    document.getElementById('skill4').value,
-                    document.getElementById('skill5').value
-                ];
-                const previousWorksFiles = document.getElementById('previousWorks').files; // إعادة جلب الملفات
+                const skills =;
+                const previousWorksFiles = document.getElementById('previousWorks').files;
                 const salaryFrom = parseInt(document.getElementById('salaryFrom').value);
                 const salaryTo = parseInt(document.getElementById('salaryTo').value);
 
                 let profileImageUrl = null;
-                const previousWorksUrls = [];
+                const previousWorksUrls =;
 
-                // 2. رفع صورة الملف الشخصي إلى Cloud Storage (إذا وُجدت)
+                // إعادة تعيين متغيرات التقدم
+                totalBytesToUpload = 0;
+                totalBytesUploaded = 0;
+                uploadTasks =;
+
+                // إظهار شريط التقدم
+                uploadProgressBarContainer.classList.remove('hidden');
+                uploadProgressText.classList.remove('hidden');
+                uploadProgressText.textContent = 'جاري الرفع: 0%';
+                uploadProgressBar.style.width = '0%';
+
+                // 1. ضغط وتجهيز صورة الملف الشخصي للرفع
                 if (profileImageFile) {
+                    const compressedProfileFile = await compressFile(profileImageFile);
                     const profileImageRef = ref(window.storage, `profileImages/${Date.now()}-${profileImageFile.name}`);
-                    const snapshot = await uploadBytes(profileImageRef, profileImageFile);
-                    profileImageUrl = await getDownloadURL(snapshot.ref);
-                    console.log('تم رفع صورة الملف الشخصي:', profileImageUrl);
+                    const uploadTask = uploadBytesResumable(profileImageRef, compressedProfileFile);
+                    uploadTasks.push(uploadTask);
+                    totalBytesToUpload += compressedProfileFile.size;
                 }
 
-                // 3. رفع صور الأعمال السابقة إلى Cloud Storage (إذا وُجدت)
+                // 2. ضغط وتجهيز صور الأعمال السابقة للرفع
                 if (previousWorksFiles.length > 0) {
-                    for (let i = 0; i < previousWorksFiles.length; i++) {
-                        const file = previousWorksFiles[i];
+                    for (const file of previousWorksFiles) {
+                        const compressedFile = await compressFile(file);
                         const previousWorkRef = ref(window.storage, `previousWorks/${Date.now()}-${file.name}`);
-                        const snapshot = await uploadBytes(previousWorkRef, file);
-                        const url = await getDownloadURL(snapshot.ref);
-                        previousWorksUrls.push(url);
-                        console.log(`تم رفع صورة العمل السابق ${i+1}:`, url);
+                        const uploadTask = uploadBytesResumable(previousWorkRef, compressedFile);
+                        uploadTasks.push(uploadTask);
+                        totalBytesToUpload += compressedFile.size;
                     }
                 }
+
+                // 3. مراقبة جميع مهام الرفع وجمع الروابط
+                const downloadURLPromises = uploadTasks.map(task => {
+                    return new Promise((resolve, reject) => {
+                        task.on('state_changed',
+                            (snapshot) => {
+                                // تحديث إجمالي البايتات المرفوعة من جميع المهام
+                                totalBytesUploaded = uploadTasks.reduce((sum, t) => sum + t.snapshot.bytesTransferred, 0);
+                                updateOverallProgressBar();
+                            },
+                            (error) => {
+                                console.error("خطأ في الرفع:", error);
+                                reject(error);
+                            },
+                            () => {
+                                getDownloadURL(task.snapshot.ref).then(resolve).catch(reject);
+                            }
+                        );
+                    });
+                });
+
+                const allDownloadURLs = await Promise.all(downloadURLPromises);
+
+                // تعيين الروابط مرة أخرى إلى المتغيرات الصحيحة بناءً على الترتيب
+                let urlIndex = 0;
+                if (profileImageFile) {
+                    profileImageUrl = allDownloadURLs[urlIndex++];
+                }
+                if (previousWorksFiles.length > 0) {
+                    for (let i = 0; i < previousWorksFiles.length; i++) {
+                        previousWorksUrls.push(allDownloadURLs[urlIndex++]);
+                    }
+                }
+
+                console.log('تم رفع صورة الملف الشخصي:', profileImageUrl);
+                console.log('تم رفع صور الأعمال السابقة:', previousWorksUrls);
+
+                // إخفاء شريط التقدم بعد اكتمال جميع عمليات الرفع
+                uploadProgressBarContainer.classList.add('hidden');
+                uploadProgressText.classList.add('hidden');
 
                 // 4. بناء كائن بيانات الموظف
                 const employeeData = {
@@ -423,18 +499,18 @@
                         from: salaryFrom,
                         to: salaryTo
                     },
-                    profileImageUrl: profileImageUrl, // رابط صورة الملف الشخصي المرفوعة
-                    previousWorksUrls: previousWorksUrls, // قائمة روابط صور الأعمال السابقة المرفوعة
-                    timestamp: new Date().toISOString() // تسجيل وقت الإضافة بتنسيق ISO
+                    profileImageUrl: profileImageUrl,
+                    previousWorksUrls: previousWorksUrls,
+                    timestamp: new Date().toISOString()
                 };
 
-                // 5. حفظ بيانات الموظف في Cloud Firestore في مجموعة 'employees'
+                // 5. حفظ بيانات الموظف في Cloud Firestore
                 const docRef = await addDoc(collection(window.db, "employees"), employeeData);
                 console.log("تم إضافة الموظف بنجاح بمعرف:", docRef.id);
 
                 // 6. إظهار رسالة نجاح وإعادة تعيين النموذج
                 alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');
-                document.getElementById('employeeForm').reset(); // مسح النموذج بالكامل
+                document.getElementById('employeeForm').reset();
 
                 // إعادة واجهة المستخدم للخطوة الأولى
                 document.getElementById('step5').classList.add('hidden');
@@ -446,7 +522,6 @@
                 console.error("خطأ أثناء إرسال النموذج:", error);
                 alert('حدث خطأ أثناء تسجيل الموظف. الرجاء المحاولة مرة أخرى.');
             } finally {
-                // إعادة الزر لحالته الأصلية بعد الانتهاء (سواء نجح أو فشل)
                 submitButton.disabled = false;
                 submitButton.textContent = originalButtonText;
             }
