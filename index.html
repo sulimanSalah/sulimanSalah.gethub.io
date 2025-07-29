@@ -1,342 +1,470 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شغلني - منصة ربط أصحاب الأعمال بالحرفيين</title>
+    <title>شغلني - ابحث عن فرصتك أو موظفك المثالي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* تضمين خط Tajawal */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-
+        
+        /* تعريف متغيرات الألوان للحفاظ على التناسق */
         :root {
-            --primary: #2563eb; /* Blue 600 */
-            --primary-dark: #1e40af; /* Blue 800 */
-            --secondary: #10b981; /* Green 500 */
-            --secondary-dark: #047857; /* Green 700 */
-            --light-gray: #f9fafb; /* Gray 50 */
-            --dark-gray: #1f2937; /* Gray 800 */
-            --text-gray: #6b7280; /* Gray 500 */
-            --purple-bg: #6B46C1; /* اللون البنفسجي المميز للخلفية */
-            --purple-dark: #5A3A9E; /* درجة أغمق للبنفسجي */
+            --primary: #2563eb; /* أزرق أساسي */
+            --primary-light: #3b82f6; /* أزرق أفتح للتأثيرات */
+            --primary-dark: #1e40af; /* أزرق أغمق للـ hover */
+            --secondary: #f59e0b; /* أصفر / برتقالي */
+            --light-bg: #f5f7fa; /* خلفية فاتحة موحدة */
+            --card-bg: #ffffff; /* خلفية البطاقات */
+            --text-color: #1f2937; /* لون النص الداكن */
+            --gray-text: #6b7280; /* لون النص الرمادي */
         }
 
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: var(--light-gray);
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي في بعض الحالات */
         }
 
-        .navbar {
-            transition: transform 0.3s ease;
-        }
-
-        .navbar-hidden {
-            transform: translateY(-100%);
-        }
-
-        .hero-section {
-            background-color: var(--purple-bg);
-            background-image: linear-gradient(to bottom right, var(--purple-dark), var(--purple-bg));
-            color: white;
-            padding: 4rem 1rem;
-            text-align: center;
-            border-bottom-left-radius: 60px; /* شكل منحني في الأسفل */
-            border-bottom-right-radius: 60px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .search-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero-search-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            padding-right: 3rem; /* Space for icon */
-            border-radius: 9999px; /* Full pill shape */
-            border: 2px solid var(--primary);
-            outline: none;
-            font-size: 1rem;
-            color: var(--dark-gray);
-            transition: border-color 0.3s;
-        }
-
-        .hero-search-input:focus {
-            border-color: var(--secondary);
-        }
-
-        .hero-search-icon {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-gray);
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px; /* Full pill shape */
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .button-primary {
+        /* تنسيق الأزرار الأساسي */
+        .btn-primary {
             background-color: var(--primary);
             color: white;
+            padding: 0.85rem 2.25rem; /* أكبر قليلاً */
+            border-radius: 0.75rem; /* حواف أكثر استدارة */
+            font-weight: 700; /* خط أثقل */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); /* ظل أزرق جذاب */
         }
-
-        .button-primary:hover {
+        .btn-primary:hover {
             background-color: var(--primary-dark);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
             transform: translateY(-2px);
         }
 
-        .button-secondary {
+        .btn-secondary {
             background-color: var(--secondary);
             color: white;
+            padding: 0.85rem 2.25rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .btn-secondary:hover {
+            background-color: #d97706;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
         }
 
-        .button-secondary:hover {
-            background-color: var(--secondary-dark);
+        /* أنماط البطاقات */
+        .card-elegant {
+            background-color: var(--card-bg);
+            border-radius: 1.25rem; /* حواف مستديرة أكثر وضوحاً */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* ظل أعمق وأكثر انتشاراً */
+            padding: 2.5rem; /* تباعد داخلي أكبر */
+            transition: all 0.3s ease;
+        }
+        .card-elegant:hover {
+            transform: translateY(-8px); /* رفع البطاقة أكثر عند التحويم */
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15); /* ظل أكبر عند التحويم */
+        }
+
+        /* حقل البحث الفخم (الأنيميشن والظل) */
+        .fancy-search-input {
+            border: none; /* إزالة الحدود الافتراضية */
+            background-color: #f0f4f8; /* خلفية فاتحة */
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05), inset -2px -2px 5px rgba(255,255,255,0.7); /* Neumorphism inner shadow */
+        }
+
+        .fancy-search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3), inset 2px 2px 5px rgba(0,0,0,0.05), inset -2px -2px 5px rgba(255,255,255,0.7); /* ظل خارجي أزرق مع Neumorphism */
+            background-color: #ffffff; /* تصير بيضاء عند التركيز */
+        }
+        
+        /* زر البحث */
+        .fancy-search-button {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .fancy-search-button:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
             transform: translateY(-2px);
+        }
+
+        /* تحسينات للعناوين */
+        .section-heading {
+            font-size: 2.8rem; /* أكبر قليلاً */
+            font-weight: 900; /* أثقل */
+            color: var(--primary-dark); /* لون أزرق داكن */
+            margin-bottom: 3.5rem; /* تباعد سفلي أكبر */
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.75rem;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            width: 80px; /* خط أطول */
+            height: 6px; /* خط أسمك */
+            background: linear-gradient(to right, var(--primary), var(--primary-light)); /* تدرج لوني */
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        /* تحسينات لقائمة التنقل */
+        .navbar .nav-link {
+            color: var(--gray-text); /* لون رمادي للروابط غير النشطة */
+            font-weight: 600; /* خط سميك */
+            padding: 0.5rem 0.75rem; /* تباعد مناسب */
+            transition: color 0.3s ease, transform 0.2s ease;
+            position: relative;
+            overflow: hidden; /* لإخفاء التأثير الزائد عن الحدود */
+        }
+
+        .navbar .nav-link:hover {
+            color: var(--primary); /* أزرق عند التحويم */
+            transform: translateY(-2px); /* رفع طفيف */
+        }
+
+        .navbar .nav-link.active {
+            color: var(--primary);
+            font-weight: 800; /* أثقل للرابط النشط */
+        }
+        .navbar .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px; /* خط أزرق تحت الرابط النشط */
+            background-color: var(--primary);
+            border-radius: 2px;
+            animation: expandUnderline 0.3s forwards; /* أنيميشن الظهور */
+        }
+
+        @keyframes expandUnderline {
+            from { width: 0%; left: 50%; transform: translateX(-50%); }
+            to { width: 100%; left: 0%; transform: translateX(0%); }
+        }
+
+        /* Hero section specific style */
+        .hero-section {
+            background: linear-gradient(to right, #2563eb, #3b82f6); /* تدرج أزرق */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding-top: 8rem; /* تباعد علوي أكبر */
+            padding-bottom: 8rem; /* تباعد سفلي أكبر */
+        }
+
+        /* For the specific add job/employee buttons section */
+        .cta-special-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); /* تدرج لوني للخلفية */
+            color: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4);
+            padding: 3.5rem 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-special-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1); /* تأثير ضوئي خفيف */
+            transform: skewY(-5deg);
+            transform-origin: top left;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .navbar .md\\:flex {
+                display: none; /* إخفاء الروابط على الجوال */
+            }
+            .navbar .flex:first-child {
+                width: 100%; /* جعل الشعار يأخذ عرض الشاشة */
+                justify-content: center;
+            }
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+            .section-heading {
+                font-size: 2rem;
+            }
+            .fancy-search-input, .fancy-search-button {
+                width: 100%;
+            }
+            .fancy-search-button {
+                margin-top: 1rem;
+            }
+            .cta-special-card {
+                padding: 2.5rem 1.5rem;
+            }
         }
     </style>
 </head>
-<body class="relative">
-
-    <nav class="navbar bg-white shadow-lg sticky top-0 z-50">
+<body>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="text-2xl font-bold text-blue-600 flex items-center">
-                        <img src="https://i.imgur.com/your-shaghlny-logo.png" alt="شغلني شعار" class="h-8 w-auto ml-2"> شغلني
-                    </div>
+                    <div class="text-3xl font-extrabold text-blue-600 tracking-wide">شغلني</div>
                 </div>
-
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="index.html" class="text-blue-600 font-medium">الرئيسية</a>
-                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="employee_listing_page.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
-                    <a href="job_application_page.html" class="text-gray-700 hover:text-blue-600">إدخال الموظفين</a>
+                    <a href="index.html" class="nav-link active">الرئيسية</a>
+                    <a href="available_employees.html" class="nav-link">الوظائف المتاحة</a>
+                    <a href="employee_listing_page.html" class="nav-link">الموظفون المتاحون</a>
+                    <a href="about_us.html" class="nav-link">من نحن</a>
+                    <a href="contact-us.html" class="nav-link">اتصل بنا</a>
                 </div>
-
-                <div class="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
-                    <button class="button button-secondary">تسجيل الدخول</button>
-                    <button class="button button-primary">حساب جديد</button>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white"></span>
+                        </button>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full border-2 border-blue-400 shadow-md">
                 </div>
-
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-white py-4">
-            <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">الرئيسية</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الوظائف</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">عرض الموظفين</a>
-            <a href="job_application_page.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">إدخال الموظفين</a>
-            <div class="border-t border-gray-200 mt-2 pt-2">
-                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">تسجيل الدخول</button>
-                <button class="block w-full text-right px-4 py-2 text-blue-600 hover:bg-gray-100">حساب جديد</button>
             </div>
         </div>
     </nav>
 
-    <header class="hero-section">
-        <div class="container mx-auto px-4 py-16">
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
-                وفر وقتك ومالك مع <br> أفضل العمالة الماهرة
+    <header class="hero-section text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl md:text-6xl font-black mb-6 animate__animated animate__fadeInUp">
+                مستقبلك المهني يبدأ هنا
             </h1>
-            <p class="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                نوفر لك حرفيين مهرة في جميع المجالات مع ضمان الجودة والاحترافية.
+            <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto mb-10 animate__animated animate__fadeInUp animate__delay-0-5s">
+                منصة السودان الرائدة لربط الكفاءات بالفرص والشركات بأفضل المواهب.
             </p>
-            <div class="search-container mb-8">
-                <input type="text" placeholder="ابحث عن حرفي" class="hero-search-input shadow-lg">
-                <i class="fas fa-search hero-search-icon"></i>
-            </div>
+            <a href="#search-section" class="btn-secondary animate__animated animate__zoomIn animate__delay-1s">
+                ابدأ البحث الآن <i class="fas fa-arrow-down mr-2"></i>
+            </a>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-12">
-        <section class="mb-16">
-            <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
-                خدماتنا تشمل جميع المجالات
-            </h2>
-            <p class="text-lg text-text-gray text-center mb-12 max-w-3xl mx-auto">
-                اختر من بين عشرات المهن والحرفيين المهرة في مختلف التخصصات لتجد ما يناسب احتياجاتك.
-            </p>
+    <section id="search-section" class="container mx-auto px-4 -mt-16 mb-16 relative z-30">
+        <div class="card-elegant p-8 md:p-10">
+            <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">ابحث عن فرصتك المثالية</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="relative flex-1 w-full">
+                    <input type="text" placeholder="ابحث عن وظيفة (مثال: مطور ويب، مهندس مدني)..."
+                           class="w-full fancy-search-input pr-12">
+                    <i class="fas fa-briefcase absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+                
+                <div class="relative flex-1 w-full">
+                    <select class="w-full fancy-search-input appearance-none pl-4 pr-12">
+                        <option value="">جميع الولايات</option>
+                        <option value="الخرطوم">الخرطوم</option>
+                        <option value="البحر الاحمر">البحر الأحمر</option>
+                        <option value="كسلا">كسلا</option>
+                        <option value="القضارف">القضارف</option>
+                        <option value="النيل الازرق">النيل الأزرق</option>
+                        <option value="نهر النيل">نهر النيل</option>
+                        <option value="الشمالية">الشمالية</option>
+                        <option value="الجزيرة">الجزيرة</option>
+                        <option value="النيل الابيض">النيل الأبيض</option>
+                        <option value="سنار">سنار</option>
+                        <option value="شمال كردفان">شمال كردفان</option>
+                        <option value="جنوب كردفان">جنوب كردفان</option>
+                        <option value="غرب كردفان">غرب كردفان</option>
+                        <option value="شمال دارفور">شمال دارفور</option>
+                        <option value="جنوب دارفور">جنوب دارفور</option>
+                        <option value="شرق دارفور">شرق دارفور</option>
+                        <option value="غرب دارفور">غرب دارفور</option>
+                        <option value="وسط دارفور">وسط دارفور</option>
+                    </select>
+                    <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
 
+                <div class="relative flex-1 w-full">
+                    <select class="w-full fancy-search-input appearance-none pl-4 pr-12">
+                        <option value="">جميع الفئات</option>
+                        <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
+                        <option value="المالية والمحاسبة">المالية والمحاسبة</option>
+                        <option value="الهندسة">الهندسة</option>
+                        <option value="الطب والصحة">الطب والصحة</option>
+                        <option value="التعليم">التعليم</option>
+                        <option value="التسويق والمبيعات">التسويق والمبيعات</option>
+                    </select>
+                    <i class="fas fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+
+                <button class="fancy-search-button flex items-center justify-center w-full md:w-auto">
+                    <i class="fas fa-search ml-2"></i> بحث
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-heading mb-12">تصفح الوظائف حسب الفئة</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <a href="#" class="card-elegant group hover:shadow-2xl flex flex-col items-center p-6">
+                    <div class="text-4xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">تكنولوجيا المعلومات</h3>
+                    <p class="text-gray-600 text-sm">أكثر من 250 وظيفة</p>
+                </a>
+                <a href="#" class="card-elegant group hover:shadow-2xl flex flex-col items-center p-6">
+                    <div class="text-4xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">المالية والمحاسبة</h3>
+                    <p class="text-gray-600 text-sm">أكثر من 180 وظيفة</p>
+                </a>
+                <a href="#" class="card-elegant group hover:shadow-2xl flex flex-col items-center p-6">
+                    <div class="text-4xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">التصميم والإبداع</h3>
+                    <p class="text-gray-600 text-sm">أكثر من 120 وظيفة</p>
+                </a>
+                <a href="#" class="card-elegant group hover:shadow-2xl flex flex-col items-center p-6">
+                    <div class="text-4xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">الهندسة والعمارة</h3>
+                    <p class="text-gray-600 text-sm">أكثر من 300 وظيفة</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-heading mb-12">وظائف مميزة في السودان</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white rounded-xl shadow-lg p-6 category-card">
-                    <div class="flex items-center justify-center bg-blue-100 text-blue-600 rounded-full w-16 h-16 text-3xl mx-auto mb-4">
-                        <i class="fas fa-wrench"></i>
+                <div class="card-elegant p-6 text-right">
+                    <h3 class="font-bold text-2xl text-blue-600 mb-2">مطوّر تطبيقات جوال</h3>
+                    <p class="text-gray-700 mb-3">شركة <span class="font-semibold">تكنو حلول</span> تبحث عن مطوّر iOS/Android للانضمام لفريقها.</p>
+                    <div class="flex items-center text-gray-600 text-base mb-2">
+                        <i class="fas fa-map-marker-alt ml-2"></i> <span>الخرطوم، السودان</span>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2 text-center">السباكة والكهرباء</h3>
-                    <ul class="text-text-gray text-sm list-none p-0 text-center">
-                        <li>تركيب - صيانة - إصلاح</li>
-                    </ul>
+                    <div class="flex items-center text-gray-600 text-base mb-4">
+                        <i class="fas fa-money-bill-wave ml-2"></i> <span class="font-bold">20,000 - 30,000 جنيه سوداني</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Swift</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Kotlin</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Flutter</span>
+                    </div>
+                    <a href="#" class="btn-primary inline-block text-sm">عرض التفاصيل <i class="fas fa-arrow-left mr-1"></i></a>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-lg p-6 category-card">
-                    <div class="flex items-center justify-center bg-green-100 text-green-600 rounded-full w-16 h-16 text-3xl mx-auto mb-4">
-                        <i class="fas fa-hard-hat"></i>
+                <div class="card-elegant p-6 text-right">
+                    <h3 class="font-bold text-2xl text-blue-600 mb-2">مهندس مدني (مواقع)</h3>
+                    <p class="text-gray-700 mb-3">شركة <span class="font-semibold">البناء الحديث</span> تطلب مهندس مواقع ذو خبرة.</p>
+                    <div class="flex items-center text-gray-600 text-base mb-2">
+                        <i class="fas fa-map-marker-alt ml-2"></i> <span>بورتسودان، السودان</span>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2 text-center">البناء والمقاولات</h3>
-                    <ul class="text-text-gray text-sm list-none p-0 text-center">
-                        <li>بناء - تشطيب - تشييد - ترميم</li>
-                    </ul>
+                    <div class="flex items-center text-gray-600 text-base mb-4">
+                        <i class="fas fa-money-bill-wave ml-2"></i> <span class="font-bold">18,000 - 25,000 جنيه سوداني</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">AutoCAD</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">إدارة مشاريع</span>
+                    </div>
+                    <a href="#" class="btn-primary inline-block text-sm">عرض التفاصيل <i class="fas fa-arrow-left mr-1"></i></a>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-lg p-6 category-card">
-                    <div class="flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-full w-16 h-16 text-3xl mx-auto mb-4">
-                        <i class="fas fa-hammer"></i>
+                <div class="card-elegant p-6 text-right">
+                    <h3 class="font-bold text-2xl text-blue-600 mb-2">مندوب مبيعات</h3>
+                    <p class="text-gray-700 mb-3">مطلوب مندوبين مبيعات لشركة توزيع كبرى في منطقة الجزيرة.</p>
+                    <div class="flex items-center text-gray-600 text-base mb-2">
+                        <i class="fas fa-map-marker-alt ml-2"></i> <span>الجزيرة، السودان</span>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2 text-center">النجارة والحدادة</h3>
-                    <ul class="text-text-gray text-sm list-none p-0 text-center">
-                        <li>أثاث - أبواب - نوافذ - درابزين</li>
-                    </ul>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg p-6 category-card">
-                    <div class="flex items-center justify-center bg-red-100 text-red-600 rounded-full w-16 h-16 text-3xl mx-auto mb-4">
-                        <i class="fas fa-house-user"></i>
+                    <div class="flex items-center text-gray-600 text-base mb-4">
+                        <i class="fas fa-money-bill-wave ml-2"></i> <span class="font-bold">8,000 - 12,000 جنيه + عمولة</span>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2 text-center">خدمات منزلية</h3>
-                    <ul class="text-text-gray text-sm list-none p-0 text-center">
-                        <li>نظافة - تركيب - نقل - تركيب أجهزة</li>
-                    </ul>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">مهارات التواصل</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">تحقيق الأهداف</span>
+                    </div>
+                    <a href="#" class="btn-primary inline-block text-sm">عرض التفاصيل <i class="fas fa-arrow-left mr-1"></i></a>
                 </div>
             </div>
-        </section>
-
-        <section class="mb-16">
-            <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
-                وظائف مطلوبة حالياً
-            </h2>
-            <div class="text-center mb-12">
-                <a href="available_employees.html" class="inline-flex items-center text-blue-600 font-semibold hover:underline">
-                    عرض جميع الوظائف <i class="fas fa-arrow-left mr-2"></i>
-                </a>
+            <div class="mt-12">
+                <a href="#" class="btn-primary">عرض جميع الوظائف <i class="fas fa-arrow-left mr-2"></i></a>
             </div>
+        </div>
+    </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">مطلوب سباك ماهر</h3>
-                    <p class="text-text-gray text-sm mb-3">شركة مقاولات تبحث عن سباك لعمل تركيبات وصيانة في مشاريعها الجديدة.</p>
-                    <div class="flex items-center text-gray-600 text-sm mb-2">
-                        <i class="fas fa-map-marker-alt ml-1"></i>
-                        <span>الخرطوم، بحري</span>
-                    </div>
-                    <div class="flex items-center text-gray-600 text-sm mb-4">
-                        <i class="fas fa-dollar-sign ml-1"></i>
-                        <span>الراتب: 80,000 - 120,000 جنيه سوداني</span>
-                    </div>
-                    <button class="button button-primary w-full">
-                        التقديم الآن
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-16">
-            <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
-                عمال مهرة جاهزون للعمل
-            </h2>
-            <div class="text-center mb-12">
-                <a href="available_employees.html" class="inline-flex items-center text-blue-600 font-semibold hover:underline">
-                    عرض جميع العمال <i class="fas fa-arrow-left mr-2"></i>
-                </a>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                    <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="صورة حرفي" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-blue-100">
-                    <h3 class="font-bold text-lg text-gray-800">أحمد محمد</h3>
-                    <p class="text-text-gray text-sm mb-3">كهربائي عام</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-4">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">تركيبات</span>
-                        <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">صيانة</span>
-                        <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">إصلاح أعطال</span>
-                    </div>
-                    <a href="#" class="button button-primary">
-                        تواصل
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-16">
-            <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-10">
-                كيف تعمل منصة "شغلني"؟
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="bg-blue-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">اختر الحرفي المناسب</h3>
-                    <p class="text-text-gray text-sm">
-                        تصفح المئات من الحرفيين المهرة في مختلف التخصصات واختر من يناسب احتياجاتك.
-                    </p>
-                </div>
-                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="bg-blue-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">تواصل واتفق على التفاصيل</h3>
-                    <p class="text-text-gray text-sm">
-                        تواصل مباشرة مع الحرفي واتفق معه على كافة التفاصيل والأسعار ومواعيد العمل.
-                    </p>
-                </div>
-                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                    <div class="bg-blue-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">احصل على الخدمة بكامل الرضا</h3>
-                    <p class="text-text-gray text-sm">
-                        استلم الخدمة كما اتفقتم مع تقييم الحرفي لضمان الجودة والاستمرارية.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-16 text-center bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-3xl font-extrabold text-gray-800 mb-6">
-                هل أنت مستعد للبدء؟
-            </h2>
-            <p class="text-lg text-text-gray mb-8">
-                انضم إلى منصة شغلني اليوم سواء كصاحب عمل أو كحرفي محترف.
-            </p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#" class="button button-primary">
-                    <i class="fas fa-users ml-3"></i> انضم كصاحب عمل
-                </a>
-                <a href="employee_registration.html" class="button button-secondary">
-                    <i class="fas fa-wrench ml-3"></i> انضم كحرفي
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer-bg py-12">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right">
-            <div>
-                <h3 class="text-2xl font-bold mb-4">شغلني</h3>
-                <p class="text-sm opacity-90 leading-relaxed">
-                    منصة رائدة في ربط العمالة الماهرة بأصحاب العمل في مختلف المجالات الحرفية والعملية.
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="cta-special-card flex flex-col items-center">
+                <h2 class="text-4xl font-black text-white mb-6">هل أنت مستعد للخطوة التالية؟</h2>
+                <p class="text-xl text-white opacity-90 max-w-3xl mx-auto mb-10">
+                    سواء كنت تبحث عن فرصة عمل جديدة أو تبحث عن أفضل المواهب لشركتك، نحن هنا لمساعدتك.
                 </p>
-                <div class="flex justify-center md:justify-end space-x-4 rtl:space-x-reverse mt-4 text-xl">
-                    <a href="#" class="hover:text-gray-300"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-gray-300"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-gray-300"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-gray-300"><i class="fab fa-linkedin"></i></a>
+                <div class="flex flex-col md:flex-row gap-6 justify-center w-full max-w-2xl">
+                    <div class="flex-1 text-center">
+                        <a href="add_job.html" class="btn-secondary w-full transform hover:scale-105" onclick="alert('لإضافة وظيفة، يرجى تسجيل الدخول أولاً.'); return false;">
+                            <i class="fas fa-plus-circle ml-2"></i> أضف وظيفة الآن
+                        </a>
+                        <p class="text-sm text-white opacity-80 mt-2">لأصحاب الأعمال والمؤسسات</p>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <a href="register_employee.html" class="btn-secondary w-full transform hover:scale-105" onclick="alert('لتسجيل موظف، يرجى تسجيل الدخول أولاً.'); return false;">
+                            <i class="fas fa-user-plus ml-2"></i> سجل موظفًا
+                        </a>
+                        <p class="text-sm text-white opacity-80 mt-2">للباحثين عن عمل</p>
+                    </div>
                 </div>
+                <p class="text-white opacity-70 text-sm mt-8">
+                    * عند النقر، قد يُطلب منك تسجيل الدخول أو إنشاء حساب.
+                </p>
             </div>
-
-            <div>
-                <h3 class="text-xl font-bold mb-4">روابط سريعة</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:underline">الرئيسية</a></li>
-                    <li><a href="#" class="hover:underline">وظائف متاحة
+        </div>
+    </section>
+    
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center space-x-6 rtl:space-x-reverse mb-4">
+                <a href="#" class="hover:text-white transition-colors duration-200">الرئيسية</a>
+                <a href="#" class="hover:text-white transition-colors duration-200">الوظائف المتاحة</a>
+                <a href="available_employees.html" class="hover:text-white transition-colors duration-200">الموظفون المتاحون</a>
+                <a href="#" class="hover:text-white transition-colors duration-200">من نحن</a>
+                <a href="#" class="hover:text-white transition-colors duration-200">اتصل بنا</a>
+            </div>
+            <div class="flex justify-center space-x-4 rtl:space-x-reverse mb-4">
+                <a href="#" class="text-2xl hover:text-white transition-colors duration-200"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-2xl hover:text-white transition-colors duration-200"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-2xl hover:text-white transition-colors duration-200"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p>&copy; 2024 شغلني. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+</html>
