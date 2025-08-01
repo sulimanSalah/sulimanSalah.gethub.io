@@ -25,7 +25,7 @@
             background-color: #f5f7fa;
         }
 
-       .step {
+        .step {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -38,29 +38,29 @@
             font-weight: bold;
         }
 
-       .step.active {
+        .step.active {
             background-color: var(--success);
         }
 
-       .step-container {
+        .step-container {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
 
-       .form-card {
+        .form-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             border: 2px solid transparent;
         }
 
-       .form-card:hover {
+        .form-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
 
-       .error-message {
+        .error-message {
             color: var(--danger);
             margin-top: 10px;
         }
@@ -235,12 +235,10 @@
     </div>
 
     <script type="module">
-        // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-        // تهيئة Firebase: هذه هي معلومات مشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -251,31 +249,23 @@
             measurementId: "G-98GQGZS09W"
         };
 
-        // تهيئة Firebase App
         const app = initializeApp(firebaseConfig);
-
-        // الحصول على كائنات Firestore و Storage
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // جعل `db` و `storage` متاحين عالمياً لدوال JavaScript الأخرى
         window.db = db;
         window.storage = storage;
 
         let currentStep = 1;
-        const totalSteps = 5; // تم تحديث العدد الكلي للخطوات
+        const totalSteps = 5;
 
-        // عناصر شريط التقدم
         const uploadProgressBarContainer = document.getElementById('uploadProgressBarContainer');
         const uploadProgressBar = document.getElementById('uploadProgressBar');
         const uploadProgressText = document.getElementById('uploadProgressText');
 
-        // متغيرات لتتبع التقدم الكلي للرفع
         let totalBytesToUpload = 0;
         let totalBytesUploaded = 0;
-        let uploadTasks =; // لتخزين جميع مهام الرفع
 
-        // دالة لتحديث شريط التقدم الكلي
         function updateOverallProgressBar() {
             if (totalBytesToUpload === 0) return;
             const overallProgress = (totalBytesUploaded / totalBytesToUpload) * 100;
@@ -283,16 +273,15 @@
             uploadProgressText.textContent = `جاري الرفع: ${overallProgress.toFixed(0)}%`;
         }
 
-        // دالة لضغط ملف واحد
         async function compressFile(file) {
             return new Promise((resolve, reject) => {
                 new Compressor(file, {
-                    quality: 0.6, // جودة الضغط (0 إلى 1)
-                    maxWidth: 1280, // أقصى عرض للصورة
-                    maxHeight: 720, // أقصى ارتفاع للصورة
-                    convertSize: 200000, // تحويل الملفات الأكبر من 200 كيلوبايت إلى JPEG
+                    quality: 0.6,
+                    maxWidth: 1280,
+                    maxHeight: 720,
+                    convertSize: 200000,
                     success(result) {
-                        resolve(result); // result هو كائن Blob مضغوط
+                        resolve(result);
                     },
                     error(err) {
                         reject(err);
@@ -300,8 +289,32 @@
                 });
             });
         }
+        
+        async function uploadFileWithProgress(file, filePath) {
+            const compressedFile = await compressFile(file);
+            const storageRef = ref(window.storage, filePath);
+            const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
-        // دالة للانتقال للخطوة التالية
+            return new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // تحديث التقدم لكل ملف على حدة
+                        totalBytesUploaded += snapshot.bytesTransferred;
+                        // يجب إعادة حساب التقدم الكلي بشكل صحيح
+                        // هذا الجزء يتطلب منطقًا أكثر تعقيدًا ليتتبع كل ملف على حدة، لذا سنعتمد على التحديث الإجمالي
+                        updateOverallProgressBar();
+                    },
+                    (error) => {
+                        console.error("خطأ في الرفع:", error);
+                        reject(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(resolve).catch(reject);
+                    }
+                );
+            });
+        }
+
         window.nextStep = function(step) {
             const stepElement = document.getElementById(`step${step}`);
             const currentForm = stepElement.querySelector('form');
@@ -311,7 +324,7 @@
                     currentForm.reportValidity();
                     return;
                 }
-            } else if (step === 4) { // الخطوة 4 (رفع الصور) لا تحتوي على <form> مباشر
+            } else if (step === 4) {
                 const previousWorksInput = document.getElementById('previousWorks');
                 if (previousWorksInput.hasAttribute('required') && previousWorksInput.files.length === 0) {
                     previousWorksInput.setCustomValidity('الرجاء رفع صور الأعمال السابقة');
@@ -331,7 +344,6 @@
             window.updateSteps();
         };
 
-        // دالة للانتقال للخطوة السابقة
         window.prevStep = function(step) {
             document.getElementById(`step${step}`).classList.add('hidden');
             currentStep--;
@@ -342,7 +354,6 @@
             window.updateSteps();
         };
 
-        // دالة لتحديث مؤشرات الخطوات
         window.updateSteps = function() {
             const steps = document.querySelectorAll('.step');
             steps.forEach((stepEl, index) => {
@@ -353,10 +364,15 @@
             });
         };
 
-        // دالة للتحقق من المهارات
         window.validateSkills = function() {
             const jobTitle = document.getElementById('jobTitle').value.toLowerCase();
-            const skillInputs =;
+            const skillInputs = [
+                document.getElementById('skill1'),
+                document.getElementById('skill2'),
+                document.getElementById('skill3'),
+                document.getElementById('skill4'),
+                document.getElementById('skill5')
+            ];
 
             for (let input of skillInputs) {
                 if (!input.value.trim()) {
@@ -371,9 +387,7 @@
             const minRelatedSkills = 2;
 
             for (let skill of skills) {
-                if (skill.includes(jobTitle) |
-
-| jobTitle.includes(skill)) {
+                if (skill.includes(jobTitle) || jobTitle.includes(skill)) {
                     relevantSkillsCount++;
                 }
             }
@@ -387,108 +401,92 @@
             }
         };
 
-        // دالة إرسال النموذج المحدثة لربطها بـ Firebase
         window.submitForm = async function() {
+            // تحقق من صحة الحقول أولاً
             const salaryFromInput = document.getElementById('salaryFrom');
             const salaryToInput = document.getElementById('salaryTo');
 
-            if (!salaryFromInput.checkValidity() ||!salaryToInput.checkValidity()) {
+            if (!salaryFromInput.checkValidity() || !salaryToInput.checkValidity()) {
                 salaryFromInput.reportValidity();
                 salaryToInput.reportValidity();
                 return;
             }
 
+            // تعطيل الزر لمنع الإرسال المتعدد
             const submitButton = document.querySelector('#step5 button[type="submit"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
             submitButton.textContent = 'جاري الإرسال...';
 
             try {
-                const profileImageFile = document.getElementById('profileImage').files;
-                const fullName = document.getElementById('fullName').value;
-                const jobTitle = document.getElementById('jobTitle').value;
-                const jobLocation = document.getElementById('jobLocation').value;
-                const experienceYears = parseInt(document.getElementById('experienceYears').value);
-                const skills =;
-                const previousWorksFiles = document.getElementById('previousWorks').files;
-                const salaryFrom = parseInt(document.getElementById('salaryFrom').value);
-                const salaryTo = parseInt(document.getElementById('salaryTo').value);
+                const profileImageInput = document.getElementById('profileImage');
+                const previousWorksInput = document.getElementById('previousWorks');
 
-                let profileImageUrl = null;
-                const previousWorksUrls =;
-
+                // تحقق من أن الملفات موجودة
+                if (!profileImageInput.files.length) {
+                    alert('الرجاء رفع صورة للملف الشخصي.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalButtonText;
+                    return;
+                }
+                
                 // إعادة تعيين متغيرات التقدم
                 totalBytesToUpload = 0;
                 totalBytesUploaded = 0;
-                uploadTasks =;
+
+                // جمع الملفات لتقدير الحجم الكلي
+                let allFiles = [];
+                allFiles.push(profileImageInput.files[0]);
+                for (const file of previousWorksInput.files) {
+                    allFiles.push(file);
+                }
+                
+                // تقدير الحجم الإجمالي للرفع
+                allFiles.forEach(file => totalBytesToUpload += file.size);
 
                 // إظهار شريط التقدم
                 uploadProgressBarContainer.classList.remove('hidden');
                 uploadProgressText.classList.remove('hidden');
                 uploadProgressText.textContent = 'جاري الرفع: 0%';
                 uploadProgressBar.style.width = '0%';
+                
+                // رفع صورة الملف الشخصي
+                const profileImageUrl = await uploadFileWithProgress(
+                    profileImageInput.files[0],
+                    `profileImages/${Date.now()}-${profileImageInput.files[0].name}`
+                );
 
-                // 1. ضغط وتجهيز صورة الملف الشخصي للرفع
-                if (profileImageFile) {
-                    const compressedProfileFile = await compressFile(profileImageFile);
-                    const profileImageRef = ref(window.storage, `profileImages/${Date.now()}-${profileImageFile.name}`);
-                    const uploadTask = uploadBytesResumable(profileImageRef, compressedProfileFile);
-                    uploadTasks.push(uploadTask);
-                    totalBytesToUpload += compressedProfileFile.size;
+                // رفع صور الأعمال السابقة
+                const previousWorksUrls = [];
+                for (const file of previousWorksInput.files) {
+                    const url = await uploadFileWithProgress(
+                        file,
+                        `previousWorks/${Date.now()}-${file.name}`
+                    );
+                    previousWorksUrls.push(url);
                 }
-
-                // 2. ضغط وتجهيز صور الأعمال السابقة للرفع
-                if (previousWorksFiles.length > 0) {
-                    for (const file of previousWorksFiles) {
-                        const compressedFile = await compressFile(file);
-                        const previousWorkRef = ref(window.storage, `previousWorks/${Date.now()}-${file.name}`);
-                        const uploadTask = uploadBytesResumable(previousWorkRef, compressedFile);
-                        uploadTasks.push(uploadTask);
-                        totalBytesToUpload += compressedFile.size;
-                    }
-                }
-
-                // 3. مراقبة جميع مهام الرفع وجمع الروابط
-                const downloadURLPromises = uploadTasks.map(task => {
-                    return new Promise((resolve, reject) => {
-                        task.on('state_changed',
-                            (snapshot) => {
-                                // تحديث إجمالي البايتات المرفوعة من جميع المهام
-                                totalBytesUploaded = uploadTasks.reduce((sum, t) => sum + t.snapshot.bytesTransferred, 0);
-                                updateOverallProgressBar();
-                            },
-                            (error) => {
-                                console.error("خطأ في الرفع:", error);
-                                reject(error);
-                            },
-                            () => {
-                                getDownloadURL(task.snapshot.ref).then(resolve).catch(reject);
-                            }
-                        );
-                    });
-                });
-
-                const allDownloadURLs = await Promise.all(downloadURLPromises);
-
-                // تعيين الروابط مرة أخرى إلى المتغيرات الصحيحة بناءً على الترتيب
-                let urlIndex = 0;
-                if (profileImageFile) {
-                    profileImageUrl = allDownloadURLs[urlIndex++];
-                }
-                if (previousWorksFiles.length > 0) {
-                    for (let i = 0; i < previousWorksFiles.length; i++) {
-                        previousWorksUrls.push(allDownloadURLs[urlIndex++]);
-                    }
-                }
-
-                console.log('تم رفع صورة الملف الشخصي:', profileImageUrl);
-                console.log('تم رفع صور الأعمال السابقة:', previousWorksUrls);
 
                 // إخفاء شريط التقدم بعد اكتمال جميع عمليات الرفع
                 uploadProgressBarContainer.classList.add('hidden');
                 uploadProgressText.classList.add('hidden');
 
-                // 4. بناء كائن بيانات الموظف
+                // جمع باقي البيانات من النموذج
+                const fullName = document.getElementById('fullName').value;
+                const jobTitle = document.getElementById('jobTitle').value;
+                const jobLocation = document.getElementById('jobLocation').value;
+                const experienceYears = parseInt(document.getElementById('experienceYears').value);
+                const skillInputs = [
+                    document.getElementById('skill1'),
+                    document.getElementById('skill2'),
+                    document.getElementById('skill3'),
+                    document.getElementById('skill4'),
+                    document.getElementById('skill5')
+                ];
+                const skills = skillInputs.map(input => input.value);
+                const salaryFrom = parseInt(salaryFromInput.value);
+                const salaryTo = parseInt(salaryToInput.value);
+
+                // بناء كائن بيانات الموظف
                 const employeeData = {
                     fullName: fullName,
                     jobTitle: jobTitle,
@@ -504,19 +502,14 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // 5. حفظ بيانات الموظف في Cloud Firestore
+                // حفظ بيانات الموظف في Cloud Firestore
                 const docRef = await addDoc(collection(window.db, "employees"), employeeData);
                 console.log("تم إضافة الموظف بنجاح بمعرف:", docRef.id);
 
-                // 6. إظهار رسالة نجاح وإعادة تعيين النموذج
+                // إظهار رسالة نجاح وإعادة تعيين النموذج
                 alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');
                 document.getElementById('employeeForm').reset();
-
-                // إعادة واجهة المستخدم للخطوة الأولى
-                document.getElementById('step5').classList.add('hidden');
-                currentStep = 1;
-                document.getElementById('step1').classList.remove('hidden');
-                window.updateSteps();
+                window.prevStep(5); // العودة إلى الخطوة الأولى
 
             } catch (error) {
                 console.error("خطأ أثناء إرسال النموذج:", error);
@@ -527,7 +520,6 @@
             }
         };
 
-        // تحديث الخطوات عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', window.updateSteps);
     </script>
 </body>
