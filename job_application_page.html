@@ -103,11 +103,6 @@
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
-                    <label for="photoUrl" class="block text-sm font-medium text-gray-700">رابط الصورة الشخصية</label>
-                    <input type="url" id="photoUrl" placeholder="مثال: https://example.com/photo.jpg"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
                     <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
                     <input type="text" id="headline" placeholder="مثال: مطور ويب | متخصص في React"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -250,8 +245,8 @@
           projectId: "shaglni-c64c0",
           storageBucket: "shaglni-c64c0.firebasestorage.app",
           messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:d191b03d97feb7929c8819",
-          measurementId: "G-18W3JYHM60"
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
         };
         
         // Initialize Firebase
@@ -378,7 +373,6 @@
             submitButton.textContent = 'جاري التسجيل...';
 
             const name = document.getElementById('name').value;
-            const photoUrl = document.getElementById('photoUrl').value;
             const headline = document.getElementById('headline').value;
             const bio = document.getElementById('bio').value;
             const email = document.getElementById('email').value;
@@ -396,7 +390,7 @@
             
             const employeeData = {
                 name: name,
-                photoUrl: photoUrl,
+                photoUrl: null, // تم حذف حقل الصورة، يمكن إبقاءه فارغاً
                 headline: headline,
                 bio: bio,
                 contact: {
