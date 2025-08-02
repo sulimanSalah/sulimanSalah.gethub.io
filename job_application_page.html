@@ -281,9 +281,11 @@
                     maxHeight: 720,
                     convertSize: 200000,
                     success(result) {
+                        console.log('تم ضغط الملف بنجاح:', result);
                         resolve(result);
                     },
                     error(err) {
+                        console.error('فشل ضغط الملف:', err.message);
                         reject(err);
                     },
                 });
@@ -291,28 +293,31 @@
         }
         
         async function uploadFileWithProgress(file, filePath) {
-            const compressedFile = await compressFile(file);
-            const storageRef = ref(window.storage, filePath);
-            const uploadTask = uploadBytesResumable(storageRef, compressedFile);
+            try {
+                const compressedFile = await compressFile(file);
+                const storageRef = ref(window.storage, filePath);
+                const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
-            return new Promise((resolve, reject) => {
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        // تحديث التقدم لكل ملف على حدة
-                        totalBytesUploaded += snapshot.bytesTransferred;
-                        // يجب إعادة حساب التقدم الكلي بشكل صحيح
-                        // هذا الجزء يتطلب منطقًا أكثر تعقيدًا ليتتبع كل ملف على حدة، لذا سنعتمد على التحديث الإجمالي
-                        updateOverallProgressBar();
-                    },
-                    (error) => {
-                        console.error("خطأ في الرفع:", error);
-                        reject(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then(resolve).catch(reject);
-                    }
-                );
-            });
+                return new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            // يتم حساب التقدم من إجمالي البايتات المرفوعة وليس من ملف واحد
+                            totalBytesUploaded += snapshot.bytesTransferred;
+                            updateOverallProgressBar();
+                        },
+                        (error) => {
+                            console.error("خطأ في الرفع:", error);
+                            reject(error);
+                        },
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then(resolve).catch(reject);
+                        }
+                    );
+                });
+            } catch (error) {
+                console.error("خطأ في دالة uploadFileWithProgress:", error);
+                throw error;
+            }
         }
 
         window.nextStep = function(step) {
@@ -402,6 +407,12 @@
         };
 
         window.submitForm = async function() {
+            // تعطيل الزر لمنع الإرسال المتعدد
+            const submitButton = document.querySelector('#step5 button[type="submit"]');
+            submitButton.disabled = true;
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'جاري الإرسال...';
+            
             // تحقق من صحة الحقول أولاً
             const salaryFromInput = document.getElementById('salaryFrom');
             const salaryToInput = document.getElementById('salaryTo');
@@ -409,14 +420,10 @@
             if (!salaryFromInput.checkValidity() || !salaryToInput.checkValidity()) {
                 salaryFromInput.reportValidity();
                 salaryToInput.reportValidity();
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
                 return;
             }
-
-            // تعطيل الزر لمنع الإرسال المتعدد
-            const submitButton = document.querySelector('#step5 button[type="submit"]');
-            submitButton.disabled = true;
-            const originalButtonText = submitButton.textContent;
-            submitButton.textContent = 'جاري الإرسال...';
 
             try {
                 const profileImageInput = document.getElementById('profileImage');
@@ -425,9 +432,11 @@
                 // تحقق من أن الملفات موجودة
                 if (!profileImageInput.files.length) {
                     alert('الرجاء رفع صورة للملف الشخصي.');
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                    return;
+                    throw new Error('لم يتم رفع صورة للملف الشخصي.');
+                }
+                if (!previousWorksInput.files.length) {
+                    alert('الرجاء رفع صور الأعمال السابقة.');
+                    throw new Error('لم يتم رفع صور الأعمال السابقة.');
                 }
                 
                 // إعادة تعيين متغيرات التقدم
@@ -443,7 +452,7 @@
                 
                 // تقدير الحجم الإجمالي للرفع
                 allFiles.forEach(file => totalBytesToUpload += file.size);
-
+                
                 // إظهار شريط التقدم
                 uploadProgressBarContainer.classList.remove('hidden');
                 uploadProgressText.classList.remove('hidden');
@@ -469,7 +478,7 @@
                 // إخفاء شريط التقدم بعد اكتمال جميع عمليات الرفع
                 uploadProgressBarContainer.classList.add('hidden');
                 uploadProgressText.classList.add('hidden');
-
+                
                 // جمع باقي البيانات من النموذج
                 const fullName = document.getElementById('fullName').value;
                 const jobTitle = document.getElementById('jobTitle').value;
