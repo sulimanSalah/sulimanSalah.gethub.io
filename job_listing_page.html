@@ -34,12 +34,12 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .job-type-fulltime {
+        .job-type-full-time {
             background-color: #d1fae5;
             color: #065f46;
         }
 
-        .job-type-parttime {
+        .job-type-part-time {
             background-color: #fef3c7;
             color: #92400e;
         }
@@ -71,7 +71,7 @@
             transition: max-height 0.3s ease-out;
         }
         .filters-container.active {
-            max-height: 500px; /* يجب أن يكون أكبر من ارتفاع المحتوى */
+            max-height: 500px;
         }
     </style>
 </head>
@@ -85,7 +85,7 @@
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
                     <a href="available_jobs.html" class="text-blue-600 font-medium">عرض الوظائف</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
+                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
                     <a href="job_registration.html" class="text-gray-700 hover:text-blue-600">إضافة وظيفة</a>
                 </div>
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
@@ -150,14 +150,27 @@
                         </div>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-2">الموقع</h4>
-                        <select id="locationFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">جميع المواقع</option>
+                        <h4 class="font-semibold mb-2">الولاية</h4>
+                        <select id="stateFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">جميع الولايات</option>
                             <option value="الخرطوم">الخرطوم</option>
-                            <option value="أم درمان">أم درمان</option>
-                            <option value="بحري">بحري</option>
-                            <option value="بورتسودان">بورتسودان</option>
-                            <option value="عمل عن بعد">عمل عن بعد</option>
+                            <option value="الجزيرة">الجزيرة</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
+                            <option value="كسلا">كسلا</option>
+                            <option value="القضارف">القضارف</option>
+                            <option value="سنار">سنار</option>
+                            <option value="النيل الأبيض">النيل الأبيض</option>
+                            <option value="النيل الأزرق">النيل الأزرق</option>
+                            <option value="شمال كردفان">شمال كردفان</option>
+                            <option value="جنوب كردفان">جنوب كردفان</option>
+                            <option value="غرب كردفان">غرب كردفان</option>
+                            <option value="الشمالية">الشمالية</option>
+                            <option value="نهر النيل">نهر النيل</option>
+                            <option value="شمال دارفور">شمال دارفور</option>
+                            <option value="جنوب دارفور">جنوب دارفور</option>
+                            <option value="غرب دارفور">غرب دارفور</option>
+                            <option value="وسط دارفور">وسط دارفور</option>
+                            <option value="شرق دارفور">شرق دارفور</option>
                         </select>
                     </div>
                     <div>
@@ -188,20 +201,25 @@
     </div>
 
     <script type="module">
+        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-            authDomain: "shaglni-c64c0.firebaseapp.com",
-            projectId: "shaglni-c64c0",
-            storageBucket: "shaglni-c64c0.firebasestorage.app",
-            messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:11ec1d6991add3309c8819",
-            measurementId: "G-98GQGZS09W"
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:d191b03d97feb7929c8819",
+          measurementId: "G-18W3JYHM60"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
         let allJobs = [];
@@ -249,7 +267,7 @@
                             <div class="p-6">
                                 <div class="flex flex-col md:flex-row md:items-start md:justify-between">
                                     <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                        <img src="https://via.placeholder.com/60" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
+                                        <img src="${job.companyLogo || 'https://via.placeholder.com/60'}" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
                                         <div>
                                             <h3 class="font-bold text-lg">${job.jobTitle}</h3>
                                             <div class="flex items-center text-gray-600 text-sm mt-1">
@@ -298,7 +316,7 @@
         // وظيفة التصفية الرئيسية
         function filterJobs() {
             const searchText = searchInput.value.toLowerCase();
-            const selectedLocation = document.getElementById('locationFilter').value;
+            const selectedState = document.getElementById('stateFilter').value;
             const selectedExperience = document.getElementById('experienceFilter').value;
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value) || 0;
             const salaryTo = parseInt(document.getElementById('salaryTo').value) || Infinity;
@@ -308,15 +326,15 @@
                 const jobText = `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.skills.join(' ')}`.toLowerCase();
                 const matchesSearch = jobText.includes(searchText);
                 
-                const matchesLocation = selectedLocation === '' || job.jobLocation === selectedLocation;
+                const matchesState = selectedState === '' || (job.jobLocation && job.jobLocation.includes(selectedState));
                 
                 const matchesExperience = selectedExperience === '' || job.experienceLevel === selectedExperience;
 
-                const matchesSalary = (job.salaryRange.from >= salaryFrom && job.salaryRange.to <= salaryTo);
+                const matchesSalary = (job.salaryRange && job.salaryRange.from >= salaryFrom && job.salaryRange.to <= salaryTo);
                 
                 const matchesJobType = selectedJobTypes.length === 0 || selectedJobTypes.includes(job.jobType);
 
-                return matchesSearch && matchesLocation && matchesExperience && matchesSalary && matchesJobType;
+                return matchesSearch && matchesState && matchesExperience && matchesSalary && matchesJobType;
             });
 
             renderJobs(filteredJobs);
@@ -351,7 +369,7 @@
 
         // إضافة مستمعات للأحداث لتشغيل التصفية
         searchInput.addEventListener('input', filterJobs);
-        document.getElementById('locationFilter').addEventListener('change', filterJobs);
+        document.getElementById('stateFilter').addEventListener('change', filterJobs);
         document.getElementById('experienceFilter').addEventListener('change', filterJobs);
         document.getElementById('salaryFrom').addEventListener('input', filterJobs);
         document.getElementById('salaryTo').addEventListener('input', filterJobs);
