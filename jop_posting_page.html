@@ -99,7 +99,7 @@
             <form id="jobForm" onsubmit="event.preventDefault(); window.nextStep(1);">
                 <div class="mb-4">
                     <label for="jobTitle" class="block text-sm font-medium text-gray-700">عنوان الوظيفة</label>
-                    <input type="text" id="jobTitle" placeholder="مثال: مطور ويب، مصمم جرافيك"
+                    <input type="text" id="jobTitle" placeholder="مثال: مطور ويب، مهندس كهربائي"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
@@ -126,14 +126,33 @@
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
             <h2 class="text-lg font-bold mb-4">الخطوة 2: المتطلبات ونوع الوظيفة</h2>
             <div class="mb-4">
-                <label for="jobLocation" class="block text-sm font-medium text-gray-700">الموقع</label>
-                <select id="jobLocation" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    <option value="">اختر موقعاً</option>
+                <label for="jobState" class="block text-sm font-medium text-gray-700">الولاية</label>
+                <select id="jobState" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    <option value="">اختر ولاية</option>
                     <option value="الخرطوم">الخرطوم</option>
-                    <option value="أم درمان">أم درمان</option>
-                    <option value="بحري">بحري</option>
-                    <option value="بورتسودان">بورتسودان</option>
-                    <option value="عمل عن بعد">عمل عن بعد</option>
+                    <option value="الجزيرة">الجزيرة</option>
+                    <option value="البحر الأحمر">البحر الأحمر</option>
+                    <option value="كسلا">كسلا</option>
+                    <option value="القضارف">القضارف</option>
+                    <option value="سنار">سنار</option>
+                    <option value="النيل الأبيض">النيل الأبيض</option>
+                    <option value="النيل الأزرق">النيل الأزرق</option>
+                    <option value="شمال كردفان">شمال كردفان</option>
+                    <option value="جنوب كردفان">جنوب كردفان</option>
+                    <option value="غرب كردفان">غرب كردفان</option>
+                    <option value="الشمالية">الشمالية</option>
+                    <option value="نهر النيل">نهر النيل</option>
+                    <option value="شمال دارفور">شمال دارفور</option>
+                    <option value="جنوب دارفور">جنوب دارفور</option>
+                    <option value="غرب دارفور">غرب دارفور</option>
+                    <option value="وسط دارفور">وسط دارفور</option>
+                    <option value="شرق دارفور">شرق دارفور</option>
+                </select>
+            </div>
+            <div class="mb-4 hidden" id="cityContainer">
+                <label for="jobCity" class="block text-sm font-medium text-gray-700">المدينة</label>
+                <select id="jobCity" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    <option value="">اختر مدينة</option>
                 </select>
             </div>
             <div class="mb-4">
@@ -182,6 +201,7 @@
                     <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
+            <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
                 السابق
             </button>
@@ -230,6 +250,38 @@
 
         let currentStep = 1;
         const totalSteps = 4;
+        
+        // بيانات الولايات والمدن
+        const sudanStates = {
+            "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
+            "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
+            "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر", "هيا"],
+            "كسلا": ["كسلا", "حلفا الجديدة", "القضارف", "همشكوريب"],
+            "القضارف": ["القضارف", "الفشقة", "القلابات", "الرهد"],
+            "سنار": ["سنار", "سنجة", "التينا", "الدندر"],
+            "النيل الأبيض": ["ربك", "كوستي", "الدويّم", "تندلتي"],
+            "النيل الأزرق": ["الدمازين", "الروصيرص", "الكرمك", "باو"],
+            "شمال كردفان": ["الأبيض", "أم روابة", "بارا", "سودري"],
+            "جنوب كردفان": ["كادقلي", "تلودي", "العباسية", "أبو جبيهة"],
+            "غرب كردفان": ["الفولة", "لقاوة", "الميرم", "أبو زبد"],
+            "الشمالية": ["دنقلا", "حلفا", "مروي", "القولد"],
+            "نهر النيل": ["الدامر", "عطبرة", "شندي", "بربر"],
+            "شمال دارفور": ["الفاشر", "كبكابية", "المالحة", "كتم"],
+            "جنوب دارفور": ["نيالا", "الضعين", "رهيد البردي", "كاس"],
+            "غرب دارفور": ["الجنينة", "سرف عمرة", "كرينك", "كلبس"],
+            "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
+            "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
+        };
+
+        // اقتراحات المهارات بناءً على عنوان الوظيفة
+        const skillSuggestions = {
+            'مطور': ['HTML', 'CSS', 'JavaScript', 'React', 'Python'],
+            'مهندس برمجيات': ['Java', 'C++', 'Git', 'Agile', 'SQL'],
+            'مصمم': ['Photoshop', 'Illustrator', 'Figma', 'UI/UX'],
+            'كهرباء': ['إصلاح المحركات الكهربائية', 'التحكم الآلي', 'صيانة الأنظمة الكهربائية', 'لوحات التحكم'],
+            'محاسب': ['ERP', 'QuickBooks', 'Excel', 'إدارة الحسابات'],
+            'مسوق': ['SEO', 'التسويق الرقمي', 'إدارة الحملات', 'وسائل التواصل الاجتماعي']
+        };
 
         window.nextStep = function(step) {
             const stepElement = document.getElementById(`step${step}`);
@@ -272,7 +324,15 @@
         };
 
         document.getElementById('skillsContainer').addEventListener('click', function(event) {
+            const currentSkillsCount = document.querySelectorAll('.skill-input').length;
+            const messageElement = document.getElementById('skillsLimitMessage');
+
             if (event.target.closest('.add-skill-btn')) {
+                if (currentSkillsCount >= 6) {
+                    messageElement.classList.remove('hidden');
+                    return;
+                }
+                messageElement.classList.add('hidden');
                 const newSkillInputHtml = `
                     <div class="mb-4 flex items-center">
                         <input type="text" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -283,6 +343,49 @@
             }
             if (event.target.closest('.remove-skill-btn')) {
                 event.target.closest('.mb-4').remove();
+                if (document.querySelectorAll('.skill-input').length < 6) {
+                    messageElement.classList.add('hidden');
+                }
+            }
+        });
+
+        // وظيفة لتعبئة المدن بناءً على الولاية المختارة
+        document.getElementById('jobState').addEventListener('change', function() {
+            const selectedState = this.value;
+            const cityContainer = document.getElementById('cityContainer');
+            const jobCitySelect = document.getElementById('jobCity');
+            
+            jobCitySelect.innerHTML = '<option value="">اختر مدينة</option>'; // إعادة تعيين الخيارات
+            
+            if (selectedState && sudanStates[selectedState]) {
+                sudanStates[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    jobCitySelect.appendChild(option);
+                });
+                cityContainer.classList.remove('hidden');
+            } else {
+                cityContainer.classList.add('hidden');
+            }
+        });
+
+        // وظيفة لاقتراح المهارات تلقائيًا
+        document.getElementById('jobTitle').addEventListener('input', function() {
+            const jobTitle = this.value.toLowerCase();
+            const skillInput = document.querySelector('.skill-input');
+            
+            if (skillInput && jobTitle.length > 2) {
+                for (const keyword in skillSuggestions) {
+                    if (jobTitle.includes(keyword)) {
+                        skillInput.value = skillSuggestions[keyword][0] || '';
+                        break;
+                    } else {
+                        skillInput.value = '';
+                    }
+                }
+            } else if (skillInput) {
+                skillInput.value = '';
             }
         });
 
@@ -296,7 +399,8 @@
             const companyName = document.getElementById('companyName').value;
             const companyLogo = document.getElementById('companyLogo').value;
             const jobDescription = document.getElementById('jobDescription').value;
-            const jobLocation = document.getElementById('jobLocation').value;
+            const jobState = document.getElementById('jobState').value;
+            const jobCity = document.getElementById('jobCity').value;
             const jobType = document.querySelector('input[name="jobType"]:checked').value;
             const experienceLevel = document.getElementById('experienceLevel').value;
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value);
@@ -310,7 +414,7 @@
                 companyName: companyName,
                 companyLogo: companyLogo || null,
                 jobDescription: jobDescription,
-                jobLocation: jobLocation,
+                jobLocation: `${jobCity}, ${jobState}`, // دمج المدينة والولاية في حقل واحد للعرض
                 jobType: jobType,
                 experienceLevel: experienceLevel,
                 skills: skills,
