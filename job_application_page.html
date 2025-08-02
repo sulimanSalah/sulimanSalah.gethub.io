@@ -6,7 +6,6 @@
     <title>إدخال الموظفين - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/compressorjs/dist/compressor.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root {
@@ -99,29 +98,21 @@
             <div class="step">2</div>
             <div class="step">3</div>
             <div class="step">4</div>
-            <div class="step">5</div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
             <h2 class="text-lg font-bold mb-4">الخطوة 1: معلومات شخصية</h2>
             <form id="employeeForm" onsubmit="event.preventDefault(); window.nextStep(1);">
                 <div class="mb-4">
-                    <label for="profileImage" class="block text-sm font-medium text-gray-700">رفع صورة الملف الشخصي</label>
-                    <input type="file" id="profileImage" accept="image/*"
-                           class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صورة الملف الشخصي')" oninput="setCustomValidity('')">
-                </div>
-                <div class="mb-4">
                     <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>
                     <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل"
                            class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-
                 <div class="mb-4">
                     <label for="jobTitle" class="block text-sm font-medium text-gray-700">المسمى الوظيفي</label>
                     <input type="text" id="jobTitle" placeholder="أدخل المسمى الوظيفي"
                            class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                     التالي
                 </button>
@@ -135,13 +126,11 @@
                 <input type="text" id="jobLocation" placeholder="أدخل الموقع"
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال الموقع')" oninput="setCustomValidity('')">
             </div>
-
             <div class="mb-4">
                 <label for="experienceYears" class="block text-sm font-medium text-gray-700">عدد سنوات الخبرة</label>
                 <input type="number" id="experienceYears" placeholder="كم سنة عملت في المجال" min="0"
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال عدد سنوات الخبرة')" oninput="setCustomValidity('')">
             </div>
-
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
                 السابق
             </button>
@@ -178,7 +167,6 @@
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
             </div>
             <div class="error-message hidden" id="skillError">يرجى إدخال مهارات تتعلق بالوظيفة المحددة.</div>
-
             <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
                 السابق
             </button>
@@ -188,32 +176,8 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-            <h2 class="text-lg font-bold mb-4">الخطوة 4: الأعمال السابقة</h2>
-            <div class="mb-4">
-                <label for="previousWorks" class="block text-sm font-medium text-gray-700">رفع صور الأعمال السابقة</label>
-                <input type="file" id="previousWorks" multiple accept="image/*"
-                       class="w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء رفع صور الأعمال السابقة')" oninput="setCustomValidity('')">
-            </div>
-
-            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
-                السابق
-            </button>
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(4)">
-                التالي
-            </button>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
-            <h2 class="text-lg font-bold mb-4">الخطوة 5: تأكيد المعلومات</h2>
+            <h2 class="text-lg font-bold mb-4">الخطوة 4: تأكيد المعلومات</h2>
             <p class="text-gray-700 mb-4">يرجى مراجعة المعلومات المدخلة بعناية قبل الإرسال. تأكد من أن جميع المعلومات صحيحة ودقيقة لضمان المصداقية.</p>
-
-            <div class="mb-4">
-                <div id="uploadProgressBarContainer" class="w-full bg-gray-200 rounded-full h-2.5 hidden">
-                    <div id="uploadProgressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
-                </div>
-                <p id="uploadProgressText" class="text-sm text-gray-600 mt-2 hidden text-right"></p>
-            </div>
-
             <div class="mb-4">
                 <label for="salaryFrom" class="block text-sm font-medium text-gray-700">السعر من</label>
                 <input type="number" id="salaryFrom" placeholder="أدخل السعر الأدنى" min="0"
@@ -224,8 +188,7 @@
                 <input type="number" id="salaryTo" placeholder="أدخل السعر الأعلى" min="0"
                        class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required oninvalid="this.setCustomValidity('الرجاء إدخال السعر الأعلى')" oninput="setCustomValidity('')">
             </div>
-
-            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(5)">
+            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
                 السابق
             </button>
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
@@ -237,7 +200,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -251,93 +213,20 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         window.db = db;
-        window.storage = storage;
 
         let currentStep = 1;
-        const totalSteps = 5;
-
-        const uploadProgressBarContainer = document.getElementById('uploadProgressBarContainer');
-        const uploadProgressBar = document.getElementById('uploadProgressBar');
-        const uploadProgressText = document.getElementById('uploadProgressText');
-
-        let totalBytesToUpload = 0;
-        let totalBytesUploaded = 0;
-
-        function updateOverallProgressBar() {
-            if (totalBytesToUpload === 0) return;
-            const overallProgress = (totalBytesUploaded / totalBytesToUpload) * 100;
-            uploadProgressBar.style.width = `${overallProgress.toFixed(0)}%`;
-            uploadProgressText.textContent = `جاري الرفع: ${overallProgress.toFixed(0)}%`;
-        }
-
-        async function compressFile(file) {
-            return new Promise((resolve, reject) => {
-                new Compressor(file, {
-                    quality: 0.6,
-                    maxWidth: 1280,
-                    maxHeight: 720,
-                    convertSize: 200000,
-                    success(result) {
-                        console.log('تم ضغط الملف بنجاح:', result);
-                        resolve(result);
-                    },
-                    error(err) {
-                        console.error('فشل ضغط الملف:', err.message);
-                        reject(err);
-                    },
-                });
-            });
-        }
-        
-        async function uploadFileWithProgress(file, filePath) {
-            try {
-                const compressedFile = await compressFile(file);
-                const storageRef = ref(window.storage, filePath);
-                const uploadTask = uploadBytesResumable(storageRef, compressedFile);
-
-                return new Promise((resolve, reject) => {
-                    uploadTask.on('state_changed',
-                        (snapshot) => {
-                            // يتم حساب التقدم من إجمالي البايتات المرفوعة وليس من ملف واحد
-                            totalBytesUploaded += snapshot.bytesTransferred;
-                            updateOverallProgressBar();
-                        },
-                        (error) => {
-                            console.error("خطأ في الرفع:", error);
-                            reject(error);
-                        },
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(resolve).catch(reject);
-                        }
-                    );
-                });
-            } catch (error) {
-                console.error("خطأ في دالة uploadFileWithProgress:", error);
-                throw error;
-            }
-        }
+        // تم تعديل عدد الخطوات من 5 إلى 4
+        const totalSteps = 4; 
 
         window.nextStep = function(step) {
             const stepElement = document.getElementById(`step${step}`);
             const currentForm = stepElement.querySelector('form');
 
-            if (currentForm) {
-                if (!currentForm.checkValidity()) {
-                    currentForm.reportValidity();
-                    return;
-                }
-            } else if (step === 4) {
-                const previousWorksInput = document.getElementById('previousWorks');
-                if (previousWorksInput.hasAttribute('required') && previousWorksInput.files.length === 0) {
-                    previousWorksInput.setCustomValidity('الرجاء رفع صور الأعمال السابقة');
-                    previousWorksInput.reportValidity();
-                    return;
-                } else {
-                    previousWorksInput.setCustomValidity('');
-                }
+            if (currentForm && !currentForm.checkValidity()) {
+                currentForm.reportValidity();
+                return;
             }
 
             stepElement.classList.add('hidden');
@@ -402,18 +291,17 @@
                 document.getElementById('skillError').classList.remove('hidden');
             } else {
                 document.getElementById('skillError').classList.add('hidden');
+                // الانتقال مباشرة إلى الخطوة 4 (النهائية)
                 window.nextStep(3);
             }
         };
 
         window.submitForm = async function() {
-            // تعطيل الزر لمنع الإرسال المتعدد
-            const submitButton = document.querySelector('#step5 button[type="submit"]');
+            const submitButton = document.querySelector('#step4 button[type="submit"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
             submitButton.textContent = 'جاري الإرسال...';
             
-            // تحقق من صحة الحقول أولاً
             const salaryFromInput = document.getElementById('salaryFrom');
             const salaryToInput = document.getElementById('salaryTo');
 
@@ -426,60 +314,6 @@
             }
 
             try {
-                const profileImageInput = document.getElementById('profileImage');
-                const previousWorksInput = document.getElementById('previousWorks');
-
-                // تحقق من أن الملفات موجودة
-                if (!profileImageInput.files.length) {
-                    alert('الرجاء رفع صورة للملف الشخصي.');
-                    throw new Error('لم يتم رفع صورة للملف الشخصي.');
-                }
-                if (!previousWorksInput.files.length) {
-                    alert('الرجاء رفع صور الأعمال السابقة.');
-                    throw new Error('لم يتم رفع صور الأعمال السابقة.');
-                }
-                
-                // إعادة تعيين متغيرات التقدم
-                totalBytesToUpload = 0;
-                totalBytesUploaded = 0;
-
-                // جمع الملفات لتقدير الحجم الكلي
-                let allFiles = [];
-                allFiles.push(profileImageInput.files[0]);
-                for (const file of previousWorksInput.files) {
-                    allFiles.push(file);
-                }
-                
-                // تقدير الحجم الإجمالي للرفع
-                allFiles.forEach(file => totalBytesToUpload += file.size);
-                
-                // إظهار شريط التقدم
-                uploadProgressBarContainer.classList.remove('hidden');
-                uploadProgressText.classList.remove('hidden');
-                uploadProgressText.textContent = 'جاري الرفع: 0%';
-                uploadProgressBar.style.width = '0%';
-                
-                // رفع صورة الملف الشخصي
-                const profileImageUrl = await uploadFileWithProgress(
-                    profileImageInput.files[0],
-                    `profileImages/${Date.now()}-${profileImageInput.files[0].name}`
-                );
-
-                // رفع صور الأعمال السابقة
-                const previousWorksUrls = [];
-                for (const file of previousWorksInput.files) {
-                    const url = await uploadFileWithProgress(
-                        file,
-                        `previousWorks/${Date.now()}-${file.name}`
-                    );
-                    previousWorksUrls.push(url);
-                }
-
-                // إخفاء شريط التقدم بعد اكتمال جميع عمليات الرفع
-                uploadProgressBarContainer.classList.add('hidden');
-                uploadProgressText.classList.add('hidden');
-                
-                // جمع باقي البيانات من النموذج
                 const fullName = document.getElementById('fullName').value;
                 const jobTitle = document.getElementById('jobTitle').value;
                 const jobLocation = document.getElementById('jobLocation').value;
@@ -495,7 +329,6 @@
                 const salaryFrom = parseInt(salaryFromInput.value);
                 const salaryTo = parseInt(salaryToInput.value);
 
-                // بناء كائن بيانات الموظف
                 const employeeData = {
                     fullName: fullName,
                     jobTitle: jobTitle,
@@ -506,19 +339,15 @@
                         from: salaryFrom,
                         to: salaryTo
                     },
-                    profileImageUrl: profileImageUrl,
-                    previousWorksUrls: previousWorksUrls,
                     timestamp: new Date().toISOString()
                 };
 
-                // حفظ بيانات الموظف في Cloud Firestore
                 const docRef = await addDoc(collection(window.db, "employees"), employeeData);
                 console.log("تم إضافة الموظف بنجاح بمعرف:", docRef.id);
 
-                // إظهار رسالة نجاح وإعادة تعيين النموذج
                 alert('تم تسجيل الموظف بنجاح في قاعدة البيانات!');
                 document.getElementById('employeeForm').reset();
-                window.prevStep(5); // العودة إلى الخطوة الأولى
+                window.prevStep(4);
 
             } catch (error) {
                 console.error("خطأ أثناء إرسال النموذج:", error);
