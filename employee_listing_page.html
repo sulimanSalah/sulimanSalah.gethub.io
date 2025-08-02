@@ -82,9 +82,15 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">الموظفين المتاحين</h1>
-            <span id="employeeCount" class="text-gray-600">...</span>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">الموظفين المتاحين</h1>
+            <div class="relative w-full md:w-1/3">
+                <input type="text" id="searchInput" placeholder="ابحث عن موظف..."
+                       class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+            </div>
         </div>
 
         <div id="employeesList" class="space-y-4">
@@ -115,18 +121,20 @@
         const db = getFirestore(app);
 
         const employeesList = document.getElementById('employeesList');
-        const employeeCountElement = document.getElementById('employeeCount');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const noEmployeesFound = document.getElementById('noEmployeesFound');
+        const searchInput = document.getElementById('searchInput');
+
+        let allEmployees = [];
 
         // وظيفة جلب الموظفين من Firebase
         async function fetchEmployees() {
             loadingIndicator.classList.remove('hidden');
             try {
                 const querySnapshot = await getDocs(collection(db, "employees"));
-                const employees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                renderEmployees(employees);
+                renderEmployees(allEmployees);
             } catch (error) {
                 console.error("خطأ في جلب الموظفين:", error);
                 employeesList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الموظفين.</div>';
@@ -192,7 +200,16 @@
                     employeesList.innerHTML += employeeCardHtml;
                 });
             }
-            employeeCountElement.textContent = `${employees.length} موظف متاح`;
+        }
+
+        // وظيفة البحث
+        function filterEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredEmployees = allEmployees.filter(employee => {
+                const searchString = `${employee.name} ${employee.headline} ${employee.contact.location} ${employee.experience} ${employee.skills.join(' ')}`.toLowerCase();
+                return searchString.includes(searchTerm);
+            });
+            renderEmployees(filteredEmployees);
         }
 
         // وظيفة مساعدة لحساب الوقت المنقضي
@@ -215,6 +232,7 @@
 
         // تشغيل جلب البيانات عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', fetchEmployees);
+        searchInput.addEventListener('input', filterEmployees);
     </script>
 </body>
 </html>
