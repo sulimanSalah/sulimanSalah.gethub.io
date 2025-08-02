@@ -23,7 +23,6 @@
             background-color: #f5f7fa;
         }
         .form-container {
-            /* تعديل العرض ليكون أكثر اتساعاً */
             max-width: 650px; 
             width: 100%;
         }
@@ -54,7 +53,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            padding: 12px 16px; /* زيادة حجم الزر قليلاً */
+            padding: 12px 16px;
             border-radius: 8px;
             margin-bottom: 12px;
             font-weight: 600;
@@ -104,7 +103,10 @@
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
-                    <label for="loginPassword" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <div class="flex justify-between items-center">
+                        <label for="loginPassword" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                        <a href="#" id="forgotPasswordLink" class="text-sm text-blue-600 hover:underline">نسيت كلمة المرور؟</a>
+                    </div>
                     <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
@@ -203,7 +205,8 @@
             signInWithPopup,
             FacebookAuthProvider,
             createUserWithEmailAndPassword,
-            sendEmailVerification
+            sendEmailVerification,
+            sendPasswordResetEmail
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
@@ -237,6 +240,9 @@
         
         const showRegisterLink = document.getElementById('showRegisterLink');
         const showLoginLink = document.getElementById('showLoginLink');
+
+        // رابط "نسيت كلمة المرور؟"
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
         
         const statusMessage = document.getElementById('statusMessage');
         const registrationStatusMessage = document.getElementById('registrationStatusMessage');
@@ -259,6 +265,29 @@
             e.preventDefault();
             registrationCard.classList.add('hidden');
             loginCard.classList.remove('hidden');
+        });
+
+        // **منطق "نسيت كلمة المرور"**
+        forgotPasswordLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = loginForm.loginEmail.value;
+
+            if (!email) {
+                showStatusMessage('الرجاء إدخال بريدك الإلكتروني أولاً.', 'error', statusMessage);
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showStatusMessage('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. الرجاء التحقق.', 'success', statusMessage);
+            } catch (error) {
+                console.error("خطأ في إعادة تعيين كلمة المرور:", error);
+                let errorMessage = 'حدث خطأ. الرجاء التأكد من صحة البريد الإلكتروني.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'لا يوجد حساب بهذا البريد الإلكتروني.';
+                }
+                showStatusMessage(errorMessage, 'error', statusMessage);
+            }
         });
         
         // التحقق من حالة المستخدم عند تحميل الصفحة (استمرارية الجلسة)
