@@ -3,465 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول / إنشاء حساب - شغلني</title>
+    <title>تسجيل الدخول - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-
-        :root { 
-            --primary: #2563eb; /* Blue 600 */
-            --primary-dark: #1e40af; /* Blue 800 */
-            --secondary: #f59e0b; /* Amber 500 */
-            --success: #10b981; /* Green 500 */
-            --danger: #ef4444; /* Red 500 */
-            --light-gray: #f9fafb; /* Gray 50 */
-            --dark-gray: #1f2937; /* Gray 800 */
-            --text-gray: #6b7280; /* Gray 500 */
-            --purple-bg: #6B46C1; /* اللون البنفسجي المميز للخلفية */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
         }
-
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: var(--light-gray);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* لجعل الصفحة تأخذ ارتفاع الشاشة بالكامل */
-            margin: 0;
+            background-color: #f5f7fa;
         }
-
-        .auth-container {
-            background-color: white;
-            padding: 2.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 450px; /* لتقييد عرض النموذج */
-            text-align: center;
+        .form-container {
+            max-width: 500px;
         }
-
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            color: var(--text-gray);
+        .form-card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-
-        .tab-button.active {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .form-field {
-            margin-bottom: 1.5rem;
-            text-align: right; /* لتنسيق التسميات من اليمين */
-        }
-
-        .form-field label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--dark-gray);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-field input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #e2e8f0; /* Gray 300 */
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            color: var(--dark-gray);
-            transition: all 0.2s ease;
-        }
-
-        .form-field input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Blue 600 with opacity */
-        }
-
-        .submit-button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .submit-button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .social-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db; /* Gray 300 */
-            border-radius: 0.5rem;
-            font-weight: 500;
-            font-size: 1rem;
-            color: var(--dark-gray);
-            transition: all 0.2s ease;
-        }
-
-        .social-button:hover {
-            background-color: #f3f4f6; /* Gray 100 */
-        }
-
-        .social-button i {
-            margin-left: 0.75rem; /* Space between icon and text */
-        }
-
         .error-message {
             color: var(--danger);
-            font-size: 0.875rem;
-            margin-top: -0.75rem; /* Adjust to fit below input */
-            margin-bottom: 1rem;
-            text-align: right;
-            visibility: hidden; /* Hidden by default */
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .error-message.show {
-            visibility: visible;
-            opacity: 1;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-
-    <div class="auth-container">
-        <div class="flex justify-center mb-6 border-b border-gray-200">
-            <button id="loginTab" class="tab-button active">تسجيل الدخول</button>
-            <button id="signupTab" class="tab-button">إنشاء حساب</button>
-        </div>
-
-        <div id="loginForm" class="auth-form">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">تسجيل الدخول</h2>
-            <form>
-                <div class="form-field">
-                    <label for="loginEmail">البريد الإلكتروني</label>
-                    <input type="email" id="loginEmail" placeholder="ادخل بريدك الإلكتروني" required>
-                    <p id="loginEmailError" class="error-message"></p>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
-                <div class="form-field">
-                    <label for="loginPassword">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="ادخل كلمة المرور" required>
-                    <p id="loginPasswordError" class="error-message"></p>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <a href="employee_registration.html" class="text-blue-600 font-medium hover:text-blue-700">تسجيل جديد</a>
                 </div>
-                <div class="text-left mb-6 text-sm">
-                    <a href="#" class="text-blue-600 hover:underline">هل نسيت كلمة المرور؟</a>
-                </div>
-                <button type="submit" id="loginButton" class="submit-button">تسجيل الدخول</button>
-            </form>
-
-            <div class="mt-6 text-gray-500 text-sm">أو سجل الدخول عبر</div>
-            <div class="flex flex-col gap-3 mt-4">
-                <button class="social-button border-blue-600 text-blue-600 hover:bg-blue-50" id="googleLogin">
-                    <i class="fab fa-google"></i> متابعة باستخدام جوجل
-                </button>
-                <button class="social-button border-gray-400 text-gray-700 hover:bg-gray-100" id="facebookLogin">
-                    <i class="fab fa-facebook"></i> متابعة باستخدام فيسبوك
-                </button>
             </div>
         </div>
+    </nav>
 
-        <div id="signupForm" class="auth-form hidden">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">إنشاء حساب جديد</h2>
-            <form>
-                <div class="form-field">
-                    <label for="signupEmail">البريد الإلكتروني</label>
-                    <input type="email" id="signupEmail" placeholder="ادخل بريدك الإلكتروني" required>
-                    <p id="signupEmailError" class="error-message"></p>
+    <div class="container mx-auto px-4 py-8 flex justify-center">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container">
+            <h2 class="text-lg font-bold mb-4 text-center">تسجيل الدخول</h2>
+            
+            <form id="loginForm" onsubmit="event.preventDefault(); window.loginUser();">
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                <div class="form-field">
-                    <label for="signupPassword">كلمة المرور</label>
-                    <input type="password" id="signupPassword" placeholder="ادخل كلمة مرور قوية" required>
-                    <p id="signupPasswordError" class="error-message"></p>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <input type="password" id="password" placeholder="أدخل كلمة المرور"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                <div class="form-field">
-                    <label for="signupConfirmPassword">تأكيد كلمة المرور</label>
-                    <input type="password" id="signupConfirmPassword" placeholder="أعد إدخال كلمة المرور" required>
-                    <p id="signupConfirmPasswordError" class="error-message"></p>
-                </div>
-                <div class="mb-6 text-sm text-gray-600 text-right">
-                    بالتسجيل، أنت توافق على <a href="#" class="text-blue-600 hover:underline">الشروط والأحكام</a> و <a href="#" class="text-blue-600 hover:underline">سياسة الخصوصية</a>.
-                </div>
-                <button type="submit" id="signupButton" class="submit-button">إنشاء حساب</button>
+
+                <div id="statusMessage" class="mt-4 text-center"></div>
+
+                <button type="submit" id="submitButton" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    تسجيل الدخول
+                </button>
+                
+                <p class="text-sm text-center text-gray-500 mt-4">
+                    ليس لديك حساب؟ <a href="employee_registration.html" class="text-blue-600 hover:underline">سجل الآن</a>
+                </p>
             </form>
-
-            <div class="mt-6 text-gray-500 text-sm">أو أنشئ حسابًا عبر</div>
-            <div class="flex flex-col gap-3 mt-4">
-                <button class="social-button border-blue-600 text-blue-600 hover:bg-blue-50" id="googleSignup">
-                    <i class="fab fa-google"></i> التسجيل باستخدام جوجل
-                </button>
-                <button class="social-button border-gray-400 text-gray-700 hover:bg-gray-100" id="facebookSignup">
-                    <i class="fab fa-facebook"></i> التسجيل باستخدام فيسبوك
-                </button>
-            </div>
         </div>
     </div>
 
     <script type="module">
-        // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import {
-            getAuth,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
-            GoogleAuthProvider,
-            signInWithPopup,
-            FacebookAuthProvider
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // تهيئة Firebase: هذه هي معلومات مشروعك
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        // تأكد من أن هذه هي إعدادات مشروع Firebase الخاص بك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
             projectId: "shaglni-c64c0",
-            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            storageBucket: "shaglni-c64c0.appspot.com",
             messagingSenderId: "768887356636",
             appId: "1:768887356636:web:11ec1d6991add3309c8819",
             measurementId: "G-98GQGZS09W"
         };
-
-        // تهيئة Firebase App
+        
+        // تهيئة Firebase
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app); // الحصول على كائن المصادقة
-
-        // عناصر الواجهة
-        const loginTab = document.getElementById('loginTab');
-        const signupTab = document.getElementById('signupTab');
+        const auth = getAuth(app);
+        
         const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
+        const submitButton = document.getElementById('submitButton');
+        const statusMessage = document.getElementById('statusMessage');
 
-        const loginEmailInput = document.getElementById('loginEmail');
-        const loginPasswordInput = document.getElementById('loginPassword');
-        const loginButton = document.getElementById('loginButton');
-        const googleLoginButton = document.getElementById('googleLogin');
-        const facebookLoginButton = document.getElementById('facebookLogin');
-
-        const signupEmailInput = document.getElementById('signupEmail');
-        const signupPasswordInput = document.getElementById('signupPassword');
-        const signupConfirmPasswordInput = document.getElementById('signupConfirmPassword');
-        const signupButton = document.getElementById('signupButton');
-        const googleSignupButton = document.getElementById('googleSignup');
-        const facebookSignupButton = document.getElementById('facebookSignup');
-
-        // عناصر رسائل الخطأ
-        const loginEmailError = document.getElementById('loginEmailError');
-        const loginPasswordError = document.getElementById('loginPasswordError');
-        const signupEmailError = document.getElementById('signupEmailError');
-        const signupPasswordError = document.getElementById('signupPasswordError');
-        const signupConfirmPasswordError = document.getElementById('signupConfirmPasswordError');
-
-        // دالة لعرض رسالة خطأ
-        function showError(element, message) {
-            element.textContent = message;
-            element.classList.add('show');
+        function showStatusMessage(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.style.color = type === 'error' ? 'var(--danger)' : (type === 'success' ? 'var(--success)' : 'var(--gray)');
         }
+        
+        window.loginUser = async function() {
+            submitButton.disabled = true;
+            submitButton.textContent = 'جاري تسجيل الدخول...';
+            showStatusMessage('جاري التحقق من البيانات...', 'info');
 
-        // دالة لإخفاء رسالة خطأ
-        function hideError(element) {
-            element.textContent = '';
-            element.classList.remove('show');
-        }
-
-        // دالة للتبديل بين نماذج تسجيل الدخول وإنشاء الحساب
-        function showLoginForm() {
-            loginTab.classList.add('active');
-            signupTab.classList.remove('active');
-            loginForm.classList.remove('hidden');
-            signupForm.classList.add('hidden');
-            // مسح أي رسائل خطأ عند التبديل
-            hideError(loginEmailError);
-            hideError(loginPasswordError);
-            hideError(signupEmailError);
-            hideError(signupPasswordError);
-            hideError(signupConfirmPasswordError);
-        }
-
-        function showSignupForm() {
-            signupTab.classList.add('active');
-            loginTab.classList.remove('active');
-            signupForm.classList.remove('hidden');
-            loginForm.classList.add('hidden');
-            // مسح أي رسائل خطأ عند التبديل
-            hideError(loginEmailError);
-            hideError(loginPasswordError);
-            hideError(signupEmailError);
-            hideError(signupPasswordError);
-            hideError(signupConfirmPasswordError);
-        }
-
-        // معالج أحداث النقر على التبويبات
-        loginTab.addEventListener('click', showLoginForm);
-        signupTab.addEventListener('click', showSignupForm);
-
-        // **معالجة تسجيل الدخول بالبريد الإلكتروني وكلمة المرور**
-        loginButton.addEventListener('click', async (e) => {
-            e.preventDefault(); // منع الإرسال الافتراضي للنموذج
-            hideError(loginEmailError);
-            hideError(loginPasswordError);
-
-            const email = loginEmailInput.value;
-            const password = loginPasswordInput.value;
-
-            if (!email || !password) {
-                if (!email) showError(loginEmailError, 'البريد الإلكتروني مطلوب.');
-                if (!password) showError(loginPasswordError, 'كلمة المرور مطلوبة.');
-                return;
-            }
-
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+        
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                alert('تم تسجيل الدخول بنجاح!');
-                // يمكن التوجيه إلى صفحة أخرى بعد تسجيل الدخول، مثلاً:
-                window.location.href = 'index.html'; // أو لوحة التحكم
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                showStatusMessage('تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+                
+                // التوجيه إلى صفحة عرض الموظفين
+                window.location.href = 'available_employees.html';
+        
             } catch (error) {
-                console.error("خطأ في تسجيل الدخول:", error.code, error.message);
-                if (error.code === 'auth/invalid-email') {
-                    showError(loginEmailError, 'صيغة البريد الإلكتروني غير صحيحة.');
-                } else if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    showError(loginPasswordError, 'البريد الإلكتروني أو كلمة المرور غير صحيحة.');
-                } else if (error.code === 'auth/too-many-requests') {
-                    showError(loginPasswordError, 'تم حظر هذا الحساب بسبب محاولات تسجيل دخول فاشلة متعددة. حاول لاحقاً.');
-                } else {
-                    showError(loginPasswordError, 'حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى.');
+                console.error("خطأ أثناء تسجيل الدخول:", error);
+                let errorMessage = "حدث خطأ غير معروف.";
+                
+                switch(error.code) {
+                    case 'auth/invalid-credential':
+                        errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'لم يتم العثور على مستخدم بهذا البريد الإلكتروني.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'كلمة المرور غير صحيحة.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
+                        break;
+                    default:
+                        errorMessage = `حدث خطأ: ${error.message}`;
+                        break;
                 }
+                showStatusMessage(errorMessage, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'تسجيل الدخول';
             }
-        });
-
-        // **معالجة إنشاء حساب جديد بالبريد الإلكتروني وكلمة المرور**
-        signupButton.addEventListener('click', async (e) => {
-            e.preventDefault(); // منع الإرسال الافتراضي للنموذج
-            hideError(signupEmailError);
-            hideError(signupPasswordError);
-            hideError(signupConfirmPasswordError);
-
-            const email = signupEmailInput.value;
-            const password = signupPasswordInput.value;
-            const confirmPassword = signupConfirmPasswordInput.value;
-
-            if (!email || !password || !confirmPassword) {
-                if (!email) showError(signupEmailError, 'البريد الإلكتروني مطلوب.');
-                if (!password) showError(signupPasswordError, 'كلمة المرور مطلوبة.');
-                if (!confirmPassword) showError(signupConfirmPasswordError, 'تأكيد كلمة المرور مطلوب.');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError(signupPasswordError, 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showError(signupConfirmPasswordError, 'كلمتا المرور غير متطابقتين.');
-                return;
-            }
-
-            try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                alert('تم إنشاء حسابك بنجاح!');
-                // يمكن التوجيه إلى صفحة أخرى بعد التسجيل، مثلاً:
-                window.location.href = 'index.html'; // أو صفحة الملف الشخصي
-            } catch (error) {
-                console.error("خطأ في إنشاء الحساب:", error.code, error.message);
-                if (error.code === 'auth/email-already-in-use') {
-                    showError(signupEmailError, 'هذا البريد الإلكتروني مستخدم بالفعل.');
-                } else if (error.code === 'auth/invalid-email') {
-                    showError(signupEmailError, 'صيغة البريد الإلكتروني غير صحيحة.');
-                } else if (error.code === 'auth/weak-password') {
-                    showError(signupPasswordError, 'كلمة المرور ضعيفة جداً. يرجى استخدام كلمة مرور أقوى.');
-                } else {
-                    showError(signupPasswordError, 'حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى.');
-                }
-            }
-        });
-
-        // **معالجة تسجيل الدخول/الاشتراك باستخدام Google**
-        const googleProvider = new GoogleAuthProvider();
-        googleLoginButton.addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-                alert('تم تسجيل الدخول باستخدام جوجل بنجاح!');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error("خطأ في تسجيل الدخول بجوجل:", error.code, error.message);
-                if (error.code === 'auth/popup-closed-by-user') {
-                    // المستخدم أغلق النافذة المنبثقة
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    // طلب نافذة منبثقة ملغى (حدث عند محاولة فتح نافذتين بسرعة)
-                } else {
-                    alert('حدث خطأ أثناء تسجيل الدخول باستخدام جوجل: ' + error.message);
-                }
-            }
-        });
-
-        googleSignupButton.addEventListener('click', async () => {
-             // نفس المنطق لتسجيل الدخول بجوجل
-            try {
-                await signInWithPopup(auth, googleProvider);
-                alert('تم التسجيل باستخدام جوجل بنجاح!');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error("خطأ في التسجيل بجوجل:", error.code, error.message);
-                 if (error.code === 'auth/popup-closed-by-user') {
-                    // المستخدم أغلق النافذة المنبثقة
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    // طلب نافذة منبثقة ملغى
-                } else {
-                    alert('حدث خطأ أثناء التسجيل باستخدام جوجل: ' + error.message);
-                }
-            }
-        });
-
-        // **معالجة تسجيل الدخول/الاشتراك باستخدام Facebook** (يتطلب إعداد Facebook App في Firebase)
-        const facebookProvider = new FacebookAuthProvider();
-        facebookLoginButton.addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, facebookProvider);
-                alert('تم تسجيل الدخول باستخدام فيسبوك بنجاح!');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error("خطأ في تسجيل الدخول بفيسبوك:", error.code, error.message);
-                 if (error.code === 'auth/popup-closed-by-user') {
-                    // المستخدم أغلق النافذة المنبثقة
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    // طلب نافذة منبثقة ملغى
-                } else {
-                    alert('حدث خطأ أثناء تسجيل الدخول باستخدام فيسبوك: ' + error.message);
-                }
-            }
-        });
-
-        facebookSignupButton.addEventListener('click', async () => {
-             // نفس المنطق لتسجيل الدخول بفيسبوك
-            try {
-                await signInWithPopup(auth, facebookProvider);
-                alert('تم التسجيل باستخدام فيسبوك بنجاح!');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error("خطأ في التسجيل بفيسبوك:", error.code, error.message);
-                 if (error.code === 'auth/popup-closed-by-user') {
-                    // المستخدم أغلق النافذة المنبثقة
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    // طلب نافذة منبثقة ملغى
-                } else {
-                    alert('حدث خطأ أثناء التسجيل باستخدام فيسبوك: ' + error.message);
-                }
-            }
-        });
+        };
     </script>
 </body>
 </html>
