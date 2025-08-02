@@ -28,9 +28,19 @@
         .form-card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        .error-message {
-            color: var(--danger);
+        .message-box {
+            padding: 10px;
             margin-top: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .message-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .message-error {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
 </head>
@@ -79,7 +89,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         
         // تأكد من أن هذه هي إعدادات مشروع Firebase الخاص بك
         const firebaseConfig = {
@@ -102,8 +112,21 @@
 
         function showStatusMessage(message, type = 'info') {
             statusMessage.textContent = message;
-            statusMessage.style.color = type === 'error' ? 'var(--danger)' : (type === 'success' ? 'var(--success)' : 'var(--gray)');
+            statusMessage.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
         }
+        
+        // **الجديد: تحقق من حالة المصادقة عند تحميل الصفحة**
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // المستخدم مسجل الدخول، قم بتوجيهه مباشرة
+                console.log('المستخدم مسجل الدخول، جاري التوجيه...');
+                showStatusMessage('تم العثور على جلسة تسجيل دخول سابقة. جاري التوجيه...', 'success');
+                window.location.href = 'available_employees.html';
+            } else {
+                // المستخدم غير مسجل الدخول، لا تفعل شيئاً (ابق في صفحة تسجيل الدخول)
+                console.log('المستخدم غير مسجل الدخول.');
+            }
+        });
         
         window.loginUser = async function() {
             submitButton.disabled = true;
@@ -114,12 +137,11 @@
             const password = loginForm.password.value;
         
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                showStatusMessage('تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+                // تسجيل الدخول
+                await signInWithEmailAndPassword(auth, email, password);
                 
-                // التوجيه إلى صفحة عرض الموظفين
-                window.location.href = 'available_employees.html';
+                // إذا وصل الكود إلى هنا، فمعنى ذلك أن تسجيل الدخول نجح
+                // التوجيه سيحدث تلقائياً بفضل onAuthStateChanged
         
             } catch (error) {
                 console.error("خطأ أثناء تسجيل الدخول:", error);
@@ -142,8 +164,10 @@
                         errorMessage = `حدث خطأ: ${error.message}`;
                         break;
                 }
+                // عرض رسالة الخطأ
                 showStatusMessage(errorMessage, 'error');
             } finally {
+                // إعادة الزر إلى حالته الأصلية
                 submitButton.disabled = false;
                 submitButton.textContent = 'تسجيل الدخول';
             }
