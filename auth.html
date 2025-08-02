@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الموظفين - شغلني</title>
+    <title>تسجيل الدخول / تسجيل جديد - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -47,6 +47,37 @@
             background-color: #e0f2fe;
             color: #075985;
         }
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .social-button i {
+            margin-left: 8px;
+            font-size: 20px;
+        }
+        .google-btn {
+            background-color: #fff;
+            color: #3b3b3b;
+            border: 1px solid #d1d5db;
+        }
+        .google-btn:hover {
+            background-color: #f3f4f6;
+        }
+        .facebook-btn {
+            background-color: #3b5998;
+            color: #fff;
+        }
+        .facebook-btn:hover {
+            background-color: #2d4373;
+        }
     </style>
 </head>
 <body>
@@ -56,15 +87,55 @@
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <a href="auth.html" class="text-blue-600 font-medium hover:text-blue-700">تسجيل الدخول</a>
-                </div>
             </div>
         </div>
     </nav>
 
     <div class="container mx-auto px-4 py-8 flex justify-center">
-        <div id="registration-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container">
+        <div id="login-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container">
+            <h2 class="text-lg font-bold mb-4 text-center">تسجيل الدخول</h2>
+            
+            <form id="loginForm" onsubmit="event.preventDefault(); window.loginUser();">
+                <div class="mb-4">
+                    <label for="loginEmail" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="loginPassword" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div id="statusMessage" class="mt-4 text-center"></div>
+
+                <button type="submit" id="emailSignInBtn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <div class="flex items-center my-4">
+                <hr class="flex-grow border-t border-gray-300">
+                <span class="mx-2 text-gray-500 text-sm">أو</span>
+                <hr class="flex-grow border-t border-gray-300">
+            </div>
+
+            <button id="googleSignInBtn" class="social-button google-btn">
+                <i class="fab fa-google"></i>
+                المتابعة باستخدام Google
+            </button>
+            
+            <button id="facebookSignInBtn" class="social-button facebook-btn">
+                <i class="fab fa-facebook"></i>
+                المتابعة باستخدام Facebook
+            </button>
+            
+            <p class="text-sm text-center text-gray-500 mt-4">
+                ليس لديك حساب؟ <a href="#" id="showRegisterLink" class="text-blue-600 hover:underline">سجل الآن</a>
+            </p>
+        </div>
+
+        <div id="registration-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container hidden">
             <h2 class="text-lg font-bold mb-4 text-center">تسجيل موظف جديد</h2>
             
             <form id="registrationForm" onsubmit="event.preventDefault(); window.registerUser();">
@@ -74,8 +145,8 @@
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">عنوان البريد الإلكتروني</label>
-                    <input type="email" id="email" placeholder="مثال: user@example.com"
+                    <label for="regEmail" class="block text-sm font-medium text-gray-700">عنوان البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" placeholder="مثال: user@example.com"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
@@ -84,8 +155,8 @@
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
-                    <input type="password" id="password" placeholder="أدخل كلمة المرور"
+                    <label for="regPassword" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <input type="password" id="regPassword" placeholder="أدخل كلمة المرور"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
@@ -94,18 +165,18 @@
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
 
-                <div id="statusMessage" class="mt-4 text-center"></div>
+                <div id="registrationStatusMessage" class="mt-4 text-center"></div>
 
-                <button type="submit" id="submitButton" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                <button type="submit" id="registerBtn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
                     تسجيل
                 </button>
                 
                 <p class="text-sm text-center text-gray-500 mt-4">
-                    هل لديك حساب؟ <a href="auth.html" class="text-blue-600 hover:underline">سجل دخولك</a>
+                    هل لديك حساب؟ <a href="#" id="showLoginLink" class="text-blue-600 hover:underline">سجل دخولك</a>
                 </p>
             </form>
         </div>
-        
+
         <div id="verification-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container hidden">
             <h2 class="text-lg font-bold mb-4 text-center">تحقق من بريدك الإلكتروني</h2>
             <div id="verificationMessage" class="message-box message-info">
@@ -122,9 +193,19 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup,
+            FacebookAuthProvider,
+            createUserWithEmailAndPassword,
+            sendEmailVerification
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
+        // تأكد من أن هذه هي إعدادات مشروع Firebase الخاص بك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -140,71 +221,115 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
+        const loginCard = document.getElementById('login-card');
         const registrationCard = document.getElementById('registration-card');
-        const registrationForm = document.getElementById('registrationForm');
-        const submitButton = document.getElementById('submitButton');
-        const statusMessage = document.getElementById('statusMessage');
         const verificationCard = document.getElementById('verification-card');
+
+        const loginForm = document.getElementById('loginForm');
+        const registrationForm = document.getElementById('registrationForm');
+        
+        const emailSignInBtn = document.getElementById('emailSignInBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const googleSignInBtn = document.getElementById('googleSignInBtn');
+        const facebookSignInBtn = document.getElementById('facebookSignInBtn');
+        
+        const showRegisterLink = document.getElementById('showRegisterLink');
+        const showLoginLink = document.getElementById('showLoginLink');
+        
+        const statusMessage = document.getElementById('statusMessage');
+        const registrationStatusMessage = document.getElementById('registrationStatusMessage');
+
         const resendEmailBtn = document.getElementById('resendEmailBtn');
 
-        function showStatusMessage(message, type = 'info') {
-            statusMessage.textContent = message;
-            statusMessage.className = `message-box ${type === 'success' ? 'message-success' : (type === 'error' ? 'message-error' : 'message-info')}`;
+        function showStatusMessage(message, type = 'info', targetElement) {
+            targetElement.textContent = message;
+            targetElement.className = `message-box ${type === 'success' ? 'message-success' : (type === 'error' ? 'message-error' : 'message-info')}`;
         }
+        
+        // **منطق التبديل بين النموذجين**
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginCard.classList.add('hidden');
+            registrationCard.classList.remove('hidden');
+        });
+
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registrationCard.classList.add('hidden');
+            loginCard.classList.remove('hidden');
+        });
         
         // التحقق من حالة المستخدم عند تحميل الصفحة (استمرارية الجلسة)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // إذا كان المستخدم موجوداً، نتحقق من حالة التحقق من البريد
                 if (user.emailVerified) {
-                    // إذا كان البريد الإلكتروني موثقاً، نوجهه إلى صفحة الموظفين
                     console.log('البريد الإلكتروني موثّق. جاري التوجيه...');
                     window.location.href = 'available_employees.html';
                 } else {
-                    // إذا لم يكن موثقاً، نعرض له شاشة التحقق
+                    loginCard.classList.add('hidden');
                     registrationCard.classList.add('hidden');
                     verificationCard.classList.remove('hidden');
                 }
             } else {
-                // إذا لم يكن المستخدم موجوداً، نعرض له صفحة التسجيل
-                registrationCard.classList.remove('hidden');
+                loginCard.classList.remove('hidden');
+                registrationCard.classList.add('hidden');
                 verificationCard.classList.add('hidden');
             }
         });
         
+        // **وظيفة تسجيل الدخول**
+        window.loginUser = async function() {
+            emailSignInBtn.disabled = true;
+            emailSignInBtn.textContent = 'جاري تسجيل الدخول...';
+            showStatusMessage('جاري التحقق من البيانات...', 'info', statusMessage);
+
+            const email = loginForm.loginEmail.value;
+            const password = loginForm.loginPassword.value;
+        
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // التوجيه سيتم تلقائياً عبر onAuthStateChanged
+            } catch (error) {
+                console.error("خطأ أثناء تسجيل الدخول:", error);
+                let errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+                showStatusMessage(errorMessage, 'error', statusMessage);
+            } finally {
+                emailSignInBtn.disabled = false;
+                emailSignInBtn.textContent = 'تسجيل الدخول';
+            }
+        };
+
+        // **وظيفة تسجيل حساب جديد**
         window.registerUser = async function() {
-            submitButton.disabled = true;
-            submitButton.textContent = 'جاري التسجيل...';
-            showStatusMessage('جاري معالجة البيانات...', 'info');
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'جاري التسجيل...';
+            showStatusMessage('جاري معالجة البيانات...', 'info', registrationStatusMessage);
 
             const fullName = registrationForm.fullName.value;
-            const email = registrationForm.email.value;
+            const email = registrationForm.regEmail.value;
             const phone = registrationForm.phone.value;
-            const password = registrationForm.password.value;
+            const password = registrationForm.regPassword.value;
             const confirmPassword = registrationForm.confirmPassword.value;
         
             if (password !== confirmPassword) {
-                showStatusMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
-                submitButton.disabled = false;
-                submitButton.textContent = 'تسجيل';
+                showStatusMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error', registrationStatusMessage);
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'تسجيل';
                 return;
             }
             if (password.length < 6) {
-                showStatusMessage('يجب أن تكون كلمة المرور 6 أحرف على الأقل.', 'error');
-                submitButton.disabled = false;
-                submitButton.textContent = 'تسجيل';
+                showStatusMessage('يجب أن تكون كلمة المرور 6 أحرف على الأقل.', 'error', registrationStatusMessage);
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'تسجيل';
                 return;
             }
         
             try {
-                // 1. إنشاء المستخدم في Firebase Authentication
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // 2. إرسال رسالة التحقق من البريد
                 await sendEmailVerification(user);
                 
-                // 3. حفظ البيانات في Firestore
                 const userData = {
                     fullName: fullName,
                     email: email,
@@ -213,7 +338,7 @@
                 };
                 await setDoc(doc(db, "employees", user.uid), userData);
 
-                // 4. إظهار شاشة التحقق للمستخدم
+                loginCard.classList.add('hidden');
                 registrationCard.classList.add('hidden');
                 verificationCard.classList.remove('hidden');
         
@@ -234,14 +359,14 @@
                         errorMessage = `حدث خطأ: ${error.message}`;
                         break;
                 }
-                showStatusMessage(errorMessage, 'error');
+                showStatusMessage(errorMessage, 'error', registrationStatusMessage);
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'تسجيل';
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'تسجيل';
             }
         };
 
-        // وظيفة لإعادة إرسال رسالة التحقق
+        // **وظيفة إعادة إرسال رسالة التحقق**
         resendEmailBtn.addEventListener('click', async () => {
             const user = auth.currentUser;
             if (user) {
@@ -252,6 +377,29 @@
                     console.error("خطأ في إعادة إرسال الرسالة:", error);
                     alert('حدث خطأ أثناء إعادة إرسال الرسالة.');
                 }
+            }
+        });
+
+        // **وظائف تسجيل الدخول عبر وسائل التواصل الاجتماعي**
+        googleSignInBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                showStatusMessage('جاري تسجيل الدخول باستخدام Google...', 'info', statusMessage);
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("خطأ في تسجيل الدخول بـ Google:", error);
+                showStatusMessage(`فشل تسجيل الدخول: ${error.message}`, 'error', statusMessage);
+            }
+        });
+        
+        facebookSignInBtn.addEventListener('click', async () => {
+            const provider = new FacebookAuthProvider();
+            try {
+                showStatusMessage('جاري تسجيل الدخول باستخدام Facebook...', 'info', statusMessage);
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("خطأ في تسجيل الدخول بـ Facebook:", error);
+                showStatusMessage(`فشل تسجيل الدخول: ${error.message}`, 'error', statusMessage);
             }
         });
     </script>
