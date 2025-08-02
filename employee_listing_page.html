@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -27,28 +27,11 @@
         .employee-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
         }
 
         .employee-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
-        }
-
-        .badge-primary {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-warning {
-            background-color: #fef3c7;
-            color: #92400e;
         }
 
         .skill-tag {
@@ -61,98 +44,16 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
-
-        .work-thumbnail {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s;
+        
+        .filters-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
         }
-
-        .work-thumbnail:hover {
-            transform: scale(1.1);
-        }
-
-        /* نافذة معرض الأعمال */
-        .work-gallery-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .work-gallery-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .work-gallery-content {
-            max-width: 800px;
-            width: 90%;
-            position: relative;
-        }
-
-        .work-gallery-slide {
-            display: none;
-            text-align: center;
-        }
-
-        .work-gallery-slide.active {
-            display: block;
-        }
-
-        .work-gallery-slide img {
-            max-height: 70vh;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-
-        .work-gallery-caption {
-            color: white;
-            margin-top: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .work-gallery-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-
-        .work-gallery-prev,
-        .work-gallery-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            padding: 1rem;
-            user-select: none;
-        }
-
-        .work-gallery-prev {
-            left: 0;
-        }
-
-        .work-gallery-next {
-            right: 0;
+        .filters-container.active {
+            max-height: 500px;
         }
     </style>
-
 </head>
 <body>
     <nav class="bg-white shadow-lg sticky top-0 z-50">
@@ -163,11 +64,10 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
                     <a href="available_employees.html" class="text-blue-600 font-medium">عرض الموظفين</a>
-                    <a href="employee_registration.html" class="text-gray-700 hover:text-blue-600">إدخال الوظائف</a>
+                    <a href="employee_registration.html" class="text-gray-700 hover:text-blue-600">إدخال الموظفين</a>
                 </div>
-
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="relative">
                         <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
@@ -182,63 +82,74 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 sticky top-16 z-40">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex-1">
-                    <div class="relative">
-                        <input type="text" placeholder="ابحث عن موظف بالاسم، المهارات أو التخصص..."
-                               class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button class="absolute left-3 top-2 text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3 rtl:space-x-reverse overflow-x-auto whitespace-nowrap py-2">
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع التخصصات</option>
-                        <option>تكنولوجيا المعلومات</option>
-                        <option>المالية والمحاسبة</option>
-                        <option>الهندسة</option>
-                        <option>التصميم</option>
-                    </select>
-
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2">
-                        <option>جميع المدن</option>
-                        <option>الخرطوم</option>
-                        <option>أم درمان</option>
-                        <option>بحري</option>
-                        <option>بورتسودان</option>
-                    </select>
-
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
-                        <i class="fas fa-filter mr-2"></i> فلترة
-                    </button>
-                </div>
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">الموظفين المتاحين</h1>
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <span id="employeeCount" class="text-gray-600">...</span>
+                <a href="employee_registration.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center">
+                    <i class="fas fa-user-plus ml-2"></i> إضافة موظف
+                </a>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="employeeCardsContainer">
-            <p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <div class="flex-1 relative">
+                    <input type="text" id="searchInput" placeholder="ابحث عن موظف بالاسم، المسمى الوظيفي أو المهارات..."
+                           class="w-full pr-12 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <button class="absolute left-3 top-2 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button id="toggleFiltersBtn" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200">
+                    <i class="fas fa-sliders-h ml-2"></i> فلاتر متقدمة
+                </button>
+            </div>
+            
+            <div id="filtersDropdown" class="filters-container">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <div>
+                        <h4 class="font-semibold mb-2">الموقع</h4>
+                        <select id="locationFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">جميع المواقع</option>
+                            <option value="الخرطوم">الخرطوم</option>
+                            <option value="أم درمان">أم درمان</option>
+                            <option value="بحري">بحري</option>
+                            <option value="بورتسودان">بورتسودان</option>
+                            <option value="عمل عن بعد">عمل عن بعد</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">عدد سنوات الخبرة</h4>
+                        <select id="experienceFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">جميع المستويات</option>
+                            <option value="0-2">0-2 سنوات</option>
+                            <option value="2-5">2-5 سنوات</option>
+                            <option value="5+">5+ سنوات</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">نطاق السعر الشهري</h4>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="salaryFrom" placeholder="من" min="0" class="w-1/2 border border-gray-300 rounded-lg px-3 py-2">
+                            <span>-</span>
+                            <input type="number" id="salaryTo" placeholder="إلى" min="0" class="w-1/2 border border-gray-300 rounded-lg px-3 py-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="work-gallery-modal" onclick="closeWorkGallery(event)">
-        <div class="work-gallery-content" onclick="event.stopPropagation()">
-            <span class="work-gallery-close" onclick="closeWorkGallery(event)">&times;</span>
-            <div id="gallerySlides"></div>
-            <a class="work-gallery-prev" onclick="changeSlide(-1)">&#10094;</a>
-            <a class="work-gallery-next" onclick="changeSlide(1)">&#10095;</a>
+        
+        <div id="employeesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8 col-span-full">جاري تحميل الموظفين...</div>
+            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8 col-span-full">لم يتم العثور على موظفين مطابقين.</div>
         </div>
     </div>
 
     <script type="module">
-        // استيراد الدوال اللازمة من Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // تهيئة Firebase: هذه هي معلومات مشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -249,166 +160,121 @@
             measurementId: "G-98GQGZS09W"
         };
 
-        // تهيئة Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app); // إذا كنت تستخدم Google Analytics
-        const db = getFirestore(app); // الحصول على نسخة من Firestore
+        const db = getFirestore(app);
 
-        let allEmployeeData = []; // لتخزين جميع بيانات الموظفين التي تم جلبها لمعرض الصور
+        let allEmployees = [];
 
-        // دالة لجلب وعرض الموظفين
-        async function fetchAndDisplayEmployees() {
-            const employeeCardsContainer = document.getElementById('employeeCardsContainer');
-            employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">جاري تحميل الموظفين...</p>'; // رسالة التحميل
+        const employeesList = document.getElementById('employeesList');
+        const employeeCountElement = document.getElementById('employeeCount');
+        const searchInput = document.getElementById('searchInput');
+        const filtersDropdown = document.getElementById('filtersDropdown');
+        const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noEmployeesFound = document.getElementById('noEmployeesFound');
 
+        // وظيفة لتبديل عرض الفلاتر
+        toggleFiltersBtn.addEventListener('click', () => {
+            filtersDropdown.classList.toggle('active');
+        });
+
+        // وظيفة جلب الموظفين من Firebase
+        async function fetchEmployees() {
+            loadingIndicator.classList.remove('hidden');
             try {
-                const employeesCollectionRef = collection(db, "employees");
-                // جلب الموظفين وترتيبهم حسب حقل 'timestamp' تنازلياً (الأحدث أولاً)
-                const q = query(employeesCollectionRef, orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
+                const querySnapshot = await getDocs(collection(db, "employees"));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                console.log('تم جلب الموظفين بنجاح:', allEmployees);
+                filterEmployees();
+            } catch (error) {
+                console.error("خطأ في جلب الموظفين:", error);
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8 col-span-full">حدث خطأ أثناء تحميل الموظفين.</div>';
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
 
-                allEmployeeData = []; // إعادة تعيين البيانات المخزنة
-                employeeCardsContainer.innerHTML = ''; // مسح رسالة التحميل / البطاقات الموجودة
-
-                if (querySnapshot.empty) {
-                    employeeCardsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">لا يوجد موظفون متاحون حاليًا.</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const employeeData = doc.data();
-                    // تخزين بيانات الموظف في allEmployeeData لاستخدامها في معرض الصور
-                    allEmployeeData.push(employeeData);
-                    // الحصول على الفهرس الحالي للموظف في allEmployeeData لاستخدامه في دالة المعرض
-                    const employeeIndex = allEmployeeData.length - 1;
-
-                    // افتراض أن حالة الموظف 'مُتاح' إذا لم يتم تحديدها
-                    const employeeStatus = employeeData.status || 'مُتاح';
-                    const statusBadgeClass = employeeStatus === 'مُتاح' ? 'badge-primary' : 'badge-success';
-                    const contactButtonClass = employeeStatus === 'مُتاح' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-800 cursor-not-allowed';
-                    const contactButtonDisabled = employeeStatus !== 'مُتاح' ? 'disabled' : '';
-                    const contactButtonText = employeeStatus === 'مُتاح' ? 'التواصل' : 'موظف حالياً';
-
-                    // معالجة صور الأعمال السابقة: التأكد من وجودها وأنها مصفوفة
-                    const previousWorks = Array.isArray(employeeData.previousWorksUrls) ? employeeData.previousWorksUrls : [];
-                    const previousWorksHTML = previousWorks.length > 0 ? previousWorks.map((url, index) => `
-                        <img src="${url}"
-                             alt="عمل سابق ${index + 1}"
-                             class="work-thumbnail"
-                             onclick="openWorkGallery(${employeeIndex}, ${index})">
-                    `).join('') : '<p class="text-gray-500 text-xs">لا توجد أعمال سابقة مرفقة.</p>';
-
-                    const employeeCardHTML = `
+        // وظيفة لعرض الموظفين في الصفحة
+        function renderEmployees(employees) {
+            employeesList.innerHTML = '';
+            if (employees.length === 0) {
+                noEmployeesFound.classList.remove('hidden');
+            } else {
+                noEmployeesFound.classList.add('hidden');
+                employees.forEach(employee => {
+                    const skillsHtml = employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
+                    const employeeCardHtml = `
                         <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden">
                             <div class="p-6">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <img src="${employeeData.profileImageUrl || 'https://via.placeholder.com/150?text=No+Image'}" alt="صورة الموظف" class="w-16 h-16 rounded-full border-2 border-white shadow">
-                                        <div>
-                                            <h3 class="font-bold text-lg">${employeeData.fullName || 'غير معروف'}</h3>
-                                            <p class="text-gray-600">${employeeData.jobTitle || 'غير محدد'}</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full ${statusBadgeClass} text-xs font-semibold">${employeeStatus}</span>
-                                </div>
-
-                                <div class="mt-4">
-                                    <div class="flex items-center text-gray-600 text-sm mb-2">
+                                <div class="flex flex-col items-center">
+                                    <img src="${employee.profileImageUrl || 'https://via.placeholder.com/100'}" alt="صورة الملف الشخصي" class="w-24 h-24 rounded-full object-cover mb-4">
+                                    <h3 class="font-bold text-lg">${employee.fullName}</h3>
+                                    <p class="text-gray-600 text-sm mb-2">${employee.jobTitle}</p>
+                                    <div class="flex items-center text-gray-500 text-sm mb-4">
                                         <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${employeeData.jobLocation || 'غير محدد'}، السودان</span>
+                                        <span>${employee.jobLocation}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>${employee.experienceYears} سنوات خبرة</span>
                                     </div>
-                                    <div class="flex items-center text-gray-600 text-sm mb-3">
-                                        <i class="fas fa-briefcase ml-1"></i>
-                                        <span>${employeeData.experienceYears || '0'} سنوات خبرة</span>
+                                    <div class="flex flex-wrap justify-center mb-4">${skillsHtml}</div>
+                                    <span class="text-lg font-bold text-blue-600">${employee.salaryRange.from} - ${employee.salaryRange.to} جنيه</span>
+                                    <div class="mt-4">
+                                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                            <i class="fas fa-phone ml-1"></i> تواصل
+                                        </button>
+                                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+                                            <i class="fas fa-eye ml-1"></i> الملف الشخصي
+                                        </button>
                                     </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                        <div class="flex flex-wrap">
-                                            ${(Array.isArray(employeeData.skills) ? employeeData.skills : []).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
-                                        <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto py-2">
-                                            ${previousWorksHTML}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex justify-between items-center pt-4 border-t border-gray-100">
-                                    <div>
-                                        <span class="text-gray-600 text-sm">السعر:</span>
-                                        <span class="font-bold">${employeeData.salaryRange?.from || '0'} - ${employeeData.salaryRange?.to || '0'} جنيه</span>
-                                    </div>
-                                    <button class="px-4 py-2 ${contactButtonClass} rounded-lg text-sm" ${contactButtonDisabled}>
-                                        <i class="fas fa-envelope ml-1"></i> ${contactButtonText}
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     `;
-                    employeeCardsContainer.insertAdjacentHTML('beforeend', employeeCardHTML);
+                    employeesList.innerHTML += employeeCardHtml;
                 });
-            } catch (error) {
-                console.error("خطأ أثناء جلب الموظفين:", error);
-                employeeCardsContainer.innerHTML = '<p class="text-red-600 text-center col-span-full">حدث خطأ أثناء تحميل الموظفين.</p>';
             }
+            employeeCountElement.textContent = `${employees.length} موظف متاح`;
         }
 
-        // Gallery Functions
-        let currentEmployeeIndex = 0;
-        let currentWorkIndex = 0;
+        // وظيفة التصفية الرئيسية
+        function filterEmployees() {
+            const searchText = searchInput.value.toLowerCase();
+            const selectedLocation = document.getElementById('locationFilter').value;
+            const selectedExperience = document.getElementById('experienceFilter').value;
+            const salaryFrom = parseInt(document.getElementById('salaryFrom').value) || 0;
+            const salaryTo = parseInt(document.getElementById('salaryTo').value) || Infinity;
 
-        window.openWorkGallery = function(empIndex, workIdx) {
-            currentEmployeeIndex = empIndex;
-            currentWorkIndex = workIdx;
+            const filteredEmployees = allEmployees.filter(employee => {
+                const employeeText = `${employee.fullName} ${employee.jobTitle} ${employee.jobLocation} ${employee.skills.join(' ')}`.toLowerCase();
+                const matchesSearch = employeeText.includes(searchText);
 
-            const modal = document.querySelector('.work-gallery-modal');
-            const slidesContainer = modal.querySelector('#gallerySlides');
+                const matchesLocation = selectedLocation === '' || employee.jobLocation === selectedLocation;
 
-            slidesContainer.innerHTML = ''; // مسح المحتوى السابق
+                const matchesExperience = selectedExperience === '' || (
+                    selectedExperience === '0-2' && employee.experienceYears >= 0 && employee.experienceYears <= 2
+                ) || (
+                    selectedExperience === '2-5' && employee.experienceYears >= 2 && employee.experienceYears <= 5
+                ) || (
+                    selectedExperience === '5+' && employee.experienceYears > 5
+                );
 
-            // التأكد من وجود بيانات الموظف وصور الأعمال السابقة
-            if (allEmployeeData[currentEmployeeIndex] && Array.isArray(allEmployeeData[currentEmployeeIndex].previousWorksUrls) && allEmployeeData[currentEmployeeIndex].previousWorksUrls.length > 0) {
-                allEmployeeData[currentEmployeeIndex].previousWorksUrls.forEach((url, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'work-gallery-slide ' + (idx === currentWorkIndex ? 'active' : '');
-                    slide.innerHTML = `<img src="${url}" alt="Work Image ${idx + 1}">`;
-                    slidesContainer.appendChild(slide);
-                });
-                modal.classList.add('show'); // إظهار النافذة
-                showSlide(currentWorkIndex); // عرض الشريحة المحددة
-            }
-        };
+                const matchesSalary = (employee.salaryRange.from >= salaryFrom && employee.salaryRange.to <= salaryTo);
 
-        window.closeWorkGallery = function(event) {
-            // الإغلاق فقط إذا تم النقر على خلفية النافذة أو زر الإغلاق
-            if (event && (event.target.classList.contains('work-gallery-modal') || event.target.classList.contains('work-gallery-close'))) {
-                document.querySelector('.work-gallery-modal').classList.remove('show');
-            }
-        };
-
-        window.changeSlide = function(n) {
-            if (allEmployeeData[currentEmployeeIndex] && Array.isArray(allEmployeeData[currentEmployeeIndex].previousWorksUrls)) {
-                const numSlides = allEmployeeData[currentEmployeeIndex].previousWorksUrls.length;
-                if (numSlides > 0) { // التأكد من وجود شرائح لتجنب الأخطاء
-                    currentWorkIndex = (currentWorkIndex + n + numSlides) % numSlides;
-                    showSlide(currentWorkIndex);
-                }
-            }
-        };
-
-        function showSlide(n) {
-            const slides = document.querySelectorAll('#gallerySlides .work-gallery-slide');
-            slides.forEach((slide, index) => {
-                slide.classList.toggle('active', index === n);
+                return matchesSearch && matchesLocation && matchesExperience && matchesSalary;
             });
+
+            renderEmployees(filteredEmployees);
         }
 
-        // جلب الموظفين عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', fetchAndDisplayEmployees);
+        // إضافة مستمعات للأحداث لتشغيل التصفية
+        searchInput.addEventListener('input', filterEmployees);
+        document.getElementById('locationFilter').addEventListener('change', filterEmployees);
+        document.getElementById('experienceFilter').addEventListener('change', filterEmployees);
+        document.getElementById('salaryFrom').addEventListener('input', filterEmployees);
+        document.getElementById('salaryTo').addEventListener('input', filterEmployees);
+        
+        // تشغيل جلب البيانات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', fetchEmployees);
     </script>
 </body>
 </html>
