@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - شغلني</title>
+    <title>تسجيل الموظفين - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -33,6 +33,7 @@
             margin-top: 10px;
             border-radius: 8px;
             font-weight: 500;
+            text-align: center;
         }
         .message-success {
             background-color: #d1fae5;
@@ -41,6 +42,10 @@
         .message-error {
             background-color: #fee2e2;
             color: #991b1b;
+        }
+        .message-info {
+            background-color: #e0f2fe;
+            color: #075985;
         }
     </style>
 </head>
@@ -52,20 +57,30 @@
                     <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <a href="employee_registration.html" class="text-blue-600 font-medium hover:text-blue-700">تسجيل جديد</a>
+                    <a href="auth.html" class="text-blue-600 font-medium hover:text-blue-700">تسجيل الدخول</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <div class="container mx-auto px-4 py-8 flex justify-center">
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container">
-            <h2 class="text-lg font-bold mb-4 text-center">تسجيل الدخول</h2>
+        <div id="registration-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container">
+            <h2 class="text-lg font-bold mb-4 text-center">تسجيل موظف جديد</h2>
             
-            <form id="loginForm" onsubmit="event.preventDefault(); window.loginUser();">
+            <form id="registrationForm" onsubmit="event.preventDefault(); window.registerUser();">
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                    <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني"
+                    <label for="fullName" class="block text-sm font-medium text-gray-700">الاسم بالكامل</label>
+                    <input type="text" id="fullName" placeholder="أدخل اسمك بالكامل"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">عنوان البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="مثال: user@example.com"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                    <input type="tel" id="phone" placeholder="أدخل رقم الهاتف"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
@@ -73,25 +88,43 @@
                     <input type="password" id="password" placeholder="أدخل كلمة المرور"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
+                <div class="mb-4">
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
+                    <input type="password" id="confirmPassword" placeholder="أعد إدخال كلمة المرور"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
 
                 <div id="statusMessage" class="mt-4 text-center"></div>
 
                 <button type="submit" id="submitButton" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    تسجيل الدخول
+                    تسجيل
                 </button>
                 
                 <p class="text-sm text-center text-gray-500 mt-4">
-                    ليس لديك حساب؟ <a href="employee_registration.html" class="text-blue-600 hover:underline">سجل الآن</a>
+                    هل لديك حساب؟ <a href="auth.html" class="text-blue-600 hover:underline">سجل دخولك</a>
                 </p>
             </form>
+        </div>
+        
+        <div id="verification-card" class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card form-container hidden">
+            <h2 class="text-lg font-bold mb-4 text-center">تحقق من بريدك الإلكتروني</h2>
+            <div id="verificationMessage" class="message-box message-info">
+                تم إنشاء حسابك بنجاح! الرجاء التحقق من صندوق بريدك الإلكتروني والضغط على الرابط لتفعيل حسابك.
+            </div>
+            <p class="text-sm text-center text-gray-500 mt-4">
+                لم تتلق الرسالة؟
+            </p>
+            <button id="resendEmailBtn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 mt-2">
+                إعادة إرسال رسالة التحقق
+            </button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        // تأكد من أن هذه هي إعدادات مشروع Firebase الخاص بك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -105,74 +138,122 @@
         // تهيئة Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         
-        const loginForm = document.getElementById('loginForm');
+        const registrationCard = document.getElementById('registration-card');
+        const registrationForm = document.getElementById('registrationForm');
         const submitButton = document.getElementById('submitButton');
         const statusMessage = document.getElementById('statusMessage');
+        const verificationCard = document.getElementById('verification-card');
+        const resendEmailBtn = document.getElementById('resendEmailBtn');
 
         function showStatusMessage(message, type = 'info') {
             statusMessage.textContent = message;
-            statusMessage.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
+            statusMessage.className = `message-box ${type === 'success' ? 'message-success' : (type === 'error' ? 'message-error' : 'message-info')}`;
         }
         
-        // **الجديد: تحقق من حالة المصادقة عند تحميل الصفحة**
-        onAuthStateChanged(auth, (user) => {
+        // التحقق من حالة المستخدم عند تحميل الصفحة (استمرارية الجلسة)
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // المستخدم مسجل الدخول، قم بتوجيهه مباشرة
-                console.log('المستخدم مسجل الدخول، جاري التوجيه...');
-                showStatusMessage('تم العثور على جلسة تسجيل دخول سابقة. جاري التوجيه...', 'success');
-                window.location.href = 'available_employees.html';
+                // إذا كان المستخدم موجوداً، نتحقق من حالة التحقق من البريد
+                if (user.emailVerified) {
+                    // إذا كان البريد الإلكتروني موثقاً، نوجهه إلى صفحة الموظفين
+                    console.log('البريد الإلكتروني موثّق. جاري التوجيه...');
+                    window.location.href = 'available_employees.html';
+                } else {
+                    // إذا لم يكن موثقاً، نعرض له شاشة التحقق
+                    registrationCard.classList.add('hidden');
+                    verificationCard.classList.remove('hidden');
+                }
             } else {
-                // المستخدم غير مسجل الدخول، لا تفعل شيئاً (ابق في صفحة تسجيل الدخول)
-                console.log('المستخدم غير مسجل الدخول.');
+                // إذا لم يكن المستخدم موجوداً، نعرض له صفحة التسجيل
+                registrationCard.classList.remove('hidden');
+                verificationCard.classList.add('hidden');
             }
         });
         
-        window.loginUser = async function() {
+        window.registerUser = async function() {
             submitButton.disabled = true;
-            submitButton.textContent = 'جاري تسجيل الدخول...';
-            showStatusMessage('جاري التحقق من البيانات...', 'info');
+            submitButton.textContent = 'جاري التسجيل...';
+            showStatusMessage('جاري معالجة البيانات...', 'info');
 
-            const email = loginForm.email.value;
-            const password = loginForm.password.value;
+            const fullName = registrationForm.fullName.value;
+            const email = registrationForm.email.value;
+            const phone = registrationForm.phone.value;
+            const password = registrationForm.password.value;
+            const confirmPassword = registrationForm.confirmPassword.value;
+        
+            if (password !== confirmPassword) {
+                showStatusMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
+                submitButton.disabled = false;
+                submitButton.textContent = 'تسجيل';
+                return;
+            }
+            if (password.length < 6) {
+                showStatusMessage('يجب أن تكون كلمة المرور 6 أحرف على الأقل.', 'error');
+                submitButton.disabled = false;
+                submitButton.textContent = 'تسجيل';
+                return;
+            }
         
             try {
-                // تسجيل الدخول
-                await signInWithEmailAndPassword(auth, email, password);
+                // 1. إنشاء المستخدم في Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
                 
-                // إذا وصل الكود إلى هنا، فمعنى ذلك أن تسجيل الدخول نجح
-                // التوجيه سيحدث تلقائياً بفضل onAuthStateChanged
+                // 2. إرسال رسالة التحقق من البريد
+                await sendEmailVerification(user);
+                
+                // 3. حفظ البيانات في Firestore
+                const userData = {
+                    fullName: fullName,
+                    email: email,
+                    phone: phone,
+                    createdAt: new Date().toISOString()
+                };
+                await setDoc(doc(db, "employees", user.uid), userData);
+
+                // 4. إظهار شاشة التحقق للمستخدم
+                registrationCard.classList.add('hidden');
+                verificationCard.classList.remove('hidden');
         
             } catch (error) {
-                console.error("خطأ أثناء تسجيل الدخول:", error);
+                console.error("خطأ أثناء التسجيل:", error);
                 let errorMessage = "حدث خطأ غير معروف.";
-                
                 switch(error.code) {
-                    case 'auth/invalid-credential':
-                        errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'لم يتم العثور على مستخدم بهذا البريد الإلكتروني.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'كلمة المرور غير صحيحة.';
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'البريد الإلكتروني مستخدم بالفعل.';
                         break;
                     case 'auth/invalid-email':
                         errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'كلمة المرور ضعيفة جداً.';
                         break;
                     default:
                         errorMessage = `حدث خطأ: ${error.message}`;
                         break;
                 }
-                // عرض رسالة الخطأ
                 showStatusMessage(errorMessage, 'error');
             } finally {
-                // إعادة الزر إلى حالته الأصلية
                 submitButton.disabled = false;
-                submitButton.textContent = 'تسجيل الدخول';
+                submitButton.textContent = 'تسجيل';
             }
         };
+
+        // وظيفة لإعادة إرسال رسالة التحقق
+        resendEmailBtn.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    await sendEmailVerification(user);
+                    alert('تم إعادة إرسال رسالة التحقق بنجاح. يرجى التحقق من بريدك.');
+                } catch (error) {
+                    console.error("خطأ في إعادة إرسال الرسالة:", error);
+                    alert('حدث خطأ أثناء إعادة إرسال الرسالة.');
+                }
+            }
+        });
     </script>
 </body>
 </html>
- 
