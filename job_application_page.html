@@ -94,151 +94,152 @@
             <div class="step">4</div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-            <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
-            <form id="employeeForm" onsubmit="event.preventDefault(); window.nextStep(1);">
+        <form id="employeeForm" onsubmit="event.preventDefault();">
+
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
+                <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700">الاسم كاملاً</label>
-                    <input type="text" id="name" placeholder="مثال: محمد أحمد علي"
+                    <input type="text" id="name" name="name" placeholder="مثال: محمد أحمد علي"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
                     <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
-                    <input type="text" id="headline" placeholder="مثال: مطور ويب | متخصص في React"
+                    <input type="text" id="headline" name="headline" placeholder="مثال: مطور ويب | متخصص في React"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="mb-4">
                     <label for="bio" class="block text-sm font-medium text-gray-700">نبذة شخصية</label>
-                    <textarea id="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
+                    <textarea id="bio" name="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
                     التالي
                 </button>
-            </form>
-        </div>
+            </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-            <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                <input type="email" id="email" placeholder="مثال: example@email.com"
-                       class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-            <div class="mb-4">
-                <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
-                <input type="tel" id="phone" placeholder="مثال: 0912345678"
-                       class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-            <div class="mb-4">
-                <label for="state" class="block text-sm font-medium text-gray-700">الولاية</label>
-                <select id="state" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    <option value="">اختر ولاية</option>
-                    <option value="الخرطوم">الخرطوم</option>
-                    <option value="الجزيرة">الجزيرة</option>
-                    <option value="البحر الأحمر">البحر الأحمر</option>
-                    <option value="كسلا">كسلا</option>
-                    <option value="القضارف">القضارف</option>
-                    <option value="سنار">سنار</option>
-                    <option value="النيل الأبيض">النيل الأبيض</option>
-                    <option value="النيل الأزرق">النيل الأزرق</option>
-                    <option value="شمال كردفان">شمال كردفان</option>
-                    <option value="جنوب كردفان">جنوب كردفان</option>
-                    <option value="غرب كردفان">غرب كردفان</option>
-                    <option value="الشمالية">الشمالية</option>
-                    <option value="نهر النيل">نهر النيل</option>
-                    <option value="شمال دارفور">شمال دارفور</option>
-                    <option value="جنوب دارفور">جنوب دارفور</option>
-                    <option value="غرب دارفور">غرب دارفور</option>
-                    <option value="وسط دارفور">وسط دارفور</option>
-                    <option value="شرق دارفور">شرق دارفور</option>
-                </select>
-            </div>
-            <div class="mb-4 hidden" id="cityContainer">
-                <label for="city" class="block text-sm font-medium text-gray-700">المدينة</label>
-                <select id="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    <option value="">اختر مدينة</option>
-                </select>
-            </div>
-            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
-                السابق
-            </button>
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
-                التالي
-            </button>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-            <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
-            <div id="skillsContainer">
-                <div class="mb-4 flex items-center">
-                    <input type="text" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+                <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" placeholder="مثال: example@email.com"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-            </div>
-            <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
-            <div class="mb-4">
-                <label for="experience" class="block text-sm font-medium text-gray-700">مستوى الخبرة</label>
-                <select id="experience" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    <option value="">اختر مستوى الخبرة</option>
-                    <option value="مبتدئ">مبتدئ (0-2 سنوات)</option>
-                    <option value="متوسط">متوسط (2-5 سنوات)</option>
-                    <option value="خبير">خبير (5+ سنوات)</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">حالة البحث عن عمل</label>
-                <div class="flex gap-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="jobStatus" value="متاح للعمل" class="form-radio text-blue-600" required>
-                        <span class="mr-2">متاح للعمل</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="jobStatus" value="لا أبحث حالياً" class="form-radio text-blue-600">
-                        <span class="mr-2">لا أبحث حالياً</span>
-                    </label>
+                <div class="mb-4">
+                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                    <input type="tel" id="phone" name="phone" placeholder="مثال: 0912345678"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
+                <div class="mb-4">
+                    <label for="state" class="block text-sm font-medium text-gray-700">الولاية</label>
+                    <select id="state" name="state" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">اختر ولاية</option>
+                        <option value="الخرطوم">الخرطوم</option>
+                        <option value="الجزيرة">الجزيرة</option>
+                        <option value="البحر الأحمر">البحر الأحمر</option>
+                        <option value="كسلا">كسلا</option>
+                        <option value="القضارف">القضارف</option>
+                        <option value="سنار">سنار</option>
+                        <option value="النيل الأبيض">النيل الأبيض</option>
+                        <option value="النيل الأزرق">النيل الأزرق</option>
+                        <option value="شمال كردفان">شمال كردفان</option>
+                        <option value="جنوب كردفان">جنوب كردفان</option>
+                        <option value="غرب كردفان">غرب كردفان</option>
+                        <option value="الشمالية">الشمالية</option>
+                        <option value="نهر النيل">نهر النيل</option>
+                        <option value="شمال دارفور">شمال دارفور</option>
+                        <option value="جنوب دارفور">جنوب دارفور</option>
+                        <option value="غرب دارفور">غرب دارفور</option>
+                        <option value="وسط دارفور">وسط دارفور</option>
+                        <option value="شرق دارفور">شرق دارفور</option>
+                    </select>
+                </div>
+                <div class="mb-4 hidden" id="cityContainer">
+                    <label for="city" class="block text-sm font-medium text-gray-700">المدينة</label>
+                    <select id="city" name="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">اختر مدينة</option>
+                    </select>
+                </div>
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
+                    السابق
+                </button>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
+                    التالي
+                </button>
             </div>
-            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
-                السابق
-            </button>
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
-                التالي
-            </button>
-        </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-            <h2 class="text-lg font-bold mb-4">الخطوة 4: ملفات شخصية وروابط</h2>
-            <div class="mb-4">
-                <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
-                <input type="url" id="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
-                       class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+                <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
+                <div id="skillsContainer">
+                    <div class="mb-4 flex items-center">
+                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
+                <div class="mb-4">
+                    <label for="experience" class="block text-sm font-medium text-gray-700">مستوى الخبرة</label>
+                    <select id="experience" name="experience" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">اختر مستوى الخبرة</option>
+                        <option value="مبتدئ">مبتدئ (0-2 سنوات)</option>
+                        <option value="متوسط">متوسط (2-5 سنوات)</option>
+                        <option value="خبير">خبير (5+ سنوات)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">حالة البحث عن عمل</label>
+                    <div class="flex gap-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="jobStatus" value="متاح للعمل" class="form-radio text-blue-600" required>
+                            <span class="mr-2">متاح للعمل</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="jobStatus" value="لا أبحث حالياً" class="form-radio text-blue-600">
+                            <span class="mr-2">لا أبحث حالياً</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
+                    السابق
+                </button>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
+                    التالي
+                </button>
             </div>
-            <div class="mb-4">
-                <label for="portfolioUrl" class="block text-sm font-medium text-gray-700">رابط معرض الأعمال (اختياري)</label>
-                <input type="url" id="portfolioUrl" placeholder="مثال: https://dribbble.com/your-portfolio"
-                       class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+                <h2 class="text-lg font-bold mb-4">الخطوة 4: ملفات شخصية وروابط</h2>
+                <div class="mb-4">
+                    <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
+                    <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="portfolioUrl" class="block text-sm font-medium text-gray-700">رابط معرض الأعمال (اختياري)</label>
+                    <input type="url" id="portfolioUrl" name="portfolioUrl" placeholder="مثال: https://dribbble.com/your-portfolio"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="linkedinUrl" class="block text-sm font-medium text-gray-700">رابط لينكد إن (اختياري)</label>
+                    <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
+                    السابق
+                </button>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
+                    تسجيل الموظف
+                </button>
             </div>
-            <div class="mb-4">
-                <label for="linkedinUrl" class="block text-sm font-medium text-gray-700">رابط لينكد إن (اختياري)</label>
-                <input type="url" id="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
-                       class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-            <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
-                السابق
-            </button>
-            <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
-                تسجيل الموظف
-            </button>
+
+        </form>
         </div>
-    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        
-        // Your web app's Firebase configuration
+
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -248,16 +249,15 @@
           appId: "1:768887356636:web:11ec1d6991add3309c8819",
           measurementId: "G-98GQGZS09W"
         };
-        
-        // Initialize Firebase
+
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
         let currentStep = 1;
         const totalSteps = 4;
+        const employeeForm = document.getElementById('employeeForm');
 
-        // بيانات الولايات والمدن
         const sudanStates = {
             "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
             "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
@@ -280,16 +280,21 @@
         };
 
         window.nextStep = function(step) {
+            // تحقق من صحة الحقول في الخطوة الحالية
             const stepElement = document.getElementById(`step${step}`);
-            const inputs = stepElement.querySelectorAll('input[required], select[required], textarea[required]');
-            
-            for (const input of inputs) {
+            const inputs = stepElement.querySelectorAll('input, select, textarea');
+            let isStepValid = true;
+            inputs.forEach(input => {
                 if (!input.checkValidity()) {
                     input.reportValidity();
-                    return;
+                    isStepValid = false;
                 }
+            });
+            
+            if (!isStepValid) {
+                return;
             }
-
+            
             stepElement.classList.add('hidden');
             currentStep++;
             if (currentStep > totalSteps) {
@@ -331,7 +336,7 @@
                 messageElement.classList.add('hidden');
                 const newSkillInputHtml = `
                     <div class="mb-4 flex items-center">
-                        <input type="text" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <button type="button" class="remove-skill-btn mr-2 p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><i class="fas fa-minus"></i></button>
                     </div>
                 `;
@@ -345,14 +350,13 @@
             }
         });
 
-        // وظيفة لتعبئة المدن بناءً على الولاية المختارة
         document.getElementById('state').addEventListener('change', function() {
             const selectedState = this.value;
             const cityContainer = document.getElementById('cityContainer');
             const citySelect = document.getElementById('city');
-            
-            citySelect.innerHTML = '<option value="">اختر مدينة</option>'; // إعادة تعيين الخيارات
-            
+
+            citySelect.innerHTML = '<option value="">اختر مدينة</option>';
+
             if (selectedState && sudanStates[selectedState]) {
                 sudanStates[selectedState].forEach(city => {
                     const option = document.createElement('option');
@@ -367,6 +371,12 @@
         });
 
         window.submitForm = async function() {
+            // التحقق من صحة جميع الحقول قبل الإرسال
+            if (!employeeForm.checkValidity()) {
+                employeeForm.reportValidity();
+                return;
+            }
+
             const submitButton = document.querySelector('#step4 button[onclick="window.submitForm()"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
@@ -387,16 +397,16 @@
 
             const skillInputs = document.querySelectorAll('.skill-input');
             const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
-            
+
             const employeeData = {
                 name: name,
-                photoUrl: null, // تم حذف حقل الصورة، يمكن إبقاءه فارغاً
+                photoUrl: null,
                 headline: headline,
                 bio: bio,
                 contact: {
                     email: email,
                     phone: phone,
-                    location: `${city}, ${state}` // دمج المدينة والولاية
+                    location: `${city}, ${state}`
                 },
                 skills: skills,
                 experience: experience,
@@ -412,8 +422,11 @@
             try {
                 await addDoc(collection(db, "employees"), employeeData);
                 alert('تم تسجيل الموظف بنجاح!');
-                document.getElementById('employeeForm').reset();
-                window.prevStep(4);
+                employeeForm.reset(); // إعادة تعيين النموذج بالكامل
+                currentStep = 1; // العودة للخطوة الأولى
+                window.updateSteps();
+                document.getElementById('step4').classList.add('hidden');
+                document.getElementById('step1').classList.remove('hidden');
             } catch (error) {
                 console.error("خطأ في تسجيل الموظف:", error);
                 alert('حدث خطأ أثناء تسجيل الموظف. الرجاء المحاولة مرة أخرى.');
@@ -423,7 +436,14 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', window.updateSteps);
+        document.addEventListener('DOMContentLoaded', () => {
+            window.updateSteps();
+            // تأكد من أن النموذج يعود للخطوة الأولى عند إعادة تحميل الصفحة
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step4').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        });
     </script>
 </body>
-</html> 
+</html>
