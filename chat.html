@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المراسلة - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 64px);
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            max-width: 75%;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        .sent {
+            align-self: flex-end;
+            background-color: #3b82f6;
+            color: #fff;
+        }
+        .received {
+            align-self: flex-start;
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #0d6efd;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-blue-600 font-bold">عرض الموظفين</a>
+                    <a href="job_registration.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">إضافة وظيفة</a>
+                </div>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="chat-container">
+            <div class="chat-header">
+                <img id="employeePhoto" src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الموظف" class="w-10 h-10 rounded-full ml-3">
+                <h2 id="employeeName" class="font-bold text-lg text-gray-800"></h2>
+            </div>
+            <div id="chatBody" class="chat-body">
+                <div id="loadingChat" class="flex justify-center items-center h-full">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <input type="text" id="messageInput" placeholder="اكتب رسالتك..." class="flex-grow p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <button id="sendMessageBtn" class="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div id="warningMessage" class="hidden text-red-600 text-sm mt-2 text-right">
+                    نعتذر، لا يمكنك إرسال أرقام هواتف أو روابط أو أي معلومات تواصل خارجية.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        // **1. تهيئة Firebase**
+        // استخدم نفس إعدادات مشروعك الأساسي.
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // **2. ربط عناصر الواجهة بمتغيرات في الكود**
+        const chatBody = document.getElementById('chatBody');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const employeeNameEl = document.getElementById('employeeName');
+        const employeePhotoEl = document.getElementById('employeePhoto');
+        const loadingChatEl = document.getElementById('loadingChat');
+        const warningMessageEl = document.getElementById('warningMessage');
+
+        let currentUserId = null;
+        let currentEmployeeId = null;
+        let unsubscribe = null;
+
+        // **3. جلب معرف الموظف من الرابط**
+        const urlParams = new URLSearchParams(window.location.search);
+        currentEmployeeId = urlParams.get('employeeId');
+
+        // **4. دالة لجلب بيانات الموظف**
+        // هذه الدالة تعرض اسم الموظف وصورته في أعلى صفحة المحادثة.
+        async function fetchEmployeeData() {
+            if (!currentEmployeeId) {
+                employeeNameEl.textContent = 'خطأ: لم يتم تحديد موظف.';
+                return;
+            }
+            const docRef = doc(db, "employees", currentEmployeeId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const employeeData = docSnap.data();
+                employeeNameEl.textContent = employeeData.name || 'موظف غير معروف';
+                employeePhotoEl.src = employeeData.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
+            } else {
+                employeeNameEl.textContent = 'خطأ: الموظف غير موجود.';
+            }
+        }
+
+        // **5. دالة لمنع التواصل الخارجي**
+        // هذه الدالة تفحص الرسالة قبل إرسالها.
+        function isValidMessage(message) {
+            const phoneRegex = /\b(\+?\d{1,4}[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})\b/g;
+            const linkRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+            const emailRegex = /[\w.-]+@[\w.-]+\.[a-zA-Z]{2,4}/g;
+            const forbiddenKeywords = ['واتساب', 'تليجرام', 'فيسبوك', 'انستجرام'];
+            if (phoneRegex.test(message) || linkRegex.test(message) || emailRegex.test(message)) return false;
+            for (const keyword of forbiddenKeywords) {
+                if (message.includes(keyword)) return false;
+            }
+            return true;
+        }
+
+        // **6. دالة عرض الرسائل في الواجهة**
+        // تقوم هذه الدالة بتحديث شاشة الدردشة بالرسائل الجديدة.
+        function displayMessages(messages) {
+            chatBody.innerHTML = '';
+            messages.forEach(msg => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.classList.add(msg.senderId === currentUserId ? 'sent' : 'received');
+                messageElement.textContent = msg.content;
+                chatBody.appendChild(messageElement);
+            });
+            chatBody.scrollTop = chatBody.scrollHeight; // التمرير التلقائي لأسفل
+        }
+
+        // **7. دالة الاستماع للرسائل الجديدة**
+        // هذه الدالة تستخدم onSnapshot لتحديث المحادثة فور وصول رسالة جديدة.
+        function listenForMessages() {
+            if (!currentUserId || !currentEmployeeId) {
+                loadingChatEl.innerHTML = '<p class="text-center text-red-500">يجب عليك تسجيل الدخول للمراسلة.</p>';
+                return;
+            }
+            
+            loadingChatEl.classList.remove('hidden');
+
+            const messagesCollectionRef = collection(db, "messages");
+            const q = query(
+                messagesCollectionRef,
+                where('senderId', 'in', [currentUserId, currentEmployeeId]),
+                where('receiverId', 'in', [currentUserId, currentEmployeeId]),
+                orderBy('timestamp', 'asc')
+            );
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                loadingChatEl.classList.add('hidden');
+                const messages = [];
+                snapshot.forEach(doc => {
+                    messages.push(doc.data());
+                });
+                displayMessages(messages);
+            }, (error) => {
+                console.error("خطأ في جلب الرسائل:", error);
+                chatBody.innerHTML = '<p class="text-center text-red-500">حدث خطأ أثناء تحميل الرسائل.</p>';
+            });
+        }
+
+        // **8. دالة إرسال الرسالة**
+        async function sendMessage() {
+            if (!currentUserId) {
+                alert("يجب عليك تسجيل الدخول لإرسال الرسائل.");
+                return;
+            }
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            if (isValidMessage(message)) {
+                try {
+                    await addDoc(collection(db, "messages"), {
+                        senderId: currentUserId,
+                        receiverId: currentEmployeeId,
+                        content: message,
+                        timestamp: serverTimestamp()
+                    });
+                    messageInput.value = '';
+                    warningMessageEl.classList.add('hidden');
+                } catch (error) {
+                    console.error("خطأ في إرسال الرسالة:", error);
+                    alert("حدث خطأ أثناء إرسال الرسالة.");
+                }
+            } else {
+                warningMessageEl.classList.remove('hidden');
+            }
+        }
+
+        // **9. مستمعي الأحداث الأساسيين**
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchEmployeeData();
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                listenForMessages();
+            } else {
+                currentUserId = null;
+                if (unsubscribe) unsubscribe();
+                chatBody.innerHTML = '<p class="text-center text-red-500">يرجى تسجيل الدخول لعرض هذه المحادثة.</p>';
+            }
+        });
+
+        sendMessageBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
