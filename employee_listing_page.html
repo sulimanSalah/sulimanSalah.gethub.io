@@ -164,7 +164,6 @@
         let currentUserId = null;
 
         // **3. قاعدة بيانات الولايات والمدن في السودان**
-        // يمكنك إضافة أو تعديل المدن في هذا الكائن
         const citiesByState = {
             'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
             'الجزيرة': ['ود مدني', 'الحصاحيصا', 'المناقل'],
@@ -254,6 +253,10 @@
                                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                                         <i class="fas fa-envelope ml-1"></i> تواصل
                                     </a>
+                                    <button onclick="hireEmployee('${employee.id}')"
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                        <i class="fas fa-user-plus ml-1"></i> توظيف
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +267,6 @@
         }
 
         // **6. دالة للفلترة والبحث**
-        // تم تعديل هذه الدالة لتأخذ في الاعتبار فقط الولاية والمدينة
         function filterAndRenderEmployees() {
             const searchTerm = searchInput.value.toLowerCase();
             const selectedState = stateFilter.value;
@@ -307,7 +309,28 @@
             return 'الآن';
         }
         
-        // **8. مستمعي الأحداث**
+        // **8. دالة توظيف موظف**
+        async function hireEmployee(employeeId) {
+            if (!currentUserId) {
+                alert("يجب عليك تسجيل الدخول لتوظيف الموظفين.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "hiringRequests"), {
+                    employerId: currentUserId,
+                    employeeId: employeeId,
+                    status: 'pending',
+                    timestamp: serverTimestamp()
+                });
+                alert("تم إرسال طلب التوظيف بنجاح! سيتم إشعار الموظف.");
+            } catch (error) {
+                console.error("خطأ في إرسال طلب التوظيف:", error);
+                alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        // **9. مستمعي الأحداث**
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
@@ -337,10 +360,6 @@
             filterAndRenderEmployees();
         });
         cityFilter.addEventListener('change', filterAndRenderEmployees);
-
-        document.addEventListener('click', (e) => {
-            // حذف زر "قبول الموظف" من الكود
-        });
     </script>
 </body>
 </html>
