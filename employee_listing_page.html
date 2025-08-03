@@ -145,14 +145,16 @@
 
         // وظيفة لعرض الموظفين في الصفحة
         function renderEmployees(employees) {
-            employeesList.innerHTML = ''; // نُفرغ قائمة الموظفين قبل إضافة العناصر الجديدة
+            employeesList.innerHTML = ''; 
 
             if (employees.length === 0) {
                 noEmployeesFound.classList.remove('hidden');
             } else {
                 noEmployeesFound.classList.add('hidden');
                 employees.forEach(employee => {
-                    const skillsHtml = employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
+                    const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
+                        ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                        : '';
                     const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
 
                     const employeeCard = document.createElement('div');
@@ -163,26 +165,26 @@
                             <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
                                 <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
                                 <div>
-                                    <h3 class="font-bold text-lg">${employee.name}</h3>
-                                    <p class="text-gray-600 text-sm mt-1">${employee.headline}</p>
+                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
                                     <div class="flex items-center text-gray-500 text-sm mt-2">
                                         <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${employee.contact.location}</span>
+                                        <span>${employee.contact?.location || 'غير محدد'}</span>
                                         <span class="mx-2">•</span>
                                         <i class="fas fa-briefcase ml-1"></i>
-                                        <span>${employee.experience}</span>
+                                        <span>${employee.experience || 'غير محدد'}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end">
-                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus}</span>
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus || 'الحالة غير محددة'}</span>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <p class="text-gray-700 mb-4">${employee.bio.substring(0, 150)}...</p>
+                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
                             <div class="mb-4">
                                 <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                <div class="flex flex-wrap">${skillsHtml}</div>
+                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
                             </div>
                             <div class="flex flex-wrap items-center justify-between">
                                 <div class="flex items-center text-gray-500 text-sm">
@@ -209,7 +211,250 @@
         function filterEmployees() {
             const searchTerm = searchInput.value.toLowerCase();
             const filteredEmployees = allEmployees.filter(employee => {
-                const searchString = `${employee.name} ${employee.headline} ${employee.contact.location} ${employee.experience} ${employee.skills.join(' ')}`.toLowerCase();
+                const searchString = `${employee.name || ''} ${employee.headline || ''} ${employee.contact?.location || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
+                return searchString.includes(searchTerm);
+            });
+            renderEmployees(filteredEmployees);
+        }
+
+        // وظيفة مساعدة لحساب الوقت المنقضي
+        function getTimeElapsed(timestamp) {
+            const now = new Date();
+            const employeeDate = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - employeeDate) / 1000);
+
+            const minutes = Math.floor(diffInSeconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const weeks = Math.floor(days / 7);
+
+            if (weeks > 0) return `منذ ${weeks} أسبوع`;
+            if (days > 0) return `منذ ${days} يوم`;
+            if (hours > 0) return `منذ ${hours} ساعة`;
+            if (minutes > 0) return `منذ ${minutes} دقيقة`;
+            return 'الآن';
+        }
+
+        // تشغيل جلب البيانات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', fetchEmployees);
+        searchInput.addEventListener('input', filterEmployees);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الموظفين - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .employee-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #eef2ff;
+            color: #4338ca;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            margin: 0.125rem;
+        }
+
+        .status-available {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-not-looking {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-blue-600 font-medium">عرض الموظفين</a>
+                    <a href="job_registration.html" class="text-gray-700 hover:text-blue-600">إضافة وظيفة</a>
+                </div>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">الموظفين المتاحين</h1>
+            <div class="relative w-full md:w-1/3">
+                <input type="text" id="searchInput" placeholder="ابحث عن موظف..."
+                       class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div id="employeesList" class="space-y-4">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الموظفين...</div>
+            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على موظفين.</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        const employeesList = document.getElementById('employeesList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noEmployeesFound = document.getElementById('noEmployeesFound');
+        const searchInput = document.getElementById('searchInput');
+
+        let allEmployees = [];
+
+        // وظيفة جلب الموظفين من Firebase
+        async function fetchEmployees() {
+            loadingIndicator.classList.remove('hidden');
+            try {
+                const querySnapshot = await getDocs(collection(db, "employees"));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                renderEmployees(allEmployees);
+            } catch (error) {
+                console.error("خطأ في جلب الموظفين:", error);
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الموظفين.</div>';
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        // وظيفة لعرض الموظفين في الصفحة
+        function renderEmployees(employees) {
+            employeesList.innerHTML = ''; 
+
+            if (employees.length === 0) {
+                noEmployeesFound.classList.remove('hidden');
+            } else {
+                noEmployeesFound.classList.add('hidden');
+                employees.forEach(employee => {
+                    const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
+                        ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                        : '';
+                    const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
+
+                    const employeeCard = document.createElement('div');
+                    employeeCard.className = 'bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6';
+
+                    employeeCard.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
+                                <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
+                                    <div class="flex items-center text-gray-500 text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt ml-1"></i>
+                                        <span>${employee.contact?.location || 'غير محدد'}</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-briefcase ml-1"></i>
+                                        <span>${employee.experience || 'غير محدد'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus || 'الحالة غير محددة'}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock ml-1"></i>
+                                    <span>${getTimeElapsed(employee.timestamp)}</span>
+                                </div>
+                                <div class="flex space-x-3 rtl:space-x-reverse">
+                                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                    </button>
+                                    <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+                                        <i class="fas fa-user-circle ml-1"></i> الملف الشخصي
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    employeesList.appendChild(employeeCard);
+                });
+            }
+        }
+
+        // وظيفة البحث
+        function filterEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredEmployees = allEmployees.filter(employee => {
+                const searchString = `${employee.name || ''} ${employee.headline || ''} ${employee.contact?.location || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
                 return searchString.includes(searchTerm);
             });
             renderEmployees(filteredEmployees);
