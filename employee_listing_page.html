@@ -44,7 +44,7 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
-        
+
         .status-available {
             background-color: #d1fae5;
             color: #065f46;
@@ -133,7 +133,7 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "employees"));
                 allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
+
                 renderEmployees(allEmployees);
             } catch (error) {
                 console.error("خطأ في جلب الموظفين:", error);
@@ -145,7 +145,8 @@
 
         // وظيفة لعرض الموظفين في الصفحة
         function renderEmployees(employees) {
-            employeesList.innerHTML = '';
+            employeesList.innerHTML = ''; // نُفرغ قائمة الموظفين قبل إضافة العناصر الجديدة
+
             if (employees.length === 0) {
                 noEmployeesFound.classList.remove('hidden');
             } else {
@@ -153,51 +154,53 @@
                 employees.forEach(employee => {
                     const skillsHtml = employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
                     const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
-                    const employeeCardHtml = `
-                        <div class="bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6">
-                            <div class="flex flex-col md:flex-row md:items-start md:justify-between">
-                                <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                    <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
-                                    <div>
-                                        <h3 class="font-bold text-lg">${employee.name}</h3>
-                                        <p class="text-gray-600 text-sm mt-1">${employee.headline}</p>
-                                        <div class="flex items-center text-gray-500 text-sm mt-2">
-                                            <i class="fas fa-map-marker-alt ml-1"></i>
-                                            <span>${employee.contact.location}</span>
-                                            <span class="mx-2">•</span>
-                                            <i class="fas fa-briefcase ml-1"></i>
-                                            <span>${employee.experience}</span>
-                                        </div>
+
+                    const employeeCard = document.createElement('div');
+                    employeeCard.className = 'bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6';
+
+                    employeeCard.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
+                                <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">${employee.name}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline}</p>
+                                    <div class="flex items-center text-gray-500 text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt ml-1"></i>
+                                        <span>${employee.contact.location}</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-briefcase ml-1"></i>
+                                        <span>${employee.experience}</span>
                                     </div>
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus}</span>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <p class="text-gray-700 mb-4">${employee.bio.substring(0, 150)}...</p>
-                                <div class="mb-4">
-                                    <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                    <div class="flex flex-wrap">${skillsHtml}</div>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-gray-700 mb-4">${employee.bio.substring(0, 150)}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                                <div class="flex flex-wrap">${skillsHtml}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock ml-1"></i>
+                                    <span>${getTimeElapsed(employee.timestamp)}</span>
                                 </div>
-                                <div class="flex flex-wrap items-center justify-between">
-                                    <div class="flex items-center text-gray-500 text-sm">
-                                        <i class="fas fa-clock ml-1"></i>
-                                        <span>${getTimeElapsed(employee.timestamp)}</span>
-                                    </div>
-                                    <div class="flex space-x-3 rtl:space-x-reverse">
-                                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                            <i class="fas fa-envelope ml-1"></i> تواصل
-                                        </button>
-                                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
-                                            <i class="fas fa-user-circle ml-1"></i> الملف الشخصي
-                                        </button>
-                                    </div>
+                                <div class="flex space-x-3 rtl:space-x-reverse">
+                                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                    </button>
+                                    <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+                                        <i class="fas fa-user-circle ml-1"></i> الملف الشخصي
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     `;
-                    employeesList.innerHTML += employeeCardHtml;
+                    employeesList.appendChild(employeeCard);
                 });
             }
         }
@@ -217,7 +220,7 @@
             const now = new Date();
             const employeeDate = new Date(timestamp);
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
-            
+
             const minutes = Math.floor(diffInSeconds / 60);
             const hours = Math.floor(minutes / 60);
             const days = Math.floor(hours / 24);
