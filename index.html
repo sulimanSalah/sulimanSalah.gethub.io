@@ -8,46 +8,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
         body {
             font-family: 'Tajawal', sans-serif;
         }
-        
         .job-card:hover, .employee-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
         .gradient-bg {
             background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- شريط التنقل -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
-                <!-- الشعار -->
                 <div class="flex items-center">
                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني - أيقونة زرقاء تمثل اليد للمصافحة مع اسم شغلني باللغتين العربية والإنجليزية" class="h-10 mr-2">
                     <span class="text-xl font-bold text-blue-600">شغلني</span>
                 </div>
-                
-                <!-- عناصر التنقل -->
+
                 <div class="hidden md:flex space-x-1 space-x-reverse">
                     <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50">الرئيسية</a>
                     <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الموظفون المتاحون</a>
                     <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الوظائف المتاحة</a>
                     <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">من نحن</a>
                 </div>
-                
-                <!-- زر تسجيل الدخول -->
+
                 <div>
-                    <a href="login_page.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50">تسجيل الدخول</a>
+                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50">تسجيل الدخول</a>
                 </div>
-                
-                <!-- زر القائمة المتنقلة -->
+
                 <button class="md:hidden text-gray-600 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
@@ -55,7 +47,6 @@
         </nav>
     </header>
 
-    <!-- القسم الرئيسي -->
     <section class="gradient-bg text-white py-20">
         <div class="container mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-6">ابحث عن الوظيفة المثالية أو الموظف المثالي</h1>
@@ -67,16 +58,13 @@
         </div>
     </section>
 
-    <!-- قسم الوظائف المتاحة -->
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h2>
                 <a href="job_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- وظيفة 1 -->
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="شعار شركة تقنية بلون أزرق بثلاثة خطوط مائلة تمثل التقدم والابتكار" class="h-14 w-14 rounded-lg object-cover">
@@ -94,8 +82,6 @@
                         <span class="font-bold text-blue-600">8,000 - 10,000 ر.س</span>
                     </div>
                 </div>
-                
-                <!-- وظيفة 2 -->
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="شعار شركة مالية بلون أخضر مع رمز الدرهم يشير إلى الاستقرار والنمو" class="h-14 w-14 rounded-lg object-cover">
@@ -112,8 +98,6 @@
                         <span class="font-bold text-blue-600">12,000 - 15,000 د.إ</span>
                     </div>
                 </div>
-                
-                <!-- وظيفة 3 -->
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/abb13b0c-6419-47cf-b4a0-dbac28d806ef.png" alt="شعار شركة تعليمية بلون بنفسجي مع كتاب مفتوح يرمز إلى المعرفة والتعلم" class="h-14 w-14 rounded-lg object-cover">
@@ -134,16 +118,37 @@
         </div>
     </section>
 
-    <!-- قسم الموظفون المتاحون -->
     <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">شركاؤنا المميزون</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-blue-600 text-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a0a192ec-3f36-4074-954f-1d8f7e2c9431.png" alt="شعار شركة التكنولوجيا السحابية" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl font-bold mb-2">انضم إلى فريق التكنولوجيا السحابية</h3>
+                        <p class="text-gray-200 mb-4">نحن نبحث عن أفضل مطوري البرمجيات والمهندسين. فرص عمل مبتكرة وبرامج تدريبية مميزة.</p>
+                        <a href="#" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">اكتشف الفرص</a>
+                    </div>
+                </div>
+                <div class="bg-green-600 text-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/445c58a5-d5a2-4a0b-93f4-d57186987e97.png" alt="شعار شركة التسويق الرقمي" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl font-bold mb-2">تعزيز حضورك الرقمي</h3>
+                        <p class="text-gray-200 mb-4">هل أنت صاحب عمل؟ نقدم لك حلولاً تسويقية متكاملة للعثور على أفضل المواهب. تواصل معنا الآن!</p>
+                        <a href="#" class="bg-white text-green-600 px-6 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">تواصل معنا</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الموظفون المتاحون</h2>
                 <a href="employee_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- موظف 1 -->
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة أحمد محمد - رجل في الثلاثينيات من عمره يرتدي قميص رسمي أزرق وابتسامة واثقة" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">أحمد محمد</h3>
@@ -154,8 +159,6 @@
                         <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">React</span>
                     </div>
                 </div>
-                
-                <!-- موظف 2 -->
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a104eaa3-b8b2-4066-a3e2-a62bb6d08770.png" alt="صورة سارة عبد الرحيم - امرأة في أواخر العشرينيات ترتدي حجاب رمادي ونظارة طبية بابتسامة مهنية" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">سارة عبد الرحيم</h3>
@@ -166,8 +169,6 @@
                         <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Illustrator</span>
                     </div>
                 </div>
-                
-                <!-- موظف 3 -->
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0aee6a1d-9fcb-49f5-9987-46ba59312e74.png" alt="صورة خالد سعيد - رجل في منتصف الثلاثينيات بملامح جادة وملابس رسمية باللون الرمادي الداكن" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">خالد سعيد</h3>
@@ -178,8 +179,6 @@
                         <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Agile</span>
                     </div>
                 </div>
-                
-                <!-- موظف 4 -->
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ff19011-c0f1-410d-bee3-b8f7f8dc37d4.png" alt="صورة مريم علي - امرأة شابة ترتدي حجاب أزرق فاتح بملامح ودودة وواثقة" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">مريم علي</h3>
@@ -194,8 +193,7 @@
         </div>
     </section>
 
-    <!-- قسم من نحن -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0">
@@ -215,7 +213,6 @@
         </div>
     </section>
 
-    <!-- تذييل الصفحة -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -229,7 +226,7 @@
                         <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-bold mb-4">روابط سريعة</h3>
                     <ul class="space-y-2">
@@ -239,7 +236,7 @@
                         <li><a href="job_application_page.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-bold mb-4">تواصل معنا</h3>
                     <ul class="space-y-2">
@@ -248,7 +245,7 @@
                         <li class="text-gray-400"><i class="fas fa-map-marker-alt ml-2"></i> الرياض، السعودية</li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-bold mb-4">النشرة البريدية</h3>
                     <p class="text-gray-400 mb-4">اشترك ليصلك كل جديد حول الوظائف والموظفين</p>
@@ -260,24 +257,19 @@
                     </div>
                 </div>
             </div>
-            
             <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
                 <p>© 2023 شغلني. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
-
     <script>
-        // كود JavaScript البسيط لتنفيذ القائمة المتنقلة في الهواتف
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.querySelector('.md\\:hidden');
             const navLinks = document.querySelector('.md\\:flex');
-            
+
             mobileMenuButton.addEventListener('click', function() {
                 navLinks.classList.toggle('hidden');
             });
-            
-            // تأثير التمرير السلس للروابط
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -290,4 +282,3 @@
     </script>
 </body>
 </html>
-
