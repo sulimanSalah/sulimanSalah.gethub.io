@@ -1,219 +1,217 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموظفين المتاحين - شغلني</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
-            direction: rtl;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 2rem;
-        }
-        .card {
-            background-color: #ffffff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-        .profile-pic {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #2563eb;
-        }
-        .name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 1rem;
-            color: #1f2937;
-        }
-        .job-title {
-            font-size: 1rem;
-            color: #6b7280;
-            margin-top: 0.25rem;
-        }
-        .details {
-            margin-top: 1rem;
-            color: #4b5563;
-        }
-        .details p {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-        }
-        .details p i {
-            margin-left: 0.5rem;
-            color: #2563eb;
-        }
-        .bio {
-            font-style: italic;
-            color: #9ca3af;
-            margin-top: 1rem;
-        }
-        .actions {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-        }
-        .actions button, .actions a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .actions .contact-btn {
-            background-color: #10b981;
-            color: white;
-        }
-        .actions .contact-btn:hover {
-            background-color: #059669;
-        }
-        .actions .hire-btn {
-            background-color: #2563eb;
-            color: white;
-        }
-        .actions .hire-btn:hover {
-            background-color: #1e40af;
-        }
-    </style>
-</head>
-<body>
+<!DOCTYPE html>  <html lang="ar" dir="rtl">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>الموظفين المتاحين - شغلني</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
+    <script src="https://cdn.tailwindcss.com"></script>  
+    <style>  
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');  body {  
+        font-family: 'Tajawal', sans-serif;  
+        background-color: #f5f7fa;  
+        direction: rtl;  
+    }  
+    .container {  
+        max-width: 1200px;  
+        margin: auto;  
+        padding: 2rem;  
+    }  
+    .card {  
+        background-color: #ffffff;  
+        border-radius: 1rem;  
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  
+        padding: 1.5rem;  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+        text-align: center;  
+        transition: transform 0.2s, box-shadow 0.2s;  
+    }  
+    .card:hover {  
+        transform: translateY(-5px);  
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);  
+    }  
+    .profile-pic {  
+        width: 100px;  
+        height: 100px;  
+        border-radius: 50%;  
+        object-fit: cover;  
+        border: 4px solid #2563eb;  
+    }  
+    .name {  
+        font-size: 1.5rem;  
+        font-weight: 700;  
+        margin-top: 1rem;  
+        color: #1f2937;  
+    }  
+    .job-title {  
+        font-size: 1rem;  
+        color: #6b7280;  
+        margin-top: 0.25rem;  
+    }  
+    .details {  
+        margin-top: 1rem;  
+        color: #4b5563;  
+    }  
+    .details p {  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        margin-bottom: 0.5rem;  
+    }  
+    .details p i {  
+        margin-left: 0.5rem;  
+        color: #2563eb;  
+    }  
+    .bio {  
+        font-style: italic;  
+        color: #9ca3af;  
+        margin-top: 1rem;  
+    }  
+    .actions {  
+        margin-top: 1.5rem;  
+        display: flex;  
+        gap: 1rem;  
+    }  
+    .actions button, .actions a {  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        padding: 0.75rem 1.5rem;  
+        border-radius: 9999px;  
+        font-weight: 500;  
+        transition: all 0.2s;  
+        cursor: pointer;  
+    }  
+    .actions .contact-btn {  
+        background-color: #10b981;  
+        color: white;  
+    }  
+    .actions .contact-btn:hover {  
+        background-color: #059669;  
+    }  
+    .actions .hire-btn {  
+        background-color: #2563eb;  
+        color: white;  
+    }  
+    .actions .hire-btn:hover {  
+        background-color: #1e40af;  
+    }  
+</style>
 
-    <div class="container">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">الموظفين المتاحين</h1>
-        <div id="employeesList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            </div>
-    </div>
+</head>  
+<body>  <div class="container">  
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">الموظفين المتاحين</h1>  
+    <div id="employeesList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">  
+        </div>  
+</div>  
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<script type="module">  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";  
+    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";  
 
-        // **1. تهيئة Firebase**
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+    // **1. تهيئة Firebase**  
+    const firebaseConfig = {  
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",  
+      authDomain: "shaglni-c64c0.firebaseapp.com",  
+      projectId: "shaglni-c64c0",  
+      storageBucket: "shaglni-c64c0.firebasestorage.app",  
+      messagingSenderId: "768887356636",  
+      appId: "1:768887356636:web:11ec1d6991add3309c8819",  
+      measurementId: "G-98GQGZS09W"  
+    };  
+    const app = initializeApp(firebaseConfig);  
+    const db = getFirestore(app);  
+    const auth = getAuth(app);  
 
-        const employeesList = document.getElementById('employeesList');
-        let currentUserId = null;
+    const employeesList = document.getElementById('employeesList');  
+    let currentUserId = null;  
 
-        // **2. دالة عرض الموظفين**
-        function renderEmployeeCard(employee) {
-            const employeeCard = document.createElement('div');
-            employeeCard.className = 'card';
-            employeeCard.innerHTML = `
-                <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${employee.name}" class="profile-pic">
-                <h3 class="name">${employee.name}</h3>
-                <p class="job-title">${employee.jobTitle}</p>
-                <div class="details">
-                    <p><i class="fas fa-map-marker-alt"></i> ${employee.location || 'غير محدد'}</p>
-                    <p><i class="fas fa-briefcase"></i> خبرة ${employee.experience} سنوات</p>
-                    <p><i class="fas fa-star"></i> ${employee.rating} / 5</p>
-                </div>
-                <p class="bio">${employee.bio}</p>
-                <div class="actions">
-                    <a href="chat.html?employeeId=${employee.id}" class="contact-btn">
-                        <i class="fas fa-comments"></i>
-                        <span class="mr-2">تواصل</span>
-                    </a>
-                    <button class="hire-btn" data-employee-id="${employee.id}">
-                        <i class="fas fa-user-tie"></i>
-                        <span class="mr-2">توظيف</span>
-                    </button>
-                </div>
-            `;
-            
-            const hireButton = employeeCard.querySelector('.hire-btn');
-            hireButton.addEventListener('click', () => handleHire(employee.id));
-            
-            employeesList.appendChild(employeeCard);
-        }
+    // **2. دالة عرض الموظفين**  
+    function renderEmployeeCard(employee) {  
+        const employeeCard = document.createElement('div');  
+        employeeCard.className = 'card';  
+        employeeCard.innerHTML = `  
+            <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${employee.name}" class="profile-pic">  
+            <h3 class="name">${employee.name}</h3>  
+            <p class="job-title">${employee.jobTitle}</p>  
+            <div class="details">  
+                <p><i class="fas fa-map-marker-alt"></i> ${employee.location || 'غير محدد'}</p>  
+                <p><i class="fas fa-briefcase"></i> خبرة ${employee.experience} سنوات</p>  
+                <p><i class="fas fa-star"></i> ${employee.rating} / 5</p>  
+            </div>  
+            <p class="bio">${employee.bio}</p>  
+            <div class="actions">  
+                <a href="chat.html?employeeId=${employee.id}" class="contact-btn">  
+                    <i class="fas fa-comments"></i>  
+                    <span class="mr-2">تواصل</span>  
+                </a>  
+                <button class="hire-btn" data-employee-id="${employee.id}">  
+                    <i class="fas fa-user-tie"></i>  
+                    <span class="mr-2">توظيف</span>  
+                </button>  
+            </div>  
+        `;  
+          
+        const hireButton = employeeCard.querySelector('.hire-btn');  
+        hireButton.addEventListener('click', () => handleHire(employee.id));  
+          
+        employeesList.appendChild(employeeCard);  
+    }  
 
-        // **3. دالة جلب الموظفين**
-        async function fetchEmployees() {
-            employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-gray-500">جاري تحميل الموظفين...</div>';
-            try {
-                const querySnapshot = await getDocs(collection(db, "employees"));
-                employeesList.innerHTML = ''; // مسح رسالة التحميل
-                if (querySnapshot.empty) {
-                    employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-gray-500">لا يوجد موظفون متاحون حالياً.</div>';
-                    return;
-                }
-                querySnapshot.forEach((doc) => {
-                    const employeeData = { id: doc.id, ...doc.data() };
-                    renderEmployeeCard(employeeData);
-                });
-            } catch (e) {
-                console.error("Error fetching employees: ", e);
-                employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-red-500">حدث خطأ أثناء تحميل البيانات.</div>';
-            }
-        }
+    // **3. دالة جلب الموظفين**  
+    async function fetchEmployees() {  
+        employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-gray-500">جاري تحميل الموظفين...</div>';  
+        try {  
+            const querySnapshot = await getDocs(collection(db, "employees"));  
+            employeesList.innerHTML = ''; // مسح رسالة التحميل  
+            if (querySnapshot.empty) {  
+                employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-gray-500">لا يوجد موظفون متاحون حالياً.</div>';  
+                return;  
+            }  
+            querySnapshot.forEach((doc) => {  
+                const employeeData = { id: doc.id, ...doc.data() };  
+                renderEmployeeCard(employeeData);  
+            });  
+        } catch (e) {  
+            console.error("Error fetching employees: ", e);  
+            employeesList.innerHTML = '<div class="text-center col-span-3 text-lg text-red-500">حدث خطأ أثناء تحميل البيانات.</div>';  
+        }  
+    }  
 
-        // **4. دالة التعامل مع زر التوظيف**
-        async function handleHire(employeeId) {
-            if (!currentUserId) {
-                alert("يجب عليك تسجيل الدخول أولاً.");
-                return;
-            }
-            if (confirm("هل أنت متأكد من رغبتك في توظيف هذا الموظف؟ سيتم إرسال طلب توظيف.")) {
-                try {
-                    await addDoc(collection(db, "hiringRequests"), {
-                        employerId: currentUserId,
-                        employeeId: employeeId,
-                        status: "pending",
-                        timestamp: new Date()
-                    });
-                    alert("تم إرسال طلب التوظيف بنجاح!");
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                    alert("فشل إرسال طلب التوظيف. تأكد من قواعد الأمان في Firestore.");
-                }
-            }
-        }
+    // **4. دالة التعامل مع زر التوظيف**  
+    async function handleHire(employeeId) {  
+        if (!currentUserId) {  
+            alert("يجب عليك تسجيل الدخول أولاً.");  
+            return;  
+        }  
+        if (confirm("هل أنت متأكد من رغبتك في توظيف هذا الموظف؟ سيتم إرسال طلب توظيف.")) {  
+            try {  
+                await addDoc(collection(db, "hiringRequests"), {  
+                    employerId: currentUserId,  
+                    employeeId: employeeId,  
+                    status: "pending",  
+                    timestamp: new Date()  
+                });  
+                alert("تم إرسال طلب التوظيف بنجاح!");  
+            } catch (e) {  
+                console.error("Error adding document: ", e);  
+                alert("فشل إرسال طلب التوظيف. تأكد من قواعد الأمان في Firestore.");  
+            }  
+        }  
+    }  
 
-        // **5. التحقق من حالة تسجيل الدخول**
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUserId = user.uid;
-            }
-            fetchEmployees();
-        });
+    // **5. التحقق من حالة تسجيل الدخول**  
+    onAuthStateChanged(auth, (user) => {  
+        if (user) {  
+            currentUserId = user.uid;  
+        }  
+        fetchEmployees();  
+    });  
 
-    </script>
-</body>
-</html>
+</script>
+
+</body>  
+</html>  هذا كود عرض الموظفين اعطني اسماء لا اقوم بمل الاستمارة كم نفر
+
