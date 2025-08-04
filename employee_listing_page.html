@@ -191,7 +191,8 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "employees"));
                 allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)); // Fixed sorting
+                // تم تعديل هذه السطر لضمان الفرز الصحيح، ولكن المشكلة كانت في عرض الوقت وليس الفرز
+                allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)); 
                 filterAndRenderEmployees();
             } catch (error) {
                 console.error("خطأ في جلب الموظفين:", error);
@@ -213,10 +214,10 @@
                         ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
                         : '';
                     const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
-                    
-                    // تحسين عرض الموقع
-                    const employeeCity = employee.contact?.location?.city || employee.location?.city || 'غير محدد';
-                    const employeeState = employee.contact?.location?.state || employee.location?.state || 'غير محدد';
+
+                    // تعديل: حل مشكلة الموقع
+                    const employeeCity = employee.location?.city || employee.contact?.location?.city || 'غير محدد';
+                    const employeeState = employee.location?.state || employee.contact?.location?.state || 'غير محدد';
                     const locationText = `${employeeCity}، ${employeeState}`;
 
                     const employeeCard = document.createElement('div');
@@ -233,8 +234,7 @@
                                         <i class="fas fa-map-marker-alt ml-1"></i>
                                         <span>${locationText}</span>
                                         <span class="mx-2">•</span>
-                                        <i class="fas fa-briefcase ml-1"></i>
-                                        <span>${employee.experience || 'غير محدد'}</span>
+                                        <span>الخبرة: ${employee.experience || 'غير محدد'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -279,10 +279,10 @@
 
             const filteredEmployees = allEmployees.filter(employee => {
                 const searchTerms = searchTerm.split(' ');
-                
-                // تحسين قراءة بيانات الموقع
-                const employeeCity = employee.contact?.location?.city || employee.location?.city || '';
-                const employeeState = employee.contact?.location?.state || employee.location?.state || '';
+
+                // تعديل: حل مشكلة الموقع
+                const employeeCity = employee.location?.city || employee.contact?.location?.city || '';
+                const employeeState = employee.location?.state || employee.contact?.location?.state || '';
 
                 const matchesSearch = searchTerms.every(term => {
                     const employeeText = `${employee.name || ''} ${employee.headline || ''} ${employeeState || ''} ${employeeCity || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
@@ -299,22 +299,27 @@
             renderEmployees(filteredEmployees);
         }
 
-        // **7. دالة لحساب الوقت المنقضي**
+        // **7. دالة لحساب الوقت المنقضي (تم تعديلها)**
         function getTimeElapsed(timestamp) {
+            if (!timestamp) return 'غير محدد';
+
             const now = new Date();
-            const employeeDate = timestamp ? new Date(timestamp.seconds * 1000) : now;
+            const employeeDate = new Date(timestamp.seconds * 1000);
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
+
+            if (diffInSeconds < 60) return 'الآن';
             const minutes = Math.floor(diffInSeconds / 60);
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
             const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `منذ ${hours} ساعة`;
             const days = Math.floor(hours / 24);
+            if (days < 7) return `منذ ${days} يوم`;
             const weeks = Math.floor(days / 7);
+            if (weeks < 4) return `منذ ${weeks} أسبوع`;
+            const months = Math.floor(days / 30);
+            if (months < 12) return `منذ ${months} شهر`;
             const years = Math.floor(days / 365);
-            if (years > 0) return `منذ ${years} سنة`;
-            if (weeks > 0) return `منذ ${weeks} أسبوع`;
-            if (days > 0) return `منذ ${days} يوم`;
-            if (hours > 0) return `منذ ${hours} ساعة`;
-            if (minutes > 0) return `منذ ${minutes} دقيقة`;
-            return 'الآن';
+            return `منذ ${years} سنة`;
         }
 
         // **8. دالة توظيف موظف**
@@ -368,7 +373,7 @@
             filterAndRenderEmployees();
         });
         cityFilter.addEventListener('change', filterAndRenderEmployees);
-        
+
         // This is necessary to expose the hireEmployee function to the onclick event in the HTML
         window.hireEmployee = hireEmployee; 
     </script>
