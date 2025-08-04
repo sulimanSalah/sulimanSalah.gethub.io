@@ -99,11 +99,6 @@
                 </a>
             </p>
         </div>
-        <div class="mt-2 text-center">
-            <a href="reset_password.html" class="font-medium text-blue-600 hover:text-blue-500 text-sm">
-                نسيت كلمة المرور؟
-            </a>
-        </div>
     </div>
 
     <script type="module">
@@ -164,7 +159,6 @@
                     element.querySelector('i').className = 'fas fa-times-circle ml-2 text-red-500';
                 }
             }
-
             return Object.values(checks).every(Boolean);
         }
 
@@ -182,6 +176,14 @@
             // إخفاء رسالة الخطأ السابقة
             feedbackMessage.classList.add('hidden');
             feedbackMessage.textContent = '';
+
+            // **التحقق من الاسم الكامل (التعديل الجديد)**
+            if (name.trim().indexOf(' ') === -1) {
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = 'الرجاء إدخال اسمك الكامل.';
+                return;
+            }
 
             // التحقق من توافق كلمات المرور
             if (password !== confirmPassword) {
