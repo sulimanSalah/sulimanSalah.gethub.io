@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الوظائف المتاحة - شغلني</title>
+    <title>الموظفون المتاحون - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -24,36 +24,34 @@
             background-color: #f5f7fa;
         }
 
-        .job-card {
+        .employee-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .job-card:hover {
+        .employee-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .tag {
+        .skill-tag {
             display: inline-flex;
             align-items: center;
+            background-color: #eef2ff;
+            color: #4338ca;
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.75rem;
             margin: 0.125rem;
         }
 
-        .job-type-full-time {
+        .status-available {
             background-color: #d1fae5;
             color: #065f46;
         }
-        .job-type-part-time {
-            background-color: #eef2ff;
-            color: #4338ca;
-        }
-        .job-type-remote {
-            background-color: #fffbeb;
-            color: #b45309;
+        .status-not-looking {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
 </head>
@@ -66,8 +64,8 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
                     <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
-                    <a href="available_jobs.html" class="text-blue-600 font-bold">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الموظفين</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-blue-600 font-bold">عرض الموظفين</a>
                     <a href="job_registration.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">إضافة وظيفة</a>
                 </div>
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
@@ -85,9 +83,9 @@
 
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الوظائف المتاحة</h1>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الموظفون المتاحون</h1>
             <div class="relative w-full md:w-1/3">
-                <input type="text" id="searchInput" placeholder="ابحث عن وظيفة..."
+                <input type="text" id="searchInput" placeholder="ابحث عن موظف..."
                        class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <i class="fas fa-search text-gray-400"></i>
@@ -95,9 +93,42 @@
             </div>
         </div>
 
-        <div id="jobsList" class="space-y-4">
-            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الوظائف...</div>
-            <div id="noJobsFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على وظائف.</div>
+        <div class="flex flex-col md:flex-row md:space-x-4 rtl:space-x-reverse mb-6">
+            <div class="w-full md:w-1/2 mb-4 md:mb-0">
+                <label for="stateFilter" class="block text-sm font-medium text-gray-700">فلتر حسب الولاية:</label>
+                <select id="stateFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                    <option value="">جميع الولايات</option>
+                    <option value="الخرطوم">ولاية الخرطوم</option>
+                    <option value="الجزيرة">ولاية الجزيرة</option>
+                    <option value="البحر الأحمر">ولاية البحر الأحمر</option>
+                    <option value="كسلا">ولاية كسلا</option>
+                    <option value="القضارف">ولاية القضارف</option>
+                    <option value="سنار">ولاية سنار</option>
+                    <option value="النيل الأبيض">ولاية النيل الأبيض</option>
+                    <option value="النيل الأزرق">ولاية النيل الأزرق</option>
+                    <option value="الشمالية">الولاية الشمالية</option>
+                    <option value="نهر النيل">ولاية نهر النيل</option>
+                    <option value="شمال كردفان">ولاية شمال كردفان</option>
+                    <option value="جنوب كردفان">ولاية جنوب كردفان</option>
+                    <option value="غرب كردفان">ولاية غرب كردفان</option>
+                    <option value="شمال دارفور">ولاية شمال دارفور</option>
+                    <option value="جنوب دارفور">ولاية جنوب دارفور</option>
+                    <option value="غرب دارفور">ولاية غرب دارفور</option>
+                    <option value="وسط دارفور">ولاية وسط دارفور</option>
+                    <option value="شرق دارفور">ولاية شرق دارفور</option>
+                </select>
+            </div>
+            <div class="w-full md:w-1/2">
+                <label for="cityFilter" class="block text-sm font-medium text-gray-700">فلتر حسب المدينة:</label>
+                <select id="cityFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md" disabled>
+                    <option value="">جميع المدن</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="employeesList" class="space-y-4">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الموظفين...</div>
+            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على موظفين.</div>
         </div>
     </div>
 
@@ -122,151 +153,213 @@
         const auth = getAuth(app);
 
         // **2. ربط عناصر الواجهة بمتغيرات في الكود**
-        const jobsList = document.getElementById('jobsList');
+        const employeesList = document.getElementById('employeesList');
         const loadingIndicator = document.getElementById('loadingIndicator');
-        const noJobsFound = document.getElementById('noJobsFound');
+        const noEmployeesFound = document.getElementById('noEmployeesFound');
         const searchInput = document.getElementById('searchInput');
+        const stateFilter = document.getElementById('stateFilter');
+        const cityFilter = document.getElementById('cityFilter');
 
-        let allJobs = [];
+        let allEmployees = [];
         let currentUserId = null;
 
-        // **3. دالة لجلب الوظائف من Firestore**
-        async function fetchJobs() {
+        // **3. قاعدة بيانات الولايات والمدن في السودان**
+        const citiesByState = {
+            'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
+            'الجزيرة': ['ود مدني', 'الحصاحيصا', 'المناقل'],
+            'البحر الأحمر': ['بورتسودان', 'سواكن', 'طوكر'],
+            'كسلا': ['كسلا', 'حلفا الجديدة', 'أروما'],
+            'القضارف': ['القضارف', 'القلابات', 'الفو'],
+            'سنار': ['سنار', 'الدالي والمزموم', 'ود النيل'],
+            'النيل الأبيض': ['ربك', 'كوستي', 'الدويم'],
+            'النيل الأزرق': ['الدمازين', 'الروصيرص', 'الكرمك'],
+            'الشمالية': ['دنقلا', 'عطبرة', 'كريمة'],
+            'نهر النيل': ['الدامر', 'شندي', 'عطبرة'],
+            'شمال كردفان': ['الأبيض', 'أم روابة', 'الرهد'],
+            'جنوب كردفان': ['كادقلي', 'أبو جبيهة', 'تلودي'],
+            'غرب كردفان': ['الفولة', 'النهود', 'المجلد'],
+            'شمال دارفور': ['الفاشر', 'كبكابية', 'مليط'],
+            'جنوب دارفور': ['نيالا', 'الضعين', 'برام'],
+            'غرب دارفور': ['الجنينة', 'كرينك', 'كلبس'],
+            'وسط دارفور': ['زالنجي', 'ودعة', 'أم دخن'],
+            'شرق دارفور': ['الضعين', 'عديلة', 'أبوكارنكا']
+        };
+
+        // **4. دالة لجلب الموظفين من Firestore**
+        async function fetchEmployees() {
             loadingIndicator.classList.remove('hidden');
             try {
-                const querySnapshot = await getDocs(collection(db, "jobs"));
-                allJobs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                allJobs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-                renderJobs(allJobs);
+                const querySnapshot = await getDocs(collection(db, "employees"));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                allEmployees.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                filterAndRenderEmployees();
             } catch (error) {
-                console.error("خطأ في جلب الوظائف:", error);
-                jobsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الوظائف.</div>';
+                console.error("خطأ في جلب الموظفين:", error);
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الموظفين.</div>';
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
         }
 
-        // **4. دالة لعرض الوظائف في الواجهة**
-        function renderJobs(jobs) {
-            jobsList.innerHTML = '';
-            if (jobs.length === 0) {
-                noJobsFound.classList.remove('hidden');
+        // **5. دالة لعرض الموظفين في الواجهة**
+        function renderEmployees(employees) {
+            employeesList.innerHTML = '';
+            if (employees.length === 0) {
+                noEmployeesFound.classList.remove('hidden');
             } else {
-                noJobsFound.classList.add('hidden');
-                jobs.forEach(job => {
-                    const jobTypeClass = job.type === 'دوام كامل' ? 'job-type-full-time' :
-                                       (job.type === 'دوام جزئي' ? 'job-type-part-time' : 'job-type-remote');
+                noEmployeesFound.classList.add('hidden');
+                employees.forEach(employee => {
+                    const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
+                        ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                        : '';
+                    const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
 
-                    const jobCard = document.createElement('div');
-                    jobCard.className = 'bg-white rounded-xl shadow-sm job-card overflow-hidden p-6';
+                    const employeeCard = document.createElement('div');
+                    employeeCard.className = 'bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6';
 
-                    jobCard.innerHTML = `
+                    employeeCard.innerHTML = `
                         <div class="flex flex-col md:flex-row md:items-start md:justify-between">
                             <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                <img src="${job.companyLogo || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="شعار الشركة" class="w-14 h-14 rounded-full object-cover">
+                                <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
                                 <div>
-                                    <h3 class="font-bold text-lg">${job.title || 'وظيفة غير معروفة'}</h3>
-                                    <p class="text-gray-600 text-sm mt-1">${job.companyName || 'شركة غير معروفة'}</p>
+                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
                                     <div class="flex items-center text-gray-500 text-sm mt-2">
                                         <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${job.location || 'غير محدد'}</span>
+                                        <span>${employee.contact?.location?.city || 'غير محدد'}، ${employee.contact?.location?.state || 'غير محدد'}</span>
                                         <span class="mx-2">•</span>
-                                        <span><i class="fas fa-money-bill-wave ml-1"></i> ${job.salary || 'غير محدد'}</span>
+                                        <i class="fas fa-briefcase ml-1"></i>
+                                        <span>${employee.experience || 'غير محدد'}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end">
-                                <span class="px-3 py-1 rounded-full ${jobTypeClass} text-xs font-semibold mb-2">${job.type || 'النوع غير محدد'}</span>
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus || 'الحالة غير محددة'}</span>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <p class="text-gray-700 mb-4">${job.description?.substring(0, 150) || 'لا يوجد وصف'}...</p>
+                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
+                            </div>
                             <div class="flex flex-wrap items-center justify-between">
                                 <div class="flex items-center text-gray-500 text-sm">
                                     <i class="fas fa-clock ml-1"></i>
-                                    <span>${getTimeElapsed(job.timestamp)}</span>
+                                    <span>${getTimeElapsed(employee.timestamp)}</span>
                                 </div>
                                 <div class="flex space-x-3 rtl:space-x-reverse">
-                                    <a href="job_details.html?jobId=${job.id}"
-                                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm">
-                                        <i class="fas fa-info-circle ml-1"></i> تفاصيل
-                                    </a>
-                                    <button onclick="saveJob('${job.id}')"
+                                    <a href="chat.html?employeeId=${employee.id}"
                                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                        <i class="fas fa-bookmark ml-1"></i> حفظ
+                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                    </a>
+                                    <button onclick="hireEmployee('${employee.id}')"
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                        <i class="fas fa-user-plus ml-1"></i> توظيف
                                     </button>
                                 </div>
                             </div>
                         </div>
                     `;
-                    jobsList.appendChild(jobCard);
+                    employeesList.appendChild(employeeCard);
                 });
             }
         }
 
-        // **5. دالة لحساب الوقت المنقضي**
-        function getTimeElapsed(timestamp) {
-            if (!timestamp) return 'غير محدد';
-            const now = new Date();
-            const jobDate = new Date(timestamp.seconds * 1000);
-            const diffInSeconds = Math.floor((now - jobDate) / 1000);
-            if (diffInSeconds < 60) return 'الآن';
-            const minutes = Math.floor(diffInSeconds / 60);
-            if (minutes < 60) return `منذ ${minutes} دقيقة`;
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `منذ ${hours} ساعة`;
-            const days = Math.floor(hours / 24);
-            if (days < 7) return `منذ ${days} يوم`;
-            const weeks = Math.floor(days / 7);
-            if (weeks < 4) return `منذ ${weeks} أسبوع`;
-            const months = Math.floor(days / 30);
-            if (months < 12) return `منذ ${months} شهر`;
-            const years = Math.floor(days / 365);
-            return `منذ ${years} سنة`;
+        // **6. دالة للفلترة والبحث**
+        function filterAndRenderEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedState = stateFilter.value;
+            const selectedCity = cityFilter.value;
+
+            const filteredEmployees = allEmployees.filter(employee => {
+                const searchTerms = searchTerm.split(' ');
+                const employeeLocation = employee.contact?.location || {};
+
+                const matchesSearch = searchTerms.every(term => {
+                    const employeeText = `${employee.name || ''} ${employee.headline || ''} ${employeeLocation.state || ''} ${employeeLocation.city || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
+                    if (employeeText.includes(term)) return true;
+                    return false;
+                });
+
+                const matchesState = selectedState === '' || (employeeLocation.state && employeeLocation.state === selectedState);
+                const matchesCity = selectedCity === '' || (employeeLocation.city && employeeLocation.city === selectedCity);
+
+                return matchesSearch && matchesState && matchesCity;
+            });
+
+            renderEmployees(filteredEmployees);
         }
 
-        // **6. دالة لحفظ الوظيفة (جديدة)**
-        async function saveJob(jobId) {
+        // **7. دالة لحساب الوقت المنقضي**
+        function getTimeElapsed(timestamp) {
+            const now = new Date();
+            const employeeDate = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - employeeDate) / 1000);
+            const minutes = Math.floor(diffInSeconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const weeks = Math.floor(days / 7);
+            const years = Math.floor(days / 365);
+            if (years > 0) return `منذ ${years} سنة`;
+            if (weeks > 0) return `منذ ${weeks} أسبوع`;
+            if (days > 0) return `منذ ${days} يوم`;
+            if (hours > 0) return `منذ ${hours} ساعة`;
+            if (minutes > 0) return `منذ ${minutes} دقيقة`;
+            return 'الآن';
+        }
+
+        // **8. دالة توظيف موظف**
+        async function hireEmployee(employeeId) {
             if (!currentUserId) {
-                alert("يجب عليك تسجيل الدخول لحفظ الوظائف.");
+                alert("يجب عليك تسجيل الدخول لتوظيف الموظفين.");
                 return;
             }
+
             try {
-                await addDoc(collection(db, "savedJobs"), {
-                    userId: currentUserId,
-                    jobId: jobId,
+                await addDoc(collection(db, "hiringRequests"), {
+                    employerId: currentUserId,
+                    employeeId: employeeId,
+                    status: 'pending',
                     timestamp: serverTimestamp()
                 });
-                alert("تم حفظ الوظيفة بنجاح!");
+                alert("تم إرسال طلب التوظيف بنجاح! سيتم إشعار الموظف.");
             } catch (error) {
-                console.error("خطأ في حفظ الوظيفة:", error);
-                alert("حدث خطأ أثناء حفظ الوظيفة. يرجى المحاولة مرة أخرى.");
+                console.error("خطأ في إرسال طلب التوظيف:", error);
+                alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
             }
         }
 
-        // **7. مستمعي الأحداث**
+        // **9. مستمعي الأحداث**
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
-                fetchJobs();
+                fetchEmployees();
             } else {
                 currentUserId = null;
                 loadingIndicator.classList.add('hidden');
-                jobsList.innerHTML = '<div class="text-center text-red-500 p-8">يجب عليك تسجيل الدخول لعرض الوظائف.</div>';
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">يجب عليك تسجيل الدخول لعرض الموظفين.</div>';
             }
         });
 
-        searchInput.addEventListener('input', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            const filteredJobs = allJobs.filter(job => {
-                const jobText = `${job.title || ''} ${job.companyName || ''} ${job.description || ''} ${job.location || ''} ${job.skills?.join(' ') || ''}`.toLowerCase();
-                return jobText.includes(searchTerm);
-            });
-            renderJobs(filteredJobs);
-        });
+        searchInput.addEventListener('input', filterAndRenderEmployees);
+        stateFilter.addEventListener('change', () => {
+            const selectedState = stateFilter.value;
+            cityFilter.innerHTML = '<option value="">جميع المدن</option>';
+            cityFilter.disabled = true;
 
-        // هذا ضروري لجعل الدالة saveJob متاحة لزر HTML
-        window.saveJob = saveJob;
+            if (selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityFilter.appendChild(option);
+                });
+                cityFilter.disabled = false;
+            }
+            filterAndRenderEmployees();
+        });
+        cityFilter.addEventListener('change', filterAndRenderEmployees);
     </script>
 </body>
 </html>
