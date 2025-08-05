@@ -58,6 +58,13 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
+        .image-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +217,12 @@
             <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
                 <h2 class="text-lg font-bold mb-4">الخطوة 4: ملفات شخصية وروابط</h2>
                 <div class="mb-4">
+                    <label for="portfolioImages" class="block text-sm font-medium text-gray-700">صور من أعمالك السابقة</label>
+                    <input type="file" id="portfolioImages" name="portfolioImages[]" multiple accept="image/*"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <div id="image-preview" class="flex flex-wrap mt-2"></div>
+                </div>
+                <div class="mb-4">
                     <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
                     <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -233,12 +246,13 @@
             </div>
 
         </form>
-        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -253,6 +267,7 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         let currentStep = 1;
         const totalSteps = 4;
@@ -280,7 +295,6 @@
         };
 
         window.nextStep = function(step) {
-            // تحقق من صحة الحقول في الخطوة الحالية
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
@@ -290,11 +304,11 @@
                     isStepValid = false;
                 }
             });
-            
+
             if (!isStepValid) {
                 return;
             }
-            
+
             stepElement.classList.add('hidden');
             currentStep++;
             if (currentStep > totalSteps) {
@@ -369,9 +383,27 @@
                 cityContainer.classList.add('hidden');
             }
         });
+        
+        // معاينة الصور التي يختارها المستخدم
+        document.getElementById('portfolioImages').addEventListener('change', function(event) {
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = '';
+            const files = event.target.files;
+            
+            if (files) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
 
         window.submitForm = async function() {
-            // التحقق من صحة جميع الحقول قبل الإرسال
             if (!employeeForm.checkValidity()) {
                 employeeForm.reportValidity();
                 return;
@@ -394,19 +426,46 @@
             const cvUrl = document.getElementById('cvUrl').value;
             const portfolioUrl = document.getElementById('portfolioUrl').value;
             const linkedinUrl = document.getElementById('linkedinUrl').value;
+            const portfolioImagesFiles = document.getElementById('portfolioImages').files;
 
             const skillInputs = document.querySelectorAll('.skill-input');
             const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
 
+            const portfolioImageUrls = [];
+            const uploadTasks = [];
+
+            // رفع الصور إلى Firebase Storage
+            if (portfolioImagesFiles.length > 0) {
+                for (let i = 0; i < portfolioImagesFiles.length; i++) {
+                    const file = portfolioImagesFiles[i];
+                    const storageRef = ref(storage, `portfolio_images/${new Date().getTime()}-${file.name}`);
+                    uploadTasks.push(uploadBytes(storageRef, file).then(snapshot => getDownloadURL(snapshot.ref)));
+                }
+
+                try {
+                    const urls = await Promise.all(uploadTasks);
+                    portfolioImageUrls.push(...urls);
+                } catch (error) {
+                    console.error("خطأ في رفع الصور:", error);
+                    alert('حدث خطأ أثناء رفع الصور. الرجاء المحاولة مرة أخرى.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalButtonText;
+                    return;
+                }
+            }
+
             const employeeData = {
                 name: name,
-                photoUrl: null,
+                photoUrl: null, // يمكن إضافة حقل لصورة البروفايل هنا أيضًا
                 headline: headline,
                 bio: bio,
                 contact: {
                     email: email,
                     phone: phone,
-                    location: `${city}, ${state}`
+                    location: {
+                        city: city,
+                        state: state
+                    }
                 },
                 skills: skills,
                 experience: experience,
@@ -416,14 +475,15 @@
                     portfolio: portfolioUrl || null,
                     linkedin: linkedinUrl || null
                 },
-                timestamp: new Date().toISOString()
+                portfolioImages: portfolioImageUrls, // تم إضافة هذا الحقل
+                timestamp: serverTimestamp()
             };
 
             try {
                 await addDoc(collection(db, "employees"), employeeData);
                 alert('تم تسجيل الموظف بنجاح!');
-                employeeForm.reset(); // إعادة تعيين النموذج بالكامل
-                currentStep = 1; // العودة للخطوة الأولى
+                employeeForm.reset();
+                currentStep = 1;
                 window.updateSteps();
                 document.getElementById('step4').classList.add('hidden');
                 document.getElementById('step1').classList.remove('hidden');
@@ -438,7 +498,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             window.updateSteps();
-            // تأكد من أن النموذج يعود للخطوة الأولى عند إعادة تحميل الصفحة
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step4').classList.add('hidden');
