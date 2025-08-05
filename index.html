@@ -10,6 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي غير المرغوب فيه */
         }
         .job-card:hover, .employee-card:hover {
             transform: translateY(-5px);
@@ -18,6 +19,33 @@
         .gradient-bg {
             background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
         }
+        .scrollable-nav {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;  /* Firefox */
+        }
+        .scrollable-nav::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        .course-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        .course-slider::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        .course-card {
+            min-width: 300px; /* حجم ثابت لكل بطاقة */
+            flex: 0 0 auto;
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .course-card:last-child {
+            margin-left: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -25,19 +53,23 @@
         <nav class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني - أيقونة زرقاء تمثل اليد للمصافحة مع اسم شغلني باللغتين العربية والإنجليزية" class="h-10 mr-2">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10 mr-2">
                     <span class="text-xl font-bold text-blue-600">شغلني</span>
                 </div>
 
-                <div class="hidden md:flex space-x-1 space-x-reverse">
-                    <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50">الرئيسية</a>
-                    <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الموظفون المتاحون</a>
-                    <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الوظائف المتاحة</a>
-                    <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">من نحن</a>
+                <div class="hidden md:flex flex-grow justify-center scrollable-nav">
+                    <div class="flex space-x-1 space-x-reverse">
+                        <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
+                        <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
+                        <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
+                        <a href="jop_posting_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
+                        <a href="registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
+                        <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">من نحن</a>
+                    </div>
                 </div>
 
-                <div>
-                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50">تسجيل الدخول</a>
+                <div class="mr-4">
+                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل الدخول</a>
                 </div>
 
                 <button class="md:hidden text-gray-600 focus:outline-none">
@@ -60,6 +92,69 @@
 
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">قوّ مهاراتك لتحصل على وظيفة أحلامك!</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">نستقبل أفضل الدورات التدريبية التي تفتح لك آفاقًا جديدة في عالم العمل. ابدأ رحلتك الآن!</p>
+            </div>
+            <div class="relative">
+                <div class="course-slider flex gap-6">
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-blue-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة تطوير الويب</h3>
+                        <p class="text-gray-600 text-sm">تعلم HTML, CSS, JavaScript وبناء مواقع ديناميكية.</p>
+                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-green-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التسويق الرقمي</h3>
+                        <p class="text-gray-600 text-sm">أتقن أساسيات SEO, SEM, والتسويق عبر وسائل التواصل الاجتماعي.</p>
+                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-yellow-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في تحليل البيانات</h3>
+                        <p class="text-gray-600 text-sm">استخدم Python وR لتحليل البيانات واتخاذ قرارات ذكية.</p>
+                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-red-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في إدارة المشاريع</h3>
+                        <p class="text-gray-600 text-sm">تعلم منهجيات Agile و Scrum لإدارة المشاريع بفاعلية.</p>
+                        <a href="#" class="mt-4 inline-block text-red-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-purple-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في تصميم UX/UI</h3>
+                        <p class="text-gray-600 text-sm">صمم واجهات مستخدم جذابة وتجارب مستخدم سلسة.</p>
+                        <a href="#" class="mt-4 inline-block text-purple-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-blue-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في الذكاء الاصطناعي</h3>
+                        <p class="text-gray-600 text-sm">تعلم بناء نماذج تعلم الآلة وكيفية استخدامها.</p>
+                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-green-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في الأمن السيبراني</h3>
+                        <p class="text-gray-600 text-sm">احمِ البيانات والأنظمة من الهجمات الإلكترونية.</p>
+                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-yellow-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في إدارة الموارد البشرية</h3>
+                        <p class="text-gray-600 text-sm">تنمية مهارات التوظيف، التدريب، وإدارة الأداء.</p>
+                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-red-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التصميم الجرافيكي</h3>
+                        <p class="text-gray-600 text-sm">استخدام برامج مثل Photoshop وIllustrator لإنشاء تصميمات احترافية.</p>
+                        <a href="#" class="mt-4 inline-block text-red-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-purple-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التجارة الإلكترونية</h3>
+                        <p class="text-gray-600 text-sm">تعلم كيفية إنشاء وإدارة متجرك الإلكتروني بنجاح.</p>
+                        <a href="#" class="mt-4 inline-block text-purple-600 font-medium hover:underline">اعرف المزيد</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h2>
                 <a href="job_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
@@ -67,7 +162,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="شعار شركة تقنية بلون أزرق بثلاثة خطوط مائلة تمثل التقدم والابتكار" class="h-14 w-14 rounded-lg object-cover">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="شعار شركة تقنية" class="h-14 w-14 rounded-lg object-cover">
                         <div class="mr-4">
                             <h3 class="text-xl font-bold text-gray-800">مطور ويب أمامي</h3>
                             <p class="text-gray-600">شركة التقنية الحديثة</p>
@@ -84,7 +179,7 @@
                 </div>
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="شعار شركة مالية بلون أخضر مع رمز الدرهم يشير إلى الاستقرار والنمو" class="h-14 w-14 rounded-lg object-cover">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="شعار شركة مالية" class="h-14 w-14 rounded-lg object-cover">
                         <div class="mr-4">
                             <h3 class="text-xl font-bold text-gray-800">محاسب مالي</h3>
                             <p class="text-gray-600">المجموعة المالية المتحدة</p>
@@ -100,7 +195,7 @@
                 </div>
                 <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
                     <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/abb13b0c-6419-47cf-b4a0-dbac28d806ef.png" alt="شعار شركة تعليمية بلون بنفسجي مع كتاب مفتوح يرمز إلى المعرفة والتعلم" class="h-14 w-14 rounded-lg object-cover">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/abb13b0c-6419-47cf-b4a0-dbac28d806ef.png" alt="شعار شركة تعليمية" class="h-14 w-14 rounded-lg object-cover">
                         <div class="mr-4">
                             <h3 class="text-xl font-bold text-gray-800">معلم رياضيات</h3>
                             <p class="text-gray-600">مدارس المستقبل</p>
@@ -120,37 +215,13 @@
 
     <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">شركاؤنا المميزون</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c92c906c-8a27-4638-9584-c5a4c9c1b351.png" alt="شعار دورة تطوير الويب" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
-                    <div class="text-center md:text-right">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">تطوير مهاراتك: دورة متكاملة في تطوير الويب</h3>
-                        <p class="text-gray-600 mb-4">تعلم أحدث التقنيات وأفضل الممارسات لتصبح مطور ويب محترف. سجل الآن لتبدأ رحلتك.</p>
-                        <a href="#" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition duration-300">سجل الآن</a>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/445c58a5-d5a2-4a0b-93f4-d57186987e97.png" alt="شعار خدمة التوظيف للشركات" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
-                    <div class="text-center md:text-right">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">هل أنت صاحب عمل؟</h3>
-                        <p class="text-gray-600 mb-4">نوفر لك أفضل المواهب العربية لتلبية احتياجات شركتك. تواصل معنا للعثور على فريق أحلامك.</p>
-                        <a href="#" class="bg-green-600 text-white px-6 py-2 rounded-full font-bold hover:bg-green-700 transition duration-300">تواصل معنا</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الموظفون المتاحون</h2>
                 <a href="employee_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة أحمد محمد - رجل في الثلاثينيات من عمره يرتدي قميص رسمي أزرق وابتسامة واثقة" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة أحمد محمد" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">أحمد محمد</h3>
                     <p class="text-blue-600 mb-2">مطور برمجيات</p>
                     <p class="text-gray-600 mb-4">خبرة 5 سنوات في تطوير تطبيقات الويب</p>
@@ -160,7 +231,7 @@
                     </div>
                 </div>
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a104eaa3-b8b2-4066-a3e2-a62bb6d08770.png" alt="صورة سارة عبد الرحيم - امرأة في أواخر العشرينيات ترتدي حجاب رمادي ونظارة طبية بابتسامة مهنية" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a104eaa3-b8b2-4066-a3e2-a62bb6d08770.png" alt="صورة سارة عبد الرحيم" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">سارة عبد الرحيم</h3>
                     <p class="text-blue-600 mb-2">مصممة جرافيك</p>
                     <p class="text-gray-600 mb-4">خبرة 4 سنوات في التصميم والتسويق</p>
@@ -170,7 +241,7 @@
                     </div>
                 </div>
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0aee6a1d-9fcb-49f5-9987-46ba59312e74.png" alt="صورة خالد سعيد - رجل في منتصف الثلاثينيات بملامح جادة وملابس رسمية باللون الرمادي الداكن" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0aee6a1d-9fcb-49f5-9987-46ba59312e74.png" alt="صورة خالد سعيد" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">خالد سعيد</h3>
                     <p class="text-blue-600 mb-2">مدير مشاريع</p>
                     <p class="text-gray-600 mb-4">خبرة 8 سنوات في إدارة الفرق التقنية</p>
@@ -180,7 +251,7 @@
                     </div>
                 </div>
                 <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ff19011-c0f1-410d-bee3-b8f7f8dc37d4.png" alt="صورة مريم علي - امرأة شابة ترتدي حجاب أزرق فاتح بملامح ودودة وواثقة" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ff19011-c0f1-410d-bee3-b8f7f8dc37d4.png" alt="صورة مريم علي" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800">مريم علي</h3>
                     <p class="text-blue-600 mb-2">متخصصة تسويق رقمي</p>
                     <p class="text-gray-600 mb-4">خبرة 3 سنوات في التسويق عبر السوشيال ميديا</p>
@@ -193,11 +264,11 @@
         </div>
     </section>
 
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/19dd3441-82aa-453d-a023-8aa3ce6235b4.png" alt="فريق عمل شغلني في اجتماع يعملون معًا في بيئة مكتبية عصرية بألوان زرقاء وبيضاء" class="rounded-xl shadow-md w-full">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/19dd3441-82aa-453d-a023-8aa3ce6235b4.png" alt="فريق عمل شغلني" class="rounded-xl shadow-md w-full">
                 </div>
                 <div class="md:w-1/2 md:mr-10">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">من نحن</h2>
@@ -217,7 +288,7 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b2001a02-ac98-45f8-90b9-8fba81827ef0.png" alt="شعار شغلني باللون الأبيض بخلفية شفافة" class="h-10 mb-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b2001a02-ac98-45f8-90b9-8fba81827ef0.png" alt="شعار شغلني" class="h-10 mb-4">
                     <p class="text-gray-400">منصة التوظيف الأولى في العالم العربي</p>
                     <div class="flex space-x-4 space-x-reverse mt-4">
                         <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
@@ -226,7 +297,6 @@
                         <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
                     </div>
                 </div>
-
                 <div>
                     <h3 class="text-lg font-bold mb-4">روابط سريعة</h3>
                     <ul class="space-y-2">
@@ -236,7 +306,6 @@
                         <li><a href="job_application_page.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h3 class="text-lg font-bold mb-4">تواصل معنا</h3>
                     <ul class="space-y-2">
@@ -245,7 +314,6 @@
                         <li class="text-gray-400"><i class="fas fa-map-marker-alt ml-2"></i> الرياض، السعودية</li>
                     </ul>
                 </div>
-
                 <div>
                     <h3 class="text-lg font-bold mb-4">النشرة البريدية</h3>
                     <p class="text-gray-400 mb-4">اشترك ليصلك كل جديد حول الوظائف والموظفين</p>
@@ -257,23 +325,22 @@
                     </div>
                 </div>
             </div>
-
             <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
                 <p>© 2023 شغلني. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
-
     <script>
-        // كود JavaScript لتنفيذ القائمة المتنقلة وتأثيرات التمرير
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.querySelector('.md\\:hidden');
             const navLinks = document.querySelector('.md\\:flex');
-
+            
+            // Toggle mobile menu
             mobileMenuButton.addEventListener('click', function() {
                 navLinks.classList.toggle('hidden');
             });
 
+            // Smooth scroll for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
