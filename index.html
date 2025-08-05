@@ -122,20 +122,20 @@
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">شركاؤنا المميزون</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-blue-600 text-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a0a192ec-3f36-4074-954f-1d8f7e2c9431.png" alt="شعار شركة التكنولوجيا السحابية" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
+                <div class="bg-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c92c906c-8a27-4638-9584-c5a4c9c1b351.png" alt="شعار دورة تطوير الويب" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
                     <div class="text-center md:text-right">
-                        <h3 class="text-2xl font-bold mb-2">انضم إلى فريق التكنولوجيا السحابية</h3>
-                        <p class="text-gray-200 mb-4">نحن نبحث عن أفضل مطوري البرمجيات والمهندسين. فرص عمل مبتكرة وبرامج تدريبية مميزة.</p>
-                        <a href="#" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">اكتشف الفرص</a>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">تطوير مهاراتك: دورة متكاملة في تطوير الويب</h3>
+                        <p class="text-gray-600 mb-4">تعلم أحدث التقنيات وأفضل الممارسات لتصبح مطور ويب محترف. سجل الآن لتبدأ رحلتك.</p>
+                        <a href="#" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition duration-300">سجل الآن</a>
                     </div>
                 </div>
-                <div class="bg-green-600 text-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/445c58a5-d5a2-4a0b-93f4-d57186987e97.png" alt="شعار شركة التسويق الرقمي" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
+                <div class="bg-white rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center transition duration-300 transform hover:scale-105">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/445c58a5-d5a2-4a0b-93f4-d57186987e97.png" alt="شعار خدمة التوظيف للشركات" class="h-24 w-24 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
                     <div class="text-center md:text-right">
-                        <h3 class="text-2xl font-bold mb-2">تعزيز حضورك الرقمي</h3>
-                        <p class="text-gray-200 mb-4">هل أنت صاحب عمل؟ نقدم لك حلولاً تسويقية متكاملة للعثور على أفضل المواهب. تواصل معنا الآن!</p>
-                        <a href="#" class="bg-white text-green-600 px-6 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">تواصل معنا</a>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">هل أنت صاحب عمل؟</h3>
+                        <p class="text-gray-600 mb-4">نوفر لك أفضل المواهب العربية لتلبية احتياجات شركتك. تواصل معنا للعثور على فريق أحلامك.</p>
+                        <a href="#" class="bg-green-600 text-white px-6 py-2 rounded-full font-bold hover:bg-green-700 transition duration-300">تواصل معنا</a>
                     </div>
                 </div>
             </div>
@@ -257,12 +257,15 @@
                     </div>
                 </div>
             </div>
+
             <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
                 <p>© 2023 شغلني. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
+
     <script>
+        // كود JavaScript لتنفيذ القائمة المتنقلة وتأثيرات التمرير
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.querySelector('.md\\:hidden');
             const navLinks = document.querySelector('.md\\:flex');
@@ -270,6 +273,7 @@
             mobileMenuButton.addEventListener('click', function() {
                 navLinks.classList.toggle('hidden');
             });
+
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
