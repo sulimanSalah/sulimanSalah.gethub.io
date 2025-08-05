@@ -12,13 +12,6 @@
             font-family: 'Tajawal', sans-serif;
             overflow-x: hidden;
         }
-        .job-card:hover, .employee-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-        }
         .course-slider {
             display: flex;
             overflow-x: auto;
@@ -40,60 +33,9 @@
             flex-direction: column;
             justify-content: space-between;
         }
-        .course-card:last-child {
-            margin-left: 0;
-        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10 mr-2">
-                    <span class="text-xl font-bold text-blue-600">شغلني</span>
-                </div>
-
-                <div class="hidden md:flex space-x-1 space-x-reverse items-center">
-                    <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
-                    <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
-                    <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
-                    <a href="jop_posting_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
-                    <a href="registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف موظف</a>
-                    <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">من نحن</a>
-                    <a href="contact.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">اتصل بنا</a>
-                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mr-4">تسجيل الدخول</a>
-                </div>
-
-                <div class="md:hidden flex items-center">
-                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mr-4">تسجيل الدخول</a>
-                    <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="mobile-menu" class="hidden md:hidden mt-3 space-y-2">
-                <a href="job_listing_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الوظائف المتاحة</a>
-                <a href="employee_listing_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الموظفون المتاحون</a>
-                <a href="jop_posting_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">أضف وظيفة</a>
-                <a href="registration.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">أضف موظف</a>
-                <a href="about.us.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">من نحن</a>
-                <a href="contact.us.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">اتصل بنا</a>
-            </div>
-        </nav>
-    </header>
-
-    <section class="gradient-bg text-white py-20">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6">ابحث عن الوظيفة المثالية أو الموظف المثالي</h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">منصة شغلني تربط بين أفضل المواهب وأفضل الشركات في المنطقة العربية</p>
-            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 space-x-reverse">
-                <a href="job_listing_page.html" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300">ابحث عن وظيفة</a>
-                <a href="jop_posting_page.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-600 transition duration-300">انشر وظيفة</a>
-            </div>
-        </div>
-    </section>
-
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10">
@@ -147,202 +89,29 @@
         </div>
     </section>
 
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h2>
-                <a href="job_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
-                    <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="شعار شركة تقنية" class="h-14 w-14 rounded-lg object-cover">
-                        <div class="mr-4">
-                            <h3 class="text-xl font-bold text-gray-800">مطور ويب أمامي</h3>
-                            <p class="text-gray-600">شركة التقنية الحديثة</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">دوام كامل</span>
-                        <span class="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">عن بعد</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-600"><i class="fas fa-map-marker-alt ml-1"></i> الرياض، السعودية</span>
-                        <span class="font-bold text-blue-600">8,000 - 10,000 ر.س</span>
-                    </div>
-                </div>
-                <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
-                    <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="شعار شركة مالية" class="h-14 w-14 rounded-lg object-cover">
-                        <div class="mr-4">
-                            <h3 class="text-xl font-bold text-gray-800">محاسب مالي</h3>
-                            <p class="text-gray-600">المجموعة المالية المتحدة</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">دوام كامل</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-600"><i class="fas fa-map-marker-alt ml-1"></i> دبي، الإمارات</span>
-                        <span class="font-bold text-blue-600">12,000 - 15,000 د.إ</span>
-                    </div>
-                </div>
-                <div class="job-card bg-white border border-gray-200 rounded-xl p-6 transition duration-300">
-                    <div class="flex items-start mb-4">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/abb13b0c-6419-47cf-b4a0-dbac28d806ef.png" alt="شعار شركة تعليمية" class="h-14 w-14 rounded-lg object-cover">
-                        <div class="mr-4">
-                            <h3 class="text-xl font-bold text-gray-800">معلم رياضيات</h3>
-                            <p class="text-gray-600">مدارس المستقبل</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">دوام جزئي</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-600"><i class="fas fa-map-marker-alt ml-1"></i> عمّان، الأردن</span>
-                        <span class="font-bold text-blue-600">500 - 700 د.أ</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-800">الموظفون المتاحون</h2>
-                <a href="employee_listing_page.html" class="text-blue-600 font-medium hover:underline">عرض الكل</a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة أحمد محمد" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-bold text-gray-800">أحمد محمد</h3>
-                    <p class="text-blue-600 mb-2">مطور برمجيات</p>
-                    <p class="text-gray-600 mb-4">خبرة 5 سنوات في تطوير تطبيقات الويب</p>
-                    <div class="flex justify-center space-x-2 space-x-reverse">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">JavaScript</span>
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">React</span>
-                    </div>
-                </div>
-                <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a104eaa3-b8b2-4066-a3e2-a62bb6d08770.png" alt="صورة سارة عبد الرحيم" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-bold text-gray-800">سارة عبد الرحيم</h3>
-                    <p class="text-blue-600 mb-2">مصممة جرافيك</p>
-                    <p class="text-gray-600 mb-4">خبرة 4 سنوات في التصميم والتسويق</p>
-                    <div class="flex justify-center space-x-2 space-x-reverse">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Photoshop</span>
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Illustrator</span>
-                    </div>
-                </div>
-                <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0aee6a1d-9fcb-49f5-9987-46ba59312e74.png" alt="صورة خالد سعيد" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-bold text-gray-800">خالد سعيد</h3>
-                    <p class="text-blue-600 mb-2">مدير مشاريع</p>
-                    <p class="text-gray-600 mb-4">خبرة 8 سنوات في إدارة الفرق التقنية</p>
-                    <div class="flex justify-center space-x-2 space-x-reverse">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">PMP</span>
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Agile</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/19dd3441-82aa-453d-a023-8aa3ce6235b4.png" alt="فريق عمل شغلني" class="rounded-xl shadow-md w-full">
-                </div>
-                <div class="md:w-1/2 md:mr-10">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6">من نحن</h2>
-                    <p class="text-gray-600 mb-4 text-lg">
-                        منصة "شغلني" هي الحل الأمثل للربط بين أصحاب المواهب وأصحاب العمل في العالم العربي. نسعى لتوفير بيئة سهلة وآمنة للبحث عن الوظائف المناسبة أو العثور على أفضل المواهب للانضمام إلى فريقك.
-                    </p>
-                    <p class="text-gray-600 text-lg">
-                        تأسست المنصة عام 2022 بمجموعة من المهنيين المتمرسين في مجال التوظيف والتقنية، بهدف تبسيط عملية البحث عن الوظائف وإدارتها في المنطقة العربية.
-                    </p>
-                    <a href="about.us.html" class="mt-6 inline-block bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 transition duration-300">تعرف أكثر عنا</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b2001a02-ac98-45f8-90b9-8fba81827ef0.png" alt="شعار شغلني" class="h-10 mb-4">
-                    <p class="text-gray-400">منصة التوظيف الأولى في العالم العربي</p>
-                    <div class="flex space-x-4 space-x-reverse mt-4">
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook text-xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">روابط سريعة</h3>
-                    <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-400 hover:text-white">الرئيسية</a></li>
-                        <li><a href="job_listing_page.html" class="text-gray-400 hover:text-white">الوظائف</a></li>
-                        <li><a href="employee_listing_page.html" class="text-gray-400 hover:text-white">البحث عن موظفين</a></li>
-                        <li><a href="registration.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">تواصل معنا</h3>
-                    <ul class="space-y-2">
-                        <li class="text-gray-400"><i class="fas fa-envelope ml-2"></i> info@shgholny.com</li>
-                        <li class="text-gray-400"><i class="fas fa-phone ml-2"></i> +966 12 345 6789</li>
-                        <li class="text-gray-400"><i class="fas fa-map-marker-alt ml-2"></i> الرياض، السعودية</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">النشرة البريدية</h3>
-                    <p class="text-gray-400 mb-4">اشترك ليصلك كل جديد حول الوظائف والموظفين</p>
-                    <div class="flex">
-                        <input type="email" placeholder="بريدك الإلكتروني" class="bg-gray-800 text-white px-4 py-2 rounded-r-lg focus:outline-none w-full">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-l-lg hover:bg-blue-700 transition duration-300">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
-                <p>© 2023 شغلني. جميع الحقوق محفوظة.</p>
-            </div>
-        </div>
-    </footer>
     <script>
-        // كود JavaScript للقائمة المنسدلة على الموبايل
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // كود JavaScript للتمرير التلقائي للدورات
+        // هذا الكود يجب أن يكون في نهاية body
         document.addEventListener('DOMContentLoaded', function() {
             const slider = document.getElementById('course-slider');
             let scrollAmount = 0;
-            let direction = 1; // 1 for right, -1 for left
+            let direction = 1; // 1 to scroll right, -1 to scroll left
 
+            // دالة التمرير التلقائي
             function autoScroll() {
-                // Determine scrolling direction and boundary
-                if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
-                    direction = -1; // Change to scroll left
-                } else if (slider.scrollLeft === 0) {
-                    direction = 1; // Change to scroll right
+                // إذا وصل الشريط إلى النهاية، غيّر الاتجاه لليسار
+                if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 1) {
+                    direction = -1;
+                } 
+                // إذا وصل الشريط إلى البداية، غيّر الاتجاه لليمين
+                else if (slider.scrollLeft <= 1) {
+                    direction = 1;
                 }
                 
-                slider.scrollLeft += 10 * direction; // Scroll speed
+                slider.scrollLeft += 1 * direction; // سرعة التمرير
             }
 
-            // Scroll every 50 milliseconds to make it smooth
-            setInterval(autoScroll, 50);
-
+            // تشغيل التمرير التلقائي كل 15 مللي ثانية (لتحرك سلس)
+            setInterval(autoScroll, 15);
         });
     </script>
 </body>
