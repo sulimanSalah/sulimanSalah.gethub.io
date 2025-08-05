@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
-            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي غير المرغوب فيه */
+            overflow-x: hidden;
         }
         .job-card:hover, .employee-card:hover {
             transform: translateY(-5px);
@@ -19,29 +19,26 @@
         .gradient-bg {
             background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
         }
-        .scrollable-nav {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;  /* Firefox */
-        }
-        .scrollable-nav::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
-        }
         .course-slider {
             display: flex;
             overflow-x: auto;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
+            cursor: grab;
         }
         .course-slider::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
+            display: none;
         }
         .course-card {
-            min-width: 300px; /* حجم ثابت لكل بطاقة */
+            min-width: 250px;
+            height: 250px;
             flex: 0 0 auto;
             margin-left: 1rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .course-card:last-child {
             margin-left: 0;
@@ -57,24 +54,31 @@
                     <span class="text-xl font-bold text-blue-600">شغلني</span>
                 </div>
 
-                <div class="hidden md:flex flex-grow justify-center scrollable-nav">
-                    <div class="flex space-x-1 space-x-reverse">
-                        <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
-                        <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
-                        <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
-                        <a href="jop_posting_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
-                        <a href="registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
-                        <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">من نحن</a>
-                    </div>
+                <div class="hidden md:flex space-x-1 space-x-reverse items-center">
+                    <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
+                    <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
+                    <a href="employee_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
+                    <a href="jop_posting_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
+                    <a href="registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف موظف</a>
+                    <a href="about.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">من نحن</a>
+                    <a href="contact.us.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">اتصل بنا</a>
+                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mr-4">تسجيل الدخول</a>
                 </div>
 
-                <div class="mr-4">
-                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل الدخول</a>
+                <div class="md:hidden flex items-center">
+                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mr-4">تسجيل الدخول</a>
+                    <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                 </div>
-
-                <button class="md:hidden text-gray-600 focus:outline-none">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden mt-3 space-y-2">
+                <a href="job_listing_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الوظائف المتاحة</a>
+                <a href="employee_listing_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">الموظفون المتاحون</a>
+                <a href="jop_posting_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">أضف وظيفة</a>
+                <a href="registration.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">أضف موظف</a>
+                <a href="about.us.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">من نحن</a>
+                <a href="contact.us.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50">اتصل بنا</a>
             </div>
         </nav>
     </header>
@@ -94,66 +98,56 @@
         <div class="container mx-auto px-6">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">قوّ مهاراتك لتحصل على وظيفة أحلامك!</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">نستقبل أفضل الدورات التدريبية التي تفتح لك آفاقًا جديدة في عالم العمل. ابدأ رحلتك الآن!</p>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">نستقبل أفضل الدورات التدريبية التي تفتح لك آفاقًا جديدة في عالم العمل.</p>
             </div>
             <div class="relative">
-                <div class="course-slider flex gap-6">
+                <div id="course-slider" class="course-slider flex gap-6">
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-blue-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة تطوير الويب</h3>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تطوير الويب الشامل</h3>
                         <p class="text-gray-600 text-sm">تعلم HTML, CSS, JavaScript وبناء مواقع ديناميكية.</p>
-                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline">اعرف المزيد</a>
+                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-green-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التسويق الرقمي</h3>
-                        <p class="text-gray-600 text-sm">أتقن أساسيات SEO, SEM, والتسويق عبر وسائل التواصل الاجتماعي.</p>
-                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">التسويق الرقمي من الصفر</h3>
+                        <p class="text-gray-600 text-sm">أتقن أساسيات SEO, SEM, والتسويق عبر السوشيال ميديا.</p>
+                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-yellow-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في تحليل البيانات</h3>
-                        <p class="text-gray-600 text-sm">استخدم Python وR لتحليل البيانات واتخاذ قرارات ذكية.</p>
-                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">إتقان اللغة الإنجليزية</h3>
+                        <p class="text-gray-600 text-sm">تطوير مهارات المحادثة والكتابة للعمل.</p>
+                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-red-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في إدارة المشاريع</h3>
-                        <p class="text-gray-600 text-sm">تعلم منهجيات Agile و Scrum لإدارة المشاريع بفاعلية.</p>
-                        <a href="#" class="mt-4 inline-block text-red-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">مهارات التواصل والقيادة</h3>
+                        <p class="text-gray-600 text-sm">بناء علاقات مهنية قوية وقيادة الفرق بنجاح.</p>
+                        <a href="#" class="mt-4 inline-block text-red-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-purple-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في تصميم UX/UI</h3>
-                        <p class="text-gray-600 text-sm">صمم واجهات مستخدم جذابة وتجارب مستخدم سلسة.</p>
-                        <a href="#" class="mt-4 inline-block text-purple-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">الذكاء الاصطناعي للمبتدئين</h3>
+                        <p class="text-gray-600 text-sm">تعرف على أساسيات الذكاء الاصطناعي وكيفية استخدامه.</p>
+                        <a href="#" class="mt-4 inline-block text-purple-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
-                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-blue-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في الذكاء الاصطناعي</h3>
-                        <p class="text-gray-600 text-sm">تعلم بناء نماذج تعلم الآلة وكيفية استخدامها.</p>
-                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline">اعرف المزيد</a>
+                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-blue-600">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">إدارة المشاريع الاحترافية</h3>
+                        <p class="text-gray-600 text-sm">تعلم منهجيات Agile و Scrum لتنظيم المشاريع.</p>
+                        <a href="#" class="mt-4 inline-block text-blue-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-green-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في الأمن السيبراني</h3>
-                        <p class="text-gray-600 text-sm">احمِ البيانات والأنظمة من الهجمات الإلكترونية.</p>
-                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">مهارات كتابة المحتوى</h3>
+                        <p class="text-gray-600 text-sm">تعلم كتابة محتوى إبداعي وجذاب للشركات.</p>
+                        <a href="#" class="mt-4 inline-block text-green-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                     <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-yellow-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في إدارة الموارد البشرية</h3>
-                        <p class="text-gray-600 text-sm">تنمية مهارات التوظيف، التدريب، وإدارة الأداء.</p>
-                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline">اعرف المزيد</a>
-                    </div>
-                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-red-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التصميم الجرافيكي</h3>
-                        <p class="text-gray-600 text-sm">استخدام برامج مثل Photoshop وIllustrator لإنشاء تصميمات احترافية.</p>
-                        <a href="#" class="mt-4 inline-block text-red-600 font-medium hover:underline">اعرف المزيد</a>
-                    </div>
-                    <div class="course-card bg-gray-100 rounded-xl p-6 shadow-md border-r-4 border-purple-600">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">دورة في التجارة الإلكترونية</h3>
-                        <p class="text-gray-600 text-sm">تعلم كيفية إنشاء وإدارة متجرك الإلكتروني بنجاح.</p>
-                        <a href="#" class="mt-4 inline-block text-purple-600 font-medium hover:underline">اعرف المزيد</a>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">أساسيات المحاسبة</h3>
+                        <p class="text-gray-600 text-sm">فهم المبادئ الأساسية للمحاسبة للعمل المالي.</p>
+                        <a href="#" class="mt-4 inline-block text-yellow-600 font-medium hover:underline self-end">اعرف المزيد</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h2>
@@ -213,7 +207,7 @@
         </div>
     </section>
 
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800">الموظفون المتاحون</h2>
@@ -250,21 +244,11 @@
                         <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Agile</span>
                     </div>
                 </div>
-                <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ff19011-c0f1-410d-bee3-b8f7f8dc37d4.png" alt="صورة مريم علي" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-bold text-gray-800">مريم علي</h3>
-                    <p class="text-blue-600 mb-2">متخصصة تسويق رقمي</p>
-                    <p class="text-gray-600 mb-4">خبرة 3 سنوات في التسويق عبر السوشيال ميديا</p>
-                    <div class="flex justify-center space-x-2 space-x-reverse">
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">SEO</span>
-                        <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Social Media</span>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0">
@@ -303,7 +287,7 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-white">الرئيسية</a></li>
                         <li><a href="job_listing_page.html" class="text-gray-400 hover:text-white">الوظائف</a></li>
                         <li><a href="employee_listing_page.html" class="text-gray-400 hover:text-white">البحث عن موظفين</a></li>
-                        <li><a href="job_application_page.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
+                        <li><a href="registration.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
                     </ul>
                 </div>
                 <div>
@@ -331,24 +315,34 @@
         </div>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.querySelector('.md\\:hidden');
-            const navLinks = document.querySelector('.md\\:flex');
-            
-            // Toggle mobile menu
-            mobileMenuButton.addEventListener('click', function() {
-                navLinks.classList.toggle('hidden');
-            });
+        // كود JavaScript للقائمة المنسدلة على الموبايل
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // كود JavaScript للتمرير التلقائي للدورات
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.getElementById('course-slider');
+            let scrollAmount = 0;
+            let direction = 1; // 1 for right, -1 for left
+
+            function autoScroll() {
+                // Determine scrolling direction and boundary
+                if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
+                    direction = -1; // Change to scroll left
+                } else if (slider.scrollLeft === 0) {
+                    direction = 1; // Change to scroll right
+                }
+                
+                slider.scrollLeft += 10 * direction; // Scroll speed
+            }
+
+            // Scroll every 50 milliseconds to make it smooth
+            setInterval(autoScroll, 50);
+
         });
     </script>
 </body>
