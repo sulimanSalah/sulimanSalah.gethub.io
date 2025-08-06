@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل موظف جديد - شغلني</title>
+    <title>الموظفون المتاحون - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -24,46 +24,34 @@
             background-color: #f5f7fa;
         }
 
-        .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            font-weight: bold;
-        }
-
-        .step.active {
-            background-color: var(--success);
-        }
-
-        .step-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .form-card {
+        .employee-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
         }
 
-        .form-card:hover {
+        .employee-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
         }
-        .image-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-left: 8px;
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #eef2ff;
+            color: #4338ca;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            margin: 0.125rem;
+        }
+
+        .status-available {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-not-looking {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
 </head>
@@ -75,10 +63,10 @@
                     <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
-                    <a href="job_registration.html" class="text-blue-600 font-medium">إضافة وظيفة</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-blue-600 font-bold">عرض الموظفين</a>
+                    <a href="job_registration.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">إضافة وظيفة</a>
                 </div>
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="relative">
@@ -94,166 +82,62 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="step-container">
-            <div class="step active">1</div>
-            <div class="step">2</div>
-            <div class="step">3</div>
-            <div class="step">4</div>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الموظفون المتاحون</h1>
+            <div class="relative w-full md:w-1/3">
+                <input type="text" id="searchInput" placeholder="ابحث عن موظف..."
+                       class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+            </div>
         </div>
 
-        <form id="employeeForm" onsubmit="event.preventDefault();">
-
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">الاسم كاملاً</label>
-                    <input type="text" id="name" name="name" placeholder="مثال: محمد أحمد علي"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
-                    <input type="text" id="headline" name="headline" placeholder="مثال: مطور ويب | متخصص في React"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="bio" class="block text-sm font-medium text-gray-700">نبذة وظيفية عنك</label>
-                    <textarea id="bio" name="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
-                              class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
-                </div>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
-                    التالي
-                </button>
+        <div class="flex flex-col md:flex-row md:space-x-4 rtl:space-x-reverse mb-6">
+            <div class="w-full md:w-1/2 mb-4 md:mb-0">
+                <label for="stateFilter" class="block text-sm font-medium text-gray-700">فلتر حسب الولاية:</label>
+                <select id="stateFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                    <option value="">جميع الولايات</option>
+                    <option value="الخرطوم">ولاية الخرطوم</option>
+                    <option value="الجزيرة">ولاية الجزيرة</option>
+                    <option value="البحر الأحمر">ولاية البحر الأحمر</option>
+                    <option value="كسلا">ولاية كسلا</option>
+                    <option value="القضارف">ولاية القضارف</option>
+                    <option value="سنار">ولاية سنار</option>
+                    <option value="النيل الأبيض">ولاية النيل الأبيض</option>
+                    <option value="النيل الأزرق">ولاية النيل الأزرق</option>
+                    <option value="الشمالية">الولاية الشمالية</option>
+                    <option value="نهر النيل">ولاية نهر النيل</option>
+                    <option value="شمال كردفان">ولاية شمال كردفان</option>
+                    <option value="جنوب كردفان">ولاية جنوب كردفان</option>
+                    <option value="غرب كردفان">ولاية غرب كردفان</option>
+                    <option value="شمال دارفور">ولاية شمال دارفور</option>
+                    <option value="جنوب دارفور">ولاية جنوب دارفور</option>
+                    <option value="غرب دارفور">ولاية غرب دارفور</option>
+                    <option value="وسط دارفور">ولاية وسط دارفور</option>
+                    <option value="شرق دارفور">ولاية شرق دارفور</option>
+                </select>
             </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-                <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" placeholder="مثال: example@email.com"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone" placeholder="مثال: 0912345678"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="state" class="block text-sm font-medium text-gray-700">الولاية</label>
-                    <select id="state" name="state" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر ولاية</option>
-                        <option value="الخرطوم">الخرطوم</option>
-                        <option value="الجزيرة">الجزيرة</option>
-                        <option value="البحر الأحمر">البحر الأحمر</option>
-                        <option value="كسلا">كسلا</option>
-                        <option value="القضارف">القضارف</option>
-                        <option value="سنار">سنار</option>
-                        <option value="النيل الأبيض">النيل الأبيض</option>
-                        <option value="النيل الأزرق">النيل الأزرق</option>
-                        <option value="شمال كردفان">شمال كردفان</option>
-                        <option value="جنوب كردفان">جنوب كردفان</option>
-                        <option value="غرب كردفان">غرب كردفان</option>
-                        <option value="الشمالية">الشمالية</option>
-                        <option value="نهر النيل">نهر النيل</option>
-                        <option value="شمال دارفور">شمال دارفور</option>
-                        <option value="جنوب دارفور">جنوب دارفور</option>
-                        <option value="غرب دارفور">غرب دارفور</option>
-                        <option value="وسط دارفور">وسط دارفور</option>
-                        <option value="شرق دارفور">شرق دارفور</option>
-                    </select>
-                </div>
-                <div class="mb-4 hidden" id="cityContainer">
-                    <label for="city" class="block text-sm font-medium text-gray-700">المدينة</label>
-                    <select id="city" name="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر مدينة</option>
-                    </select>
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
-                    التالي
-                </button>
+            <div class="w-full md:w-1/2">
+                <label for="cityFilter" class="block text-sm font-medium text-gray-700">فلتر حسب المدينة:</label>
+                <select id="cityFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md" disabled>
+                    <option value="">جميع المدن</option>
+                </select>
             </div>
+        </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-                <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
-                <div id="skillsContainer">
-                    <div class="mb-4 flex items-center">
-                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
-                <div class="mb-4">
-                    <label for="experience" class="block text-sm font-medium text-gray-700">مستوى الخبرة</label>
-                    <select id="experience" name="experience" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر مستوى الخبرة</option>
-                        <option value="مبتدئ">مبتدئ (0-2 سنوات)</option>
-                        <option value="متوسط">متوسط (2-5 سنوات)</option>
-                        <option value="خبير">خبير (5+ سنوات)</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">حالة البحث عن عمل</label>
-                    <div class="flex gap-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="jobStatus" value="متاح للعمل" class="form-radio text-blue-600" required>
-                            <span class="mr-2">متاح للعمل</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="jobStatus" value="لا أبحث حالياً" class="form-radio text-blue-600">
-                            <span class="mr-2">لا أبحث حالياً</span>
-                        </label>
-                    </div>
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
-                    التالي
-                </button>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-                <h2 class="text-lg font-bold mb-4">الخطوة 4: ملفات شخصية وروابط</h2>
-                <div class="mb-4">
-                    <label for="portfolioImages" class="block text-sm font-medium text-gray-700">صور من أعمالك السابقة</label>
-                    <input type="file" id="portfolioImages" name="portfolioImages[]" multiple accept="image/*"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <div id="image-preview" class="flex flex-wrap mt-2"></div>
-                </div>
-                <div class="mb-4">
-                    <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
-                    <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="portfolioUrl" class="block text-sm font-medium text-gray-700">رابط معرض الأعمال (اختياري)</label>
-                    <input type="url" id="portfolioUrl" name="portfolioUrl" placeholder="مثال: https://dribbble.com/your-portfolio"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="linkedinUrl" class="block text-sm font-medium text-gray-700">رابط لينكد إن (اختياري)</label>
-                    <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
-                    تسجيل الموظف
-                </button>
-            </div>
-
-        </form>
+        <div id="employeesList" class="space-y-4">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الموظفين...</div>
+            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على موظفين.</div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+        // **1. تهيئة Firebase**
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -265,244 +149,236 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
+        const auth = getAuth(app);
 
-        let currentStep = 1;
-        const totalSteps = 4;
-        const employeeForm = document.getElementById('employeeForm');
+        // **2. ربط عناصر الواجهة بمتغيرات في الكود**
+        const employeesList = document.getElementById('employeesList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noEmployeesFound = document.getElementById('noEmployeesFound');
+        const searchInput = document.getElementById('searchInput');
+        const stateFilter = document.getElementById('stateFilter');
+        const cityFilter = document.getElementById('cityFilter');
 
-        const sudanStates = {
-            "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
-            "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
-            "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر", "هيا"],
-            "كسلا": ["كسلا", "حلفا الجديدة", "القضارف", "همشكوريب"],
-            "القضارف": ["القضارف", "الفشقة", "القلابات", "الرهد"],
-            "سنار": ["سنار", "سنجة", "التينا", "الدندر"],
-            "النيل الأبيض": ["ربك", "كوستي", "الدويّم", "تندلتي"],
-            "النيل الأزرق": ["الدمازين", "الروصيرص", "الكرمك", "باو"],
-            "شمال كردفان": ["الأبيض", "أم روابة", "بارا", "سودري"],
-            "جنوب كردفان": ["كادقلي", "تلودي", "العباسية", "أبو جبيهة"],
-            "غرب كردفان": ["الفولة", "لقاوة", "الميرم", "أبو زبد"],
-            "الشمالية": ["دنقلا", "حلفا", "مروي", "القولد"],
-            "نهر النيل": ["الدامر", "عطبرة", "شندي", "بربر"],
-            "شمال دارفور": ["الفاشر", "كبكابية", "المالحة", "كتم"],
-            "جنوب دارفور": ["نيالا", "الضعين", "رهيد البردي", "كاس"],
-            "غرب دارفور": ["الجنينة", "سرف عمرة", "كرينك", "كلبس"],
-            "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
-            "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
+        let allEmployees = [];
+        let currentUserId = null;
+
+        // **3. قاعدة بيانات الولايات والمدن في السودان**
+        const citiesByState = {
+            'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
+            'الجزيرة': ['ود مدني', 'الحصاحيصا', 'المناقل'],
+            'البحر الأحمر': ['بورتسودان', 'سواكن', 'طوكر'],
+            'كسلا': ['كسلا', 'حلفا الجديدة', 'أروما'],
+            'القضارف': ['القضارف', 'القلابات', 'الفو'],
+            'سنار': ['سنار', 'الدالي والمزموم', 'ود النيل'],
+            'النيل الأبيض': ['ربك', 'كوستي', 'الدويم'],
+            'النيل الأزرق': ['الدمازين', 'الروصيرص', 'الكرمك'],
+            'الشمالية': ['دنقلا', 'عطبرة', 'كريمة'],
+            'نهر النيل': ['الدامر', 'شندي', 'عطبرة'],
+            'شمال كردفان': ['الأبيض', 'أم روابة', 'الرهد'],
+            'جنوب كردفان': ['كادقلي', 'أبو جبيهة', 'تلودي'],
+            'غرب كردفان': ['الفولة', 'النهود', 'المجلد'],
+            'شمال دارفور': ['الفاشر', 'كبكابية', 'مليط'],
+            'جنوب دارفور': ['نيالا', 'الضعين', 'برام'],
+            'غرب دارفور': ['الجنينة', 'كرينك', 'كلبس'],
+            'وسط دارفور': ['زالنجي', 'ودعة', 'أم دخن'],
+            'شرق دارفور': ['الضعين', 'عديلة', 'أبوكارنكا']
         };
 
-        window.nextStep = function(step) {
-            const stepElement = document.getElementById(`step${step}`);
-            const inputs = stepElement.querySelectorAll('input, select, textarea');
-            let isStepValid = true;
-            inputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    isStepValid = false;
-                }
+        // **4. دالة لجلب الموظفين من Firestore**
+        async function fetchEmployees() {
+            loadingIndicator.classList.remove('hidden');
+            try {
+                const querySnapshot = await getDocs(collection(db, "employees"));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // تم تعديل هذه السطر لضمان الفرز الصحيح، ولكن المشكلة كانت في عرض الوقت وليس الفرز
+                allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)); 
+                filterAndRenderEmployees();
+            } catch (error) {
+                console.error("خطأ في جلب الموظفين:", error);
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الموظفين.</div>';
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        // **5. دالة لعرض الموظفين في الواجهة**
+        function renderEmployees(employees) {
+            employeesList.innerHTML = '';
+            if (employees.length === 0) {
+                noEmployeesFound.classList.remove('hidden');
+            } else {
+                noEmployeesFound.classList.add('hidden');
+                employees.forEach(employee => {
+                    const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
+                        ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                        : '';
+                    const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
+
+                    // تعديل: حل مشكلة الموقع
+                    const employeeCity = employee.location?.city || employee.contact?.location?.city || 'غير محدد';
+                    const employeeState = employee.location?.state || employee.contact?.location?.state || 'غير محدد';
+                    const locationText = `${employeeCity}، ${employeeState}`;
+
+                    const employeeCard = document.createElement('div');
+                    employeeCard.className = 'bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6';
+
+                    employeeCard.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
+                                <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
+                                    <div class="flex items-center text-gray-500 text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt ml-1"></i>
+                                        <span>${locationText}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>الخبرة: ${employee.experience || 'غير محدد'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus || 'الحالة غير محددة'}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock ml-1"></i>
+                                    <span>${getTimeElapsed(employee.timestamp)}</span>
+                                </div>
+                                <div class="flex space-x-3 rtl:space-x-reverse">
+                                    <a href="chat.html?employeeId=${employee.id}"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                    </a>
+                                    <button onclick="hireEmployee('${employee.id}')"
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                        <i class="fas fa-user-plus ml-1"></i> توظيف
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    employeesList.appendChild(employeeCard);
+                });
+            }
+        }
+
+        // **6. دالة للفلترة والبحث**
+        function filterAndRenderEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedState = stateFilter.value;
+            const selectedCity = cityFilter.value;
+
+            const filteredEmployees = allEmployees.filter(employee => {
+                const searchTerms = searchTerm.split(' ');
+
+                // تعديل: حل مشكلة الموقع
+                const employeeCity = employee.location?.city || employee.contact?.location?.city || '';
+                const employeeState = employee.location?.state || employee.contact?.location?.state || '';
+
+                const matchesSearch = searchTerms.every(term => {
+                    const employeeText = `${employee.name || ''} ${employee.headline || ''} ${employeeState || ''} ${employeeCity || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
+                    if (employeeText.includes(term)) return true;
+                    return false;
+                });
+
+                const matchesState = selectedState === '' || (employeeState === selectedState);
+                const matchesCity = selectedCity === '' || (employeeCity === selectedCity);
+
+                return matchesSearch && matchesState && matchesCity;
             });
 
-            if (!isStepValid) {
+            renderEmployees(filteredEmployees);
+        }
+
+        // **7. دالة لحساب الوقت المنقضي (تم تعديلها)**
+        function getTimeElapsed(timestamp) {
+            if (!timestamp) return 'غير محدد';
+
+            const now = new Date();
+            const employeeDate = new Date(timestamp.seconds * 1000);
+            const diffInSeconds = Math.floor((now - employeeDate) / 1000);
+
+            if (diffInSeconds < 60) return 'الآن';
+            const minutes = Math.floor(diffInSeconds / 60);
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `منذ ${days} يوم`;
+            const weeks = Math.floor(days / 7);
+            if (weeks < 4) return `منذ ${weeks} أسبوع`;
+            const months = Math.floor(days / 30);
+            if (months < 12) return `منذ ${months} شهر`;
+            const years = Math.floor(days / 365);
+            return `منذ ${years} سنة`;
+        }
+
+        // **8. دالة توظيف موظف**
+        async function hireEmployee(employeeId) {
+            if (!currentUserId) {
+                alert("يجب عليك تسجيل الدخول لتوظيف الموظفين.");
                 return;
             }
 
-            stepElement.classList.add('hidden');
-            currentStep++;
-            if (currentStep > totalSteps) {
-                currentStep = totalSteps;
+            try {
+                await addDoc(collection(db, "hiringRequests"), {
+                    employerId: currentUserId,
+                    employeeId: employeeId,
+                    status: 'pending',
+                    timestamp: serverTimestamp()
+                });
+                alert("تم إرسال طلب التوظيف بنجاح! سيتم إشعار الموظف.");
+            } catch (error) {
+                console.error("خطأ في إرسال طلب التوظيف:", error);
+                alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
             }
-            document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps();
-        };
+        }
 
-        window.prevStep = function(step) {
-            document.getElementById(`step${step}`).classList.add('hidden');
-            currentStep--;
-            if (currentStep < 1) {
-                currentStep = 1;
-            }
-            document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps();
-        };
-
-        window.updateSteps = function() {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((stepEl, index) => {
-                stepEl.classList.remove('active');
-                if (index < currentStep) {
-                    stepEl.classList.add('active');
-                }
-            });
-        };
-
-        document.getElementById('skillsContainer').addEventListener('click', function(event) {
-            const currentSkillsCount = document.querySelectorAll('.skill-input').length;
-            const messageElement = document.getElementById('skillsLimitMessage');
-
-            if (event.target.closest('.add-skill-btn')) {
-                if (currentSkillsCount >= 6) {
-                    messageElement.classList.remove('hidden');
-                    return;
-                }
-                messageElement.classList.add('hidden');
-                const newSkillInputHtml = `
-                    <div class="mb-4 flex items-center">
-                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="button" class="remove-skill-btn mr-2 p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><i class="fas fa-minus"></i></button>
-                    </div>
-                `;
-                document.getElementById('skillsContainer').insertAdjacentHTML('beforeend', newSkillInputHtml);
-            }
-            if (event.target.closest('.remove-skill-btn')) {
-                event.target.closest('.mb-4').remove();
-                if (document.querySelectorAll('.skill-input').length < 6) {
-                    messageElement.classList.add('hidden');
-                }
+        // **9. مستمعي الأحداث**
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                fetchEmployees();
+            } else {
+                currentUserId = null;
+                loadingIndicator.classList.add('hidden');
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">يجب عليك تسجيل الدخول لعرض الموظفين.</div>';
             }
         });
 
-        document.getElementById('state').addEventListener('change', function() {
-            const selectedState = this.value;
-            const cityContainer = document.getElementById('cityContainer');
-            const citySelect = document.getElementById('city');
+        searchInput.addEventListener('input', filterAndRenderEmployees);
+        stateFilter.addEventListener('change', () => {
+            const selectedState = stateFilter.value;
+            cityFilter.innerHTML = '<option value="">جميع المدن</option>';
+            cityFilter.disabled = true;
 
-            citySelect.innerHTML = '<option value="">اختر مدينة</option>';
-
-            if (selectedState && sudanStates[selectedState]) {
-                sudanStates[selectedState].forEach(city => {
+            if (selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
                     option.textContent = city;
-                    citySelect.appendChild(option);
+                    cityFilter.appendChild(option);
                 });
-                cityContainer.classList.remove('hidden');
-            } else {
-                cityContainer.classList.add('hidden');
+                cityFilter.disabled = false;
             }
+            filterAndRenderEmployees();
         });
-        
-        // معاينة الصور التي يختارها المستخدم
-        document.getElementById('portfolioImages').addEventListener('change', function(event) {
-            const previewContainer = document.getElementById('image-preview');
-            previewContainer.innerHTML = '';
-            const files = event.target.files;
-            
-            if (files) {
-                Array.from(files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        previewContainer.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
-        });
+        cityFilter.addEventListener('change', filterAndRenderEmployees);
 
-        window.submitForm = async function() {
-            if (!employeeForm.checkValidity()) {
-                employeeForm.reportValidity();
-                return;
-            }
-
-            const submitButton = document.querySelector('#step4 button[onclick="window.submitForm()"]');
-            submitButton.disabled = true;
-            const originalButtonText = submitButton.textContent;
-            submitButton.textContent = 'جاري التسجيل...';
-
-            const name = document.getElementById('name').value;
-            const headline = document.getElementById('headline').value;
-            const bio = document.getElementById('bio').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const state = document.getElementById('state').value;
-            const city = document.getElementById('city').value;
-            const experience = document.getElementById('experience').value;
-            const jobStatus = document.querySelector('input[name="jobStatus"]:checked').value;
-            const cvUrl = document.getElementById('cvUrl').value;
-            const portfolioUrl = document.getElementById('portfolioUrl').value;
-            const linkedinUrl = document.getElementById('linkedinUrl').value;
-            const portfolioImagesFiles = document.getElementById('portfolioImages').files;
-
-            const skillInputs = document.querySelectorAll('.skill-input');
-            const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
-
-            const portfolioImageUrls = [];
-            const uploadTasks = [];
-
-            // رفع الصور إلى Firebase Storage
-            if (portfolioImagesFiles.length > 0) {
-                for (let i = 0; i < portfolioImagesFiles.length; i++) {
-                    const file = portfolioImagesFiles[i];
-                    const storageRef = ref(storage, `portfolio_images/${new Date().getTime()}-${file.name}`);
-                    uploadTasks.push(uploadBytes(storageRef, file).then(snapshot => getDownloadURL(snapshot.ref)));
-                }
-
-                try {
-                    const urls = await Promise.all(uploadTasks);
-                    portfolioImageUrls.push(...urls);
-                } catch (error) {
-                    console.error("خطأ في رفع الصور:", error);
-                    alert('حدث خطأ أثناء رفع الصور. الرجاء المحاولة مرة أخرى.');
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                    return;
-                }
-            }
-
-            const employeeData = {
-                name: name,
-                photoUrl: null, // يمكن إضافة حقل لصورة البروفايل هنا أيضًا
-                headline: headline,
-                bio: bio,
-                contact: {
-                    email: email,
-                    phone: phone,
-                    location: {
-                        city: city,
-                        state: state
-                    }
-                },
-                skills: skills,
-                experience: experience,
-                jobStatus: jobStatus,
-                links: {
-                    cv: cvUrl || null,
-                    portfolio: portfolioUrl || null,
-                    linkedin: linkedinUrl || null
-                },
-                portfolioImages: portfolioImageUrls, // تم إضافة هذا الحقل
-                timestamp: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "employees"), employeeData);
-                alert('تم تسجيل الموظف بنجاح!');
-                employeeForm.reset();
-                currentStep = 1;
-                window.updateSteps();
-                document.getElementById('step4').classList.add('hidden');
-                document.getElementById('step1').classList.remove('hidden');
-            } catch (error) {
-                console.error("خطأ في تسجيل الموظف:", error);
-                alert('حدث خطأ أثناء تسجيل الموظف. الرجاء المحاولة مرة أخرى.');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            window.updateSteps();
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.add('hidden');
-            document.getElementById('step4').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-        });
+        // This is necessary to expose the hireEmployee function to the onclick event in the HTML
+        window.hireEmployee = hireEmployee; 
     </script>
 </body>
 </html>
+هذا كود عرض الوظائف
+ زر حفظ   ماذا يجب ان اعمل 
+وكذلك زر التفاصيل
