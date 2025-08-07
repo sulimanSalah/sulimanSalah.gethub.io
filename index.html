@@ -49,9 +49,12 @@
         .side-menu {
             transition: all 0.3s ease-in-out;
             transform: translateX(100%);
+            /* لتجنب التفاعل مع المحتوى في الخلفية */
+            pointer-events: none;
         }
         .side-menu.active {
             transform: translateX(0);
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -263,6 +266,7 @@
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">JavaScript</span>
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">React</span>
                         </div>
+                        <a href="employee_chats.html?employeeId=..." class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">تواصل</a>
                     </div>
                     <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a104eaa3-b8b2-4066-a3e2-a62bb6d08770.png" alt="صورة سارة عبد الرحيم" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
@@ -273,6 +277,7 @@
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Photoshop</span>
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Illustrator</span>
                         </div>
+                        <a href="employee_chats.html?employeeId=..." class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">تواصل</a>
                     </div>
                     <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0aee6a1d-9fcb-49f5-9987-46ba59312e74.png" alt="صورة خالد سعيد" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
@@ -283,6 +288,7 @@
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">PMP</span>
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Agile</span>
                         </div>
+                        <a href="employee_chats.html?employeeId=..." class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">تواصل</a>
                     </div>
                     <div class="employee-card bg-white border border-gray-200 rounded-xl p-6 text-center transition duration-300">
                         <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ff19011-c0f1-410d-bee3-b8f7f8dc37d4.png" alt="صورة مريم علي" class="h-32 w-32 rounded-full mx-auto mb-4 object-cover">
@@ -293,6 +299,7 @@
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">SEO</span>
                             <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Social Media</span>
                         </div>
+                        <a href="employee_chats.html?employeeId=..." class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">تواصل</a>
                     </div>
                 </div>
             </div>
@@ -360,34 +367,4 @@
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-400">
-                <p>© 2023 شغلني. جميع الحقوق محفوظة.</p>
-            </div>
-        </div>
-    </footer>
-    
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const sideMenu = document.getElementById('side-menu');
-
-        menuBtn.addEventListener('click', () => {
-            sideMenu.classList.add('active');
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            sideMenu.classList.remove('active');
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+            <div class="border-t border-gray-800 mt-
