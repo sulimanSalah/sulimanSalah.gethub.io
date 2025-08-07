@@ -3,196 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محادثة - شغلني</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>المحادثة - شغلني</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
-            color: #1f2937;
+            background-color: #f3f4f6;
         }
-
         .chat-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            background: #ffffff;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 4rem);
-            position: relative;
-        }
-
-        .chat-header {
-            background-color: #2563eb;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        .chat-header .back-button {
-            color: white;
-            font-size: 1.5rem;
-            margin-left: 1rem;
-        }
-
-        .chat-header .profile-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .chat-header .profile-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-left: 0.75rem;
-            border: 2px solid white;
-        }
-
-        .chat-header .profile-info h3 {
-            font-size: 1.125rem;
-            font-weight: bold;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            padding: 1.5rem;
+            height: calc(100vh - 120px);
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            background-color: #f9fafb;
-            direction: ltr;
-        }
-
-        .message {
-            max-width: 75%;
-            padding: 0.75rem 1.25rem;
-            border-radius: 1.5rem;
-            word-wrap: break-word;
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-
-        .message.sent {
-            background-color: #2563eb;
-            color: white;
-            align-self: flex-start;
-            border-bottom-left-radius: 0.5rem;
-        }
-
-        .message.received {
-            background-color: #e5e7eb;
-            color: #1f2937;
-            align-self: flex-end;
-            border-bottom-right-radius: 0.5rem;
-        }
-
-        .message-input-container {
-            padding: 1rem;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-        }
-
-        .message-input {
-            flex-grow: 1;
-            border-radius: 9999px;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid #d1d5db;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            direction: rtl;
-        }
-
-        .message-input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
-        }
-
-        .send-button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        .send-button:hover {
-            background-color: #1e40af;
-            transform: scale(1.05);
-        }
-        .send-button:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            transition: opacity 0.3s ease;
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col h-screen">
 
-    <div class="chat-container">
-        <div class="chat-header">
-            <a href="available_employees.html" class="back-button">
-                <i class="fas fa-arrow-right"></i>
-            </a>
-            <div class="profile-info">
-                <img id="profileImage" src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي">
-                <h3 id="chatTitle">...</h3>
+    <header class="bg-white shadow-lg p-4 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+            <button onclick="window.history.back()" class="text-gray-600 hover:text-blue-600">
+                <i class="fas fa-arrow-right text-xl"></i>
+            </button>
+            <div class="flex-shrink-0">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+            </div>
+            <div>
+                <h2 class="font-bold text-gray-800" id="recipientName"></h2>
+                <p class="text-sm text-gray-500">متصل الآن</p>
             </div>
         </div>
+    </header>
 
-        <div id="chatMessages" class="chat-messages">
-            <div id="noMessages" class="hidden text-center text-lg text-gray-500 p-8">لا توجد رسائل سابقة. ابدأ المحادثة!</div>
-        </div>
+    <main class="flex-1 p-4 chat-container" id="messagesContainer">
+        </main>
 
-        <div id="inputContainer" class="message-input-container">
-            <input type="text" id="messageInput" class="message-input" placeholder="اكتب رسالتك..." disabled>
-            <button id="sendButton" class="send-button" disabled>
+    <footer class="bg-white p-4 shadow-lg sticky bottom-0">
+        <form id="messageForm" class="flex items-center space-x-2 rtl:space-x-reverse">
+            <input type="text" id="messageInput" placeholder="اكتب رسالتك..."
+                   class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" class="p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700">
                 <i class="fas fa-paper-plane"></i>
             </button>
-        </div>
-
-        <div id="loadingOverlay" class="loading-overlay">
-            <i class="fas fa-spinner fa-spin text-4xl text-blue-600"></i>
-        </div>
-    </div>
+        </form>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // **1. تهيئة Firebase**
+        
+        // قم بتعديل هذا الجزء بمعلومات مشروعك
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -206,146 +67,123 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-
-        // **2. ربط عناصر الواجهة بمتغيرات في الكود**
-        const chatMessages = document.getElementById('chatMessages');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const messageForm = document.getElementById('messageForm');
         const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const chatTitle = document.getElementById('chatTitle');
-        const profileImage = document.getElementById('profileImage');
-        const noMessages = document.getElementById('noMessages');
-        const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        let currentUser;
+        let recipientId;
+        let chatId;
 
-        let currentUserId = null;
-        let otherUserId = null;
+        // الحصول على ID الموظف من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        recipientId = urlParams.get('employeeId');
 
-        // **3. دالة جلب معرف المستخدم الآخر من الرابط**
-        function getOtherUserIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('employeeId') || urlParams.get('clientId');
+        // التحقق من حالة تسجيل الدخول
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                // بعد تسجيل الدخول، يمكننا الآن تحديد مسار المحادثة
+                if (recipientId) {
+                    await setupChat();
+                    listenForMessages();
+                    await getRecipientInfo();
+                }
+            } else {
+                alert('الرجاء تسجيل الدخول أولاً.');
+                // توجيه المستخدم إلى صفحة تسجيل الدخول
+                window.location.href = 'login.html'; 
+            }
+        });
+
+        // إعداد المحادثة (تحديد chatId)
+        async function setupChat() {
+            // إنشاء chatId فريد بناءً على id المستخدمين
+            const users = [currentUser.uid, recipientId].sort();
+            chatId = users.join('_');
         }
 
-        // **4. دالة جلب بيانات المستخدم الآخر**
-        async function fetchOtherUser(userId) {
-            if (!userId) return null;
+        // جلب معلومات الموظف (الاسم، الصورة، إلخ.)
+        async function getRecipientInfo() {
             try {
-                const docRef = doc(db, "employees", userId);
+                const docRef = doc(db, "employees", recipientId);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    return docSnap.data();
+                    const recipientName = docSnap.data().name;
+                    document.getElementById('recipientName').textContent = recipientName;
+                    // يمكنك تحديث الصورة هنا أيضاً
                 }
-                return null;
             } catch (error) {
-                console.error("Error fetching user data:", error);
-                return null;
+                console.error("خطأ في جلب بيانات الموظف:", error);
             }
         }
 
-        // **5. دالة إرسال الرسالة**
-        async function sendMessage() {
-            const messageText = messageInput.value.trim();
-            if (messageText === '' || !currentUserId || !otherUserId) {
-                return;
-            }
+        // الاستماع للرسائل الجديدة في الوقت الفعلي
+        function listenForMessages() {
+            const messagesRef = collection(db, "chats", chatId, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
 
-            try {
-                // عرض الرسالة في الواجهة فوراً
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message sent';
-                messageElement.textContent = messageText;
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // مسح حقل الإدخال
-                messageInput.value = '';
-
-                // إرسال الرسالة إلى Firestore
-                await addDoc(collection(db, "messages"), {
-                    senderId: currentUserId,
-                    receiverId: otherUserId,
-                    text: messageText,
-                    timestamp: serverTimestamp()
+            onSnapshot(q, (snapshot) => {
+                // إزالة جميع الرسائل القديمة قبل إضافة الجديدة
+                messagesContainer.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const message = doc.data();
+                    displayMessage(message);
                 });
-                
-            } catch (error) {
-                console.error("Error sending message: ", error);
-            }
-        }
-
-        // **6. دالة لعرض جميع الرسائل**
-        function renderAllMessages(messages) {
-            chatMessages.innerHTML = '';
-            if (messages.length === 0) {
-                noMessages.classList.remove('hidden');
-            } else {
-                noMessages.classList.add('hidden');
-                messages.forEach(message => {
-                    const messageElement = document.createElement('div');
-                    messageElement.className = `message ${message.senderId === currentUserId ? 'sent' : 'received'}`;
-                    messageElement.textContent = message.text;
-                    chatMessages.appendChild(messageElement);
-                });
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        // **7. دالة لإعداد المحادثة**
-        async function setupChat(userId) {
-            currentUserId = userId;
-            otherUserId = getOtherUserIdFromUrl();
-            
-            if (!otherUserId) {
-                loadingOverlay.style.display = 'none';
-                chatMessages.innerHTML = '<div class="text-center text-red-500 p-8">لم يتم تحديد المستخدم الآخر للمحادثة.</div>';
-                return;
-            }
-
-            // جلب اسم المستخدم الآخر فقط دون الصورة
-            const otherUser = await fetchOtherUser(otherUserId);
-            chatTitle.textContent = otherUser ? otherUser.name : 'مستخدم غير معروف';
-            
-            // استخدام صورة افتراضية ثابتة
-            profileImage.src = 'https://randomuser.me/api/portraits/men/32.jpg';
-
-            // تفعيل حقول الإدخال والأزرار بعد تسجيل الدخول
-            messageInput.disabled = false;
-            sendButton.disabled = false;
-            
-            // جلب الرسائل والاستماع للتحديثات
-            const chatQuery = query(collection(db, "messages"), orderBy("timestamp", "asc"));
-            onSnapshot(chatQuery, (querySnapshot) => {
-                const messages = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if ((data.senderId === currentUserId && data.receiverId === otherUserId) || (data.senderId === otherUserId && data.receiverId === currentUserId)) {
-                        messages.push(data);
-                    }
-                });
-                loadingOverlay.style.display = 'none';
-                renderAllMessages(messages);
+                // تمرير الشاشة إلى آخر رسالة
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, (error) => {
+                console.error("خطأ في الاستماع للرسائل:", error);
             });
         }
         
-        // **8. مستمعي الأحداث**
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+        // إرسال الرسالة
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (messageText === '') return;
 
-        // **9. التحقق من حالة تسجيل الدخول**
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setupChat(user.uid);
-            } else {
-                loadingOverlay.style.display = 'none';
-                chatMessages.innerHTML = '<div class="text-center text-red-500 p-8">يجب عليك تسجيل الدخول لعرض الرسائل.</div>';
-                messageInput.disabled = true;
-                sendButton.disabled = true;
+            const newMessage = {
+                senderId: currentUser.uid,
+                recipientId: recipientId,
+                text: messageText,
+                timestamp: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "chats", chatId, "messages"), newMessage);
+                messageInput.value = '';
+            } catch (error) {
+                console.error("خطأ في إرسال الرسالة:", error);
+                alert("فشل إرسال الرسالة. الرجاء المحاولة مرة أخرى.");
             }
         });
+        
+        // عرض الرسالة في الواجهة
+        function displayMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('flex', 'mb-2');
+
+            // تحديد ما إذا كانت الرسالة مرسلة أم مستلمة
+            if (message.senderId === currentUser.uid) {
+                // رسالة مرسلة
+                messageElement.classList.add('justify-end');
+                messageElement.innerHTML = `
+                    <div class="bg-blue-600 text-white rounded-t-xl rounded-bl-xl p-3 max-w-sm">
+                        <p>${message.text}</p>
+                    </div>
+                `;
+            } else {
+                // رسالة مستلمة
+                messageElement.classList.add('justify-start');
+                messageElement.innerHTML = `
+                    <div class="bg-gray-200 text-gray-800 rounded-t-xl rounded-br-xl p-3 max-w-sm">
+                        <p>${message.text}</p>
+                    </div>
+                `;
+            }
+            messagesContainer.appendChild(messageElement);
+        }
     </script>
 </body>
 </html>
