@@ -3,180 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة الرسائل - شغلني</title>
+    <title>المحادثات - شغلني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* تصميم الواجهة */
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f3f4f6;
         }
-        .chat-container {
-            width: 100%;
-            max-width: 800px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
+        .main-content {
+            transition: margin-right 0.3s ease;
         }
-        .chat-header {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            text-align: center;
+        .sidebar {
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
         }
-        .messages-feed {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+        .sidebar.active {
+            transform: translateX(0);
         }
-        .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 18px;
-            max-width: 70%;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-        .message.sent {
-            background-color: #007bff;
-            color: #fff;
-            margin-right: auto; /* يجعل الرسالة تظهر على اليسار في RTL */
-            border-bottom-right-radius: 0;
-        }
-        .message.received {
-            background-color: #e5e5ea;
-            color: #000;
-            margin-left: auto; /* يجعل الرسالة تظهر على اليمين في RTL */
-            border-bottom-left-radius: 0;
-        }
-        .message-input-form {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid #e0e0e0;
-        }
-        .message-input {
-            flex-grow: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            outline: none;
-            font-size: 16px;
-        }
-        .send-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            padding: 10px 20px;
-            margin-right: 10px;
-            cursor: pointer;
-            font-size: 16px;
+        @media (min-width: 768px) {
+            .sidebar {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-right: 256px;
+            }
         }
     </style>
 </head>
-<body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h4>محادثة مع: مستخدم آخر</h4>
+<body class="flex min-h-screen">
+
+    <div id="sidebar" class="bg-gray-800 text-white w-64 p-4 fixed right-0 top-0 bottom-0 z-50 transform md:transform-none sidebar">
+        <div class="flex items-center justify-between mb-8">
+            <a href="index.html" class="flex items-center">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار شغلني" class="h-8">
+                <span class="text-xl font-bold mr-2">شغلني</span>
+            </a>
+            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
         </div>
-        <div class="messages-feed" id="messages-feed">
-            </div>
-        <div class="message-input-form">
-            <input type="text" id="message-input" class="message-input" placeholder="اكتب رسالتك...">
-            <button id="send-button" class="send-button">إرسال</button>
-        </div>
+        <nav>
+            <ul>
+                <li class="mb-2">
+                    <a href="employee_dashboard.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <i class="fas fa-tachometer-alt ml-3"></i>
+                        لوحة التحكم
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="employee_profile.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <i class="fas fa-user ml-3"></i>
+                        ملفي الشخصي
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="job_listing_page.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <i class="fas fa-briefcase ml-3"></i>
+                        الوظائف المتاحة
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="employee_applications.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <i class="fas fa-file-alt ml-3"></i>
+                        طلباتي
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="employee_chats.html" class="flex items-center p-3 rounded-lg bg-gray-700 text-white">
+                        <i class="fas fa-comments ml-3"></i>
+                        المحادثات
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-red-400 hover:text-red-300">
+                        <i class="fas fa-sign-out-alt ml-3"></i>
+                        تسجيل الخروج
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <div id="main-content" class="flex-1 main-content">
+        <header class="bg-white shadow p-4 flex items-center justify-between sticky top-0 z-40">
+            <button id="open-sidebar-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            <h1 class="text-xl font-bold text-gray-900 hidden md:block">المحادثات</h1>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <a href="#" class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-bell text-xl"></i>
+                </a>
+                <a href="#" class="flex items-center text-gray-800 font-medium">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة المستخدم" class="h-8 w-8 rounded-full ml-2">
+                    أحمد محمد
+                </a>
+            </div>
+        </header>
 
-    <script>
-        // كود ربط البيانات الخاص بك
+        <main class="p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">المحادثات</h2>
+
+            <div class="bg-white rounded-xl shadow-md flex flex-col md:flex-row h-[70vh]">
+                <div class="w-full md:w-1/3 border-b md:border-b-0 md:border-l border-gray-200 p-4 overflow-y-auto">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">المحادثات المفتوحة</h3>
+                    <ul id="chat-list" class="space-y-2">
+                        <li class="chat-item p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center" data-chat-id="chat1">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="صورة المستخدم" class="w-12 h-12 rounded-full object-cover ml-3">
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-900">المجموعة المالية المتحدة</p>
+                                <p class="text-sm text-gray-500 truncate">أهلاً بك، متى يمكننا تحديد موعد للمقابلة؟</p>
+                            </div>
+                        </li>
+                        <li class="chat-item p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center" data-chat-id="chat2">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="صورة المستخدم" class="w-12 h-12 rounded-full object-cover ml-3">
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-900">شركة التقنية الحديثة</p>
+                                <p class="text-sm text-gray-500 truncate">شكراً على طلبك، قيد المراجعة...</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="w-full md:w-2/3 flex flex-col justify-between">
+                    <div id="chat-header" class="border-b border-gray-200 p-4 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img id="chat-user-img" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="صورة المستخدم" class="w-10 h-10 rounded-full object-cover ml-3">
+                            <div>
+                                <h4 id="chat-user-name" class="font-bold text-gray-900">المجموعة المالية المتحدة</h4>
+                                <p id="job-status" class="text-sm text-yellow-500 mt-1">حالة الطلب: قيد المراجعة</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            </div>
+                    </div>
+
+                    <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+                        <div class="flex justify-end">
+                            <div class="bg-blue-600 text-white p-3 rounded-lg max-w-sm">
+                                <p>أهلاً بكم، لقد قمت بتقديم طلب للوظيفة. هل هناك أي تحديثات؟</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-start">
+                            <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-sm">
+                                <p>أهلاً بك، تم استلام طلبك وهو قيد المراجعة حاليًا. سيتم التواصل معك قريبًا.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start">
+                            <div class="bg-white border-4 border-green-500 p-4 rounded-lg shadow-md max-w-sm">
+                                <h5 class="font-bold text-green-700 text-lg mb-2">عرض عمل جديد</h5>
+                                <p class="text-gray-800 mb-2">
+                                    تهانينا، نقدم لك عرض عمل لوظيفة **محاسب مالي** براتب شهري قدره **13,500 د.إ**.
+                                    يرجى الرد على هذا العرض خلال 72 ساعة.
+                                </p>
+                                <div class="flex justify-start space-x-2 space-x-reverse mt-4">
+                                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700">قبول</button>
+                                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-700">رفض</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <form id="message-form" class="p-4 border-t border-gray-200 flex items-center">
+                        <input id="message-input" type="text" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ml-2">
+                        <button type="submit" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // **1. تهيئة Firebase**
         const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:d836c1d5d30167279c8819",
-          measurementId: "G-5P0MNGPMG0"
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:11ec1d6991add3309c8819",
+            measurementId: "G-98GQGZS09W"
         };
 
-        // تهيئة Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = app.firestore();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // المتغيرات التي ستحتاج لتغييرها
-        const currentUserId = "user1"; // مُعرّف المستخدم الحالي
-        const conversationId = "chat_123"; // مُعرّف المحادثة
+        // **2. ربط عناصر الواجهة**
+        const messagesContainer = document.getElementById('messages-container');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
 
-        const messagesFeed = document.getElementById("messages-feed");
-        const messageInput = document.getElementById("message-input");
-        const sendButton = document.getElementById("send-button");
+        let currentChatId = "chat1"; // افتراضياً، يتم تحديد محادثة معينة
 
-        // ----------------------------------------------------
-        // وظائف Firestore
-        // ----------------------------------------------------
+        // **3. عرض الرسائل من Firestore**
+        function displayMessages(chatId) {
+            messagesContainer.innerHTML = '';
+            const messagesQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
 
-        // وظيفة لإضافة رسالة جديدة إلى Firestore
-        async function sendMessage() {
-            const messageText = messageInput.value.trim();
-            if (messageText === "") return; // لا ترسل رسالة فارغة
-
-            const docRef = await db.collection("chats").doc(conversationId).collection("messages").add({
-                senderId: currentUserId,
-                text: messageText,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            onSnapshot(messagesQuery, (snapshot) => {
+                messagesContainer.innerHTML = ''; // مسح الرسائل القديمة
+                snapshot.forEach((doc) => {
+                    const messageData = doc.data();
+                    const messageElement = document.createElement('div');
+                    
+                    // تحديد إذا كانت الرسالة من المستخدم الحالي
+                    const isMyMessage = messageData.senderId === auth.currentUser.uid;
+                    
+                    messageElement.classList.add('flex', isMyMessage ? 'justify-end' : 'justify-start');
+                    
+                    let messageContent = `
+                        <div class="bg-${isMyMessage ? 'blue-600' : 'gray-200'} text-${isMyMessage ? 'white' : 'gray-800'} p-3 rounded-lg max-w-sm">
+                            <p>${messageData.text}</p>
+                        </div>
+                    `;
+                    
+                    messageElement.innerHTML = messageContent;
+                    messagesContainer.appendChild(messageElement);
+                });
+                messagesContainer.scrollTop = messagesContainer.scrollHeight; // التمرير للأسفل تلقائياً
             });
-
-            console.log("تم إرسال الرسالة بنجاح مع مُعرّف:", docRef.id);
-            messageInput.value = ""; // تفريغ حقل الإدخال
         }
+        
+        // **4. إرسال رسالة جديدة**
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (messageText === '') return;
 
-        // الاستماع للرسائل الجديدة في الوقت الفعلي
-        db.collection("chats")
-          .doc(conversationId)
-          .collection("messages")
-          .orderBy("timestamp")
-          .onSnapshot((snapshot) => {
-              messagesFeed.innerHTML = ""; // مسح الرسائل القديمة
-              snapshot.forEach((doc) => {
-                  const message = doc.data();
-                  const messageElement = document.createElement("div");
-                  messageElement.textContent = message.text;
-                  
-                  // تحديد نوع الرسالة (مرسلة أو مستلمة)
-                  if (message.senderId === currentUserId) {
-                      messageElement.classList.add("message", "sent");
-                  } else {
-                      messageElement.classList.add("message", "received");
-                  }
-                  
-                  messagesFeed.appendChild(messageElement);
-              });
-              // التمرير إلى أسفل تلقائيًا
-              messagesFeed.scrollTop = messagesFeed.scrollHeight;
-          });
+            if (auth.currentUser) {
+                await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                    senderId: auth.currentUser.uid,
+                    text: messageText,
+                    timestamp: new Date()
+                });
+                messageInput.value = '';
+            }
+        });
+        
+        // **5. التبديل بين المحادثات**
+        document.getElementById('chat-list').addEventListener('click', (e) => {
+            const chatItem = e.target.closest('.chat-item');
+            if (chatItem) {
+                currentChatId = chatItem.getAttribute('data-chat-id');
+                // تحديث واجهة المحادثة (الاسم، الصورة، حالة الطلب)
+                // هنا يمكن إضافة منطق لجلب البيانات من Firestore
+                document.getElementById('chat-user-name').textContent = chatItem.querySelector('p').textContent;
+                document.getElementById('chat-user-img').src = chatItem.querySelector('img').src;
+                document.getElementById('job-status').textContent = 'حالة الطلب: تم القبول'; // مثال
+                displayMessages(currentChatId);
+            }
+        });
 
-        // ----------------------------------------------------
-        // إدارة الأحداث (Events)
-        // ----------------------------------------------------
+        // **6. منطق القائمة الجانبية**
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
 
-        sendButton.addEventListener("click", sendMessage);
-
-        messageInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                sendMessage();
+        // **7. التحقق من حالة المصادقة عند التحميل**
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // المستخدم مسجل الدخول، يمكن عرض المحادثات
+                displayMessages(currentChatId);
+            } else {
+                // المستخدم غير مسجل الدخول، إعادة التوجيه إلى صفحة تسجيل الدخول
+                // window.location.href = 'login.html';
             }
         });
     </script>
