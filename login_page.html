@@ -109,10 +109,11 @@
     </div>
 
     <script type="module">
+        // ** التعديل الجديد هنا: استيراد sendEmailVerification **
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
         // **1. تهيئة Firebase**
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -135,7 +136,7 @@
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const roleInput = document.getElementById('role');
-        
+
         // **3. دالة التحقق من كلمة المرور**
         function validatePassword() {
             const password = passwordInput.value;
@@ -174,7 +175,7 @@
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
             const role = roleInput.value;
-            
+
             feedbackMessage.classList.add('hidden');
             feedbackMessage.textContent = '';
 
@@ -200,9 +201,13 @@
             }
 
             try {
+                // إنشاء حساب المستخدم
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                
+
+                // **الخطوة الجديدة: إرسال رسالة تأكيد البريد الإلكتروني**
+                await sendEmailVerification(user);
+
                 const collectionName = role === 'employee' ? 'employees' : 'employers';
                 await setDoc(doc(db, collectionName, user.uid), {
                     name: name,
@@ -213,7 +218,7 @@
 
                 feedbackMessage.classList.remove('hidden', 'text-red-500');
                 feedbackMessage.classList.add('text-green-500');
-                feedbackMessage.textContent = 'تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول.';
+                feedbackMessage.textContent = 'تم إنشاء حسابك بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب.';
 
                 registerForm.reset();
 
