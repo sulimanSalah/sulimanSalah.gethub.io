@@ -139,13 +139,13 @@
 
         // **1. تهيئة Firebase**
         const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:11ec1d6991add3309c8819",
+            measurementId: "G-98GQGZS09W"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -192,7 +192,7 @@
                 const querySnapshot = await getDocs(collection(db, "employees"));
                 allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 // تم تعديل هذه السطر لضمان الفرز الصحيح، ولكن المشكلة كانت في عرض الوقت وليس الفرز
-                allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)); 
+                allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                 filterAndRenderEmployees();
             } catch (error) {
                 console.error("خطأ في جلب الموظفين:", error);
@@ -254,9 +254,9 @@
                                     <span>${getTimeElapsed(employee.timestamp)}</span>
                                 </div>
                                 <div class="flex space-x-3 rtl:space-x-reverse">
-                                    <a href="chat.html?employeeId=${employee.id}"
+                                    <a href="company_chat.html?chatId=chat_${currentUserId}_${employee.id}&employeeId=${employee.id}"
                                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                        <i class="fas fa-envelope ml-1"></i> مراسلة
                                     </a>
                                     <button onclick="hireEmployee('${employee.id}')"
                                         class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
@@ -375,7 +375,7 @@
         cityFilter.addEventListener('change', filterAndRenderEmployees);
 
         // This is necessary to expose the hireEmployee function to the onclick event in the HTML
-        window.hireEmployee = hireEmployee; 
+        window.hireEmployee = hireEmployee;
     </script>
 </body>
 </html>
