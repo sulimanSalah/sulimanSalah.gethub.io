@@ -1,88 +1,168 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - موقع التوظيف</title>
+    <title>لوحة تحكم الشركة - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f3f4f6;
         }
-        header {
-            background-color: #007BFF;
+        .sidebar {
+            width: 250px;
+        }
+        .sidebar a {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+        .sidebar a.active {
+            background-color: #1d4ed8;
             color: white;
-            padding: 20px;
-            text-align: center;
+            font-weight: 700;
         }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .dashboard-card {
-            background-color: white;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .dashboard-card h3 {
-            color: #333;
-        }
-        .dashboard-card p {
-            color: #666;
-        }
-        .dashboard-card a {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 10px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .dashboard-card a:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
+        .sidebar a:hover:not(.active) {
+            background-color: #e5e7eb;
+            color: #1f2937;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>لوحة التحكم</h1>
-    </header>
+<body class="bg-gray-100 flex min-h-screen">
 
-    <div class="container">
-        <!-- بطاقة صاحب العمل -->
-        <div class="dashboard-card">
-            <h3>أنت صاحب عمل</h3>
-            <p>يمكنك إضافة وظائف جديدة، متابعة المتقدمين، وإدارة تفاصيل العمل.</p>
-            <a href="job-posting.html">إضافة وظيفة جديدة</a>
-            <a href="my-jobs.html">وظائفي الحالية</a>
+    <aside class="sidebar bg-white shadow-lg p-6 flex flex-col">
+        <div class="mb-8">
+            <a href="#" class="flex items-center space-x-2 rtl:space-x-reverse">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10">
+                <span class="text-2xl font-bold text-blue-600">شغلني</span>
+            </a>
         </div>
-
-        <!-- بطاقة الموظف -->
-        <div class="dashboard-card">
-            <h3>أنت موظف</h3>
-            <p>يمكنك البحث عن وظائف جديدة، التقديم عليها، ومتابعة تقدمك في العمل.</p>
-            <a href="job-listings.html">عرض الوظائف المتاحة</a>
-            <a href="my-applications.html">طلباتي</a>
+        <nav class="flex-1">
+            <a href="company_dashboard.html" class="active">
+                <i class="fas fa-home ml-3"></i>
+                <span>لوحة التحكم</span>
+            </a>
+            <a href="company_jobs.html">
+                <i class="fas fa-briefcase ml-3"></i>
+                <span>وظائفي</span>
+            </a>
+            <a href="company_applicants.html">
+                <i class="fas fa-users ml-3"></i>
+                <span>المتقدمون</span>
+            </a>
+            <a href="company_chats.html">
+                <i class="fas fa-comments ml-3"></i>
+                <span>المحادثات</span>
+            </a>
+            <a href="company_settings.html">
+                <i class="fas fa-cog ml-3"></i>
+                <span>الإعدادات</span>
+            </a>
+        </nav>
+        <div class="mt-auto">
+            <a href="logout.html" class="text-red-600 hover:text-white hover:bg-red-600">
+                <i class="fas fa-sign-out-alt ml-3"></i>
+                <span>تسجيل الخروج</span>
+            </a>
         </div>
-    </div>
+    </aside>
 
-    <footer>
-        <p>© 2025 موقع التوظيف - جميع الحقوق محفوظة</p>
-    </footer>
+    <main class="flex-1 p-8">
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">محادثاتي مع الموظفين</h1>
+            <div id="chatsList" class="space-y-4">
+                <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل المحادثات...</div>
+                <div id="noChatsFound" class="hidden text-center text-lg text-gray-500 p-8">لا توجد محادثات حتى الآن.</div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // **1. تهيئة Firebase - بيانات مشروعك**
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:d836c1d5d30167279c8819",
+            measurementId: "G-5P0MNGPMG0"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // **2. ربط عناصر الواجهة**
+        const chatsList = document.getElementById('chatsList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noChatsFound = document.getElementById('noChatsFound');
+
+        // **3. دالة لجلب المحادثات وعرضها**
+        async function fetchChats() {
+            loadingIndicator.classList.remove('hidden');
+            chatsList.innerHTML = '';
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const companyId = user.uid;
+                    try {
+                        const chatsQuery = query(collection(db, "chats"), where("companyId", "==", companyId), orderBy("lastMessageTimestamp", "desc"));
+                        const chatsSnapshot = await getDocs(chatsQuery);
+
+                        if (chatsSnapshot.empty) {
+                            noChatsFound.classList.remove('hidden');
+                        } else {
+                            noChatsFound.classList.add('hidden');
+                            chatsSnapshot.forEach(doc => {
+                                const chatData = doc.data();
+                                const chatId = doc.id;
+
+                                // يمكنك تعديل هذا الجزء لجلب بيانات الموظف والوظيفة
+                                // من قاعدة البيانات وعرضها في البطاقة
+                                const employeeName = chatData.employeeName || 'موظف غير معروف';
+                                const jobTitle = chatData.jobTitle || 'وظيفة غير محددة';
+                                const lastMessage = chatData.lastMessage || 'لا توجد رسائل حديثة';
+                                const employeePhotoUrl = chatData.employeePhotoUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
+
+                                const chatCard = document.createElement('a');
+                                chatCard.href = `company_chat.html?chatId=${chatId}&employeeId=${chatData.employeeId}&jobId=${chatData.jobId}`;
+                                chatCard.className = 'flex items-center space-x-4 rtl:space-x-reverse bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition duration-200';
+                                chatCard.innerHTML = `
+                                    <img src="${employeePhotoUrl}" alt="صورة الموظف" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-800">${employeeName}</h4>
+                                        <p class="text-sm text-gray-600">${jobTitle}</p>
+                                        <p class="text-xs text-gray-400 mt-1">${lastMessage}</p>
+                                    </div>
+                                    <i class="fas fa-chevron-left text-gray-400"></i>
+                                `;
+                                chatsList.appendChild(chatCard);
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error fetching chats:", error);
+                        chatsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل المحادثات.</div>';
+                    } finally {
+                        loadingIndicator.classList.add('hidden');
+                    }
+                } else {
+                    window.location.href = "login.html";
+                }
+            });
+        }
+
+        // **4. استدعاء الدالة عند تحميل الصفحة**
+        document.addEventListener('DOMContentLoaded', fetchChats);
+    </script>
 </body>
 </html>
