@@ -180,7 +180,7 @@
             }
             
             messageElement.textContent = message.text;
-            messagesContainer.prepend(messageElement); // prepend to add new messages at the bottom
+            messagesContainer.prepend(messageElement);
         }
 
         // **7. إرسال رسالة جديدة**
@@ -197,13 +197,13 @@
                     timestamp: serverTimestamp()
                 });
                 
-                // Update the last message in the main chat document
                 await updateDoc(doc(db, "chats", chatId), {
                     lastMessage: messageText,
                     lastMessageTimestamp: serverTimestamp()
                 });
 
-                messageInput.value = ''; // Clear input field
+                // **تمت إضافة هذا السطر:**
+                messageInput.value = ''; // مسح حقل الإدخال بعد الإرسال
             } catch (error) {
                 console.error("Error sending message:", error);
             }
@@ -227,7 +227,7 @@
                 listenForMessages();
                 sendButton.disabled = false;
             } else {
-                window.location.href = "login.html"; // Redirect to login
+                window.location.href = "login.html";
             }
         });
 
