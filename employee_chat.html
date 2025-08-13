@@ -3,179 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محادثة مع الشركة - شغلني</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>مراسلة الشركة - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f3f4f6;
         }
-        .message-box {
-            max-height: calc(100vh - 200px);
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .chat-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .chat-messages {
+            flex-grow: 1;
             overflow-y: auto;
-            scroll-behavior: smooth;
+            padding: 1rem;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .chat-input {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+        .message-bubble {
+            max-width: 75%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        .message-sent {
+            background-color: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            margin-right: 1rem;
+            border-bottom-right-radius: 0;
+        }
+        .message-received {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            align-self: flex-start;
+            margin-left: 1rem;
+            border-bottom-left-radius: 0;
         }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col h-screen">
-
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10 mr-2">
-                        <span class="text-xl font-bold text-blue-600">شغلني</span>
-                    </a>
-                </div>
-                <div class="mr-4">
-                    <a href="login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل الدخول</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="flex-1 flex flex-col p-6">
-        <div class="bg-white rounded-t-xl shadow-md p-4 flex items-center justify-between border-b border-gray-200">
-            <div class="flex items-center">
-                <img id="company-logo" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="شعار الشركة" class="w-12 h-12 rounded-full object-cover ml-3">
-                <div>
-                    <h2 id="company-name" class="text-xl font-bold text-gray-800">المجموعة المالية المتحدة</h2>
-                    <p id="job-title" class="text-sm text-gray-500">مراسلة بخصوص وظيفة: **محاسب مالي**</p>
-                    <p id="job-status" class="text-sm font-semibold text-yellow-500 mt-1">حالة الطلب: قيد المراجعة</p>
-                </div>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <a href="javascript:history.back()" class="text-gray-500 hover:text-gray-900 mr-4">
+                <i class="fas fa-arrow-right text-xl"></i>
+            </a>
+            <img id="company-logo" src="https://via.placeholder.com/150" alt="شعار الشركة" class="w-12 h-12 rounded-full object-cover ml-3">
+            <div>
+                <h3 id="company-name" class="text-lg font-bold text-gray-800">جاري التحميل...</h3>
+                <p id="chat-status" class="text-sm text-gray-500">متصل الآن</p>
             </div>
         </div>
-
-        <div id="message-box" class="message-box flex-1 bg-white p-6 overflow-y-auto rounded-b-xl shadow-md">
+        <div id="messages-container" class="chat-messages">
+            <div id="loading-messages" class="text-center text-gray-500 p-4">جاري تحميل الرسائل...</div>
+        </div>
+        <div class="chat-input">
+            <div class="flex items-center">
+                <input type="text" id="message-input" placeholder="اكتب رسالتك..."
+                       class="flex-1 p-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
+                <button id="send-button"
+                        class="bg-blue-600 text-white p-3 rounded-full mr-3 hover:bg-blue-700 transition duration-200" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
-
-        <form id="message-form" class="mt-4 p-4 bg-white rounded-xl shadow-md flex items-center">
-            <input id="message-input" type="text" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ml-2">
-            <button type="submit" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </form>
+        </div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, serverTimestamp, getDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // **1. تهيئة Firebase - بيانات مشروعك**
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
             projectId: "shaglni-c64c0",
             storageBucket: "shaglni-c64c0.firebasestorage.app",
             messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:d836c1d5d30167279c8819",
-            measurementId: "G-5P0MNGPMG0"
+            appId: "1:768887356636:web:3aca75cb4733f0e49c8819",
+            measurementId: "G-XKM89TW824"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-
-        // **2. ربط عناصر الواجهة**
-        const messageBox = document.getElementById('message-box');
-        const messageForm = document.getElementById('message-form');
+        const messagesContainer = document.getElementById('messages-container');
         const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
         const companyNameEl = document.getElementById('company-name');
         const companyLogoEl = document.getElementById('company-logo');
-        const jobTitleEl = document.getElementById('job-title');
-        const jobStatusEl = document.getElementById('job-status');
-
-        let currentChatId = null;
-        let companyId = null;
-        let jobId = null;
-
-        // **3. استخراج البيانات من URL (طريقة ديناميكية)**
+        const loadingMessages = document.getElementById('loading-messages');
         const urlParams = new URLSearchParams(window.location.search);
-        currentChatId = urlParams.get('chatId');
-        companyId = urlParams.get('companyId');
-        jobId = urlParams.get('jobId');
-
-        // **4. تحديث واجهة المحادثة ببيانات الشركة والوظيفة**
-        async function updateChatHeader() {
-            if (companyId) {
-                const companyRef = doc(db, "companies", companyId); // تأكد من اسم مجموعة الشركات
-                const companySnap = await getDoc(companyRef);
-                if (companySnap.exists()) {
-                    const companyData = companySnap.data();
-                    companyNameEl.textContent = companyData.name;
-                    companyLogoEl.src = companyData.logoUrl;
-                }
+        const chatId = urlParams.get('chatId');
+        const companyId = urlParams.get('companyId');
+        let currentUserId = null;
+        async function fetchCompanyData() {
+            if (!companyId) {
+                companyNameEl.textContent = 'خطأ: لم يتم تحديد الشركة.';
+                return;
             }
-            if (jobId) {
-                const jobRef = doc(db, "jobs", jobId); // تأكد من اسم مجموعة الوظائف
-                const jobSnap = await getDoc(jobRef);
-                if (jobSnap.exists()) {
-                    const jobData = jobSnap.data();
-                    jobTitleEl.textContent = `مراسلة بخصوص وظيفة: **${jobData.title}**`;
+            try {
+                const companyDoc = await getDoc(doc(db, "companies", companyId));
+                if (companyDoc.exists()) {
+                    const companyData = companyDoc.data();
+                    companyNameEl.textContent = companyData.name || 'شركة غير معروفة';
+                    companyLogoEl.src = companyData.logoUrl || 'https://via.placeholder.com/150';
+                } else {
+                    companyNameEl.textContent = 'الشركة غير موجودة.';
                 }
+            } catch (error) {
+                console.error("Error fetching company data:", error);
+                companyNameEl.textContent = 'خطأ في جلب البيانات.';
             }
-            // يجب تحديث حالة الطلب من مكان آخر، ربما من طلبات المستخدم
-            jobStatusEl.textContent = "حالة الطلب: قيد المراجعة";
         }
-
-        // **5. عرض الرسائل من Firestore**
-        function displayMessages(chatId) {
-            const messagesQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
-
+        fetchCompanyData();
+        function listenForMessages() {
+            if (!chatId) {
+                loadingMessages.textContent = 'خطأ: لم يتم تحديد المحادثة.';
+                return;
+            }
+            const messagesQuery = query(
+                collection(db, `chats/${chatId}/messages`),
+                orderBy("timestamp", "asc")
+            );
             onSnapshot(messagesQuery, (snapshot) => {
-                messageBox.innerHTML = '';
-                snapshot.forEach((doc) => {
-                    const messageData = doc.data();
-                    const messageElement = document.createElement('div');
-                    const isMyMessage = messageData.senderId === auth.currentUser.uid;
-                    messageElement.classList.add('flex', 'mb-4', isMyMessage ? 'justify-end' : 'justify-start');
-                    const messageContent = `
-                        <div class="bg-${isMyMessage ? 'blue-600' : 'gray-200'} text-${isMyMessage ? 'white' : 'gray-800'} p-3 rounded-lg max-w-sm">
-                            <p>${messageData.text}</p>
-                        </div>
-                    `;
-                    messageElement.innerHTML = messageContent;
-                    messageBox.appendChild(messageElement);
+                loadingMessages.classList.add('hidden');
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const messageData = change.doc.data();
+                        displayMessage(messageData);
+                    }
                 });
-                messageBox.scrollTop = messageBox.scrollHeight;
+            }, (error) => {
+                console.error("Error listening for messages:", error);
+                loadingMessages.textContent = 'حدث خطأ أثناء تحميل الرسائل.';
             });
         }
-
-        // **6. إرسال رسالة جديدة**
-        messageForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        function displayMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message-bubble');
+            if (message.senderId === currentUserId) {
+                messageElement.classList.add('message-sent', 'mr-auto');
+            } else {
+                messageElement.classList.add('message-received', 'ml-auto');
+            }
+            messageElement.textContent = message.text;
+            messagesContainer.prepend(messageElement);
+        }
+        async function sendMessage() {
             const messageText = messageInput.value.trim();
-            if (messageText === '') return;
-
-            if (auth.currentUser && currentChatId) {
-                await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                    senderId: auth.currentUser.uid,
+            if (messageText === "" || !currentUserId || !chatId) {
+                return;
+            }
+            try {
+                await addDoc(collection(db, `chats/${chatId}/messages`), {
                     text: messageText,
+                    senderId: currentUserId,
                     timestamp: serverTimestamp()
                 });
+                await updateDoc(doc(db, "chats", chatId), {
+                    lastMessage: messageText,
+                    lastMessageTimestamp: serverTimestamp()
+                });
                 messageInput.value = '';
-            } else {
-                alert("يجب تسجيل الدخول وبدء محادثة لإرسال الرسائل.");
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        }
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
-
-        // **7. عند تحميل الصفحة، ابدأ بعرض الرسائل**
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('input', () => {
+            sendButton.disabled = messageInput.value.trim() === '';
+        });
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (currentChatId) {
-                    updateChatHeader();
-                    displayMessages(currentChatId);
-                } else {
-                    alert("خطأ: لم يتم تحديد محادثة.");
-                    // يمكنك إعادة التوجيه إلى صفحة لوحة التحكم
-                    // window.location.href = "employee_dashboard.html";
-                }
+                currentUserId = user.uid;
+                listenForMessages();
+                sendButton.disabled = false;
             } else {
-                window.location.href = "login.html"; // إعادة التوجيه لصفحة تسجيل الدخول
+                window.location.href = "login.html";
             }
         });
     </script>
