@@ -1,1 +1,165 @@
-gzhs
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الموظف - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .sidebar {
+            width: 250px;
+        }
+        .sidebar a {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+        .sidebar a.active {
+            background-color: #1d4ed8;
+            color: white;
+            font-weight: 700;
+        }
+        .sidebar a:hover:not(.active) {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex min-h-screen">
+
+    <aside class="sidebar bg-white shadow-lg p-6 flex flex-col">
+        <div class="mb-8">
+            <a href="#" class="flex items-center space-x-2 rtl:space-x-reverse">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10">
+                <span class="text-2xl font-bold text-blue-600">شغلني</span>
+            </a>
+        </div>
+        <nav class="flex-1">
+            <a href="employee_dashboard.html" class="active">
+                <i class="fas fa-comments ml-3"></i>
+                <span>محادثاتي</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-briefcase ml-3"></i>
+                <span>الوظائف</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-building ml-3"></i>
+                <span>الشركات</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-user ml-3"></i>
+                <span>ملفي الشخصي</span>
+            </a>
+        </nav>
+        <div class="mt-auto">
+            <a href="#" class="text-red-600 hover:text-white hover:bg-red-600">
+                <i class="fas fa-sign-out-alt ml-3"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">محادثاتي مع الشركات</h1>
+            <div id="chatsList" class="space-y-4">
+                <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل المحادثات...</div>
+                <div id="noChatsFound" class="hidden text-center text-lg text-gray-500 p-8">لا توجد محادثات حتى الآن.</div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // **1. تهيئة Firebase - بيانات مشروعك**
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:3aca75cb4733f0e49c8819",
+            measurementId: "G-XKM89TW824"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // **2. ربط عناصر الواجهة**
+        const chatsList = document.getElementById('chatsList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noChatsFound = document.getElementById('noChatsFound');
+
+        // **3. دالة لجلب المحادثات وعرضها**
+        async function fetchChats() {
+            loadingIndicator.classList.remove('hidden');
+            chatsList.innerHTML = '';
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const employeeId = user.uid;
+                    try {
+                        const chatsQuery = query(collection(db, "chats"), where("employeeId", "==", employeeId), orderBy("lastMessageTimestamp", "desc"));
+                        const chatsSnapshot = await getDocs(chatsQuery);
+
+                        if (chatsSnapshot.empty) {
+                            noChatsFound.classList.remove('hidden');
+                        } else {
+                            noChatsFound.classList.add('hidden');
+                            for (const docSnapshot of chatsSnapshot.docs) {
+                                const chatData = docSnapshot.data();
+                                const chatId = docSnapshot.id;
+
+                                // جلب بيانات الشركة المرتبطة بالمحادثة
+                                const companyId = chatData.companyId;
+                                const companyDoc = await getDoc(doc(db, "companies", companyId));
+                                const companyData = companyDoc.exists() ? companyDoc.data() : { name: 'شركة غير معروفة', logoUrl: 'https://via.placeholder.com/150' };
+
+                                const companyName = companyData.name;
+                                const companyLogoUrl = companyData.logoUrl;
+                                const lastMessage = chatData.lastMessage || 'لا توجد رسائل حديثة';
+
+                                const chatCard = document.createElement('a');
+                                chatCard.href = `employee_chat.html?chatId=${chatId}&companyId=${companyId}`;
+                                chatCard.className = 'flex items-center space-x-4 rtl:space-x-reverse bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition duration-200';
+                                chatCard.innerHTML = `
+                                    <img src="${companyLogoUrl}" alt="شعار الشركة" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-800">${companyName}</h4>
+                                        <p class="text-xs text-gray-400 mt-1">${lastMessage}</p>
+                                    </div>
+                                    <i class="fas fa-chevron-left text-gray-400"></i>
+                                `;
+                                chatsList.appendChild(chatCard);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error fetching chats:", error);
+                        chatsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل المحادثات.</div>';
+                    } finally {
+                        loadingIndicator.classList.add('hidden');
+                    }
+                } else {
+                    window.location.href = "login.html";
+                }
+            });
+        }
+
+        // **4. استدعاء الدالة عند تحميل الصفحة**
+        document.addEventListener('DOMContentLoaded', fetchChats);
+    </script>
+</body>
+</html>
