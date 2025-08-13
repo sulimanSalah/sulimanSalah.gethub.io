@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الشركة - شغلني</title>
+    <title>لوحة تحكم الموظف - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -44,29 +44,25 @@
             </a>
         </div>
         <nav class="flex-1">
-            <a href="company_dashboard.html" class="active">
-                <i class="fas fa-home ml-3"></i>
-                <span>لوحة التحكم</span>
-            </a>
-            <a href="company_jobs.html">
-                <i class="fas fa-briefcase ml-3"></i>
-                <span>وظائفي</span>
-            </a>
-            <a href="company_applicants.html">
-                <i class="fas fa-users ml-3"></i>
-                <span>المتقدمون</span>
-            </a>
-            <a href="company_chats.html">
+            <a href="employee_dashboard.html" class="active">
                 <i class="fas fa-comments ml-3"></i>
-                <span>المحادثات</span>
+                <span>محادثاتي</span>
             </a>
-            <a href="company_settings.html">
-                <i class="fas fa-cog ml-3"></i>
-                <span>الإعدادات</span>
+            <a href="#">
+                <i class="fas fa-briefcase ml-3"></i>
+                <span>الوظائف</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-building ml-3"></i>
+                <span>الشركات</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-user ml-3"></i>
+                <span>ملفي الشخصي</span>
             </a>
         </nav>
         <div class="mt-auto">
-            <a href="logout.html" class="text-red-600 hover:text-white hover:bg-red-600">
+            <a href="#" class="text-red-600 hover:text-white hover:bg-red-600">
                 <i class="fas fa-sign-out-alt ml-3"></i>
                 <span>تسجيل الخروج</span>
             </a>
@@ -75,7 +71,7 @@
 
     <main class="flex-1 p-8">
         <div class="bg-white shadow-lg rounded-xl p-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">محادثاتي مع الموظفين</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">محادثاتي مع الشركات</h1>
             <div id="chatsList" class="space-y-4">
                 <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل المحادثات...</div>
                 <div id="noChatsFound" class="hidden text-center text-lg text-gray-500 p-8">لا توجد محادثات حتى الآن.</div>
@@ -85,7 +81,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // **1. تهيئة Firebase - بيانات مشروعك**
@@ -95,8 +91,8 @@
             projectId: "shaglni-c64c0",
             storageBucket: "shaglni-c64c0.firebasestorage.app",
             messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:d836c1d5d30167279c8819",
-            measurementId: "G-5P0MNGPMG0"
+            appId: "1:768887356636:web:3aca75cb4733f0e49c8819",
+            measurementId: "G-XKM89TW824"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -114,40 +110,41 @@
 
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    const companyId = user.uid;
+                    const employeeId = user.uid;
                     try {
-                        const chatsQuery = query(collection(db, "chats"), where("companyId", "==", companyId), orderBy("lastMessageTimestamp", "desc"));
+                        const chatsQuery = query(collection(db, "chats"), where("employeeId", "==", employeeId), orderBy("lastMessageTimestamp", "desc"));
                         const chatsSnapshot = await getDocs(chatsQuery);
 
                         if (chatsSnapshot.empty) {
                             noChatsFound.classList.remove('hidden');
                         } else {
                             noChatsFound.classList.add('hidden');
-                            chatsSnapshot.forEach(doc => {
-                                const chatData = doc.data();
-                                const chatId = doc.id;
+                            for (const docSnapshot of chatsSnapshot.docs) {
+                                const chatData = docSnapshot.data();
+                                const chatId = docSnapshot.id;
+                                
+                                // جلب بيانات الشركة المرتبطة بالمحادثة
+                                const companyId = chatData.companyId;
+                                const companyDoc = await getDoc(doc(db, "companies", companyId));
+                                const companyData = companyDoc.exists() ? companyDoc.data() : { name: 'شركة غير معروفة', logoUrl: 'https://via.placeholder.com/150' };
 
-                                // يمكنك تعديل هذا الجزء لجلب بيانات الموظف والوظيفة
-                                // من قاعدة البيانات وعرضها في البطاقة
-                                const employeeName = chatData.employeeName || 'موظف غير معروف';
-                                const jobTitle = chatData.jobTitle || 'وظيفة غير محددة';
+                                const companyName = companyData.name;
+                                const companyLogoUrl = companyData.logoUrl;
                                 const lastMessage = chatData.lastMessage || 'لا توجد رسائل حديثة';
-                                const employeePhotoUrl = chatData.employeePhotoUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
 
                                 const chatCard = document.createElement('a');
-                                chatCard.href = `company_chat.html?chatId=${chatId}&employeeId=${chatData.employeeId}&jobId=${chatData.jobId}`;
+                                chatCard.href = `employee_chat.html?chatId=${chatId}&companyId=${companyId}`;
                                 chatCard.className = 'flex items-center space-x-4 rtl:space-x-reverse bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition duration-200';
                                 chatCard.innerHTML = `
-                                    <img src="${employeePhotoUrl}" alt="صورة الموظف" class="w-12 h-12 rounded-full object-cover">
+                                    <img src="${companyLogoUrl}" alt="شعار الشركة" class="w-12 h-12 rounded-full object-cover">
                                     <div class="flex-1">
-                                        <h4 class="font-bold text-gray-800">${employeeName}</h4>
-                                        <p class="text-sm text-gray-600">${jobTitle}</p>
+                                        <h4 class="font-bold text-gray-800">${companyName}</h4>
                                         <p class="text-xs text-gray-400 mt-1">${lastMessage}</p>
                                     </div>
                                     <i class="fas fa-chevron-left text-gray-400"></i>
                                 `;
                                 chatsList.appendChild(chatCard);
-                            });
+                            }
                         }
                     } catch (error) {
                         console.error("Error fetching chats:", error);
