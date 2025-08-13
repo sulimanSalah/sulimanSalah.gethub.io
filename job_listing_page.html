@@ -18,42 +18,34 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
-
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
         }
-
         .job-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-
         .job-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
-
         .job-type-full-time {
             background-color: #d1fae5;
             color: #065f46;
         }
-
         .job-type-part-time {
             background-color: #fef3c7;
             color: #92400e;
         }
-
         .job-type-remote {
             background-color: #dbeafe;
             color: #1e40af;
         }
-
         .job-type-contract {
             background-color: #e0e7ff;
             color: #4338ca;
         }
-
         .skill-tag {
             display: inline-flex;
             align-items: center;
@@ -64,7 +56,6 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
-        
         .filters-container {
             max-height: 0;
             overflow: hidden;
@@ -100,7 +91,6 @@
             </div>
         </div>
     </nav>
-
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h1>
@@ -111,7 +101,6 @@
                 </a>
             </div>
         </div>
-
         <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
             <div class="flex flex-col md:flex-row md:items-center gap-4">
                 <div class="flex-1 relative">
@@ -125,7 +114,6 @@
                     <i class="fas fa-sliders-h ml-2"></i> فلاتر متقدمة
                 </button>
             </div>
-            
             <div id="filtersDropdown" class="filters-container">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                     <div>
@@ -193,20 +181,17 @@
                 </div>
             </div>
         </div>
-        
         <div id="jobsList" class="space-y-4">
             <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الوظائف...</div>
             <div id="noJobsFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على وظائف مطابقة.</div>
         </div>
     </div>
-
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // Your web app's Firebase configuration
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -216,14 +201,13 @@
           appId: "1:768887356636:web:d191b03d97feb7929c8819",
           measurementId: "G-18W3JYHM60"
         };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-
+        const auth = getAuth(app);
+        
         let allJobs = [];
-
+        let currentUserId = null;
         const jobsList = document.getElementById('jobsList');
         const jobCountElement = document.getElementById('jobCount');
         const searchInput = document.getElementById('searchInput');
@@ -231,13 +215,11 @@
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const noJobsFound = document.getElementById('noJobsFound');
-
-        // وظيفة لتبديل عرض الفلاتر
+        
         toggleFiltersBtn.addEventListener('click', () => {
             filtersDropdown.classList.toggle('active');
         });
-
-        // وظيفة جلب الوظائف من Firebase
+        
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
@@ -252,8 +234,7 @@
                 loadingIndicator.classList.add('hidden');
             }
         }
-
-        // وظيفة لعرض الوظائف في الصفحة
+        
         function renderJobs(jobs) {
             jobsList.innerHTML = '';
             if (jobs.length === 0) {
@@ -261,7 +242,7 @@
             } else {
                 noJobsFound.classList.add('hidden');
                 jobs.forEach(job => {
-                    const skillsHtml = job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
+                    const skillsHtml = job.skills?.map(skill => `<span class="skill-tag">${skill}</span>`).join('') || '';
                     const jobCardHtml = `
                         <div class="bg-white rounded-xl shadow-sm job-card overflow-hidden">
                             <div class="p-6">
@@ -280,11 +261,11 @@
                                     </div>
                                     <div class="flex flex-col items-end">
                                         <span class="px-3 py-1 rounded-full job-type-${job.jobType} text-xs font-semibold mb-2">${getJobTypeLabel(job.jobType)}</span>
-                                        <span class="text-lg font-bold text-blue-600">${job.salaryRange.from} - ${job.salaryRange.to} جنيه</span>
+                                        <span class="text-lg font-bold text-blue-600">${job.salaryRange?.from || ''} - ${job.salaryRange?.to || ''} جنيه</span>
                                     </div>
                                 </div>
                                 <div class="mt-4">
-                                    <p class="text-gray-700 mb-4">${job.jobDescription.substring(0, 150)}...</p>
+                                    <p class="text-gray-700 mb-4">${job.jobDescription?.substring(0, 150) || 'لا يوجد وصف'}...</p>
                                     <div class="mb-4">
                                         <h4 class="font-semibold text-sm mb-2">المهارات المطلوبة:</h4>
                                         <div class="flex flex-wrap">${skillsHtml}</div>
@@ -295,12 +276,13 @@
                                             <span>منذ ${getTimeElapsed(job.timestamp)}</span>
                                         </div>
                                         <div class="flex space-x-3 rtl:space-x-reverse">
-                                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                            <a href="job_details.html?jobId=${job.id}" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
                                                 <i class="fas fa-eye ml-1"></i> عرض التفاصيل
-                                            </button>
-                                            <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
-                                                <i class="far fa-heart ml-1"></i> حفظ
-                                            </button>
+                                            </a>
+                                            <a href="employee_chat.html?chatId=chat_${job.companyId}_${currentUserId}&companyId=${job.companyId}"
+                                               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                                <i class="fas fa-envelope ml-1"></i> مراسلة
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -312,8 +294,7 @@
             }
             jobCountElement.textContent = `${jobs.length} وظيفة متاحة`;
         }
-
-        // وظيفة التصفية الرئيسية
+        
         function filterJobs() {
             const searchText = searchInput.value.toLowerCase();
             const selectedState = document.getElementById('stateFilter').value;
@@ -321,26 +302,19 @@
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value) || 0;
             const salaryTo = parseInt(document.getElementById('salaryTo').value) || Infinity;
             const selectedJobTypes = Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(cb => cb.value);
-
+            
             const filteredJobs = allJobs.filter(job => {
-                const jobText = `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.skills.join(' ')}`.toLowerCase();
+                const jobText = `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.skills?.join(' ') || ''}`.toLowerCase();
                 const matchesSearch = jobText.includes(searchText);
-                
                 const matchesState = selectedState === '' || (job.jobLocation && job.jobLocation.includes(selectedState));
-                
                 const matchesExperience = selectedExperience === '' || job.experienceLevel === selectedExperience;
-
                 const matchesSalary = (job.salaryRange && job.salaryRange.from >= salaryFrom && job.salaryRange.to <= salaryTo);
-                
                 const matchesJobType = selectedJobTypes.length === 0 || selectedJobTypes.includes(job.jobType);
-
                 return matchesSearch && matchesState && matchesExperience && matchesSalary && matchesJobType;
             });
-
             renderJobs(filteredJobs);
         }
-
-        // وظائف مساعدة
+        
         function getJobTypeLabel(type) {
             switch (type) {
                 case 'full-time': return 'دوام كامل';
@@ -350,24 +324,25 @@
                 default: return '';
             }
         }
+        
         function getTimeElapsed(timestamp) {
+            if (!timestamp) return 'غير محدد';
+            const jobDate = new Date(timestamp.toDate());
             const now = new Date();
-            const jobDate = new Date(timestamp);
             const diffInSeconds = Math.floor((now - jobDate) / 1000);
             
             const minutes = Math.floor(diffInSeconds / 60);
             const hours = Math.floor(minutes / 60);
             const days = Math.floor(hours / 24);
             const weeks = Math.floor(days / 7);
-
+            
             if (weeks > 0) return `منذ ${weeks} أسبوع`;
             if (days > 0) return `منذ ${days} يوم`;
             if (hours > 0) return `منذ ${hours} ساعة`;
             if (minutes > 0) return `منذ ${minutes} دقيقة`;
             return 'الآن';
         }
-
-        // إضافة مستمعات للأحداث لتشغيل التصفية
+        
         searchInput.addEventListener('input', filterJobs);
         document.getElementById('stateFilter').addEventListener('change', filterJobs);
         document.getElementById('experienceFilter').addEventListener('change', filterJobs);
@@ -376,9 +351,18 @@
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', filterJobs);
         });
-
-        // تشغيل جلب البيانات عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', fetchJobs);
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                fetchJobs();
+            } else {
+                // إذا لم يكن المستخدم مسجلاً، يمكن توجيهه إلى صفحة تسجيل الدخول
+                // window.location.href = "login.html";
+                // أو يمكننا عرض الوظائف له فقط دون إمكانية المراسلة
+                fetchJobs();
+            }
+        });
     </script>
 </body>
 </html>
