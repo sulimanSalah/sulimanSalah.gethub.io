@@ -18,34 +18,42 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
+
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
         }
+
         .job-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
+
         .job-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
+
         .job-type-full-time {
             background-color: #d1fae5;
             color: #065f46;
         }
+
         .job-type-part-time {
             background-color: #fef3c7;
             color: #92400e;
         }
+
         .job-type-remote {
             background-color: #dbeafe;
             color: #1e40af;
         }
+
         .job-type-contract {
             background-color: #e0e7ff;
             color: #4338ca;
         }
+
         .skill-tag {
             display: inline-flex;
             align-items: center;
@@ -56,6 +64,7 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
+
         .filters-container {
             max-height: 0;
             overflow: hidden;
@@ -91,6 +100,7 @@
             </div>
         </div>
     </nav>
+
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h1>
@@ -101,6 +111,7 @@
                 </a>
             </div>
         </div>
+
         <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
             <div class="flex flex-col md:flex-row md:items-center gap-4">
                 <div class="flex-1 relative">
@@ -114,6 +125,7 @@
                     <i class="fas fa-sliders-h ml-2"></i> فلاتر متقدمة
                 </button>
             </div>
+
             <div id="filtersDropdown" class="filters-container">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                     <div>
@@ -181,33 +193,36 @@
                 </div>
             </div>
         </div>
+
         <div id="jobsList" class="space-y-4">
             <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الوظائف...</div>
             <div id="noJobsFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على وظائف مطابقة.</div>
         </div>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+        
         const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:d191b03d97feb7929c8819",
-          measurementId: "G-18W3JYHM60"
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:d191b03d97feb7929c8819",
+            measurementId: "G-18W3JYHM60"
         };
+
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
         let allJobs = [];
         let currentUserId = null;
+        
         const jobsList = document.getElementById('jobsList');
         const jobCountElement = document.getElementById('jobCount');
         const searchInput = document.getElementById('searchInput');
@@ -224,9 +239,34 @@
             loadingIndicator.classList.remove('hidden');
             try {
                 const querySnapshot = await getDocs(collection(db, "jobs"));
-                allJobs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const jobsPromises = querySnapshot.docs.map(async docSnapshot => {
+                    const jobData = docSnapshot.data();
+                    const companyId = jobData.companyId;
+                    let companyName = "غير معروف";
+                    let companyLogoUrl = "https://via.placeholder.com/60";
+                    
+                    if (companyId) {
+                        const companyDoc = await getDoc(doc(db, "companies", companyId));
+                        if (companyDoc.exists()) {
+                            const companyData = companyDoc.data();
+                            companyName = companyData.name || companyName;
+                            companyLogoUrl = companyData.logoUrl || companyLogoUrl;
+                        }
+                    }
+                    
+                    return {
+                        id: docSnapshot.id,
+                        ...jobData,
+                        companyName: companyName,
+                        companyLogoUrl: companyLogoUrl
+                    };
+                });
+                
+                allJobs = await Promise.all(jobsPromises);
                 console.log('تم جلب الوظائف بنجاح:', allJobs);
                 filterJobs();
+                
             } catch (error) {
                 console.error("خطأ في جلب الوظائف:", error);
                 jobsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل الوظائف.</div>';
@@ -242,26 +282,29 @@
             } else {
                 noJobsFound.classList.add('hidden');
                 jobs.forEach(job => {
-                    const skillsHtml = job.skills?.map(skill => `<span class="skill-tag">${skill}</span>`).join('') || '';
+                    const skillsHtml = (job.skills && Array.isArray(job.skills)) ? job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('') : '';
+                    const salaryFrom = job.salaryRange?.from || '';
+                    const salaryTo = job.salaryRange?.to || '';
+
                     const jobCardHtml = `
                         <div class="bg-white rounded-xl shadow-sm job-card overflow-hidden">
                             <div class="p-6">
                                 <div class="flex flex-col md:flex-row md:items-start md:justify-between">
                                     <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                        <img src="${job.companyLogo || 'https://via.placeholder.com/60'}" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
+                                        <img src="${job.companyLogoUrl}" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
                                         <div>
-                                            <h3 class="font-bold text-lg">${job.jobTitle}</h3>
+                                            <h3 class="font-bold text-lg">${job.jobTitle || 'عنوان الوظيفة غير محدد'}</h3>
                                             <div class="flex items-center text-gray-600 text-sm mt-1">
                                                 <span>${job.companyName}</span>
                                                 <span class="mx-2">•</span>
                                                 <i class="fas fa-map-marker-alt ml-1"></i>
-                                                <span>${job.jobLocation}</span>
+                                                <span>${job.jobLocation || 'غير محدد'}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex flex-col items-end">
                                         <span class="px-3 py-1 rounded-full job-type-${job.jobType} text-xs font-semibold mb-2">${getJobTypeLabel(job.jobType)}</span>
-                                        <span class="text-lg font-bold text-blue-600">${job.salaryRange?.from || ''} - ${job.salaryRange?.to || ''} جنيه</span>
+                                        <span class="text-lg font-bold text-blue-600">${salaryFrom} - ${salaryTo} جنيه</span>
                                     </div>
                                 </div>
                                 <div class="mt-4">
@@ -295,6 +338,9 @@
             jobCountElement.textContent = `${jobs.length} وظيفة متاحة`;
         }
 
+        // ... بقية الدوال (filterJobs, getJobTypeLabel, getTimeElapsed)
+        // لم يتم تغييرها لأنها صحيحة
+        
         function filterJobs() {
             const searchText = searchInput.value.toLowerCase();
             const selectedState = document.getElementById('stateFilter').value;
@@ -302,7 +348,7 @@
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value) || 0;
             const salaryTo = parseInt(document.getElementById('salaryTo').value) || Infinity;
             const selectedJobTypes = Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(cb => cb.value);
-
+            
             const filteredJobs = allJobs.filter(job => {
                 const jobText = `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.skills?.join(' ') || ''}`.toLowerCase();
                 const matchesSearch = jobText.includes(searchText);
@@ -314,7 +360,7 @@
             });
             renderJobs(filteredJobs);
         }
-
+        
         function getJobTypeLabel(type) {
             switch (type) {
                 case 'full-time': return 'دوام كامل';
@@ -324,25 +370,25 @@
                 default: return '';
             }
         }
-
+        
         function getTimeElapsed(timestamp) {
             if (!timestamp) return 'غير محدد';
             const jobDate = new Date(timestamp.toDate());
             const now = new Date();
             const diffInSeconds = Math.floor((now - jobDate) / 1000);
-
+            
             const minutes = Math.floor(diffInSeconds / 60);
             const hours = Math.floor(minutes / 60);
             const days = Math.floor(hours / 24);
             const weeks = Math.floor(days / 7);
-
+            
             if (weeks > 0) return `منذ ${weeks} أسبوع`;
             if (days > 0) return `منذ ${days} يوم`;
             if (hours > 0) return `منذ ${hours} ساعة`;
             if (minutes > 0) return `منذ ${minutes} دقيقة`;
             return 'الآن';
         }
-
+        
         searchInput.addEventListener('input', filterJobs);
         document.getElementById('stateFilter').addEventListener('change', filterJobs);
         document.getElementById('experienceFilter').addEventListener('change', filterJobs);
@@ -351,17 +397,14 @@
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', filterJobs);
         });
-
-        // هذا هو الجزء الذي تم تعديله
+        
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
+                fetchJobs();
             } else {
-                currentUserId = null;
+                fetchJobs();
             }
-            // يتم استدعاء fetchJobs الآن في كل مرة يتم فيها تغيير حالة المصادقة
-            // سواء كان المستخدم مسجلاً أو لا، لضمان عرض الوظائف للجميع.
-            fetchJobs();
         });
     </script>
 </body>
