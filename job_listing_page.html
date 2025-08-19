@@ -18,42 +18,34 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
-
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
         }
-
         .job-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-
         .job-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
-
         .job-type-full-time {
             background-color: #d1fae5;
             color: #065f46;
         }
-
         .job-type-part-time {
             background-color: #fef3c7;
             color: #92400e;
         }
-
         .job-type-remote {
             background-color: #dbeafe;
             color: #1e40af;
         }
-
         .job-type-contract {
             background-color: #e0e7ff;
             color: #4338ca;
         }
-
         .skill-tag {
             display: inline-flex;
             align-items: center;
@@ -64,7 +56,6 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
-
         .filters-container {
             max-height: 0;
             overflow: hidden;
@@ -100,7 +91,6 @@
             </div>
         </div>
     </nav>
-
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">الوظائف المتاحة</h1>
@@ -111,7 +101,6 @@
                 </a>
             </div>
         </div>
-
         <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
             <div class="flex flex-col md:flex-row md:items-center gap-4">
                 <div class="flex-1 relative">
@@ -125,7 +114,6 @@
                     <i class="fas fa-sliders-h ml-2"></i> فلاتر متقدمة
                 </button>
             </div>
-
             <div id="filtersDropdown" class="filters-container">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                     <div>
@@ -193,16 +181,13 @@
                 </div>
             </div>
         </div>
-
         <div id="jobsList" class="space-y-4">
             <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الوظائف...</div>
             <div id="noJobsFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على وظائف مطابقة.</div>
         </div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         
@@ -215,11 +200,9 @@
             appId: "1:768887356636:web:d191b03d97feb7929c8819",
             measurementId: "G-18W3JYHM60"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-
         let allJobs = [];
         let currentUserId = null;
         
@@ -230,43 +213,49 @@
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const noJobsFound = document.getElementById('noJobsFound');
-
+        
         toggleFiltersBtn.addEventListener('click', () => {
             filtersDropdown.classList.toggle('active');
         });
-
+        
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
-                const querySnapshot = await getDocs(collection(db, "jobs"));
-                
-                const jobsPromises = querySnapshot.docs.map(async docSnapshot => {
+                // **تم تصحيح اسم المجموعة هنا**
+                const querySnapshot = await getDocs(collection(db, "Jop"));
+                const jobDocs = querySnapshot.docs;
+                const jobsWithCompanyData = [];
+        
+                for (const docSnapshot of jobDocs) {
                     const jobData = docSnapshot.data();
                     const companyId = jobData.companyId;
                     let companyName = "غير معروف";
                     let companyLogoUrl = "https://via.placeholder.com/60";
-                    
+        
                     if (companyId) {
-                        const companyDoc = await getDoc(doc(db, "companies", companyId));
-                        if (companyDoc.exists()) {
-                            const companyData = companyDoc.data();
-                            companyName = companyData.name || companyName;
-                            companyLogoUrl = companyData.logoUrl || companyLogoUrl;
+                        try {
+                            const companyDoc = await getDoc(doc(db, "companies", companyId));
+                            if (companyDoc.exists()) {
+                                const companyData = companyDoc.data();
+                                companyName = companyData.name || companyName;
+                                companyLogoUrl = companyData.logoUrl || companyLogoUrl;
+                            }
+                        } catch (error) {
+                            console.error("خطأ في جلب بيانات الشركة:", error);
                         }
                     }
-                    
-                    return {
+        
+                    jobsWithCompanyData.push({
                         id: docSnapshot.id,
                         ...jobData,
                         companyName: companyName,
                         companyLogoUrl: companyLogoUrl
-                    };
-                });
-                
-                allJobs = await Promise.all(jobsPromises);
+                    });
+                }
+        
+                allJobs = jobsWithCompanyData;
                 console.log('تم جلب الوظائف بنجاح:', allJobs);
                 filterJobs();
-                
             } catch (error) {
                 console.error("خطأ في جلب الوظائف:", error);
                 jobsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل الوظائف.</div>';
@@ -274,7 +263,7 @@
                 loadingIndicator.classList.add('hidden');
             }
         }
-
+        
         function renderJobs(jobs) {
             jobsList.innerHTML = '';
             if (jobs.length === 0) {
@@ -285,61 +274,57 @@
                     const skillsHtml = (job.skills && Array.isArray(job.skills)) ? job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('') : '';
                     const salaryFrom = job.salaryRange?.from || '';
                     const salaryTo = job.salaryRange?.to || '';
-
-                    const jobCardHtml = `
-                        <div class="bg-white rounded-xl shadow-sm job-card overflow-hidden">
-                            <div class="p-6">
-                                <div class="flex flex-col md:flex-row md:items-start md:justify-between">
-                                    <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                        <img src="${job.companyLogoUrl}" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
-                                        <div>
-                                            <h3 class="font-bold text-lg">${job.jobTitle || 'عنوان الوظيفة غير محدد'}</h3>
-                                            <div class="flex items-center text-gray-600 text-sm mt-1">
-                                                <span>${job.companyName}</span>
-                                                <span class="mx-2">•</span>
-                                                <i class="fas fa-map-marker-alt ml-1"></i>
-                                                <span>${job.jobLocation || 'غير محدد'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col items-end">
-                                        <span class="px-3 py-1 rounded-full job-type-${job.jobType} text-xs font-semibold mb-2">${getJobTypeLabel(job.jobType)}</span>
-                                        <span class="text-lg font-bold text-blue-600">${salaryFrom} - ${salaryTo} جنيه</span>
+        
+                    const jobCard = document.createElement('div');
+                    jobCard.className = 'bg-white rounded-xl shadow-sm job-card overflow-hidden p-6';
+        
+                    jobCard.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
+                                <img src="${job.companyLogoUrl}" alt="شعار الشركة" class="w-14 h-14 rounded-lg object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">${job.jobTitle || 'عنوان الوظيفة غير محدد'}</h3>
+                                    <div class="flex items-center text-gray-600 text-sm mt-1">
+                                        <span>${job.companyName}</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-map-marker-alt ml-1"></i>
+                                        <span>${job.jobLocation || 'غير محدد'}</span>
                                     </div>
                                 </div>
-                                <div class="mt-4">
-                                    <p class="text-gray-700 mb-4">${job.jobDescription?.substring(0, 150) || 'لا يوجد وصف'}...</p>
-                                    <div class="mb-4">
-                                        <h4 class="font-semibold text-sm mb-2">المهارات المطلوبة:</h4>
-                                        <div class="flex flex-wrap">${skillsHtml}</div>
-                                    </div>
-                                    <div class="flex flex-wrap items-center justify-between">
-                                        <div class="flex items-center text-gray-500 text-sm">
-                                            <i class="fas fa-clock ml-1"></i>
-                                            <span>منذ ${getTimeElapsed(job.timestamp)}</span>
-                                        </div>
-                                        <div class="flex space-x-3 rtl:space-x-reverse">
-                                            <a href="job_details.html?jobId=${job.id}" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
-                                                <i class="fas fa-eye ml-1"></i> عرض التفاصيل
-                                            </a>
-                                            <a href="employee_chat.html?chatId=chat_${job.companyId}_${currentUserId}&companyId=${job.companyId}"
-                                               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                                <i class="fas fa-envelope ml-1"></i> مراسلة
-                                            </a>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full job-type-${job.jobType} text-xs font-semibold mb-2">${getJobTypeLabel(job.jobType)}</span>
+                                <span class="text-lg font-bold text-blue-600">${salaryFrom} - ${salaryTo} جنيه</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-gray-700 mb-4">${job.jobDescription?.substring(0, 150) || 'لا يوجد وصف'}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات المطلوبة:</h4>
+                                <div class="flex flex-wrap">${skillsHtml}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock ml-1"></i>
+                                    <span>منذ ${getTimeElapsed(job.timestamp)}</span>
+                                </div>
+                                <div class="flex space-x-3 rtl:space-x-reverse">
+                                    <a href="job_details.html?jobId=${job.id}" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+                                        <i class="fas fa-eye ml-1"></i> عرض التفاصيل
+                                    </a>
+                                    <a href="employee_chat.html?chatId=chat_${job.companyId}_${currentUserId}&companyId=${job.companyId}"
+                                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        <i class="fas fa-envelope ml-1"></i> مراسلة
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     `;
-                    jobsList.innerHTML += jobCardHtml;
+                    jobsList.appendChild(jobCard);
                 });
             }
             jobCountElement.textContent = `${jobs.length} وظيفة متاحة`;
         }
-
-        // ... بقية الدوال (filterJobs, getJobTypeLabel, getTimeElapsed)
-        // لم يتم تغييرها لأنها صحيحة
         
         function filterJobs() {
             const searchText = searchInput.value.toLowerCase();
@@ -350,7 +335,7 @@
             const selectedJobTypes = Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(cb => cb.value);
             
             const filteredJobs = allJobs.filter(job => {
-                const jobText = `${job.jobTitle} ${job.companyName} ${job.jobDescription} ${job.skills?.join(' ') || ''}`.toLowerCase();
+                const jobText = `${job.jobTitle || ''} ${job.companyName || ''} ${job.jobDescription || ''} ${job.skills?.join(' ') || ''}`.toLowerCase();
                 const matchesSearch = jobText.includes(searchText);
                 const matchesState = selectedState === '' || (job.jobLocation && job.jobLocation.includes(selectedState));
                 const matchesExperience = selectedExperience === '' || job.experienceLevel === selectedExperience;
