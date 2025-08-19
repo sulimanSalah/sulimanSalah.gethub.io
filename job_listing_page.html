@@ -221,8 +221,8 @@
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
-                // **تم تصحيح اسم المجموعة هنا**
-                const querySnapshot = await getDocs(collection(db, "Jop"));
+                // **تم تصحيح اسم المجموعة إلى Jops**
+                const querySnapshot = await getDocs(collection(db, "Jops"));
                 const jobDocs = querySnapshot.docs;
                 const jobsWithCompanyData = [];
         
