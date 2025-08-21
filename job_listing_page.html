@@ -226,8 +226,8 @@
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
-                // جلب المستندات من مجموعة "Jops"
-                const querySnapshot = await getDocs(collection(db, "Jops"));
+                // تم تغيير "Jops" إلى "jops"
+                const querySnapshot = await getDocs(collection(db, "jops"));
 
                 allJobs = querySnapshot.docs.map(docSnapshot => {
                     const jobData = docSnapshot.data();
