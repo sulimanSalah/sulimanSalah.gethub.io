@@ -187,11 +187,12 @@
         </div>
     </div>
     <script type="module">
+        // استيراد المكتبات اللازمة من Firebase CDN
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // إعدادات Firebase
+        // إعدادات Firebase الخاصة بك
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -201,12 +202,12 @@
             appId: "1:768887356636:web:d191b03d97feb7929c8819",
             measurementId: "G-18W3JYHM60"
         };
-        
+
         // تهيئة Firebase و Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        
+
         let allJobs = [];
         let currentUserId = null;
 
@@ -225,12 +226,11 @@
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
+                // جلب المستندات من مجموعة "Jops"
                 const querySnapshot = await getDocs(collection(db, "Jops"));
-                
+
                 allJobs = querySnapshot.docs.map(docSnapshot => {
                     const jobData = docSnapshot.data();
-                    
-                    // استخدام البيانات مباشرة من المستند (لأنه لا يوجد كولكشن "companies")
                     return {
                         id: docSnapshot.id,
                         ...jobData,
