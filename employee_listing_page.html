@@ -210,10 +210,18 @@
             } else {
                 noEmployeesFound.classList.add('hidden');
                 employees.forEach(employee => {
+                    // تأكد من وجود حقل المهارات وتحويله إلى نص HTML
                     const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
                         ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
-                        : '';
+                        : 'لا توجد مهارات مسجلة';
+                    
                     const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
+
+                    // تعديل: الوصول الآمن لبيانات الموظف
+                    const employeeName = employee.name || 'موظف غير معروف';
+                    const employeeHeadline = employee.headline || 'بدون عنوان وظيفي';
+                    const employeeExperience = employee.experience || 'غير محدد';
+                    const employeeBio = employee.bio || 'لا توجد نبذة شخصية';
 
                     // تعديل: حل مشكلة الموقع
                     const employeeCity = employee.location?.city || employee.contact?.location?.city || 'غير محدد';
@@ -228,13 +236,13 @@
                             <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
                                 <img src="${employee.photoUrl || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
                                 <div>
-                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
-                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
+                                    <h3 class="font-bold text-lg">${employeeName}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employeeHeadline}</p>
                                     <div class="flex items-center text-gray-500 text-sm mt-2">
                                         <i class="fas fa-map-marker-alt ml-1"></i>
                                         <span>${locationText}</span>
                                         <span class="mx-2">•</span>
-                                        <span>الخبرة: ${employee.experience || 'غير محدد'}</span>
+                                        <span>الخبرة: ${employeeExperience}</span>
                                     </div>
                                 </div>
                             </div>
@@ -243,10 +251,10 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
+                            <p class="text-gray-700 mb-4">${employeeBio.substring(0, 150)}...</p>
                             <div class="mb-4">
                                 <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
+                                <div class="flex flex-wrap">${skillsHtml}</div>
                             </div>
                             <div class="flex flex-wrap items-center justify-between">
                                 <div class="flex items-center text-gray-500 text-sm">
@@ -301,10 +309,12 @@
 
         // **7. دالة لحساب الوقت المنقضي (تم تعديلها)**
         function getTimeElapsed(timestamp) {
-            if (!timestamp) return 'غير محدد';
+            if (!timestamp || !timestamp.seconds) {
+                return 'غير محدد';
+            }
 
-            const now = new Date();
-            const employeeDate = new Date(timestamp.seconds * 1000);
+            const now = Date.now();
+            const employeeDate = timestamp.seconds * 1000;
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
 
             if (diffInSeconds < 60) return 'الآن';
@@ -316,11 +326,12 @@
             if (days < 7) return `منذ ${days} يوم`;
             const weeks = Math.floor(days / 7);
             if (weeks < 4) return `منذ ${weeks} أسبوع`;
-            const months = Math.floor(days / 30);
+            const months = Math.floor(days / 30.44);
             if (months < 12) return `منذ ${months} شهر`;
-            const years = Math.floor(days / 365);
+            const years = Math.floor(days / 365.25);
             return `منذ ${years} سنة`;
         }
+
 
         // **8. دالة توظيف موظف**
         async function hireEmployee(employeeId) {
