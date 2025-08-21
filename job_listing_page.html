@@ -188,9 +188,10 @@
     </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
+
+        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
             authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -200,12 +201,15 @@
             appId: "1:768887356636:web:d191b03d97feb7929c8819",
             measurementId: "G-18W3JYHM60"
         };
+        
+        // تهيئة Firebase و Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        
         let allJobs = [];
         let currentUserId = null;
-        
+
         const jobsList = document.getElementById('jobsList');
         const jobCountElement = document.getElementById('jobCount');
         const searchInput = document.getElementById('searchInput');
@@ -213,47 +217,28 @@
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const noJobsFound = document.getElementById('noJobsFound');
-        
+
         toggleFiltersBtn.addEventListener('click', () => {
             filtersDropdown.classList.toggle('active');
         });
-        
+
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
-                // **تم تصحيح اسم المجموعة إلى Jops**
                 const querySnapshot = await getDocs(collection(db, "Jops"));
-                const jobDocs = querySnapshot.docs;
-                const jobsWithCompanyData = [];
-        
-                for (const docSnapshot of jobDocs) {
+                
+                allJobs = querySnapshot.docs.map(docSnapshot => {
                     const jobData = docSnapshot.data();
-                    const companyId = jobData.companyId;
-                    let companyName = "غير معروف";
-                    let companyLogoUrl = "https://via.placeholder.com/60";
-        
-                    if (companyId) {
-                        try {
-                            const companyDoc = await getDoc(doc(db, "companies", companyId));
-                            if (companyDoc.exists()) {
-                                const companyData = companyDoc.data();
-                                companyName = companyData.name || companyName;
-                                companyLogoUrl = companyData.logoUrl || companyLogoUrl;
-                            }
-                        } catch (error) {
-                            console.error("خطأ في جلب بيانات الشركة:", error);
-                        }
-                    }
-        
-                    jobsWithCompanyData.push({
+                    
+                    // استخدام البيانات مباشرة من المستند (لأنه لا يوجد كولكشن "companies")
+                    return {
                         id: docSnapshot.id,
                         ...jobData,
-                        companyName: companyName,
-                        companyLogoUrl: companyLogoUrl
-                    });
-                }
-        
-                allJobs = jobsWithCompanyData;
+                        companyName: jobData.companyName || "غير معروف",
+                        companyLogoUrl: jobData.companyLogoUrl || "https://via.placeholder.com/60"
+                    };
+                });
+
                 console.log('تم جلب الوظائف بنجاح:', allJobs);
                 filterJobs();
             } catch (error) {
@@ -263,7 +248,7 @@
                 loadingIndicator.classList.add('hidden');
             }
         }
-        
+
         function renderJobs(jobs) {
             jobsList.innerHTML = '';
             if (jobs.length === 0) {
@@ -274,10 +259,10 @@
                     const skillsHtml = (job.skills && Array.isArray(job.skills)) ? job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('') : '';
                     const salaryFrom = job.salaryRange?.from || '';
                     const salaryTo = job.salaryRange?.to || '';
-        
+
                     const jobCard = document.createElement('div');
                     jobCard.className = 'bg-white rounded-xl shadow-sm job-card overflow-hidden p-6';
-        
+
                     jobCard.innerHTML = `
                         <div class="flex flex-col md:flex-row md:items-start md:justify-between">
                             <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
@@ -325,7 +310,7 @@
             }
             jobCountElement.textContent = `${jobs.length} وظيفة متاحة`;
         }
-        
+
         function filterJobs() {
             const searchText = searchInput.value.toLowerCase();
             const selectedState = document.getElementById('stateFilter').value;
@@ -333,7 +318,7 @@
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value) || 0;
             const salaryTo = parseInt(document.getElementById('salaryTo').value) || Infinity;
             const selectedJobTypes = Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(cb => cb.value);
-            
+
             const filteredJobs = allJobs.filter(job => {
                 const jobText = `${job.jobTitle || ''} ${job.companyName || ''} ${job.jobDescription || ''} ${job.skills?.join(' ') || ''}`.toLowerCase();
                 const matchesSearch = jobText.includes(searchText);
@@ -345,7 +330,7 @@
             });
             renderJobs(filteredJobs);
         }
-        
+
         function getJobTypeLabel(type) {
             switch (type) {
                 case 'full-time': return 'دوام كامل';
@@ -355,25 +340,25 @@
                 default: return '';
             }
         }
-        
+
         function getTimeElapsed(timestamp) {
-            if (!timestamp) return 'غير محدد';
-            const jobDate = new Date(timestamp.toDate());
+            if (!timestamp || typeof timestamp.toDate !== 'function') return 'غير محدد';
+            const jobDate = timestamp.toDate();
             const now = new Date();
             const diffInSeconds = Math.floor((now - jobDate) / 1000);
-            
+
             const minutes = Math.floor(diffInSeconds / 60);
             const hours = Math.floor(minutes / 60);
             const days = Math.floor(hours / 24);
             const weeks = Math.floor(days / 7);
-            
+
             if (weeks > 0) return `منذ ${weeks} أسبوع`;
             if (days > 0) return `منذ ${days} يوم`;
             if (hours > 0) return `منذ ${hours} ساعة`;
             if (minutes > 0) return `منذ ${minutes} دقيقة`;
             return 'الآن';
         }
-        
+
         searchInput.addEventListener('input', filterJobs);
         document.getElementById('stateFilter').addEventListener('change', filterJobs);
         document.getElementById('experienceFilter').addEventListener('change', filterJobs);
@@ -382,7 +367,7 @@
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', filterJobs);
         });
-        
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUserId = user.uid;
