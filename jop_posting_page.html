@@ -209,7 +209,7 @@
                 التالي
             </button>
         </div>
-        
+
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
             <h2 class="text-lg font-bold mb-4">الخطوة 4: الراتب والإرسال</h2>
             <div class="mb-4">
@@ -236,7 +236,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
         // Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -247,15 +249,18 @@
           appId: "1:768887356636:web:d191b03d97feb7929c8819",
           measurementId: "G-18W3JYHM60"
         };
-        
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
         let currentStep = 1;
         const totalSteps = 4;
-        
+        let currentUserId = null;
+
+
         // بيانات الولايات والمدن
         const sudanStates = {
             "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
@@ -291,7 +296,7 @@
         window.nextStep = function(step) {
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input[required], select[required], textarea[required]');
-            
+
             for (const input of inputs) {
                 if (!input.checkValidity()) {
                     input.reportValidity();
@@ -359,9 +364,9 @@
             const selectedState = this.value;
             const cityContainer = document.getElementById('cityContainer');
             const jobCitySelect = document.getElementById('jobCity');
-            
+
             jobCitySelect.innerHTML = '<option value="">اختر مدينة</option>'; // إعادة تعيين الخيارات
-            
+
             if (selectedState && sudanStates[selectedState]) {
                 sudanStates[selectedState].forEach(city => {
                     const option = document.createElement('option');
@@ -379,7 +384,7 @@
         document.getElementById('jobTitle').addEventListener('input', function() {
             const jobTitle = this.value.toLowerCase();
             const skillInput = document.querySelector('.skill-input');
-            
+
             if (skillInput && jobTitle.length > 2) {
                 for (const keyword in skillSuggestions) {
                     if (jobTitle.includes(keyword)) {
@@ -410,9 +415,10 @@
             const experienceLevel = document.getElementById('experienceLevel').value;
             const salaryFrom = parseInt(document.getElementById('salaryFrom').value);
             const salaryTo = parseInt(document.getElementById('salaryTo').value);
-            
+
             const skillInputs = document.querySelectorAll('.skill-input');
             const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
+            const companyId = currentUserId; // استخدم معرف المستخدم الحالي كمعرف للشركة
 
             const jobData = {
                 jobTitle: jobTitle,
@@ -427,11 +433,14 @@
                     from: salaryFrom,
                     to: salaryTo
                 },
+                companyId: companyId,
                 timestamp: new Date().toISOString()
             };
 
             try {
-                await addDoc(collection(db, "jobs"), jobData);
+                // *** هذا هو التغيير الذي تم إجراؤه ***
+                // تم تغيير "jobs" إلى "All_jops"
+                await addDoc(collection(db, "All_jops"), jobData);
                 alert('تم إضافة الوظيفة بنجاح!');
                 document.getElementById('jobForm').reset();
                 window.prevStep(4);
@@ -443,6 +452,15 @@
                 submitButton.textContent = originalButtonText;
             }
         };
+
+        // تحديث معرف المستخدم عند تسجيل الدخول أو الخروج
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+            } else {
+                currentUserId = null;
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', window.updateSteps);
     </script>
