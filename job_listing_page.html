@@ -226,8 +226,9 @@
         async function fetchJobs() {
             loadingIndicator.classList.remove('hidden');
             try {
-                // تم تغيير "Jops" إلى "jops"
-                const querySnapshot = await getDocs(collection(db, "jops"));
+                // *** هذا هو التغيير الذي تم إجراؤه ***
+                // تم تغيير "jops" إلى "All_jops"
+                const querySnapshot = await getDocs(collection(db, "All_jops"));
 
                 allJobs = querySnapshot.docs.map(docSnapshot => {
                     const jobData = docSnapshot.data();
