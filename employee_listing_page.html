@@ -139,7 +139,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // **1. تهيئة Firebase**
@@ -170,7 +170,7 @@
         let allEmployees = [];
         let isUserLoggedIn = false;
 
-        // 3. قاعدة بيانات الولايات والمدن في السودان
+        // **3. قاعدة بيانات الولايات والمدن في السودان**
         const citiesByState = {
             'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
             'الجزيرة': ['ود مدني', 'الحصاحيصا', 'المناقل'],
@@ -192,7 +192,7 @@
             'شرق دارفور': ['الضعين', 'عديلة', 'أبوكارنكا']
         };
 
-        // 4. دالة لجلب الموظفين من Firestore
+        // **4. دالة لجلب الموظفين من Firestore**
         async function fetchEmployees() {
             loadingIndicator.classList.remove('hidden');
             try {
@@ -207,7 +207,7 @@
             }
         }
 
-        // 5. دالة لعرض الموظفين في الواجهة (تم تعديلها لتناسب التصميم)
+        // **5. دالة لعرض الموظفين في الواجهة**
         function renderEmployees(employees) {
             employeesList.innerHTML = '';
             if (employees.length === 0) {
@@ -270,7 +270,7 @@
             }
         }
 
-        // 6. دالة للفلترة والبحث
+        // **6. دالة للفلترة والبحث**
         function filterAndRenderEmployees() {
             const searchTerm = searchInput.value.toLowerCase();
             const selectedState = stateFilter.value;
@@ -290,7 +290,7 @@
             renderEmployees(filteredEmployees);
         }
 
-        // 7. دالة لتحديث المدن بناءً على الولاية
+        // **7. دالة لتحديث المدن بناءً على الولاية**
         function updateCities() {
             const selectedState = stateFilter.value;
             cityFilter.innerHTML = '<option value="">جميع المدن</option>';
@@ -307,14 +307,14 @@
             filterAndRenderEmployees();
         }
 
-        // 8. دالة لتحديث الواجهة بناءً على حالة المستخدم
+        // **8. دالة لتحديث الواجهة بناءً على حالة المستخدم**
         function updateUI(user) {
             isUserLoggedIn = !!user;
             authMessage.style.display = isUserLoggedIn ? 'none' : 'block';
             filterAndRenderEmployees(); // لإظهار أو إخفاء زر التواصل
         }
 
-        // 9. مستمعي الأحداث
+        // **9. مستمعي الأحداث**
         onAuthStateChanged(auth, (user) => {
             updateUI(user);
         });
