@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض الموظفين - شغلني</title>
+    <title>الموظفون المتاحون - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -18,20 +18,22 @@
             --dark: #1f2937;
             --gray: #6b7280;
         }
+
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
         }
+
         .employee-card {
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
         }
+
         .employee-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
         }
+
         .skill-tag {
             display: inline-flex;
             align-items: center;
@@ -42,23 +44,32 @@
             font-size: 0.75rem;
             margin: 0.125rem;
         }
+
+        .status-available {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-not-looking {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
         .filters-container {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
+
         .filters-container.active {
             max-height: 500px;
         }
-        /* لتسهيل رؤية رسالة "يجب عليك تسجيل الدخول" */
-        #authMessage {
-            display: none;
-            text-align: center;
+
+        .message-box {
+            background-color: #fef9c3;
+            color: #854d0e;
             padding: 1rem;
-            background-color: #ffe4e6;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
             border-radius: 0.5rem;
+            text-align: center;
             margin-bottom: 1rem;
         }
     </style>
@@ -71,10 +82,10 @@
                     <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-blue-600 font-medium">عرض الموظفين</a>
-                    <a href="job_registration.html" class="text-gray-700 hover:text-blue-600">إضافة وظيفة</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-blue-600 font-bold">عرض الموظفين</a>
+                    <a href="job_registration.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">إضافة وظيفة</a>
                 </div>
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="relative">
@@ -88,13 +99,19 @@
             </div>
         </div>
     </nav>
+
     <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">الموظفين المتاحين</h1>
-            <div class="flex items-center space-x-3 rtl:space-x-reverse">
-                <span id="employeeCount" class="text-gray-600">...</span>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الموظفون المتاحون</h1>
+            <div class="relative w-full md:w-1/3">
+                <input type="text" id="searchInput" placeholder="ابحث عن موظف..."
+                       class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
             </div>
         </div>
+        
         <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
             <div class="flex flex-col md:flex-row md:items-center gap-4">
                 <div class="flex-1 relative">
@@ -176,77 +193,73 @@
                 </div>
             </div>
         </div>
-        <div id="authMessage" class="hidden">
-            يجب عليك تسجيل الدخول لمراسلة الموظفين.
+
+        <div id="authMessage" class="hidden message-box">
+            <i class="fas fa-info-circle ml-2"></i> يجب عليك تسجيل الدخول لمراسلة أو توظيف الموظفين.
         </div>
-        <div id="employeesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div id="loadingIndicator" class="text-center text-lg text-gray-500 col-span-full p-8">جاري تحميل الموظفين...</div>
-            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 col-span-full p-8">لم يتم العثور على موظفين مطابقين.</div>
+
+        <div id="employeesList" class="space-y-4">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الموظفين...</div>
+            <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على موظفين.</div>
         </div>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, where, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // إعدادات Firebase
+        // 1. تهيئة Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-            authDomain: "shaglni-c64c0.firebaseapp.com",
-            projectId: "shaglni-c64c0",
-            storageBucket: "shaglni-c64c0.firebasestorage.app",
-            messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:d191b03d97feb7929c8819",
-            measurementId: "G-18W3JYHM60"
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        // 2. ربط عناصر الواجهة بمتغيرات في الكود
+        const employeesList = document.getElementById('employeesList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noEmployeesFound = document.getElementById('noEmployeesFound');
+        const searchInput = document.getElementById('searchInput');
+        const stateFilter = document.getElementById('stateFilter');
+        const experienceFilter = document.getElementById('experienceFilter');
+        const specializationFilter = document.getElementById('specializationFilter');
+        const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        const filtersDropdown = document.getElementById('filtersDropdown');
+        const authMessage = document.getElementById('authMessage');
+
         let allEmployees = [];
         let currentUserId = null;
         let isUserLoggedIn = false;
-
-        const employeesList = document.getElementById('employeesList');
-        const employeeCountElement = document.getElementById('employeeCount');
-        const searchInput = document.getElementById('searchInput');
-        const filtersDropdown = document.getElementById('filtersDropdown');
-        const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const noEmployeesFound = document.getElementById('noEmployeesFound');
-        const authMessage = document.getElementById('authMessage');
 
         toggleFiltersBtn.addEventListener('click', () => {
             filtersDropdown.classList.toggle('active');
         });
 
-        // ** تم تعديل هذه الدالة: تم فصل جلب البيانات عن التحقق من المصادقة **
+        // 3. دالة لجلب الموظفين من Firestore
         async function fetchEmployees() {
             loadingIndicator.classList.remove('hidden');
             try {
-                const q = query(collection(db, "employees"));
-                const querySnapshot = await getDocs(q);
-
-                allEmployees = querySnapshot.docs.map(docSnapshot => {
-                    const employeeData = docSnapshot.data();
-                    return {
-                        id: docSnapshot.id,
-                        ...employeeData,
-                        profileImageUrl: employeeData.profileImageUrl || 'https://via.placeholder.com/150'
-                    };
-                });
-                console.log('تم جلب الموظفين بنجاح:', allEmployees);
-                filterEmployees();
+                const querySnapshot = await getDocs(collection(db, "employees"));
+                allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                filterAndRenderEmployees();
             } catch (error) {
                 console.error("خطأ في جلب الموظفين:", error);
-                employeesList.innerHTML = '<div class="text-center text-red-500 col-span-full p-8">حدث خطأ أثناء تحميل الموظفين.</div>';
+                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل بيانات الموظفين.</div>';
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
         }
 
-        // ** تم تعديل هذه الدالة: لتظهر أو تخفي زر المراسلة بناءً على حالة تسجيل الدخول **
+        // 4. دالة لعرض الموظفين في الواجهة (تم تعديلها)
         function renderEmployees(employees) {
             employeesList.innerHTML = '';
             if (employees.length === 0) {
@@ -254,69 +267,143 @@
             } else {
                 noEmployeesFound.classList.add('hidden');
                 employees.forEach(employee => {
-                    const skillsHtml = (employee.skills && Array.isArray(employee.skills)) ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('') : '';
+                    const skillsHtml = Array.isArray(employee.skills) && employee.skills.length > 0
+                        ? employee.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                        : '';
+                    const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
 
                     const employeeCard = document.createElement('div');
                     employeeCard.className = 'bg-white rounded-xl shadow-sm employee-card overflow-hidden p-6';
 
                     employeeCard.innerHTML = `
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                <img src="${employee.profileImageUrl}" alt="صورة الملف الشخصي" class="w-16 h-16 rounded-full object-cover">
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
+                                <img src="${employee.photoUrl || 'https://via.placeholder.com/150'}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
                                 <div>
-                                    <h3 class="font-bold text-lg">${employee.name || 'غير معروف'}</h3>
-                                    <span class="text-gray-600 text-sm">${employee.specialization || 'غير محدد'}</span>
+                                    <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
+                                    <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
+                                    <div class="flex items-center text-gray-500 text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt ml-1"></i>
+                                        <span>${employee.state || 'غير محدد'}، ${employee.city || 'غير محدد'}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>الخبرة: ${employee.experience || 'غير محدد'}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold text-blue-600 bg-blue-100">${employee.experienceLevel || 'غير محدد'}</span>
-                        </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700 text-sm mb-2">${employee.bio?.substring(0, 100) || 'لا يوجد نبذة'}...</p>
-                            <div class="flex items-center text-gray-500 text-xs">
-                                <i class="fas fa-map-marker-alt ml-1"></i>
-                                <span>${employee.city || 'غير محدد'}، ${employee.state || 'غير محدد'}</span>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${employee.jobStatus || 'الحالة غير محددة'}</span>
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
-                            <div class="flex flex-wrap">${skillsHtml}</div>
-                        </div>
-                        <div class="flex justify-end space-x-2 rtl:space-x-reverse">
-                            <a href="employee_details.html?employeeId=${employee.id}" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
-                                <i class="fas fa-eye ml-1"></i> عرض التفاصيل
-                            </a>
-                            <a href="chat.html?chatId=chat_${currentUserId}_${employee.id}&employeeId=${employee.id}"
-                               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm ${isUserLoggedIn ? '' : 'hidden'}" id="messageBtn_${employee.id}">
-                                <i class="fas fa-envelope ml-1"></i> مراسلة
-                            </a>
+                        <div class="mt-4">
+                            <p class="text-gray-700 mb-4">${employee.bio?.substring(0, 150) || 'لا توجد نبذة شخصية'}...</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">المهارات:</h4>
+                                <div class="flex flex-wrap">${skillsHtml || 'لا توجد مهارات مسجلة'}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock ml-1"></i>
+                                    <span>${getTimeElapsed(employee.timestamp)}</span>
+                                </div>
+                                <div class="flex space-x-3 rtl:space-x-reverse">
+                                    <a href="employee_details.html?id=${employee.id}"
+                                        class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+                                        <i class="fas fa-eye ml-1"></i> عرض التفاصيل
+                                    </a>
+                                    <button onclick="saveEmployee('${employee.id}')"
+                                        class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm ${isUserLoggedIn ? '' : 'hidden'}">
+                                        <i class="fas fa-bookmark ml-1"></i> حفظ
+                                    </button>
+                                    <a href="chat.html?employeeId=${employee.id}"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm ${isUserLoggedIn ? '' : 'hidden'}">
+                                        <i class="fas fa-envelope ml-1"></i> تواصل
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     `;
                     employeesList.appendChild(employeeCard);
                 });
             }
-            employeeCountElement.textContent = `${employees.length} موظف متاح`;
         }
 
-        function filterEmployees() {
-            const searchText = searchInput.value.toLowerCase();
-            const selectedState = document.getElementById('stateFilter').value;
-            const selectedExperience = document.getElementById('experienceFilter').value;
-            const selectedSpecialization = document.getElementById('specializationFilter').value;
+        // 5. دالة للفلترة والبحث
+        function filterAndRenderEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedState = stateFilter.value;
+            const selectedExperience = experienceFilter.value;
+            const selectedSpecialization = specializationFilter.value;
             const selectedJobTypes = Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(cb => cb.value);
 
             const filteredEmployees = allEmployees.filter(employee => {
-                const employeeText = `${employee.name || ''} ${employee.specialization || ''} ${employee.bio || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
-                const matchesSearch = employeeText.includes(searchText);
-                const matchesState = selectedState === '' || (employee.state && employee.state.includes(selectedState));
-                const matchesExperience = selectedExperience === '' || employee.experienceLevel === selectedExperience;
+                const searchTerms = searchTerm.split(' ');
+                const employeeText = `${employee.name || ''} ${employee.headline || ''} ${employee.state || ''} ${employee.city || ''} ${employee.experience || ''} ${employee.skills?.join(' ') || ''}`.toLowerCase();
+                const matchesSearch = searchTerms.every(term => employeeText.includes(term));
+                const matchesState = selectedState === '' || employee.state === selectedState;
+                const matchesExperience = selectedExperience === '' || employee.experience === selectedExperience;
                 const matchesSpecialization = selectedSpecialization === '' || employee.specialization === selectedSpecialization;
                 const matchesJobType = selectedJobTypes.length === 0 || selectedJobTypes.every(type => employee.employmentType?.includes(type));
                 return matchesSearch && matchesState && matchesExperience && matchesSpecialization && matchesJobType;
             });
+
             renderEmployees(filteredEmployees);
         }
 
-        // ** هذه الدالة هي للتحديث بناءً على حالة المصادقة فقط **
+        // 6. دالة لحساب الوقت المنقضي
+        function getTimeElapsed(timestamp) {
+            if (!timestamp) return 'غير محدد';
+            let employeeDate;
+            if (typeof timestamp.toDate === 'function') {
+                employeeDate = timestamp.toDate();
+            } else {
+                employeeDate = new Date(timestamp);
+            }
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - employeeDate) / 1000);
+            if (diffInSeconds < 60) return 'الآن';
+            const minutes = Math.floor(diffInSeconds / 60);
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `منذ ${days} يوم`;
+            const weeks = Math.floor(days / 7);
+            if (weeks < 4) return `منذ ${weeks} أسبوع`;
+            const months = Math.floor(days / 30);
+            if (months < 12) return `منذ ${months} شهر`;
+            const years = Math.floor(days / 365);
+            return `منذ ${years} سنة`;
+        }
+        
+        // 7. دالة لحفظ الموظف
+        async function saveEmployee(employeeId) {
+            if (!isUserLoggedIn) {
+                alert("يجب عليك تسجيل الدخول لحفظ الموظفين.");
+                return;
+            }
+            try {
+                // التأكد من أن المستخدم لم يحفظ هذا الموظف بالفعل
+                const savedEmployeesRef = collection(db, "savedEmployees");
+                const q = query(savedEmployeesRef, where("userId", "==", currentUserId), where("employeeId", "==", employeeId));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    await addDoc(savedEmployeesRef, {
+                        userId: currentUserId,
+                        employeeId: employeeId,
+                        savedAt: serverTimestamp()
+                    });
+                    alert("تم حفظ الموظف بنجاح!");
+                } else {
+                    alert("لقد قمت بحفظ هذا الموظف من قبل.");
+                }
+            } catch (error) {
+                console.error("خطأ في حفظ الموظف:", error);
+                alert("حدث خطأ أثناء حفظ الموظف. يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        // 8. دالة لتحديث الواجهة بناءً على حالة المستخدم
         function updateUI(user) {
             isUserLoggedIn = !!user;
             if (isUserLoggedIn) {
@@ -326,26 +413,25 @@
                 currentUserId = null;
                 authMessage.classList.remove('hidden');
             }
-            // إعادة رسم القائمة لإظهار أو إخفاء زر المراسلة
-            filterEmployees();
+            // إعادة عرض القائمة لتحديث أزرار الإجراءات
+            filterAndRenderEmployees();
         }
 
-        // الاستماع لحالة المصادقة
+        // 9. مستمعي الأحداث
         onAuthStateChanged(auth, (user) => {
             updateUI(user);
         });
 
-        // ** تم تعديل هذا الجزء: الآن يتم جلب الموظفين فوراً عند تحميل الصفحة **
         document.addEventListener('DOMContentLoaded', fetchEmployees);
-
-        // إضافة مستمعين لمرشحات البحث
-        searchInput.addEventListener('input', filterEmployees);
-        document.getElementById('stateFilter').addEventListener('change', filterEmployees);
-        document.getElementById('experienceFilter').addEventListener('change', filterEmployees);
-        document.getElementById('specializationFilter').addEventListener('change', filterEmployees);
+        searchInput.addEventListener('input', filterAndRenderEmployees);
+        stateFilter.addEventListener('change', filterAndRenderEmployees);
+        experienceFilter.addEventListener('change', filterAndRenderEmployees);
+        specializationFilter.addEventListener('change', filterAndRenderEmployees);
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', filterEmployees);
+            checkbox.addEventListener('change', filterAndRenderEmployees);
         });
+
+        window.saveEmployee = saveEmployee;
     </script>
 </body>
 </html>
