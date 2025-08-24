@@ -188,10 +188,11 @@
         // **4. دالة لجلب الموظفين من Firestore**
         async function fetchEmployees() {
             loadingIndicator.classList.remove('hidden');
+            employeesList.innerHTML = '';
+            noEmployeesFound.classList.add('hidden');
             try {
                 const querySnapshot = await getDocs(collection(db, "employees"));
                 allEmployees = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // تم تعديل هذه السطر لضمان الفرز الصحيح، ولكن المشكلة كانت في عرض الوقت وليس الفرز
                 allEmployees.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)); 
                 filterAndRenderEmployees();
             } catch (error) {
@@ -215,7 +216,6 @@
                         : '';
                     const statusClass = employee.jobStatus === 'متاح للعمل' ? 'status-available' : 'status-not-looking';
 
-                    // تعديل: حل مشكلة الموقع
                     const employeeCity = employee.location?.city || employee.contact?.location?.city || 'غير محدد';
                     const employeeState = employee.location?.state || employee.contact?.location?.state || 'غير محدد';
                     const locationText = `${employeeCity}، ${employeeState}`;
@@ -280,7 +280,6 @@
             const filteredEmployees = allEmployees.filter(employee => {
                 const searchTerms = searchTerm.split(' ');
 
-                // تعديل: حل مشكلة الموقع
                 const employeeCity = employee.location?.city || employee.contact?.location?.city || '';
                 const employeeState = employee.location?.state || employee.contact?.location?.state || '';
 
@@ -299,7 +298,7 @@
             renderEmployees(filteredEmployees);
         }
 
-        // **7. دالة لحساب الوقت المنقضي (تم تعديلها)**
+        // **7. دالة لحساب الوقت المنقضي**
         function getTimeElapsed(timestamp) {
             if (!timestamp) return 'غير محدد';
 
@@ -308,75 +307,4 @@
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
 
             if (diffInSeconds < 60) return 'الآن';
-            const minutes = Math.floor(diffInSeconds / 60);
-            if (minutes < 60) return `منذ ${minutes} دقيقة`;
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `منذ ${hours} ساعة`;
-            const days = Math.floor(hours / 24);
-            if (days < 7) return `منذ ${days} يوم`;
-            const weeks = Math.floor(days / 7);
-            if (weeks < 4) return `منذ ${weeks} أسبوع`;
-            const months = Math.floor(days / 30);
-            if (months < 12) return `منذ ${months} شهر`;
-            const years = Math.floor(days / 365);
-            return `منذ ${years} سنة`;
-        }
-
-        // **8. دالة توظيف موظف**
-        async function hireEmployee(employeeId) {
-            if (!currentUserId) {
-                alert("يجب عليك تسجيل الدخول لتوظيف الموظفين.");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "hiringRequests"), {
-                    employerId: currentUserId,
-                    employeeId: employeeId,
-                    status: 'pending',
-                    timestamp: serverTimestamp()
-                });
-                alert("تم إرسال طلب التوظيف بنجاح! سيتم إشعار الموظف.");
-            } catch (error) {
-                console.error("خطأ في إرسال طلب التوظيف:", error);
-                alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
-            }
-        }
-
-        // **9. مستمعي الأحداث**
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                fetchEmployees();
-            } else {
-                currentUserId = null;
-                loadingIndicator.classList.add('hidden');
-                employeesList.innerHTML = '<div class="text-center text-red-500 p-8">يجب عليك تسجيل الدخول لعرض الموظفين.</div>';
-            }
-        });
-
-        searchInput.addEventListener('input', filterAndRenderEmployees);
-        stateFilter.addEventListener('change', () => {
-            const selectedState = stateFilter.value;
-            cityFilter.innerHTML = '<option value="">جميع المدن</option>';
-            cityFilter.disabled = true;
-
-            if (selectedState && citiesByState[selectedState]) {
-                citiesByState[selectedState].forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    cityFilter.appendChild(option);
-                });
-                cityFilter.disabled = false;
-            }
-            filterAndRenderEmployees();
-        });
-        cityFilter.addEventListener('change', filterAndRenderEmployees);
-
-        // This is necessary to expose the hireEmployee function to the onclick event in the HTML
-        window.hireEmployee = hireEmployee; 
-    </script>
-</body>
-</html>
-  
+            const minutes = Math.floor(diffInSeconds / 60
