@@ -3,112 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الرسائل - شغلني</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>تطبيق دردشة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --light: #f9fafb;
-            --dark: #1f2937;
-            --gray: #6b7280;
-        }
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
-        }
-        .chat-container {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
             display: flex;
-            height: calc(100vh - 80px); 
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .chat-sidebar {
-            width: 320px;
-            background-color: #ffffff;
-            border-left: 1px solid #e5e7eb;
-            overflow-y: auto;
-        }
-        .chat-main {
-            flex-grow: 1;
-            background-color: #f9fafb;
+        
+        .chat-container {
+            width: 100%;
+            max-width: 450px;
+            height: 90vh;
             display: flex;
             flex-direction: column;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            overflow: hidden;
         }
-        .message-bubble {
-            max-width: 70%;
+        
+        .chat-header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .chat-box {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
             padding: 10px 15px;
             border-radius: 20px;
-            margin-bottom: 10px;
+            max-width: 75%;
+            word-wrap: break-word;
+            font-size: 1em;
+            line-height: 1.4;
         }
-        .message-bubble.sent {
-            background-color: var(--primary);
-            color: white;
+        
+        .user-message {
+            background-color: #007bff;
+            color: #ffffff;
             align-self: flex-end;
-            border-bottom-left-radius: 5px;
         }
-        .message-bubble.received {
-            background-color: #e5e7eb;
-            color: var(--dark);
+        
+        .ai-message {
+            background-color: #e0e0e0;
+            color: #333;
             align-self: flex-start;
-            border-bottom-right-radius: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #ffffff;
+        }
+        
+        #user-input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 1em;
+            outline: none;
+        }
+        
+        #send-btn {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.2em;
+        }
+        
+        #send-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
-                    <a href="job_registration.html" class="text-blue-600 font-medium">إضافة وظيفة</a>
-                </div>
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="relative">
-                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-                    </div>
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
-                </div>
+    <div class="chat-container">
+        <header class="chat-header">
+            <h3>المساعد الافتراضي</h3>
+        </header>
+        <div class="chat-box" id="chat-box">
             </div>
-        </div>
-    </nav>
-    <div class="chat-container container mx-auto rounded-xl shadow-lg mt-8 overflow-hidden">
-        <div class="chat-sidebar p-4 flex flex-col">
-            <h2 class="text-xl font-bold mb-4">المحادثات</h2>
-            <div id="chatsList" class="flex-grow overflow-y-auto">
-                <p class="text-gray-500 text-center mt-8">جاري تحميل المحادثات...</p>
-            </div>
-        </div>
-
-        <div class="chat-main p-4">
-            <div class="flex items-center border-b pb-4 mb-4">
-                <img id="chatPartnerImage" src="https://randomuser.me/api/portraits/men/20.jpg" alt="صورة المستخدم" class="w-12 h-12 rounded-full mr-4">
-                <h3 id="chatPartnerName" class="text-xl font-bold text-gray-800">اختر محادثة</h3>
-            </div>
-            <div id="messagesContainer" class="flex-grow flex flex-col overflow-y-auto pb-4">
-                <p class="text-gray-500 text-center mt-8">لا توجد محادثة محددة.</p>
-            </div>
-            <div class="mt-4 flex items-center">
-                <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..."
-                       class="flex-grow pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
-                <button id="sendMessageBtn" class="bg-blue-600 text-white rounded-lg px-6 py-2 mr-2 hover:bg-blue-700 focus:outline-none" disabled>
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
+        <form class="chat-input" id="chat-form">
+            <input type="text" id="user-input" placeholder="اكتب رسالتك..." autocomplete="off">
+            <button type="submit" id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
     </div>
-    
+
     <script type="module" src="chat.js"></script>
 </body>
 </html>
