@@ -3,289 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحادثات - شغلني</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>الرسائل - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+        }
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f5f7fa;
         }
-        .main-content {
-            transition: margin-right 0.3s ease;
+        .chat-container {
+            display: flex;
+            height: calc(100vh - 80px); 
         }
-        .sidebar {
-            transition: transform 0.3s ease;
-            transform: translateX(100%);
+        .chat-sidebar {
+            width: 320px;
+            background-color: #ffffff;
+            border-left: 1px solid #e5e7eb;
+            overflow-y: auto;
         }
-        .sidebar.active {
-            transform: translateX(0);
+        .chat-main {
+            flex-grow: 1;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
         }
-        @media (min-width: 768px) {
-            .sidebar {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-right: 256px;
-            }
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        .message-bubble.sent {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-left-radius: 5px;
+        }
+        .message-bubble.received {
+            background-color: #e5e7eb;
+            color: var(--dark);
+            align-self: flex-start;
+            border-bottom-right-radius: 5px;
         }
     </style>
 </head>
-<body class="flex min-h-screen">
-
-    <div id="sidebar" class="bg-gray-800 text-white w-64 p-4 fixed right-0 top-0 bottom-0 z-50 transform md:transform-none sidebar">
-        <div class="flex items-center justify-between mb-8">
-            <a href="index.html" class="flex items-center">
-                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار شغلني" class="h-8">
-                <span class="text-xl font-bold mr-2">شغلني</span>
-            </a>
-            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
-                <i class="fas fa-times text-2xl"></i>
-            </button>
-        </div>
-        <nav>
-            <ul>
-                <li class="mb-2">
-                    <a href="employee_dashboard.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-tachometer-alt ml-3"></i>
-                        لوحة التحكم
-                    </a>
-                </li>
-                <li class="mb-2">
-                    <a href="employee_profile.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-user ml-3"></i>
-                        ملفي الشخصي
-                    </a>
-                </li>
-                <li class="mb-2">
-                    <a href="job_listing_page.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-briefcase ml-3"></i>
-                        الوظائف المتاحة
-                    </a>
-                </li>
-                <li class="mb-2">
-                    <a href="employee_applications.html" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-file-alt ml-3"></i>
-                        طلباتي
-                    </a>
-                </li>
-                <li class="mb-2">
-                    <a href="employee_chats.html" class="flex items-center p-3 rounded-lg bg-gray-700 text-white">
-                        <i class="fas fa-comments ml-3"></i>
-                        المحادثات
-                    </a>
-                </li>
-                <li class="mb-2">
-                    <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-red-400 hover:text-red-300">
-                        <i class="fas fa-sign-out-alt ml-3"></i>
-                        تسجيل الخروج
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <div id="main-content" class="flex-1 main-content">
-        <header class="bg-white shadow p-4 flex items-center justify-between sticky top-0 z-40">
-            <button id="open-sidebar-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
-            <h1 class="text-xl font-bold text-gray-900 hidden md:block">المحادثات</h1>
-            <div class="flex items-center space-x-2 space-x-reverse">
-                <a href="#" class="text-gray-600 hover:text-gray-800">
-                    <i class="fas fa-bell text-xl"></i>
-                </a>
-                <a href="#" class="flex items-center text-gray-800 font-medium">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d57596e8-de87-47ed-adc1-9d31d60207f3.png" alt="صورة المستخدم" class="h-8 w-8 rounded-full ml-2">
-                    أحمد محمد
-                </a>
-            </div>
-        </header>
-
-        <main class="p-6">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">المحادثات</h2>
-
-            <div class="bg-white rounded-xl shadow-md flex flex-col md:flex-row h-[70vh]">
-                <div class="w-full md:w-1/3 border-b md:border-b-0 md:border-l border-gray-200 p-4 overflow-y-auto">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">المحادثات المفتوحة</h3>
-                    <ul id="chat-list" class="space-y-2">
-                        <li class="chat-item p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center" data-chat-id="chat1">
-                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="صورة المستخدم" class="w-12 h-12 rounded-full object-cover ml-3">
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900">المجموعة المالية المتحدة</p>
-                                <p class="text-sm text-gray-500 truncate">أهلاً بك، متى يمكننا تحديد موعد للمقابلة؟</p>
-                            </div>
-                        </li>
-                        <li class="chat-item p-3 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center" data-chat-id="chat2">
-                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5509bbd7-bc4c-41ae-ad92-c25c0e247e15.png" alt="صورة المستخدم" class="w-12 h-12 rounded-full object-cover ml-3">
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900">شركة التقنية الحديثة</p>
-                                <p class="text-sm text-gray-500 truncate">شكراً على طلبك، قيد المراجعة...</p>
-                            </div>
-                        </li>
-                    </ul>
+<body>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
                 </div>
-
-                <div class="w-full md:w-2/3 flex flex-col justify-between">
-                    <div id="chat-header" class="border-b border-gray-200 p-4 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <img id="chat-user-img" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f499d957-7a9d-4fdc-a301-f69a9f387e13.png" alt="صورة المستخدم" class="w-10 h-10 rounded-full object-cover ml-3">
-                            <div>
-                                <h4 id="chat-user-name" class="font-bold text-gray-900">المجموعة المالية المتحدة</h4>
-                                <p id="job-status" class="text-sm text-yellow-500 mt-1">حالة الطلب: قيد المراجعة</p>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2 space-x-reverse">
-                            </div>
-                    </div>
-
-                    <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4">
-                        <div class="flex justify-end">
-                            <div class="bg-blue-600 text-white p-3 rounded-lg max-w-sm">
-                                <p>أهلاً بكم، لقد قمت بتقديم طلب للوظيفة. هل هناك أي تحديثات؟</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-start">
-                            <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-sm">
-                                <p>أهلاً بك، تم استلام طلبك وهو قيد المراجعة حاليًا. سيتم التواصل معك قريبًا.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-start">
-                            <div class="bg-white border-4 border-green-500 p-4 rounded-lg shadow-md max-w-sm">
-                                <h5 class="font-bold text-green-700 text-lg mb-2">عرض عمل جديد</h5>
-                                <p class="text-gray-800 mb-2">
-                                    تهانينا، نقدم لك عرض عمل لوظيفة **محاسب مالي** براتب شهري قدره **13,500 د.إ**.
-                                    يرجى الرد على هذا العرض خلال 72 ساعة.
-                                </p>
-                                <div class="flex justify-start space-x-2 space-x-reverse mt-4">
-                                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700">قبول</button>
-                                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-700">رفض</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <form id="message-form" class="p-4 border-t border-gray-200 flex items-center">
-                        <input id="message-input" type="text" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ml-2">
-                        <button type="submit" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                            <i class="fas fa-paper-plane"></i>
+                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
+                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
+                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
+                    <a href="job_registration.html" class="text-blue-600 font-medium">إضافة وظيفة</a>
+                </div>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
-                    </form>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
                 </div>
             </div>
-        </main>
+        </div>
+    </nav>
+    <div class="chat-container container mx-auto rounded-xl shadow-lg mt-8 overflow-hidden">
+        <div class="chat-sidebar p-4 flex flex-col">
+            <h2 class="text-xl font-bold mb-4">المحادثات</h2>
+            <div id="chatsList" class="flex-grow overflow-y-auto">
+                <p class="text-gray-500 text-center mt-8">جاري تحميل المحادثات...</p>
+            </div>
+        </div>
+
+        <div class="chat-main p-4">
+            <div class="flex items-center border-b pb-4 mb-4">
+                <img id="chatPartnerImage" src="https://randomuser.me/api/portraits/men/20.jpg" alt="صورة المستخدم" class="w-12 h-12 rounded-full mr-4">
+                <h3 id="chatPartnerName" class="text-xl font-bold text-gray-800">اختر محادثة</h3>
+            </div>
+            <div id="messagesContainer" class="flex-grow flex flex-col overflow-y-auto pb-4">
+                <p class="text-gray-500 text-center mt-8">لا توجد محادثة محددة.</p>
+            </div>
+            <div class="mt-4 flex items-center">
+                <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..."
+                       class="flex-grow pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+                <button id="sendMessageBtn" class="bg-blue-600 text-white rounded-lg px-6 py-2 mr-2 hover:bg-blue-700 focus:outline-none" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
     </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // **1. تهيئة Firebase**
-        const firebaseConfig = {
-            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-            authDomain: "shaglni-c64c0.firebaseapp.com",
-            projectId: "shaglni-c64c0",
-            storageBucket: "shaglni-c64c0.firebasestorage.app",
-            messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:11ec1d6991add3309c8819",
-            measurementId: "G-98GQGZS09W"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        // **2. ربط عناصر الواجهة**
-        const messagesContainer = document.getElementById('messages-container');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('message-input');
-        const sidebar = document.getElementById('sidebar');
-        const openSidebarBtn = document.getElementById('open-sidebar-btn');
-        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-
-        let currentChatId = "chat1"; // افتراضياً، يتم تحديد محادثة معينة
-
-        // **3. عرض الرسائل من Firestore**
-        function displayMessages(chatId) {
-            messagesContainer.innerHTML = '';
-            const messagesQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
-
-            onSnapshot(messagesQuery, (snapshot) => {
-                messagesContainer.innerHTML = ''; // مسح الرسائل القديمة
-                snapshot.forEach((doc) => {
-                    const messageData = doc.data();
-                    const messageElement = document.createElement('div');
-                    
-                    // تحديد إذا كانت الرسالة من المستخدم الحالي
-                    const isMyMessage = messageData.senderId === auth.currentUser.uid;
-                    
-                    messageElement.classList.add('flex', isMyMessage ? 'justify-end' : 'justify-start');
-                    
-                    let messageContent = `
-                        <div class="bg-${isMyMessage ? 'blue-600' : 'gray-200'} text-${isMyMessage ? 'white' : 'gray-800'} p-3 rounded-lg max-w-sm">
-                            <p>${messageData.text}</p>
-                        </div>
-                    `;
-                    
-                    messageElement.innerHTML = messageContent;
-                    messagesContainer.appendChild(messageElement);
-                });
-                messagesContainer.scrollTop = messagesContainer.scrollHeight; // التمرير للأسفل تلقائياً
-            });
-        }
-        
-        // **4. إرسال رسالة جديدة**
-        messageForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const messageText = messageInput.value.trim();
-            if (messageText === '') return;
-
-            if (auth.currentUser) {
-                await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                    senderId: auth.currentUser.uid,
-                    text: messageText,
-                    timestamp: new Date()
-                });
-                messageInput.value = '';
-            }
-        });
-        
-        // **5. التبديل بين المحادثات**
-        document.getElementById('chat-list').addEventListener('click', (e) => {
-            const chatItem = e.target.closest('.chat-item');
-            if (chatItem) {
-                currentChatId = chatItem.getAttribute('data-chat-id');
-                // تحديث واجهة المحادثة (الاسم، الصورة، حالة الطلب)
-                // هنا يمكن إضافة منطق لجلب البيانات من Firestore
-                document.getElementById('chat-user-name').textContent = chatItem.querySelector('p').textContent;
-                document.getElementById('chat-user-img').src = chatItem.querySelector('img').src;
-                document.getElementById('job-status').textContent = 'حالة الطلب: تم القبول'; // مثال
-                displayMessages(currentChatId);
-            }
-        });
-
-        // **6. منطق القائمة الجانبية**
-        openSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.add('active');
-        });
-        closeSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-        });
-
-        // **7. التحقق من حالة المصادقة عند التحميل**
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // المستخدم مسجل الدخول، يمكن عرض المحادثات
-                displayMessages(currentChatId);
-            } else {
-                // المستخدم غير مسجل الدخول، إعادة التوجيه إلى صفحة تسجيل الدخول
-                // window.location.href = 'login.html';
-            }
-        });
-    </script>
+    
+    <script type="module" src="chat.js"></script>
 </body>
 </html>
