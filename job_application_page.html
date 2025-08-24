@@ -239,8 +239,10 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+        // **1. Firebase Configuration**
+        // Replace with your Firebase project's config
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -254,6 +256,7 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const auth = getAuth(app); // **2. Initialize Firebase Auth**
 
         let currentStep = 1;
         const totalSteps = 4;
@@ -371,6 +374,13 @@
         });
 
         window.submitForm = async function() {
+            // **3. Check for authenticated user**
+            const user = auth.currentUser;
+            if (!user) {
+                alert('يجب عليك تسجيل الدخول أولاً لتتمكن من إضافة موظف.');
+                return;
+            }
+
             if (!employeeForm.checkValidity()) {
                 employeeForm.reportValidity();
                 return;
@@ -417,6 +427,7 @@
                     portfolio: portfolioUrl || null,
                     linkedin: linkedinUrl || null
                 },
+                userId: user.uid, // **4. Include the user's ID**
                 timestamp: serverTimestamp()
             };
 
@@ -443,6 +454,16 @@
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step4').classList.add('hidden');
             document.getElementById('step1').classList.remove('hidden');
+
+            // **Optional: Initial check for authentication status on page load**
+            onAuthStateChanged(auth, (user) => {
+              if (user) {
+                console.log("المستخدم مسجل الدخول، يمكنه إضافة موظف.");
+              } else {
+                console.log("المستخدم غير مسجل الدخول.");
+                // Here, you could redirect to a login page or show a login button
+              }
+            });
         });
     </script>
 </body>
