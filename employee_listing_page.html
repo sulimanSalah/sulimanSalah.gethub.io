@@ -307,4 +307,72 @@
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
 
             if (diffInSeconds < 60) return 'الآن';
-            const minutes = Math.floor(diffInSeconds / 60
+            const minutes = Math.floor(diffInSeconds / 60);
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `منذ ${days} يوم`;
+            const weeks = Math.floor(days / 7);
+            if (weeks < 4) return `منذ ${weeks} أسبوع`;
+            const months = Math.floor(days / 30);
+            if (months < 12) return `منذ ${months} شهر`;
+            const years = Math.floor(days / 365);
+            return `منذ ${years} سنة`;
+        }
+
+        // **8. دالة توظيف موظف**
+        async function hireEmployee(employeeId) {
+            if (!currentUserId) {
+                alert("يجب عليك تسجيل الدخول لتوظيف الموظفين.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "hiringRequests"), {
+                    employerId: currentUserId,
+                    employeeId: employeeId,
+                    status: 'pending',
+                    timestamp: serverTimestamp()
+                });
+                alert("تم إرسال طلب التوظيف بنجاح! سيتم إشعار الموظف.");
+            } catch (error) {
+                console.error("خطأ في إرسال طلب التوظيف:", error);
+                alert("حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        // **9. مستمعي الأحداث: تم التعديل هنا**
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+            } else {
+                currentUserId = null;
+            }
+            // استدعاء دالة جلب الموظفين هنا لكي يتم عرضهم دائمًا
+            fetchEmployees();
+        });
+
+        searchInput.addEventListener('input', filterAndRenderEmployees);
+        stateFilter.addEventListener('change', () => {
+            const selectedState = stateFilter.value;
+            cityFilter.innerHTML = '<option value="">جميع المدن</option>';
+            cityFilter.disabled = true;
+
+            if (selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityFilter.appendChild(option);
+                });
+                cityFilter.disabled = false;
+            }
+            filterAndRenderEmployees();
+        });
+        cityFilter.addEventListener('change', filterAndRenderEmployees);
+
+        window.hireEmployee = hireEmployee; 
+    </script>
+</body>
+</html>
