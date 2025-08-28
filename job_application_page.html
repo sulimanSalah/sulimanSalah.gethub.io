@@ -98,26 +98,7 @@
         <form id="employeeForm" onsubmit="event.preventDefault();">
 
             <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: صور الملف الشخصي والأعمال</h2>
-                <div class="mb-4">
-                    <label for="profileImage" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
-                    <input type="file" id="profileImage" name="profileImage" accept="image/*"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="workImages" class="block text-sm font-medium text-gray-700">صور الأعمال السابقة (يمكنك اختيار أكثر من صورة)</label>
-                    <input type="file" id="workImages" name="workImages" accept="image/*" multiple
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
-                </div>
-                <div id="imageStatus" class="text-sm mt-2"></div>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
-                    التالي
-                </button>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-                <h2 class="text-lg font-bold mb-4">الخطوة 2: المعلومات الشخصية</h2>
+                <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700">الاسم كاملاً</label>
                     <input type="text" id="name" name="name" placeholder="مثال: محمد أحمد علي"
@@ -133,16 +114,20 @@
                     <textarea id="bio" name="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
                 </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
+                <div class="mb-4">
+                    <label for="profileImage" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
+                    <input type="file" id="profileImage" name="profileImage" accept="image/*"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">يُفضل أن تكون الصورة بجودة عالية.</p>
+                </div>
+                <div id="profileImageStatus" class="text-sm mt-2"></div>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
                     التالي
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-                <h2 class="text-lg font-bold mb-4">الخطوة 3: معلومات الاتصال والموقع</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+                <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
                     <input type="email" id="email" name="email" placeholder="مثال: example@email.com"
@@ -183,16 +168,16 @@
                         <option value="">اختر مدينة</option>
                     </select>
                 </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
                     السابق
                 </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
                     التالي
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-                <h2 class="text-lg font-bold mb-4">الخطوة 4: المهارات ومستوى الخبرة</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+                <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
                 <div id="skillsContainer">
                     <div class="mb-4 flex items-center">
                         <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -222,6 +207,23 @@
                         </label>
                     </div>
                 </div>
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
+                    السابق
+                </button>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
+                    التالي
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+                <h2 class="text-lg font-bold mb-4">الخطوة 4: صور الأعمال السابقة</h2>
+                <div class="mb-4">
+                    <label for="workImages" class="block text-sm font-medium text-gray-700">صور الأعمال السابقة (يمكنك اختيار أكثر من صورة)</label>
+                    <input type="file" id="workImages" name="workImages" accept="image/*" multiple
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
+                </div>
+                <div id="workImagesStatus" class="text-sm mt-2"></div>
                 <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
                     السابق
                 </button>
@@ -281,14 +283,67 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const storage = getStorage(app); // **2. Initialize Firebase Storage**
+        const storage = getStorage(app);
 
         let currentStep = 1;
-        const totalSteps = 5; // **تحديث عدد الخطوات الإجمالي**
+        const totalSteps = 5;
         const employeeForm = document.getElementById('employeeForm');
 
         let profileImageUrl = null;
         let workImageUrls = [];
+
+        // **2. دالة لضغط الصور**
+        async function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        const maxWidth = 800; // يمكنك تغيير الحد الأقصى للعرض
+                        const maxHeight = 800; // والحد الأقصى للارتفاع
+
+                        let width = img.width;
+                        let height = img.height;
+
+                        // إعادة حساب الأبعاد مع الحفاظ على نسبة العرض إلى الارتفاع
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob((blob) => {
+                            resolve(blob);
+                        }, 'image/jpeg', 0.7); // 0.7 هي جودة الضغط، يمكنك تغييرها
+                    };
+                    img.onerror = (error) => reject(error);
+                };
+            });
+        }
+
+        // **3. وظيفة لرفع الملفات (تم تحديثها لتشمل الضغط)**
+        async function uploadFile(file, folder, userId) {
+            const compressedBlob = await compressImage(file);
+            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`; // تغيير الامتداد إلى jpeg
+            const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
+            await uploadBytes(fileRef, compressedBlob);
+            return await getDownloadURL(fileRef);
+        }
 
         const sudanStates = {
             "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
@@ -311,69 +366,20 @@
             "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
         };
 
-        // **3. وظيفة لرفع الملفات**
-        async function uploadFile(file, folder, userId) {
-            const fileName = `${Date.now()}-${file.name}`;
-            const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
-            await uploadBytes(fileRef, file);
-            return await getDownloadURL(fileRef);
-        }
-
         window.nextStep = async function(step) {
-            // **4. معالجة الخطوة 1 الجديدة**
-            if (step === 1) {
-                const profileImageFile = document.getElementById('profileImage').files[0];
-                const workImageFiles = document.getElementById('workImages').files;
-                const statusElement = document.getElementById('imageStatus');
-                const nextButton = document.querySelector('#step1 button');
-
-                // تحقق من وجود المستخدم الحالي
-                const user = auth.currentUser;
-                if (!user) {
-                    alert('يجب عليك تسجيل الدخول أولاً.');
-                    return;
-                }
-                
-                // التحقق من وجود صورة للملف الشخصي
-                if (!profileImageFile) {
-                    statusElement.textContent = 'الرجاء اختيار صورة شخصية.';
-                    return;
-                }
-
-                nextButton.disabled = true;
-                nextButton.textContent = 'جاري رفع الصور...';
-                statusElement.textContent = 'يتم رفع الصور، يرجى الانتظار...';
-
-                try {
-                    // رفع صورة الملف الشخصي
-                    profileImageUrl = await uploadFile(profileImageFile, 'profile_images', user.uid);
-                    
-                    // رفع صور الأعمال السابقة
-                    workImageUrls = [];
-                    const uploadPromises = [];
-                    // حد أقصى 5 صور
-                    for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                        uploadPromises.push(uploadFile(workImageFiles[i], 'work_images', user.uid));
-                    }
-                    workImageUrls = await Promise.all(uploadPromises);
-
-                    statusElement.textContent = 'تم رفع الصور بنجاح!';
-                } catch (error) {
-                    console.error("فشل رفع الصور:", error);
-                    statusElement.textContent = 'فشل رفع الصور. الرجاء المحاولة مرة أخرى.';
-                    nextButton.disabled = false;
-                    nextButton.textContent = 'التالي';
-                    return;
-                } finally {
-                    nextButton.disabled = false;
-                    nextButton.textContent = 'التالي';
-                }
+            const user = auth.currentUser;
+            if (!user) {
+                alert('يجب عليك تسجيل الدخول أولاً.');
+                return;
             }
 
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
             inputs.forEach(input => {
+                if (input.id === 'workImages') {
+                    return; // نتجاهل التحقق من حقل الصور
+                }
                 if (!input.checkValidity()) {
                     input.reportValidity();
                     isStepValid = false;
@@ -382,6 +388,63 @@
 
             if (!isStepValid) {
                 return;
+            }
+
+            // **4. معالجة رفع صورة الملف الشخصي في الخطوة 1**
+            if (step === 1) {
+                const profileImageFile = document.getElementById('profileImage').files[0];
+                const statusElement = document.getElementById('profileImageStatus');
+                const nextButton = document.querySelector('#step1 button');
+
+                if (profileImageFile) {
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'جاري رفع الصورة...';
+                    statusElement.textContent = 'يتم ضغط ورفع الصورة، يرجى الانتظار...';
+                    try {
+                        profileImageUrl = await uploadFile(profileImageFile, 'profile_images', user.uid);
+                        statusElement.textContent = 'تم رفع الصورة بنجاح!';
+                    } catch (error) {
+                        console.error("فشل رفع صورة الملف الشخصي:", error);
+                        statusElement.textContent = 'فشل رفع الصورة. الرجاء المحاولة مرة أخرى.';
+                        nextButton.disabled = false;
+                        nextButton.textContent = 'التالي';
+                        return;
+                    } finally {
+                        nextButton.disabled = false;
+                        nextButton.textContent = 'التالي';
+                    }
+                }
+            }
+
+            // **5. معالجة رفع صور الأعمال في الخطوة 4**
+            if (step === 4) {
+                const workImageFiles = document.getElementById('workImages').files;
+                const statusElement = document.getElementById('workImagesStatus');
+                const nextButton = document.querySelector('#step4 button.bg-blue-600');
+
+                if (workImageFiles.length > 0) {
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'جاري رفع الصور...';
+                    statusElement.textContent = 'يتم ضغط ورفع صور الأعمال، يرجى الانتظار...';
+                    try {
+                        workImageUrls = [];
+                        const uploadPromises = [];
+                        for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
+                            uploadPromises.push(uploadFile(workImageFiles[i], 'work_images', user.uid));
+                        }
+                        workImageUrls = await Promise.all(uploadPromises);
+                        statusElement.textContent = 'تم رفع الصور بنجاح!';
+                    } catch (error) {
+                        console.error("فشل رفع صور الأعمال:", error);
+                        statusElement.textContent = 'فشل رفع الصور. الرجاء المحاولة مرة أخرى.';
+                        nextButton.disabled = false;
+                        nextButton.textContent = 'التالي';
+                        return;
+                    } finally {
+                        nextButton.disabled = false;
+                        nextButton.textContent = 'التالي';
+                    }
+                }
             }
 
             stepElement.classList.add('hidden');
@@ -493,8 +556,8 @@
             const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
 
             const employeeData = {
-                profileImage: profileImageUrl, // **5. إضافة رابط صورة الملف الشخصي**
-                workImages: workImageUrls,     // **6. إضافة روابط صور الأعمال**
+                profileImage: profileImageUrl,
+                workImages: workImageUrls,
                 name: name,
                 headline: headline,
                 bio: bio,
@@ -537,7 +600,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             window.updateSteps();
-            // إخفاء جميع الخطوات ما عدا الأولى عند تحميل الصفحة
             document.querySelectorAll('.form-card').forEach((card, index) => {
                 if (index !== 0) {
                     card.classList.add('hidden');
