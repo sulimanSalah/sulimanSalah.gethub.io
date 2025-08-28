@@ -92,12 +92,32 @@
             <div class="step">2</div>
             <div class="step">3</div>
             <div class="step">4</div>
+            <div class="step">5</div>
         </div>
 
         <form id="employeeForm" onsubmit="event.preventDefault();">
 
             <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
+                <h2 class="text-lg font-bold mb-4">الخطوة 1: صور الملف الشخصي والأعمال</h2>
+                <div class="mb-4">
+                    <label for="profileImage" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
+                    <input type="file" id="profileImage" name="profileImage" accept="image/*"
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="workImages" class="block text-sm font-medium text-gray-700">صور الأعمال السابقة (يمكنك اختيار أكثر من صورة)</label>
+                    <input type="file" id="workImages" name="workImages" accept="image/*" multiple
+                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
+                </div>
+                <div id="imageStatus" class="text-sm mt-2"></div>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
+                    التالي
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
+                <h2 class="text-lg font-bold mb-4">الخطوة 2: المعلومات الشخصية</h2>
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700">الاسم كاملاً</label>
                     <input type="text" id="name" name="name" placeholder="مثال: محمد أحمد علي"
@@ -113,13 +133,16 @@
                     <textarea id="bio" name="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
                 </div>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
+                    السابق
+                </button>
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
                     التالي
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-                <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
+                <h2 class="text-lg font-bold mb-4">الخطوة 3: معلومات الاتصال والموقع</h2>
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
                     <input type="email" id="email" name="email" placeholder="مثال: example@email.com"
@@ -160,16 +183,16 @@
                         <option value="">اختر مدينة</option>
                     </select>
                 </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
                     السابق
                 </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
                     التالي
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-                <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
+                <h2 class="text-lg font-bold mb-4">الخطوة 4: المهارات ومستوى الخبرة</h2>
                 <div id="skillsContainer">
                     <div class="mb-4 flex items-center">
                         <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -199,16 +222,16 @@
                         </label>
                     </div>
                 </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
                     السابق
                 </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
+                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(4)">
                     التالي
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-                <h2 class="text-lg font-bold mb-4">الخطوة 4: ملفات شخصية وروابط</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
+                <h2 class="text-lg font-bold mb-4">الخطوة 5: ملفات شخصية وروابط</h2>
                 <div class="mb-4">
                     <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
                     <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
@@ -224,7 +247,7 @@
                     <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
                            class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
+                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(5)">
                     السابق
                 </button>
                 <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
@@ -240,6 +263,7 @@
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         // **1. Firebase Configuration**
         // Replace with your Firebase project's config
@@ -256,11 +280,15 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        const auth = getAuth(app); // **2. Initialize Firebase Auth**
+        const auth = getAuth(app);
+        const storage = getStorage(app); // **2. Initialize Firebase Storage**
 
         let currentStep = 1;
-        const totalSteps = 4;
+        const totalSteps = 5; // **تحديث عدد الخطوات الإجمالي**
         const employeeForm = document.getElementById('employeeForm');
+
+        let profileImageUrl = null;
+        let workImageUrls = [];
 
         const sudanStates = {
             "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
@@ -283,7 +311,65 @@
             "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
         };
 
-        window.nextStep = function(step) {
+        // **3. وظيفة لرفع الملفات**
+        async function uploadFile(file, folder, userId) {
+            const fileName = `${Date.now()}-${file.name}`;
+            const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
+            await uploadBytes(fileRef, file);
+            return await getDownloadURL(fileRef);
+        }
+
+        window.nextStep = async function(step) {
+            // **4. معالجة الخطوة 1 الجديدة**
+            if (step === 1) {
+                const profileImageFile = document.getElementById('profileImage').files[0];
+                const workImageFiles = document.getElementById('workImages').files;
+                const statusElement = document.getElementById('imageStatus');
+                const nextButton = document.querySelector('#step1 button');
+
+                // تحقق من وجود المستخدم الحالي
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('يجب عليك تسجيل الدخول أولاً.');
+                    return;
+                }
+                
+                // التحقق من وجود صورة للملف الشخصي
+                if (!profileImageFile) {
+                    statusElement.textContent = 'الرجاء اختيار صورة شخصية.';
+                    return;
+                }
+
+                nextButton.disabled = true;
+                nextButton.textContent = 'جاري رفع الصور...';
+                statusElement.textContent = 'يتم رفع الصور، يرجى الانتظار...';
+
+                try {
+                    // رفع صورة الملف الشخصي
+                    profileImageUrl = await uploadFile(profileImageFile, 'profile_images', user.uid);
+                    
+                    // رفع صور الأعمال السابقة
+                    workImageUrls = [];
+                    const uploadPromises = [];
+                    // حد أقصى 5 صور
+                    for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
+                        uploadPromises.push(uploadFile(workImageFiles[i], 'work_images', user.uid));
+                    }
+                    workImageUrls = await Promise.all(uploadPromises);
+
+                    statusElement.textContent = 'تم رفع الصور بنجاح!';
+                } catch (error) {
+                    console.error("فشل رفع الصور:", error);
+                    statusElement.textContent = 'فشل رفع الصور. الرجاء المحاولة مرة أخرى.';
+                    nextButton.disabled = false;
+                    nextButton.textContent = 'التالي';
+                    return;
+                } finally {
+                    nextButton.disabled = false;
+                    nextButton.textContent = 'التالي';
+                }
+            }
+
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
@@ -374,7 +460,6 @@
         });
 
         window.submitForm = async function() {
-            // **3. Check for authenticated user**
             const user = auth.currentUser;
             if (!user) {
                 alert('يجب عليك تسجيل الدخول أولاً لتتمكن من إضافة موظف.');
@@ -386,7 +471,7 @@
                 return;
             }
 
-            const submitButton = document.querySelector('#step4 button[onclick="window.submitForm()"]');
+            const submitButton = document.querySelector('#step5 button[onclick="window.submitForm()"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
             submitButton.textContent = 'جاري التسجيل...';
@@ -408,6 +493,8 @@
             const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
 
             const employeeData = {
+                profileImage: profileImageUrl, // **5. إضافة رابط صورة الملف الشخصي**
+                workImages: workImageUrls,     // **6. إضافة روابط صور الأعمال**
                 name: name,
                 headline: headline,
                 bio: bio,
@@ -427,7 +514,7 @@
                     portfolio: portfolioUrl || null,
                     linkedin: linkedinUrl || null
                 },
-                userId: user.uid, // **4. Include the user's ID**
+                userId: user.uid,
                 timestamp: serverTimestamp()
             };
 
@@ -437,7 +524,7 @@
                 employeeForm.reset();
                 currentStep = 1;
                 window.updateSteps();
-                document.getElementById('step4').classList.add('hidden');
+                document.getElementById('step5').classList.add('hidden');
                 document.getElementById('step1').classList.remove('hidden');
             } catch (error) {
                 console.error("خطأ في تسجيل الموظف:", error);
@@ -450,18 +537,19 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             window.updateSteps();
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.add('hidden');
-            document.getElementById('step4').classList.add('hidden');
+            // إخفاء جميع الخطوات ما عدا الأولى عند تحميل الصفحة
+            document.querySelectorAll('.form-card').forEach((card, index) => {
+                if (index !== 0) {
+                    card.classList.add('hidden');
+                }
+            });
             document.getElementById('step1').classList.remove('hidden');
 
-            // **Optional: Initial check for authentication status on page load**
             onAuthStateChanged(auth, (user) => {
               if (user) {
                 console.log("المستخدم مسجل الدخول، يمكنه إضافة موظف.");
               } else {
                 console.log("المستخدم غير مسجل الدخول.");
-                // Here, you could redirect to a login page or show a login button
               }
             });
         });
