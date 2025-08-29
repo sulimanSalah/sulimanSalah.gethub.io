@@ -353,10 +353,13 @@
             });
         }
 
-        // **1. وظيفة لرفع الملفات مع شريط تقدم**
         async function uploadFileWithProgress(file, folder, userId, progressBarId, statusId) {
+            console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
             const compressedBlob = await compressImage(file);
-            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
+            console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
+            
+            // **هنا تم تعديل اسم الملف ليتم إنشاء اسم فريد دائمًا**
+            const fileName = `${Date.now()}-${userId}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
             const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
             const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
 
@@ -368,20 +371,20 @@
             return new Promise((resolve, reject) => {
                 uploadTask.on('state_changed', 
                     (snapshot) => {
-                        // تحديث شريط التقدم
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         progressBar.style.width = progress + '%';
                         statusElement.textContent = `جاري الرفع: ${Math.round(progress)}%`;
+                        console.log(`[رفع الملفات] تقدم الرفع: ${Math.round(progress)}%`);
                     }, 
                     (error) => {
-                        // معالجة الأخطاء
+                        console.error(`[خطأ في الرفع] فشل رفع الملف:`, error);
                         progressContainer.classList.add('hidden');
                         statusElement.textContent = 'فشل الرفع.';
                         reject(error);
                     }, 
                     () => {
-                        // عند اكتمال الرفع
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل: ${downloadURL}`);
                             progressContainer.classList.add('hidden');
                             statusElement.textContent = 'تم الرفع بنجاح.';
                             resolve(downloadURL);
@@ -413,11 +416,10 @@
         };
 
         window.nextStep = async function(step) {
+            // **تم إزالة التحقق من المستخدم هنا**
             const user = auth.currentUser;
-            if (!user) {
-                alert('يجب عليك تسجيل الدخول أولاً.');
-                return;
-            }
+            const userId = user ? user.uid : "anonymous_user"; // استخدام "anonymous_user" إذا لم يكن هناك مستخدم
+            console.log(`[التقدم] بدء الخطوة ${step} للمستخدم: ${userId}`);
 
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input, select, textarea');
@@ -433,23 +435,25 @@
             });
 
             if (!isStepValid) {
+                console.warn(`[خطأ في النموذج] البيانات في الخطوة ${step} غير صالحة.`);
                 return;
             }
 
-            // معالجة رفع صورة الملف الشخصي في الخطوة 1
             if (step === 1) {
                 const profileImageFile = document.getElementById('profileImage').files[0];
                 const statusElement = document.getElementById('profileImageStatus');
                 const nextButton = document.querySelector('#step1 button');
 
                 if (profileImageFile) {
+                    console.log('[رفع صورة الملف الشخصي] بدء عملية الرفع.');
                     nextButton.disabled = true;
                     statusElement.textContent = 'يتم رفع الصورة، يرجى الانتظار...';
                     try {
-                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', user.uid, 'profile-progress', 'profileImageStatus');
+                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', userId, 'profile-progress', 'profileImageStatus');
+                        console.log('[رفع صورة الملف الشخصي] تم الرفع بنجاح.');
                     } catch (error) {
-                        console.error("فشل رفع صورة الملف الشخصي:", error);
-                        statusElement.textContent = 'فشل رفع الصورة. الرجاء المحاولة مرة أخرى.';
+                        console.error("[خطأ في رفع الصورة] فشل رفع صورة الملف الشخصي:", error);
+                        statusElement.textContent = 'فشل الرفع. الرجاء المحاولة مرة أخرى.';
                         nextButton.disabled = false;
                         return;
                     } finally {
@@ -458,25 +462,26 @@
                 }
             }
 
-            // معالجة رفع صور الأعمال في الخطوة 4
             if (step === 4) {
                 const workImageFiles = document.getElementById('workImages').files;
                 const statusElement = document.getElementById('workImagesStatus');
                 const nextButton = document.querySelector('#step4 button.bg-blue-600');
 
                 if (workImageFiles.length > 0) {
+                    console.log('[رفع صور الأعمال] بدء عملية الرفع.');
                     nextButton.disabled = true;
                     statusElement.textContent = 'يتم رفع صور الأعمال، يرجى الانتظار...';
                     try {
                         workImageUrls = [];
                         const uploadPromises = [];
                         for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', user.uid, 'work-progress', 'workImagesStatus'));
+                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', userId, 'work-progress', 'workImagesStatus'));
                         }
                         workImageUrls = await Promise.all(uploadPromises);
+                        console.log('[رفع صور الأعمال] تم رفع جميع الصور بنجاح.');
                     } catch (error) {
-                        console.error("فشل رفع صور الأعمال:", error);
-                        statusElement.textContent = 'فشل رفع الصور. الرجاء المحاولة مرة أخرى.';
+                        console.error("[خطأ في رفع الصور] فشل رفع صور الأعمال:", error);
+                        statusElement.textContent = 'فشل الرفع. الرجاء المحاولة مرة أخرى.';
                         nextButton.disabled = false;
                         return;
                     } finally {
@@ -485,6 +490,7 @@
                 }
             }
 
+            console.log(`[التقدم] الانتقال من الخطوة ${currentStep} إلى الخطوة ${currentStep + 1}`);
             stepElement.classList.add('hidden');
             currentStep++;
             if (currentStep > totalSteps) {
@@ -495,6 +501,7 @@
         };
 
         window.prevStep = function(step) {
+            console.log(`[التقدم] العودة من الخطوة ${currentStep} إلى الخطوة ${currentStep - 1}`);
             document.getElementById(`step${step}`).classList.add('hidden');
             currentStep--;
             if (currentStep < 1) {
@@ -512,6 +519,7 @@
                     stepEl.classList.add('active');
                 }
             });
+            console.log(`[التقدم] الخطوة الحالية: ${currentStep}`);
         };
 
         document.getElementById('skillsContainer').addEventListener('click', function(event) {
@@ -520,6 +528,7 @@
 
             if (event.target.closest('.add-skill-btn')) {
                 if (currentSkillsCount >= 6) {
+                    console.warn('[المهارات] لا يمكن إضافة أكثر من 6 مهارات.');
                     messageElement.classList.remove('hidden');
                     return;
                 }
@@ -531,12 +540,14 @@
                     </div>
                 `;
                 document.getElementById('skillsContainer').insertAdjacentHTML('beforeend', newSkillInputHtml);
+                console.log(`[المهارات] تم إضافة حقل مهارة جديد. العدد الحالي: ${currentSkillsCount + 1}`);
             }
             if (event.target.closest('.remove-skill-btn')) {
                 event.target.closest('.mb-4').remove();
                 if (document.querySelectorAll('.skill-input').length < 6) {
                     messageElement.classList.add('hidden');
                 }
+                console.log(`[المهارات] تم حذف حقل مهارة. العدد المتبقي: ${document.querySelectorAll('.skill-input').length}`);
             }
         });
 
@@ -546,7 +557,6 @@
             const citySelect = document.getElementById('city');
 
             citySelect.innerHTML = '<option value="">اختر مدينة</option>';
-
             if (selectedState && sudanStates[selectedState]) {
                 sudanStates[selectedState].forEach(city => {
                     const option = document.createElement('option');
@@ -555,23 +565,25 @@
                     citySelect.appendChild(option);
                 });
                 cityContainer.classList.remove('hidden');
+                console.log(`[الموقع] تم تحديد الولاية: ${selectedState}، وعرض مدنها.`);
             } else {
                 cityContainer.classList.add('hidden');
+                console.log('[الموقع] لم يتم تحديد ولاية.');
             }
         });
 
         window.submitForm = async function() {
+            // **تم إزالة التحقق من المستخدم هنا**
             const user = auth.currentUser;
-            if (!user) {
-                alert('يجب عليك تسجيل الدخول أولاً لتتمكن من إضافة موظف.');
-                return;
-            }
+            const userId = user ? user.uid : "anonymous_user"; // استخدام "anonymous_user" إذا لم يكن هناك مستخدم
 
             if (!employeeForm.checkValidity()) {
+                console.warn('[خطأ في النموذج] فشل التحقق من صحة بيانات النموذج.');
                 employeeForm.reportValidity();
                 return;
             }
 
+            console.log('[إرسال النموذج] بدء عملية إرسال النموذج.');
             const submitButton = document.querySelector('#step5 button[onclick="window.submitForm()"]');
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
@@ -615,21 +627,29 @@
                     portfolio: portfolioUrl || null,
                     linkedin: linkedinUrl || null
                 },
-                userId: user.uid,
+                // userId: user.uid, // هذا السطر تم حذفه
                 timestamp: serverTimestamp()
             };
 
+            // **تعديل: إضافة حقل userId بشكل اختياري**
+            if (user) {
+                employeeData.userId = user.uid;
+            } else {
+                employeeData.userId = "anonymous_user";
+            }
+            
+            console.log('[إرسال النموذج] بيانات النموذج جاهزة للإرسال:', employeeData);
+
             try {
                 await addDoc(collection(db, "employees"), employeeData);
-                alert('تم تسجيل الموظف بنجاح!');
+                console.log('✅ تم تسجيل الموظف بنجاح في قاعدة البيانات.');
                 employeeForm.reset();
                 currentStep = 1;
                 window.updateSteps();
                 document.getElementById('step5').classList.add('hidden');
                 document.getElementById('step1').classList.remove('hidden');
             } catch (error) {
-                console.error("خطأ في تسجيل الموظف:", error);
-                alert('حدث خطأ أثناء تسجيل الموظف. الرجاء المحاولة مرة أخرى.');
+                console.error("❌ خطأ في تسجيل الموظف في قاعدة البيانات:", error);
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = originalButtonText;
@@ -647,9 +667,9 @@
 
             onAuthStateChanged(auth, (user) => {
               if (user) {
-                console.log("المستخدم مسجل الدخول، يمكنه إضافة موظف.");
+                console.log("✅ المستخدم مسجل الدخول، يمكنه إضافة موظف.");
               } else {
-                console.log("المستخدم غير مسجل الدخول.");
+                console.log("⚠️ المستخدم غير مسجل الدخول. بعض الوظائف قد لا تعمل.");
               }
             });
         });
