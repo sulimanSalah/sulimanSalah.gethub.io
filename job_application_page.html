@@ -58,6 +58,20 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -121,6 +135,9 @@
                     <p class="text-sm text-gray-500 mt-1">يُفضل أن تكون الصورة بجودة عالية.</p>
                 </div>
                 <div id="profileImageStatus" class="text-sm mt-2"></div>
+                <div class="progress-container hidden">
+                    <div id="profile-progress" class="progress-bar" style="width: 0%;"></div>
+                </div>
                 <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
                     التالي
                 </button>
@@ -224,6 +241,9 @@
                     <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
                 </div>
                 <div id="workImagesStatus" class="text-sm mt-2"></div>
+                <div class="progress-container hidden">
+                    <div id="work-progress" class="progress-bar" style="width: 0%;"></div>
+                </div>
                 <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
                     السابق
                 </button>
@@ -265,10 +285,9 @@
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-        // **1. Firebase Configuration**
-        // Replace with your Firebase project's config
+        // Firebase Configuration
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -292,7 +311,6 @@
         let profileImageUrl = null;
         let workImageUrls = [];
 
-        // **2. دالة لضغط الصور**
         async function compressImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -304,13 +322,12 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        const maxWidth = 800; // يمكنك تغيير الحد الأقصى للعرض
-                        const maxHeight = 800; // والحد الأقصى للارتفاع
+                        const maxWidth = 800;
+                        const maxHeight = 800;
 
                         let width = img.width;
                         let height = img.height;
 
-                        // إعادة حساب الأبعاد مع الحفاظ على نسبة العرض إلى الارتفاع
                         if (width > height) {
                             if (width > maxWidth) {
                                 height *= maxWidth / width;
@@ -329,20 +346,49 @@
 
                         canvas.toBlob((blob) => {
                             resolve(blob);
-                        }, 'image/jpeg', 0.7); // 0.7 هي جودة الضغط، يمكنك تغييرها
+                        }, 'image/jpeg', 0.7);
                     };
                     img.onerror = (error) => reject(error);
                 };
             });
         }
 
-        // **3. وظيفة لرفع الملفات (تم تحديثها لتشمل الضغط)**
-        async function uploadFile(file, folder, userId) {
+        // **1. وظيفة لرفع الملفات مع شريط تقدم**
+        async function uploadFileWithProgress(file, folder, userId, progressBarId, statusId) {
             const compressedBlob = await compressImage(file);
-            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`; // تغيير الامتداد إلى jpeg
+            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
             const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
-            await uploadBytes(fileRef, compressedBlob);
-            return await getDownloadURL(fileRef);
+            const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
+
+            const progressBar = document.getElementById(progressBarId);
+            const progressContainer = progressBar.parentElement;
+            const statusElement = document.getElementById(statusId);
+            progressContainer.classList.remove('hidden');
+
+            return new Promise((resolve, reject) => {
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // تحديث شريط التقدم
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        progressBar.style.width = progress + '%';
+                        statusElement.textContent = `جاري الرفع: ${Math.round(progress)}%`;
+                    }, 
+                    (error) => {
+                        // معالجة الأخطاء
+                        progressContainer.classList.add('hidden');
+                        statusElement.textContent = 'فشل الرفع.';
+                        reject(error);
+                    }, 
+                    () => {
+                        // عند اكتمال الرفع
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            progressContainer.classList.add('hidden');
+                            statusElement.textContent = 'تم الرفع بنجاح.';
+                            resolve(downloadURL);
+                        });
+                    }
+                );
+            });
         }
 
         const sudanStates = {
@@ -377,8 +423,8 @@
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
             inputs.forEach(input => {
-                if (input.id === 'workImages') {
-                    return; // نتجاهل التحقق من حقل الصور
+                if (input.id === 'workImages' || input.id === 'profileImage') {
+                    return;
                 }
                 if (!input.checkValidity()) {
                     input.reportValidity();
@@ -390,7 +436,7 @@
                 return;
             }
 
-            // **4. معالجة رفع صورة الملف الشخصي في الخطوة 1**
+            // معالجة رفع صورة الملف الشخصي في الخطوة 1
             if (step === 1) {
                 const profileImageFile = document.getElementById('profileImage').files[0];
                 const statusElement = document.getElementById('profileImageStatus');
@@ -398,25 +444,21 @@
 
                 if (profileImageFile) {
                     nextButton.disabled = true;
-                    nextButton.textContent = 'جاري رفع الصورة...';
-                    statusElement.textContent = 'يتم ضغط ورفع الصورة، يرجى الانتظار...';
+                    statusElement.textContent = 'يتم رفع الصورة، يرجى الانتظار...';
                     try {
-                        profileImageUrl = await uploadFile(profileImageFile, 'profile_images', user.uid);
-                        statusElement.textContent = 'تم رفع الصورة بنجاح!';
+                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', user.uid, 'profile-progress', 'profileImageStatus');
                     } catch (error) {
                         console.error("فشل رفع صورة الملف الشخصي:", error);
                         statusElement.textContent = 'فشل رفع الصورة. الرجاء المحاولة مرة أخرى.';
                         nextButton.disabled = false;
-                        nextButton.textContent = 'التالي';
                         return;
                     } finally {
                         nextButton.disabled = false;
-                        nextButton.textContent = 'التالي';
                     }
                 }
             }
 
-            // **5. معالجة رفع صور الأعمال في الخطوة 4**
+            // معالجة رفع صور الأعمال في الخطوة 4
             if (step === 4) {
                 const workImageFiles = document.getElementById('workImages').files;
                 const statusElement = document.getElementById('workImagesStatus');
@@ -424,25 +466,21 @@
 
                 if (workImageFiles.length > 0) {
                     nextButton.disabled = true;
-                    nextButton.textContent = 'جاري رفع الصور...';
-                    statusElement.textContent = 'يتم ضغط ورفع صور الأعمال، يرجى الانتظار...';
+                    statusElement.textContent = 'يتم رفع صور الأعمال، يرجى الانتظار...';
                     try {
                         workImageUrls = [];
                         const uploadPromises = [];
                         for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            uploadPromises.push(uploadFile(workImageFiles[i], 'work_images', user.uid));
+                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', user.uid, 'work-progress', 'workImagesStatus'));
                         }
                         workImageUrls = await Promise.all(uploadPromises);
-                        statusElement.textContent = 'تم رفع الصور بنجاح!';
                     } catch (error) {
                         console.error("فشل رفع صور الأعمال:", error);
                         statusElement.textContent = 'فشل رفع الصور. الرجاء المحاولة مرة أخرى.';
                         nextButton.disabled = false;
-                        nextButton.textContent = 'التالي';
                         return;
                     } finally {
                         nextButton.disabled = false;
-                        nextButton.textContent = 'التالي';
                     }
                 }
             }
