@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حلوياتنا - واجهة جذابة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #fcf8e8; /* لون كريمي فاتح */
+            color: #4a4a4a; /* رمادي داكن */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(rgba(252, 248, 232, 0.7), rgba(252, 248, 232, 0.7)), url('https://images.pexels.com/photos/1028723/pexels-photo-1028723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center/cover;
+            background-attachment: fixed;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero h1 {
+            font-size: 5em;
+            color: #d2691e; /* لون بني محروق يشبه الشوكولاتة */
+            margin-bottom: 0.2em;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            color: #8b4513; /* لون أغمق قليلاً */
+            max-width: 600px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #ff6347; /* لون برتقالي فاتح */
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: #ff4500; /* لون برتقالي داكن */
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>حلويات تُصنع بحب!</h1>
+        <p>استمتع بتجربة فريدة مع أشهى الحلويات والمعجنات الطازجة، حيث يلتقي الذوق الرفيع بالجودة العالية.</p>
+        <a href="#" class="btn">تصفح قائمتنا الآن</a>
+    </div>
+</body>
+</html>
