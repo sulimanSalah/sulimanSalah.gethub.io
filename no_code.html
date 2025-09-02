@@ -3,70 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حلوياتنا - واجهة جذابة</title>
+    <title>عقارات النخبة - الرئيسية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --bg-color-light: #f8f9fa;
+            --bg-color-dark: #343a40;
+            --card-bg-color: #ffffff;
+            --text-color-dark: #212529;
+            --text-color-light: #f8f9fa;
+        }
 
         body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #fcf8e8; /* لون كريمي فاتح */
-            color: #4a4a4a; /* رمادي داكن */
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color-light);
+            color: var(--text-color-dark);
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-align: center;
-        } 
+            direction: rtl;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 1rem;
+        }
+
+        /* Hero Section */
         .hero {
             position: relative;
-            height: 100vh;
+            height: 80vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
-            background: linear-gradient(rgba(252, 248, 232, 0.7), rgba(252, 248, 232, 0.7)), url('https://images.pexels.com/photos/1028723/pexels-photo-1028723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center/cover;
-            background-attachment: fixed;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/10180909/pexels-photo-10180909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center/cover;
+            color: var(--text-color-light);
         }
 
-        .hero h1 {
-            font-size: 5em;
-            color: #d2691e; /* لون بني محروق يشبه الشوكولاتة */
-            margin-bottom: 0.2em;
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        .hero p {
-            font-size: 1.5em;
-            color: #8b4513; /* لون أغمق قليلاً */
-            max-width: 600px;
+        .hero-content p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
         }
 
-        .btn {
-            display: inline-block;
-            background-color: #ff6347; /* لون برتقالي فاتح */
-            color: #fff;
-            padding: 15px 30px;
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
             text-decoration: none;
-            border-radius: 50px;
             font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 2em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
         }
 
-        .btn:hover {
-            background-color: #ff4500; /* لون برتقالي داكن */
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        .btn-primary:hover {
+            background-color: var(--primary-color-dark);
         }
+        
+        /* Property Grid Section */
+        .properties-grid {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .property-card {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .property-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-body h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body .price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text-color-dark);
+            margin-top: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .card-footer span {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .card-footer .icon {
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+        }
+
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>حلويات تُصنع بحب!</h1>
-        <p>استمتع بتجربة فريدة مع أشهى الحلويات والمعجنات الطازجة، حيث يلتقي الذوق الرفيع بالجودة العالية.</p>
-        <a href="#" class="btn">تصفح قائمتنا الآن</a>
-    </div>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>عقارات النخبة</h1>
+            <p>أفضل العقارات السكنية والتجارية في السوق، بوابتك نحو منزل الأحلام.</p>
+            <a href="#" class="btn-primary">استكشف عقاراتنا</a>
+        </div>
+    </header>
+
+    <section class="properties-grid">
+        <div class="container">
+            <h2 class="section-title">عقارات مميزة</h2>
+            <div class="grid-container">
+                <div class="property-card">
+                    <img src="https://images.pexels.com/photos/10180909/pexels-photo-10180909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="صورة عقار">
+                    <div class="card-body">
+                        <h3>فيلا فاخرة للبيع</h3>
+                        <p>
+                            <i class="fas fa-map-marker-alt"></i> حي الواحة، الرياض
+                        </p>
+                        <p class="price">3,500,000 ريال</p>
+                        <div class="card-footer">
+                            <span><i class="fas fa-bed icon"></i> 5 غرف نوم</span>
+                            <span><i class="fas fa-bath icon"></i> 4 حمامات</span>
+                            <span><i class="fas fa-ruler-combined icon"></i> 450 م²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="صورة عقار">
+                    <div class="card-body">
+                        <h3>شقة عصرية للايجار</h3>
+                        <p>
+                            <i class="fas fa-map-marker-alt"></i> وسط المدينة، جدة
+                        </p>
+                        <p class="price">75,000 ريال / سنوي</p>
+                        <div class="card-footer">
+                            <span><i class="fas fa-bed icon"></i> 3 غرف نوم</span>
+                            <span><i class="fas fa-bath icon"></i> 2 حمام</span>
+                            <span><i class="fas fa-ruler-combined icon"></i> 180 م²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <img src="https://images.pexels.com/photos/10180909/pexels-photo-10180909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="صورة عقار">
+                    <div class="card-body">
+                        <h3>فيلا فاخرة للبيع</h3>
+                        <p>
+                            <i class="fas fa-map-marker-alt"></i> حي الواحة، الرياض
+                        </p>
+                        <p class="price">3,500,000 ريال</p>
+                        <div class="card-footer">
+                            <span><i class="fas fa-bed icon"></i> 5 غرف نوم</span>
+                            <span><i class="fas fa-bath icon"></i> 4 حمامات</span>
+                            <span><i class="fas fa-ruler-combined icon"></i> 450 م²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="صورة عقار">
+                    <div class="card-body">
+                        <h3>شقة عصرية للايجار</h3>
+                        <p>
+                            <i class="fas fa-map-marker-alt"></i> وسط المدينة، جدة
+                        </p>
+                        <p class="price">75,000 ريال / سنوي</p>
+                        <div class="card-footer">
+                            <span><i class="fas fa-bed icon"></i> 3 غرف نوم</span>
+                            <span><i class="fas fa-bath icon"></i> 2 حمام</span>
+                            <span><i class="fas fa-ruler-combined icon"></i> 180 م²</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </body>
 </html>
