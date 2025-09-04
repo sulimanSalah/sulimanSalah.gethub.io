@@ -353,13 +353,14 @@
             });
         }
 
-        async function uploadFileWithProgress(file, folder, userId, progressBarId, statusId) {
+        async function uploadFileWithProgress(file, folder, progressBarId, statusId) {
             console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
             const compressedBlob = await compressImage(file);
             console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
-
-            const fileName = `${Date.now()}-${userId}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
-            const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
+            
+            // استخدام اسم عشوائي لعدم وجود userId
+            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
+            const fileRef = ref(storage, `${folder}/${fileName}`);
             const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
 
             const progressBar = document.getElementById(progressBarId);
@@ -415,17 +416,7 @@
         };
 
         window.nextStep = async function(step) {
-            // **التعديل الأول: التحقق من وجود المستخدم قبل الرفع**
-            const user = auth.currentUser;
-            if (step === 1 && document.getElementById('profileImage').files[0]) {
-                if (!user) {
-                    alert("يجب عليك تسجيل الدخول أولاً لإكمال هذه الخطوة.");
-                    console.warn("[خطأ في المصادقة] المستخدم غير مسجل الدخول.");
-                    return; 
-                }
-            }
-
-            const userId = user ? user.uid : "anonymous_user"; 
+            const userId = "anonymous_user"; 
             console.log(`[التقدم] بدء الخطوة ${step} للمستخدم: ${userId}`);
 
             const stepElement = document.getElementById(`step${step}`);
@@ -456,7 +447,7 @@
                     nextButton.disabled = true;
                     statusElement.textContent = 'يتم رفع الصورة، يرجى الانتظار...';
                     try {
-                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', userId, 'profile-progress', 'profileImageStatus');
+                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', 'profile-progress', 'profileImageStatus');
                         console.log('[رفع صورة الملف الشخصي] تم الرفع بنجاح.');
                     } catch (error) {
                         console.error("[خطأ في رفع الصورة] فشل رفع صورة الملف الشخصي:", error);
@@ -482,7 +473,7 @@
                         workImageUrls = [];
                         const uploadPromises = [];
                         for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', userId, 'work-progress', 'workImagesStatus'));
+                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', 'work-progress', 'workImagesStatus'));
                         }
                         workImageUrls = await Promise.all(uploadPromises);
                         console.log('[رفع صور الأعمال] تم رفع جميع الصور بنجاح.');
@@ -580,15 +571,7 @@
         });
 
         window.submitForm = async function() {
-            // **التعديل الثاني: التحقق من وجود المستخدم قبل إرسال النموذج**
-            const user = auth.currentUser;
-            if (!user) {
-                alert("يجب عليك تسجيل الدخول لإرسال النموذج.");
-                console.warn("[خطأ في المصادقة] المستخدم غير مسجل الدخول.");
-                return;
-            }
-            
-            const userId = user.uid;
+            const userId = "anonymous_user";
 
             if (!employeeForm.checkValidity()) {
                 console.warn('[خطأ في النموذج] فشل التحقق من صحة بيانات النموذج.');
@@ -671,13 +654,7 @@
             });
             document.getElementById('step1').classList.remove('hidden');
 
-            onAuthStateChanged(auth, (user) => {
-              if (user) {
-                console.log("✅ المستخدم مسجل الدخول، يمكنه إضافة موظف.");
-              } else {
-                console.log("⚠️ المستخدم غير مسجل الدخول. بعض الوظائف قد لا تعمل.");
-              }
-            });
+            // تم إزالة onAuthStateChanged
         });
     </script>
 </body>
