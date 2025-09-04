@@ -321,7 +321,7 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
+
                         const maxWidth = 800;
                         const maxHeight = 800;
 
@@ -357,8 +357,7 @@
             console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
             const compressedBlob = await compressImage(file);
             console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
-            
-            // **هنا تم تعديل اسم الملف ليتم إنشاء اسم فريد دائمًا**
+
             const fileName = `${Date.now()}-${userId}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
             const fileRef = ref(storage, `${folder}/${userId}/${fileName}`);
             const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
@@ -416,9 +415,17 @@
         };
 
         window.nextStep = async function(step) {
-            // **تم إزالة التحقق من المستخدم هنا**
+            // **التعديل الأول: التحقق من وجود المستخدم قبل الرفع**
             const user = auth.currentUser;
-            const userId = user ? user.uid : "anonymous_user"; // استخدام "anonymous_user" إذا لم يكن هناك مستخدم
+            if (step === 1 && document.getElementById('profileImage').files[0]) {
+                if (!user) {
+                    alert("يجب عليك تسجيل الدخول أولاً لإكمال هذه الخطوة.");
+                    console.warn("[خطأ في المصادقة] المستخدم غير مسجل الدخول.");
+                    return; 
+                }
+            }
+
+            const userId = user ? user.uid : "anonymous_user"; 
             console.log(`[التقدم] بدء الخطوة ${step} للمستخدم: ${userId}`);
 
             const stepElement = document.getElementById(`step${step}`);
@@ -573,9 +580,15 @@
         });
 
         window.submitForm = async function() {
-            // **تم إزالة التحقق من المستخدم هنا**
+            // **التعديل الثاني: التحقق من وجود المستخدم قبل إرسال النموذج**
             const user = auth.currentUser;
-            const userId = user ? user.uid : "anonymous_user"; // استخدام "anonymous_user" إذا لم يكن هناك مستخدم
+            if (!user) {
+                alert("يجب عليك تسجيل الدخول لإرسال النموذج.");
+                console.warn("[خطأ في المصادقة] المستخدم غير مسجل الدخول.");
+                return;
+            }
+            
+            const userId = user.uid;
 
             if (!employeeForm.checkValidity()) {
                 console.warn('[خطأ في النموذج] فشل التحقق من صحة بيانات النموذج.');
@@ -627,17 +640,10 @@
                     portfolio: portfolioUrl || null,
                     linkedin: linkedinUrl || null
                 },
-                // userId: user.uid, // هذا السطر تم حذفه
+                userId: userId,
                 timestamp: serverTimestamp()
             };
 
-            // **تعديل: إضافة حقل userId بشكل اختياري**
-            if (user) {
-                employeeData.userId = user.uid;
-            } else {
-                employeeData.userId = "anonymous_user";
-            }
-            
             console.log('[إرسال النموذج] بيانات النموذج جاهزة للإرسال:', employeeData);
 
             try {
@@ -676,5 +682,3 @@
     </script>
 </body>
 </html>
-
-مرحاتجربة نشر الكود الجديد
