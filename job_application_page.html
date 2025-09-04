@@ -241,9 +241,8 @@
                     <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
                 </div>
                 <div id="workImagesStatus" class="text-sm mt-2"></div>
-                <div class="progress-container hidden">
-                    <div id="work-progress" class="progress-bar" style="width: 0%;"></div>
-                </div>
+                <div id="workProgressContainer" class="flex flex-col gap-2 mt-4"></div>
+
                 <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
                     السابق
                 </button>
@@ -287,12 +286,12 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-        // Firebase Configuration
+        // Firebase Configuration - تم تعديل storageBucket
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
           projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          storageBucket: "shaglni-c64c0.appspot.com", // ✅ تم التصحيح هنا
           messagingSenderId: "768887356636",
           appId: "1:768887356636:web:11ec1d6991add3309c8819",
           measurementId: "G-98GQGZS09W"
@@ -310,6 +309,7 @@
 
         let profileImageUrl = null;
         let workImageUrls = [];
+        const MAX_FILE_SIZE_MB = 5; // ✅ تم تحديد الحد الأقصى لحجم الملف
 
         async function compressImage(file) {
             return new Promise((resolve, reject) => {
@@ -353,20 +353,40 @@
             });
         }
 
-        async function uploadFileWithProgress(file, folder, progressBarId, statusId) {
+        // ✅ تم تعديل الدالة لإنشاء أشرطة تقدم منفصلة
+        async function uploadFileWithProgress(file, folder, fileIndex) {
             console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
+            
+            // ✅ تم التحقق من حجم الملف
+            const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
+            if (file.size > maxSizeBytes) {
+                alert(`حجم ملف ${file.name} يجب ألا يتجاوز ${MAX_FILE_SIZE_MB} ميجابايت.`);
+                const statusEl = document.getElementById(`status-${fileIndex}`);
+                if(statusEl) statusEl.remove();
+                throw new Error("File size exceeds limit");
+            }
+            
             const compressedBlob = await compressImage(file);
             console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
-            
-            // استخدام اسم عشوائي لعدم وجود userId
+
             const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
             const fileRef = ref(storage, `${folder}/${fileName}`);
             const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
 
-            const progressBar = document.getElementById(progressBarId);
-            const progressContainer = progressBar.parentElement;
-            const statusElement = document.getElementById(statusId);
-            progressContainer.classList.remove('hidden');
+            // ✅ إنشاء عناصر التقدم ديناميكيًا
+            const progressContainerHtml = `
+                <div id="file-upload-${fileIndex}" class="my-2">
+                    <p class="text-sm font-medium">${file.name}</p>
+                    <div class="progress-container">
+                        <div id="progress-${fileIndex}" class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div id="status-${fileIndex}" class="text-xs text-gray-500 mt-1">جاري الرفع...</div>
+                </div>
+            `;
+            document.getElementById('workProgressContainer').insertAdjacentHTML('beforeend', progressContainerHtml);
+
+            const progressBar = document.getElementById(`progress-${fileIndex}`);
+            const statusElement = document.getElementById(`status-${fileIndex}`);
 
             return new Promise((resolve, reject) => {
                 uploadTask.on('state_changed', 
@@ -374,19 +394,19 @@
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         progressBar.style.width = progress + '%';
                         statusElement.textContent = `جاري الرفع: ${Math.round(progress)}%`;
-                        console.log(`[رفع الملفات] تقدم الرفع: ${Math.round(progress)}%`);
+                        console.log(`[رفع الملفات] تقدم الرفع لـ ${file.name}: ${Math.round(progress)}%`);
                     }, 
                     (error) => {
                         console.error(`[خطأ في الرفع] فشل رفع الملف:`, error);
-                        progressContainer.classList.add('hidden');
-                        statusElement.textContent = 'فشل الرفع.';
+                        statusElement.textContent = `فشل الرفع لـ ${file.name}.`;
+                        statusElement.classList.add('text-red-500');
                         reject(error);
                     }, 
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل: ${downloadURL}`);
-                            progressContainer.classList.add('hidden');
+                            console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل لـ ${file.name}: ${downloadURL}`);
                             statusElement.textContent = 'تم الرفع بنجاح.';
+                            statusElement.classList.add('text-green-500');
                             resolve(downloadURL);
                         });
                     }
@@ -416,13 +436,13 @@
         };
 
         window.nextStep = async function(step) {
-            const userId = "anonymous_user"; 
-            console.log(`[التقدم] بدء الخطوة ${step} للمستخدم: ${userId}`);
+            console.log(`[التقدم] بدء الخطوة ${step}`);
 
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
             inputs.forEach(input => {
+                // ✅ يتم تجاهل حقول الصور لأن التحقق من الحجم يتم في دالة الرفع
                 if (input.id === 'workImages' || input.id === 'profileImage') {
                     return;
                 }
@@ -447,7 +467,7 @@
                     nextButton.disabled = true;
                     statusElement.textContent = 'يتم رفع الصورة، يرجى الانتظار...';
                     try {
-                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', 'profile-progress', 'profileImageStatus');
+                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', 0);
                         console.log('[رفع صورة الملف الشخصي] تم الرفع بنجاح.');
                     } catch (error) {
                         console.error("[خطأ في رفع الصورة] فشل رفع صورة الملف الشخصي:", error);
@@ -462,24 +482,27 @@
 
             if (step === 4) {
                 const workImageFiles = document.getElementById('workImages').files;
-                const statusElement = document.getElementById('workImagesStatus');
                 const nextButton = document.querySelector('#step4 button.bg-blue-600');
 
                 if (workImageFiles.length > 0) {
                     console.log('[رفع صور الأعمال] بدء عملية الرفع.');
                     nextButton.disabled = true;
-                    statusElement.textContent = 'يتم رفع صور الأعمال، يرجى الانتظار...';
+                    
+                    // تنظيف حاوية التقدم قبل بدء الرفع
+                    document.getElementById('workProgressContainer').innerHTML = '';
+                    
                     try {
                         workImageUrls = [];
                         const uploadPromises = [];
                         for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', 'work-progress', 'workImagesStatus'));
+                            // ✅ إرسال رقم فهرس الملف لإنشاء شريط تقدم منفصل
+                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', i));
                         }
                         workImageUrls = await Promise.all(uploadPromises);
                         console.log('[رفع صور الأعمال] تم رفع جميع الصور بنجاح.');
                     } catch (error) {
                         console.error("[خطأ في رفع الصور] فشل رفع صور الأعمال:", error);
-                        statusElement.textContent = 'فشل الرفع. الرجاء المحاولة مرة أخرى.';
+                        // رسائل الخطأ تظهر الآن بجانب كل ملف
                         nextButton.disabled = false;
                         return;
                     } finally {
@@ -654,7 +677,7 @@
             });
             document.getElementById('step1').classList.remove('hidden');
 
-            // تم إزالة onAuthStateChanged
+            // ✅ تم إزالة onAuthStateChanged
         });
     </script>
 </body>
