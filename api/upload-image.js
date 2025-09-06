@@ -1,26 +1,42 @@
 import { put } from '@vercel/blob';
 
-export default async function POST(request) {
+export const config = {
+  runtime: 'edge',
+};
+
+export default async function handleUpload(request) {
   try {
-    const file = request.files.get('file');
+    const { searchParams } = new URL(request.url);
+    const filename = searchParams.get('filename');
+
+    if (!request.body) {
+      throw new Error('No file data provided.');
+    }
+
+    // قم بتغيير هذا الجزء لتتوافق مع الطريقة التي تم بها إرسال الملف
+    const formData = await request.formData();
+    const file = formData.get('file');
 
     if (!file) {
-      return new Response(JSON.stringify({ error: 'No file uploaded.' }), {
-        status: 400,
-      });
+        throw new Error('File not found in form data.');
     }
 
     const blob = await put(file.name, file, {
-      access: 'public', // يجعل الملفات قابلة للوصول للجميع
+      access: 'public',
     });
 
     return new Response(JSON.stringify(blob), {
       status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   } catch (error) {
-    console.error('Error uploading file:', error);
-    return new Response(JSON.stringify({ error: 'Failed to upload file.' }), {
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 }
