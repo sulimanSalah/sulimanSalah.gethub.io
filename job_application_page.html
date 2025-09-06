@@ -3,677 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل موظف جديد - شغلني</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>شغلني - الصفحة الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --light: #f9fafb;
-            --dark: #1f2937;
-            --gray: #6b7280;
+            --primary-color: #3498db; /* أزرق */
+            --secondary-color: #2ecc71; /* أخضر */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --text-color: #555;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f5f7fa;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
-        .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            font-weight: bold;
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
         }
 
-        .step.active {
-            background-color: var(--success);
-        }
-
-        .step-container {
+        /* Navbar */
+        .navbar {
+            background-color: #ffffff;
+            padding: 15px 0;
+            box-shadow: var(--box-shadow);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar .container {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar .logo {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-left: 20px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            color: var(--dark-color);
+            font-weight: 700;
+            padding: 5px 0;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .navbar ul li a:hover,
+        .navbar ul li a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1500x500/3498db/ffffff?text=شغلني+للعمل') no-repeat center center/cover;
+            color: #ffffff;
+            text-align: center;
+            padding: 100px 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
             margin-bottom: 20px;
         }
 
-        .form-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
+        .hero p {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin-bottom: 30px;
         }
 
-        .form-card:hover {
+        .hero .btn {
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero .btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-width: 800px;
+            margin: -50px auto 50px auto; /* سالب 50px لجعلها تظهر فوق قسم الهيرو قليلاً */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar input[type="text"],
+        .search-bar select {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            min-width: 200px;
+        }
+
+        .search-bar .btn-search {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar .btn-search:hover {
+            background-color: #2980b9;
+        }
+
+        /* Sections common styling */
+        .section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 2.5em;
+            color: var(--dark-color);
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* Featured Jobs */
+        .featured-jobs .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .featured-jobs .job-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: right;
+            transition: transform 0.3s ease;
+        }
+
+        .featured-jobs .job-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
         }
 
-        .progress-container {
-            width: 100%;
-            background-color: #e5e7eb;
-            border-radius: 9999px;
-            margin-top: 8px;
+        .featured-jobs .job-card h3 {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin-bottom: 10px;
         }
 
-        .progress-bar {
-            height: 8px;
-            background-color: var(--primary);
-            border-radius: 9999px;
-            transition: width 0.3s ease;
+        .featured-jobs .job-card p {
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+        .featured-jobs .job-card .location,
+        .featured-jobs .job-card .salary {
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background-color: #f9f9f9;
+        }
+
+        .how-it-works .steps-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .how-it-works .step-card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            width: 280px;
+        }
+
+        .how-it-works .step-card .icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .how-it-works .step-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .cta-section h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+         .cta-section h2::after { /* Override for white h2 */
+            background-color: #ffffff;
+        }
+
+
+        .cta-section .btn {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            padding: 15px 30px;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .cta-section .btn:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-color);
+            color: #ffffff;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .footer .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer .footer-links a {
+            color: #ffffff;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer .social-icons a {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin: 0 8px;
+        }
+        .footer .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        /* General container for content */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .navbar .logo {
+                font-size: 1.8em;
+                margin-bottom: 10px;
+            }
+            .navbar ul {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+                flex-wrap: wrap;
+            }
+            .navbar ul li {
+                margin: 5px 10px;
+            }
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .search-bar {
+                flex-direction: column;
+                margin-top: 20px; /* Adjust margin for mobile */
+            }
+            .search-bar input[type="text"],
+            .search-bar select,
+            .search-bar .btn-search {
+                width: 100%;
+                min-width: unset;
+            }
+            .section h2 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="#" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
-                    <a href="available_jobs.html" class="text-gray-700 hover:text-blue-600">عرض الوظائف</a>
-                    <a href="available_employees.html" class="text-gray-700 hover:text-blue-600">عرض الموظفين</a>
-                    <a href="job_registration.html" class="text-blue-600 font-medium">إضافة وظيفة</a>
-                </div>
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="relative">
-                        <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-                    </div>
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
-                </div>
-            </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">شغلني</div>
+            <ul>
+                <li><a href="#home" class="active">الرئيسية</a></li>
+                <li><a href="#featured-jobs">الوظائف المميزة</a></li>
+                <li><a href="#how-it-works">كيف يعمل؟</a></li>
+                <li><a href="#available-employees">الموظفون المتاحون</a></li>
+                <li><a href="#register-employee">تسجيل موظف</a></li>
+                <li><a href="#available-jobs">الوظائف المتاحة</a></li>
+                <li><a href="#add-job">إضافة وظيفة</a></li>
+                <li><a href="#contact">تواصل معنا</a></li>
+            </ul>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="step-container">
-            <div class="step active">1</div>
-            <div class="step">2</div>
-            <div class="step">3</div>
-            <div class="step">4</div>
-            <div class="step">5</div>
+    <header class="hero" id="home">
+        <div class="container">
+            <h1>ابحث عن وظيفة أحلامك أو أفضل المواهب لمشروعك</h1>
+            <p>موقع شغلني يربط بين الباحثين عن عمل وأصحاب الأعمال في جميع القطاعات.</p>
+            <a href="#featured-jobs" class="btn">اكتشف الوظائف الآن</a>
         </div>
+    </header>
 
-        <form id="employeeForm" onsubmit="event.preventDefault();">
+    <section class="search-bar">
+        <input type="text" placeholder="ابحث عن وظيفة (مثال: مطور ويب)...">
+        <select>
+            <option value="">كل المدن</option>
+            <option value="riyadh">الرياض</option>
+            <option value="jeddah">جدة</option>
+            <option value="dubai">دبي</option>
+            <option value="cairo">القاهرة</option>
+        </select>
+        <select>
+            <option value="">كل الفئات</option>
+            <option value="it">تكنولوجيا المعلومات</option>
+            <option value="marketing">تسويق</option>
+            <option value="finance">مالية</option>
+            <option value="design">تصميم</option>
+        </select>
+        <button class="btn-search">بحث</button>
+    </section>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: المعلومات الشخصية</h2>
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">الاسم كاملاً</label>
-                    <input type="text" id="name" name="name" placeholder="مثال: محمد أحمد علي"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+    <section class="section featured-jobs" id="featured-jobs">
+        <div class="container">
+            <h2>وظائف مميزة</h2>
+            <div class="job-grid">
+                <div class="job-card">
+                    <h3>مطوّر واجهات أمامية (Front-end Developer)</h3>
+                    <p>شركة تقنية رائدة تبحث عن مطور واجهات أمامية بخبرة لا تقل عن سنتين.</p>
+                    <p class="location">الموقع: الرياض، السعودية</p>
+                    <p class="salary">الراتب: قابل للتفاوض</p>
+                    <a href="#" class="btn-link">عرض التفاصيل</a>
                 </div>
-                <div class="mb-4">
-                    <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
-                    <input type="text" id="headline" name="headline" placeholder="مثال: مطور ويب | متخصص في React"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <div class="job-card">
+                    <h3>مدير تسويق رقمي (Digital Marketing Manager)</h3>
+                    <p>فرصة رائعة لقيادة فريق التسويق الرقمي في شركة ناشئة واعدة.</p>
+                    <p class="location">الموقع: دبي، الإمارات</p>
+                    <p class="salary">الراتب: 8,000 - 12,000 درهم</p>
+                    <a href="#" class="btn-link">عرض التفاصيل</a>
                 </div>
-                <div class="mb-4">
-                    <label for="bio" class="block text-sm font-medium text-gray-700">نبذة وظيفية عنك</label>
-                    <textarea id="bio" name="bio" rows="5" placeholder="اكتب نبذة مختصرة عنك وعن خبراتك"
-                              class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
+                <div class="job-card">
+                    <h3>محاسب (Accountant)</h3>
+                    <p>مطلوب محاسب بخبرة في برامج المحاسبة المالية للعمل بدوام كامل.</p>
+                    <p class="location">الموقع: القاهرة، مصر</p>
+                    <p class="salary">الراتب: 5,000 - 7,000 جنيه</p>
+                    <a href="#" class="btn-link">عرض التفاصيل</a>
                 </div>
-                <div class="mb-4">
-                    <label for="profileImage" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
-                    <input type="file" id="profileImage" name="profileImage" accept="image/*"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">يُفضل أن تكون الصورة بجودة عالية.</p>
+                <div class="job-card">
+                    <h3>مصمم جرافيك (Graphic Designer)</h3>
+                    <p>موهبة إبداعية مطلوبة لتصميم حملات إعلانية ومواد تسويقية.</p>
+                    <p class="location">الموقع: عن بعد</p>
+                    <p class="salary">الراتب: حسب المشروع</p>
+                    <a href="#" class="btn-link">عرض التفاصيل</a>
                 </div>
-                <div id="profileImageStatus" class="text-sm mt-2"></div>
-                <div class="progress-container hidden">
-                    <div id="profile-progress" class="progress-bar" style="width: 0%;"></div>
-                </div>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(1)">
-                    التالي
-                </button>
             </div>
+        </div>
+    </section>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2">
-                <h2 class="text-lg font-bold mb-4">الخطوة 2: معلومات الاتصال والموقع</h2>
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" placeholder="مثال: example@email.com"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+    <section class="section how-it-works" id="how-it-works">
+        <div class="container">
+            <h2>كيف يعمل شغلني؟</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="icon">🔍</div>
+                    <h3>ابحث عن وظيفة</h3>
+                    <p>تصفح آلاف الوظائف الشاغرة في مختلف المجالات والصناعات.</p>
                 </div>
-                <div class="mb-4">
-                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone" placeholder="مثال: 0912345678"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <div class="step-card">
+                    <div class="icon">📝</div>
+                    <h3>أنشئ ملفك الشخصي</h3>
+                    <p>أبرز مهاراتك وخبراتك لجذب أفضل أصحاب العمل.</p>
                 </div>
-                <div class="mb-4">
-                    <label for="state" class="block text-sm font-medium text-gray-700">الولاية</label>
-                    <select id="state" name="state" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر ولاية</option>
-                        <option value="الخرطوم">الخرطوم</option>
-                        <option value="الجزيرة">الجزيرة</option>
-                        <option value="البحر الأحمر">البحر الأحمر</option>
-                        <option value="كسلا">كسلا</option>
-                        <option value="القضارف">القضارف</option>
-                        <option value="سنار">سنار</option>
-                        <option value="النيل الأبيض">النيل الأبيض</option>
-                        <option value="النيل الأزرق">النيل الأزرق</option>
-                        <option value="شمال كردفان">شمال كردفان</option>
-                        <option value="جنوب كردفان">جنوب كردفان</option>
-                        <option value="غرب كردفان">غرب كردفان</option>
-                        <option value="الشمالية">الشمالية</option>
-                        <option value="نهر النيل">نهر النيل</option>
-                        <option value="شمال دارفور">شمال دارفور</option>
-                        <option value="جنوب دارفور">جنوب دارفور</option>
-                        <option value="غرب دارفور">غرب دارفور</option>
-                        <option value="وسط دارفور">وسط دارفور</option>
-                        <option value="شرق دارفور">شرق دارفور</option>
-                    </select>
+                <div class="step-card">
+                    <div class="icon">💼</div>
+                    <h3>قدم على الوظائف</h3>
+                    <p>بضغطة زر، قدم على الوظائف التي تناسبك مباشرة.</p>
                 </div>
-                <div class="mb-4 hidden" id="cityContainer">
-                    <label for="city" class="block text-sm font-medium text-gray-700">المدينة</label>
-                    <select id="city" name="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر مدينة</option>
-                    </select>
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(2)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(2)">
-                    التالي
-                </button>
             </div>
+        </div>
+    </section>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3">
-                <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
-                <div id="skillsContainer">
-                    <div class="mb-4 flex items-center">
-                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
-                <div class="mb-4">
-                    <label for="experience" class="block text-sm font-medium text-gray-700">مستوى الخبرة</label>
-                    <select id="experience" name="experience" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="">اختر مستوى الخبرة</option>
-                        <option value="مبتدئ">مبتدئ (0-2 سنوات)</option>
-                        <option value="متوسط">متوسط (2-5 سنوات)</option>
-                        <option value="خبير">خبير (5+ سنوات)</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">حالة البحث عن عمل</label>
-                    <div class="flex gap-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="jobStatus" value="متاح للعمل" class="form-radio text-blue-600" required>
-                            <span class="mr-2">متاح للعمل</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="jobStatus" value="لا أبحث حالياً" class="form-radio text-blue-600">
-                            <span class="mr-2">لا أبحث حالياً</span>
-                        </label>
-                    </div>
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(3)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(3)">
-                    التالي
-                </button>
+    <section class="cta-section">
+        <div class="container">
+            <h2>هل أنت صاحب عمل وتبحث عن موظفين؟</h2>
+            <p>نحن نربطك بأفضل المواهب المتاحة في السوق.</p>
+            <a href="#register-employee" class="btn">سجل شركتك الآن</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">عن شغلني</a> |
+                <a href="#">الخصوصية</a> |
+                <a href="#">الشروط والأحكام</a> |
+                <a href="#">الأسئلة الشائعة</a>
             </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4">
-                <h2 class="text-lg font-bold mb-4">الخطوة 4: صور الأعمال السابقة</h2>
-                <div class="mb-4">
-                    <label for="workImages" class="block text-sm font-medium text-gray-700">صور الأعمال السابقة (يمكنك اختيار أكثر من صورة)</label>
-                    <input type="file" id="workImages" name="workImages" accept="image/*" multiple
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">يمكنك رفع ما يصل إلى 5 صور.</p>
-                </div>
-                <div id="workImagesStatus" class="text-sm mt-2"></div>
-                <div id="workProgressContainer" class="flex flex-col gap-2 mt-4"></div>
-
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(4)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.nextStep(4)">
-                    التالي
-                </button>
+            <div class="social-icons">
+                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/facebook-new.png" alt="Facebook" style="vertical-align: middle;"></a>
+                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/twitter--v1.png" alt="Twitter" style="vertical-align: middle;"></a>
+                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/linkedin.png" alt="LinkedIn" style="vertical-align: middle;"></a>
             </div>
+            <p>&copy; 2024 شغلني. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5">
-                <h2 class="text-lg font-bold mb-4">الخطوة 5: ملفات شخصية وروابط</h2>
-                <div class="mb-4">
-                    <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV)</label>
-                    <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="portfolioUrl" class="block text-sm font-medium text-gray-700">رابط معرض الأعمال (اختياري)</label>
-                    <input type="url" id="portfolioUrl" name="portfolioUrl" placeholder="مثال: https://dribbble.com/your-portfolio"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="linkedinUrl" class="block text-sm font-medium text-gray-700">رابط لينكد إن (اختياري)</label>
-                    <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
-                           class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" onclick="window.prevStep(5)">
-                    السابق
-                </button>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="window.submitForm()">
-                    تسجيل الموظف
-                </button>
-            </div>
-
-        </form>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
-        // Firebase Configuration - ✅ تم إبقاء الإعدادات كما هي
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.appspot.com",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        
-        let currentStep = 1;
-        const totalSteps = 5;
-        const employeeForm = document.getElementById('employeeForm');
-
-        let profileImageUrl = null;
-        let workImageUrls = [];
-        const MAX_FILE_SIZE_MB = 5;
-
-        async function compressImage(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-
-                        const maxWidth = 800;
-                        const maxHeight = 800;
-
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > height) {
-                            if (width > maxWidth) {
-                                height *= maxWidth / width;
-                                width = maxWidth;
-                            }
-                        } else {
-                            if (height > maxHeight) {
-                                width *= maxHeight / height;
-                                height = maxHeight;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        canvas.toBlob((blob) => {
-                            resolve(blob);
-                        }, 'image/jpeg', 0.7);
-                    };
-                    img.onerror = (error) => reject(error);
-                };
-            });
-        }
-
-        // ✅ هذه الدالة الآن تستخدم Vercel Serverless Function لرفع الملف
-        async function uploadFileWithProgress(file, folder, fileIndex) {
-            console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
-
-            const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
-            if (file.size > maxSizeBytes) {
-                alert(`حجم ملف ${file.name} يجب ألا يتجاوز ${MAX_FILE_SIZE_MB} ميجابايت.`);
-                const statusEl = document.getElementById(`status-${fileIndex}`);
-                if(statusEl) statusEl.remove();
-                throw new Error("File size exceeds limit");
-            }
-
-            const compressedBlob = await compressImage(file);
-            console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
-
-            const progressContainerHtml = `
-                <div id="file-upload-${fileIndex}" class="my-2">
-                    <p class="text-sm font-medium">${file.name}</p>
-                    <div class="progress-container">
-                        <div id="progress-${fileIndex}" class="progress-bar" style="width: 0%;"></div>
-                    </div>
-                    <div id="status-${fileIndex}" class="text-xs text-gray-500 mt-1">جاري الرفع...</div>
-                </div>
-            `;
-            if (folder === 'work_images') {
-                document.getElementById('workProgressContainer').insertAdjacentHTML('beforeend', progressContainerHtml);
-            } else {
-                 document.getElementById('profileImageStatus').innerHTML = progressContainerHtml;
-            }
-
-            const progressBar = document.getElementById(`progress-${fileIndex}`);
-            const statusElement = document.getElementById(`status-${fileIndex}`);
-
-            const formData = new FormData();
-            formData.append('file', compressedBlob);
-            
-            try {
-                const response = await fetch('/api/upload-image', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                const downloadURL = data.url;
-
-                progressBar.style.width = '100%';
-                statusElement.textContent = 'تم الرفع بنجاح.';
-                statusElement.classList.add('text-green-500');
-                console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل لـ ${file.name}: ${downloadURL}`);
-
-                return downloadURL;
-
-            } catch (error) {
-                console.error(`[خطأ في الرفع] فشل رفع الملف:`, error);
-                progressBar.style.width = '100%';
-                progressBar.style.backgroundColor = 'var(--danger)';
-                statusElement.textContent = `فشل الرفع لـ ${file.name}.`;
-                statusElement.classList.add('text-red-500');
-                throw error;
-            }
-        }
-
-        const sudanStates = {
-            "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
-            "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
-            "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر", "هيا"],
-            "كسلا": ["كسلا", "حلفا الجديدة", "القضارف", "همشكوريب"],
-            "القضارف": ["القضارف", "الفشقة", "القلابات", "الرهد"],
-            "سنار": ["سنار", "سنجة", "التينا", "الدندر"],
-            "النيل الأبيض": ["ربك", "كوستي", "الدويّم", "تندلتي"],
-            "النيل الأزرق": ["الدمازين", "الروصيرص", "الكرمك", "باو"],
-            "شمال كردفان": ["الأبيض", "أم روابة", "بارا", "سودري"],
-            "جنوب كردفان": ["كادقلي", "تلودي", "العباسية", "أبو جبيهة"],
-            "غرب كردفان": ["الفولة", "لقاوة", "الميرم", "أبو زبد"],
-            "الشمالية": ["دنقلا", "حلفا", "مروي", "القولد"],
-            "نهر النيل": ["الدامر", "عطبرة", "شندي", "بربر"],
-            "شمال دارفور": ["الفاشر", "كبكابية", "المالحة", "كتم"],
-            "جنوب دارفور": ["نيالا", "الضعين", "رهيد البردي", "كاس"],
-            "غرب دارفور": ["الجنينة", "سرف عمرة", "كرينك", "كلبس"],
-            "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
-            "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
-        };
-
-        window.nextStep = async function(step) {
-            console.log(`[التقدم] بدء الخطوة ${step}`);
-
-            const stepElement = document.getElementById(`step${step}`);
-            const inputs = stepElement.querySelectorAll('input, select, textarea');
-            let isStepValid = true;
-            inputs.forEach(input => {
-                if (input.id === 'workImages' || input.id === 'profileImage') {
-                    return;
-                }
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    isStepValid = false;
-                }
-            });
-
-            if (!isStepValid) {
-                console.warn(`[خطأ في النموذج] البيانات في الخطوة ${step} غير صالحة.`);
-                return;
-            }
-
-            if (step === 1) {
-                const profileImageFile = document.getElementById('profileImage').files[0];
-                const statusElement = document.getElementById('profileImageStatus');
-                const nextButton = document.querySelector('#step1 button');
-
-                if (profileImageFile) {
-                    console.log('[رفع صورة الملف الشخصي] بدء عملية الرفع.');
-                    nextButton.disabled = true;
-                    statusElement.textContent = 'يتم رفع الصورة، يرجى الانتظار...';
-                    try {
-                        profileImageUrl = await uploadFileWithProgress(profileImageFile, 'profile_images', 0);
-                        console.log('[رفع صورة الملف الشخصي] تم الرفع بنجاح.');
-                    } catch (error) {
-                        console.error("[خطأ في رفع الصورة] فشل رفع صورة الملف الشخصي:", error);
-                        statusElement.textContent = 'فشل الرفع. الرجاء المحاولة مرة أخرى.';
-                        nextButton.disabled = false;
-                        return;
-                    } finally {
-                        nextButton.disabled = false;
-                    }
-                }
-            }
-
-            if (step === 4) {
-                const workImageFiles = document.getElementById('workImages').files;
-                const nextButton = document.querySelector('#step4 button.bg-blue-600');
-
-                if (workImageFiles.length > 0) {
-                    console.log('[رفع صور الأعمال] بدء عملية الرفع.');
-                    nextButton.disabled = true;
-                    document.getElementById('workProgressContainer').innerHTML = '';
-                    try {
-                        workImageUrls = [];
-                        const uploadPromises = [];
-                        for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', i));
-                        }
-                        workImageUrls = await Promise.all(uploadPromises);
-                        console.log('[رفع صور الأعمال] تم رفع جميع الصور بنجاح.');
-                    } catch (error) {
-                        console.error("[خطأ في رفع الصور] فشل رفع صور الأعمال:", error);
-                        nextButton.disabled = false;
-                        return;
-                    } finally {
-                        nextButton.disabled = false;
-                    }
-                }
-            }
-
-            console.log(`[التقدم] الانتقال من الخطوة ${currentStep} إلى الخطوة ${currentStep + 1}`);
-            stepElement.classList.add('hidden');
-            currentStep++;
-            if (currentStep > totalSteps) {
-                currentStep = totalSteps;
-            }
-            document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps();
-        };
-
-        window.prevStep = function(step) {
-            console.log(`[التقدم] العودة من الخطوة ${currentStep} إلى الخطوة ${currentStep - 1}`);
-            document.getElementById(`step${step}`).classList.add('hidden');
-            currentStep--;
-            if (currentStep < 1) {
-                currentStep = 1;
-            }
-            document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            window.updateSteps();
-        };
-
-        window.updateSteps = function() {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((stepEl, index) => {
-                stepEl.classList.remove('active');
-                if (index < currentStep) {
-                    stepEl.classList.add('active');
-                }
-            });
-            console.log(`[التقدم] الخطوة الحالية: ${currentStep}`);
-        };
-
-        document.getElementById('skillsContainer').addEventListener('click', function(event) {
-            const currentSkillsCount = document.querySelectorAll('.skill-input').length;
-            const messageElement = document.getElementById('skillsLimitMessage');
-
-            if (event.target.closest('.add-skill-btn')) {
-                if (currentSkillsCount >= 6) {
-                    console.warn('[المهارات] لا يمكن إضافة أكثر من 6 مهارات.');
-                    messageElement.classList.remove('hidden');
-                    return;
-                }
-                messageElement.classList.add('hidden');
-                const newSkillInputHtml = `
-                    <div class="mb-4 flex items-center">
-                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="button" class="remove-skill-btn mr-2 p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><i class="fas fa-minus"></i></button>
-                    </div>
-                `;
-                document.getElementById('skillsContainer').insertAdjacentHTML('beforeend', newSkillInputHtml);
-                console.log(`[المهارات] تم إضافة حقل مهارة جديد. العدد الحالي: ${currentSkillsCount + 1}`);
-            }
-            if (event.target.closest('.remove-skill-btn')) {
-                event.target.closest('.mb-4').remove();
-                if (document.querySelectorAll('.skill-input').length < 6) {
-                    messageElement.classList.add('hidden');
-                }
-                console.log(`[المهارات] تم حذف حقل مهارة. العدد المتبقي: ${document.querySelectorAll('.skill-input').length}`);
-            }
-        });
-
-        document.getElementById('state').addEventListener('change', function() {
-            const selectedState = this.value;
-            const cityContainer = document.getElementById('cityContainer');
-            const citySelect = document.getElementById('city');
-
-            citySelect.innerHTML = '<option value="">اختر مدينة</option>';
-            if (selectedState && sudanStates[selectedState]) {
-                sudanStates[selectedState].forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-                cityContainer.classList.remove('hidden');
-                console.log(`[الموقع] تم تحديد الولاية: ${selectedState}، وعرض مدنها.`);
-            } else {
-                cityContainer.classList.add('hidden');
-                console.log('[الموقع] لم يتم تحديد ولاية.');
-            }
-        });
-
-        window.submitForm = async function() {
-            const userId = "anonymous_user";
-
-            if (!employeeForm.checkValidity()) {
-                console.warn('[خطأ في النموذج] فشل التحقق من صحة بيانات النموذج.');
-                employeeForm.reportValidity();
-                return;
-            }
-
-            console.log('[إرسال النموذج] بدء عملية إرسال النموذج.');
-            const submitButton = document.querySelector('#step5 button[onclick="window.submitForm()"]');
-            submitButton.disabled = true;
-            const originalButtonText = submitButton.textContent;
-            submitButton.textContent = 'جاري التسجيل...';
-
-            const name = document.getElementById('name').value;
-            const headline = document.getElementById('headline').value;
-            const bio = document.getElementById('bio').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const state = document.getElementById('state').value;
-            const city = document.getElementById('city').value;
-            const experience = document.getElementById('experience').value;
-            const jobStatus = document.querySelector('input[name="jobStatus"]:checked').value;
-            const cvUrl = document.getElementById('cvUrl').value;
-            const portfolioUrl = document.getElementById('portfolioUrl').value;
-            const linkedinUrl = document.getElementById('linkedinUrl').value;
-
-            const skillInputs = document.querySelectorAll('.skill-input');
-            const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
-
-            const employeeData = {
-                profileImage: profileImageUrl,
-                workImages: workImageUrls,
-                name: name,
-                headline: headline,
-                bio: bio,
-                contact: {
-                    email: email,
-                    phone: phone,
-                    location: {
-                        city: city,
-                        state: state
-                    }
-                },
-                skills: skills,
-                experience: experience,
-                jobStatus: jobStatus,
-                links: {
-                    cv: cvUrl || null,
-                    portfolio: portfolioUrl || null,
-                    linkedin: linkedinUrl || null
-                },
-                userId: userId,
-                timestamp: serverTimestamp() // ✅ تم إعادة serverTimestamp
-            };
-
-            console.log('[إرسال النموذج] بيانات النموذج جاهزة للإرسال:', employeeData);
-
-            try {
-                await addDoc(collection(db, "employees"), employeeData);
-                console.log('✅ تم تسجيل الموظف بنجاح في قاعدة البيانات.');
-                employeeForm.reset();
-                currentStep = 1;
-                window.updateSteps();
-                document.getElementById('step5').classList.add('hidden');
-                document.getElementById('step1').classList.remove('hidden');
-            } catch (error) {
-                console.error("❌ خطأ في تسجيل الموظف في قاعدة البيانات:", error);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            window.updateSteps();
-            document.querySelectorAll('.form-card').forEach((card, index) => {
-                if (index !== 0) {
-                    card.classList.add('hidden');
-                }
-            });
-            document.getElementById('step1').classList.remove('hidden');
-        });
-    </script>
 </body>
 </html>
