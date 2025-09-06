@@ -284,14 +284,13 @@
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-        // Firebase Configuration - تم تعديل storageBucket
+        
+        // Firebase Configuration - ✅ تم إبقاء الإعدادات كما هي
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
           projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.appspot.com", // ✅ تم التصحيح هنا
+          storageBucket: "shaglni-c64c0.appspot.com",
           messagingSenderId: "768887356636",
           appId: "1:768887356636:web:11ec1d6991add3309c8819",
           measurementId: "G-98GQGZS09W"
@@ -301,15 +300,14 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const storage = getStorage(app);
-
+        
         let currentStep = 1;
         const totalSteps = 5;
         const employeeForm = document.getElementById('employeeForm');
 
         let profileImageUrl = null;
         let workImageUrls = [];
-        const MAX_FILE_SIZE_MB = 5; // ✅ تم تحديد الحد الأقصى لحجم الملف
+        const MAX_FILE_SIZE_MB = 5;
 
         async function compressImage(file) {
             return new Promise((resolve, reject) => {
@@ -353,11 +351,10 @@
             });
         }
 
-        // ✅ تم تعديل الدالة لإنشاء أشرطة تقدم منفصلة
+        // ✅ هذه الدالة الآن تستخدم Vercel Serverless Function لرفع الملف
         async function uploadFileWithProgress(file, folder, fileIndex) {
             console.log(`[رفع الملفات] بدء ضغط الملف: ${file.name}`);
-            
-            // ✅ تم التحقق من حجم الملف
+
             const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
             if (file.size > maxSizeBytes) {
                 alert(`حجم ملف ${file.name} يجب ألا يتجاوز ${MAX_FILE_SIZE_MB} ميجابايت.`);
@@ -365,15 +362,10 @@
                 if(statusEl) statusEl.remove();
                 throw new Error("File size exceeds limit");
             }
-            
+
             const compressedBlob = await compressImage(file);
             console.log(`[رفع الملفات] تم ضغط الملف بنجاح. الحجم الأصلي: ${file.size} بايت، الحجم بعد الضغط: ${compressedBlob.size} بايت.`);
 
-            const fileName = `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}.jpeg`;
-            const fileRef = ref(storage, `${folder}/${fileName}`);
-            const uploadTask = uploadBytesResumable(fileRef, compressedBlob);
-
-            // ✅ إنشاء عناصر التقدم ديناميكيًا
             const progressContainerHtml = `
                 <div id="file-upload-${fileIndex}" class="my-2">
                     <p class="text-sm font-medium">${file.name}</p>
@@ -383,35 +375,46 @@
                     <div id="status-${fileIndex}" class="text-xs text-gray-500 mt-1">جاري الرفع...</div>
                 </div>
             `;
-            document.getElementById('workProgressContainer').insertAdjacentHTML('beforeend', progressContainerHtml);
+            if (folder === 'work_images') {
+                document.getElementById('workProgressContainer').insertAdjacentHTML('beforeend', progressContainerHtml);
+            } else {
+                 document.getElementById('profileImageStatus').innerHTML = progressContainerHtml;
+            }
 
             const progressBar = document.getElementById(`progress-${fileIndex}`);
             const statusElement = document.getElementById(`status-${fileIndex}`);
 
-            return new Promise((resolve, reject) => {
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        progressBar.style.width = progress + '%';
-                        statusElement.textContent = `جاري الرفع: ${Math.round(progress)}%`;
-                        console.log(`[رفع الملفات] تقدم الرفع لـ ${file.name}: ${Math.round(progress)}%`);
-                    }, 
-                    (error) => {
-                        console.error(`[خطأ في الرفع] فشل رفع الملف:`, error);
-                        statusElement.textContent = `فشل الرفع لـ ${file.name}.`;
-                        statusElement.classList.add('text-red-500');
-                        reject(error);
-                    }, 
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل لـ ${file.name}: ${downloadURL}`);
-                            statusElement.textContent = 'تم الرفع بنجاح.';
-                            statusElement.classList.add('text-green-500');
-                            resolve(downloadURL);
-                        });
-                    }
-                );
-            });
+            const formData = new FormData();
+            formData.append('file', compressedBlob);
+            
+            try {
+                const response = await fetch('/api/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const downloadURL = data.url;
+
+                progressBar.style.width = '100%';
+                statusElement.textContent = 'تم الرفع بنجاح.';
+                statusElement.classList.add('text-green-500');
+                console.log(`[رفع الملفات] تم الرفع بنجاح. رابط التحميل لـ ${file.name}: ${downloadURL}`);
+
+                return downloadURL;
+
+            } catch (error) {
+                console.error(`[خطأ في الرفع] فشل رفع الملف:`, error);
+                progressBar.style.width = '100%';
+                progressBar.style.backgroundColor = 'var(--danger)';
+                statusElement.textContent = `فشل الرفع لـ ${file.name}.`;
+                statusElement.classList.add('text-red-500');
+                throw error;
+            }
         }
 
         const sudanStates = {
@@ -442,7 +445,6 @@
             const inputs = stepElement.querySelectorAll('input, select, textarea');
             let isStepValid = true;
             inputs.forEach(input => {
-                // ✅ يتم تجاهل حقول الصور لأن التحقق من الحجم يتم في دالة الرفع
                 if (input.id === 'workImages' || input.id === 'profileImage') {
                     return;
                 }
@@ -487,22 +489,17 @@
                 if (workImageFiles.length > 0) {
                     console.log('[رفع صور الأعمال] بدء عملية الرفع.');
                     nextButton.disabled = true;
-                    
-                    // تنظيف حاوية التقدم قبل بدء الرفع
                     document.getElementById('workProgressContainer').innerHTML = '';
-                    
                     try {
                         workImageUrls = [];
                         const uploadPromises = [];
                         for (let i = 0; i < Math.min(workImageFiles.length, 5); i++) {
-                            // ✅ إرسال رقم فهرس الملف لإنشاء شريط تقدم منفصل
                             uploadPromises.push(uploadFileWithProgress(workImageFiles[i], 'work_images', i));
                         }
                         workImageUrls = await Promise.all(uploadPromises);
                         console.log('[رفع صور الأعمال] تم رفع جميع الصور بنجاح.');
                     } catch (error) {
                         console.error("[خطأ في رفع الصور] فشل رفع صور الأعمال:", error);
-                        // رسائل الخطأ تظهر الآن بجانب كل ملف
                         nextButton.disabled = false;
                         return;
                     } finally {
@@ -647,7 +644,7 @@
                     linkedin: linkedinUrl || null
                 },
                 userId: userId,
-                timestamp: serverTimestamp()
+                timestamp: serverTimestamp() // ✅ تم إعادة serverTimestamp
             };
 
             console.log('[إرسال النموذج] بيانات النموذج جاهزة للإرسال:', employeeData);
@@ -676,14 +673,7 @@
                 }
             });
             document.getElementById('step1').classList.remove('hidden');
-
-            // ✅ تم إزالة onAuthStateChanged
         });
     </script>
-
-
-
-
-<p> نعم</p>
 </body>
 </html>
