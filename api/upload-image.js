@@ -1,9 +1,5 @@
 import { put } from '@vercel/blob';
 
-export const config = {
-  runtime: 'edge',
-};
-
 export default async function handleUpload(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -13,7 +9,6 @@ export default async function handleUpload(request) {
       throw new Error('No file data provided.');
     }
 
-    // قم بتغيير هذا الجزء لتتوافق مع الطريقة التي تم بها إرسال الملف
     const formData = await request.formData();
     const file = formData.get('file');
 
