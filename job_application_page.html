@@ -140,15 +140,12 @@
         }
 
         try {
-            // رفع الصورة الشخصية إلى Vercel Blob
             const profileImageUrl = await uploadImage(photoFile);
 
-            // رفع صور الأعمال السابقة إلى Vercel Blob
             const previousWorksUrls = await Promise.all(
                 Array.from(previousWorksFiles).map(file => uploadImage(file))
             );
 
-            // حفظ البيانات في Firestore
             await addDoc(collection(db, "employees"), {
                 fullName,
                 jobTitle,
