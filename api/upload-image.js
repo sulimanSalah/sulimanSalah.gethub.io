@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 
 export default async function handleUpload(request) {
-  try {
+  try { 
     const { searchParams } = new URL(request.url);
     const filename = searchParams.get('filename');
 
