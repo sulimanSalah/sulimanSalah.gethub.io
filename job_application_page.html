@@ -1,497 +1,199 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شغلني - الصفحة الرئيسية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>تسجيل موظف جديد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #3498db; /* أزرق */
-            --secondary-color: #2ecc71; /* أخضر */
-            --dark-color: #333;
-            --light-color: #f4f4f4;
-            --text-color: #555;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            background-color: var(--light-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
         }
-
-        a {
-            text-decoration: none;
-            color: var(--primary-color);
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: #ffffff;
-            padding: 15px 0;
-            box-shadow: var(--box-shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .navbar .container {
-            width: 90%;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .navbar .logo {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-left: 20px;
-        }
-
-        .navbar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        .navbar ul li {
-            margin: 0 15px;
-        }
-
-        .navbar ul li a {
-            color: var(--dark-color);
-            font-weight: 700;
-            padding: 5px 0;
-            transition: color 0.3s ease, border-bottom 0.3s ease;
-            border-bottom: 2px solid transparent;
-        }
-
-        .navbar ul li a:hover,
-        .navbar ul li a.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1500x500/3498db/ffffff?text=شغلني+للعمل') no-repeat center center/cover;
-            color: #ffffff;
-            text-align: center;
-            padding: 100px 20px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.3em;
-            max-width: 800px;
-            margin-bottom: 30px;
-        }
-
-        .hero .btn {
-            background-color: var(--secondary-color);
-            color: #ffffff;
-            padding: 15px 30px;
-            border-radius: var(--border-radius);
-            font-size: 1.1em;
-            transition: background-color 0.3s ease;
-        }
-
-        .hero .btn:hover {
-            background-color: #27ae60;
-        }
-
-        /* Search Bar */
-        .search-bar {
-            background-color: #ffffff;
-            padding: 30px 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            max-width: 800px;
-            margin: -50px auto 50px auto; /* سالب 50px لجعلها تظهر فوق قسم الهيرو قليلاً */
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .search-bar input[type="text"],
-        .search-bar select {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-            min-width: 200px;
-        }
-
-        .search-bar .btn-search {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar .btn-search:hover {
-            background-color: #2980b9;
-        }
-
-        /* Sections common styling */
-        .section {
-            padding: 60px 20px;
-            text-align: center;
-        }
-
-        .section h2 {
-            font-size: 2.5em;
-            color: var(--dark-color);
-            margin-bottom: 40px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section h2::after {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary-color);
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        /* Featured Jobs */
-        .featured-jobs .job-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .featured-jobs .job-card {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            text-align: right;
-            transition: transform 0.3s ease;
-        }
-
-        .featured-jobs .job-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .featured-jobs .job-card h3 {
-            color: var(--primary-color);
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .featured-jobs .job-card p {
-            font-size: 0.95em;
-            margin-bottom: 8px;
-        }
-        .featured-jobs .job-card .location,
-        .featured-jobs .job-card .salary {
-            color: var(--text-color);
-            font-size: 0.9em;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            background-color: #f9f9f9;
-        }
-
-        .how-it-works .steps-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        .how-it-works .step-card {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            text-align: center;
-            width: 280px;
-        }
-
-        .how-it-works .step-card .icon {
-            font-size: 3em;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .how-it-works .step-card h3 {
-            color: var(--dark-color);
-            margin-bottom: 10px;
-        }
-
-        /* Call to Action */
-        .cta-section {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .cta-section h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
-         .cta-section h2::after { /* Override for white h2 */
-            background-color: #ffffff;
-        }
-
-
-        .cta-section .btn {
-            background-color: #ffffff;
-            color: var(--primary-color);
-            padding: 15px 30px;
-            border-radius: var(--border-radius);
-            font-size: 1.1em;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .cta-section .btn:hover {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-        }
-
-        /* Footer */
-        .footer {
-            background-color: var(--dark-color);
-            color: #ffffff;
-            padding: 40px 20px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .footer .footer-links {
-            margin-bottom: 20px;
-        }
-
-        .footer .footer-links a {
-            color: #ffffff;
-            margin: 0 10px;
-            transition: color 0.3s ease;
-        }
-
-        .footer .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer .social-icons a {
-            color: #ffffff;
-            font-size: 1.5em;
-            margin: 0 8px;
-        }
-        .footer .social-icons a:hover {
-            color: var(--primary-color);
-        }
-
-        /* General container for content */
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px;
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
-
-        /* Media Queries for responsiveness */
-        @media (max-width: 768px) {
-            .navbar .logo {
-                font-size: 1.8em;
-                margin-bottom: 10px;
-            }
-            .navbar ul {
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
-                flex-wrap: wrap;
-            }
-            .navbar ul li {
-                margin: 5px 10px;
-            }
-            .hero h1 {
-                font-size: 2.5em;
-            }
-            .hero p {
-                font-size: 1em;
-            }
-            .search-bar {
-                flex-direction: column;
-                margin-top: 20px; /* Adjust margin for mobile */
-            }
-            .search-bar input[type="text"],
-            .search-bar select,
-            .search-bar .btn-search {
-                width: 100%;
-                min-width: unset;
-            }
-            .section h2 {
-                font-size: 2em;
-            }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #374151;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .submit-btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #1e40af;
+        }
+        .message {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .success-message {
+            background-color: #dcfce7;
+            color: #065f46;
+        }
+        .error-message {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">شغلني</div>
-            <ul>
-                <li><a href="#home" class="active">الرئيسية</a></li>
-                <li><a href="#featured-jobs">الوظائف المميزة</a></li>
-                <li><a href="#how-it-works">كيف يعمل؟</a></li>
-                <li><a href="#available-employees">الموظفون المتاحون</a></li>
-                <li><a href="#register-employee">تسجيل موظف</a></li>
-                <li><a href="#available-jobs">الوظائف المتاحة</a></li>
-                <li><a href="#add-job">إضافة وظيفة</a></li>
-                <li><a href="#contact">تواصل معنا</a></li>
-            </ul>
+<div class="container">
+    <h1 class="text-2xl font-bold text-center mb-6">تسجيل موظف جديد</h1>
+    <form id="employee-form" class="space-y-4">
+        <div class="form-group">
+            <label for="fullName">الاسم الكامل:</label>
+            <input type="text" id="fullName" name="fullName" required>
         </div>
-    </nav>
-
-    <header class="hero" id="home">
-        <div class="container">
-            <h1>ابحث عن وظيفة أحلامك أو أفضل المواهب لمشروعك</h1>
-            <p>موقع شغلني يربط بين الباحثين عن عمل وأصحاب الأعمال في جميع القطاعات.</p>
-            <a href="#featured-jobs" class="btn">اكتشف الوظائف الآن</a>
+        <div class="form-group">
+            <label for="jobTitle">المسمى الوظيفي:</label>
+            <input type="text" id="jobTitle" name="jobTitle" required>
         </div>
-    </header>
-
-    <section class="search-bar">
-        <input type="text" placeholder="ابحث عن وظيفة (مثال: مطور ويب)...">
-        <select>
-            <option value="">كل المدن</option>
-            <option value="riyadh">الرياض</option>
-            <option value="jeddah">جدة</option>
-            <option value="dubai">دبي</option>
-            <option value="cairo">القاهرة</option>
-        </select>
-        <select>
-            <option value="">كل الفئات</option>
-            <option value="it">تكنولوجيا المعلومات</option>
-            <option value="marketing">تسويق</option>
-            <option value="finance">مالية</option>
-            <option value="design">تصميم</option>
-        </select>
-        <button class="btn-search">بحث</button>
-    </section>
-
-    <section class="section featured-jobs" id="featured-jobs">
-        <div class="container">
-            <h2>وظائف مميزة</h2>
-            <div class="job-grid">
-                <div class="job-card">
-                    <h3>مطوّر واجهات أمامية (Front-end Developer)</h3>
-                    <p>شركة تقنية رائدة تبحث عن مطور واجهات أمامية بخبرة لا تقل عن سنتين.</p>
-                    <p class="location">الموقع: الرياض، السعودية</p>
-                    <p class="salary">الراتب: قابل للتفاوض</p>
-                    <a href="#" class="btn-link">عرض التفاصيل</a>
-                </div>
-                <div class="job-card">
-                    <h3>مدير تسويق رقمي (Digital Marketing Manager)</h3>
-                    <p>فرصة رائعة لقيادة فريق التسويق الرقمي في شركة ناشئة واعدة.</p>
-                    <p class="location">الموقع: دبي، الإمارات</p>
-                    <p class="salary">الراتب: 8,000 - 12,000 درهم</p>
-                    <a href="#" class="btn-link">عرض التفاصيل</a>
-                </div>
-                <div class="job-card">
-                    <h3>محاسب (Accountant)</h3>
-                    <p>مطلوب محاسب بخبرة في برامج المحاسبة المالية للعمل بدوام كامل.</p>
-                    <p class="location">الموقع: القاهرة، مصر</p>
-                    <p class="salary">الراتب: 5,000 - 7,000 جنيه</p>
-                    <a href="#" class="btn-link">عرض التفاصيل</a>
-                </div>
-                <div class="job-card">
-                    <h3>مصمم جرافيك (Graphic Designer)</h3>
-                    <p>موهبة إبداعية مطلوبة لتصميم حملات إعلانية ومواد تسويقية.</p>
-                    <p class="location">الموقع: عن بعد</p>
-                    <p class="salary">الراتب: حسب المشروع</p>
-                    <a href="#" class="btn-link">عرض التفاصيل</a>
-                </div>
-            </div>
+        <div class="form-group">
+            <label for="jobLocation">المدينة:</label>
+            <input type="text" id="jobLocation" name="jobLocation" required>
         </div>
-    </section>
-
-    <section class="section how-it-works" id="how-it-works">
-        <div class="container">
-            <h2>كيف يعمل شغلني؟</h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="icon">🔍</div>
-                    <h3>ابحث عن وظيفة</h3>
-                    <p>تصفح آلاف الوظائف الشاغرة في مختلف المجالات والصناعات.</p>
-                </div>
-                <div class="step-card">
-                    <div class="icon">📝</div>
-                    <h3>أنشئ ملفك الشخصي</h3>
-                    <p>أبرز مهاراتك وخبراتك لجذب أفضل أصحاب العمل.</p>
-                </div>
-                <div class="step-card">
-                    <div class="icon">💼</div>
-                    <h3>قدم على الوظائف</h3>
-                    <p>بضغطة زر، قدم على الوظائف التي تناسبك مباشرة.</p>
-                </div>
-            </div>
+        <div class="form-group">
+            <label for="photo">صورة شخصية:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
         </div>
-    </section>
-
-    <section class="cta-section">
-        <div class="container">
-            <h2>هل أنت صاحب عمل وتبحث عن موظفين؟</h2>
-            <p>نحن نربطك بأفضل المواهب المتاحة في السوق.</p>
-            <a href="#register-employee" class="btn">سجل شركتك الآن</a>
+        <div class="form-group">
+            <label for="previousWorks">أعمال سابقة (صور):</label>
+            <input type="file" id="previousWorks" name="previousWorks" accept="image/*" multiple>
         </div>
-    </section>
+        <button type="submit" class="submit-btn w-full">إرسال</button>
+    </form>
+    <div id="message" class="message hidden"></div>
+</div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-links">
-                <a href="#">عن شغلني</a> |
-                <a href="#">الخصوصية</a> |
-                <a href="#">الشروط والأحكام</a> |
-                <a href="#">الأسئلة الشائعة</a>
-            </div>
-            <div class="social-icons">
-                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/facebook-new.png" alt="Facebook" style="vertical-align: middle;"></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/twitter--v1.png" alt="Twitter" style="vertical-align: middle;"></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/linkedin.png" alt="LinkedIn" style="vertical-align: middle;"></a>
-            </div>
-            <p>&copy; 2024 شغلني. جميع الحقوق محفوظة.</p>
-        </div>
-    </footer>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // **هام:** استبدل هذه الإعدادات بمعلومات مشروعك من Firebase Console
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('employee-form');
+    const messageDiv = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value;
+        const jobTitle = document.getElementById('jobTitle').value;
+        const jobLocation = document.getElementById('jobLocation').value;
+        const photoFile = document.getElementById('photo').files[0];
+        const previousWorksFiles = document.getElementById('previousWorks').files;
+
+        if (!photoFile) {
+            showMessage('يرجى اختيار صورة شخصية.', 'error');
+            return;
+        }
+
+        try {
+            // رفع الصورة الشخصية إلى Vercel Blob
+            const profileImageUrl = await uploadImage(photoFile);
+
+            // رفع صور الأعمال السابقة إلى Vercel Blob
+            const previousWorksUrls = await Promise.all(
+                Array.from(previousWorksFiles).map(file => uploadImage(file))
+            );
+
+            // حفظ البيانات في Firestore
+            await addDoc(collection(db, "employees"), {
+                fullName,
+                jobTitle,
+                jobLocation,
+                profileImageUrl,
+                previousWorksUrls,
+                timestamp: serverTimestamp(),
+            });
+
+            showMessage('تم تسجيل الموظف بنجاح!', 'success');
+            form.reset();
+
+        } catch (error) {
+            console.error("خطأ في عملية التسجيل:", error);
+            showMessage(`حدث خطأ: ${error.message}`, 'error');
+        }
+    });
+
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.statusText;
+            throw new Error(errorData);
+        }
+
+        const { url } = await response.json();
+        return url;
+    }
+
+    function showMessage(msg, type) {
+        messageDiv.textContent = msg;
+        messageDiv.className = `message ${type}-message`;
+        messageDiv.classList.remove('hidden');
+        setTimeout(() => {
+            messageDiv.classList.add('hidden');
+        }, 5000);
+    }
+</script>
 
 </body>
 </html>
