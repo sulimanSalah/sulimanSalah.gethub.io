@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -109,12 +109,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // **هذه هي إعدادات Firebase الحقيقية الخاصة بك**
+    // **إعدادات Firebase الخاصة بك**
     const firebaseConfig = {
       apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
       authDomain: "shaglni-c64c0.firebaseapp.com",
       projectId: "shaglni-c64c0",
-      storageBucket: "shaglni-c64c0.firebasestorage.app",
+      storageBucket: "shaglni-c64c0.appspot.com",
       messagingSenderId: "768887356636",
       appId: "1:768887356636:web:11ec1d6991add3309c8819",
       measurementId: "G-98GQGZS09W"
@@ -161,22 +161,20 @@
 
         } catch (error) {
             console.error("خطأ في عملية التسجيل:", error);
+            // نعرض رسالة الخطأ التقنية هنا
             showMessage(`حدث خطأ: ${error.message}`, 'error');
         }
     });
 
     async function uploadImage(file) {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const response = await fetch('/api/upload-image', {
+        const response = await fetch(`/api/upload-image?filename=${file.name}`, {
             method: 'POST',
-            body: formData,
+            body: file, // نرسل الملف مباشرة
         });
 
         if (!response.ok) {
-            const errorData = await response.statusText;
-            throw new Error(errorData);
+            const errorData = await response.json();
+            throw new Error(errorData.error || "خطأ غير معروف في الرفع");
         }
 
         const { url } = await response.json();
@@ -194,4 +192,4 @@
 </script>
 
 </body>
-</html> 
+</html>
