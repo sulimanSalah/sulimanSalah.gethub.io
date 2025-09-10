@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -122,7 +122,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const CLOUDINARY_CLOUD_NAME = "dbmjg23hi";
+    const CLOUDINARY_CLOUD_NAME = "dbmjg23hl";
     const CLOUDINARY_UPLOAD_PRESET = "employee_preset";
 
     const form = document.getElementById('employee-form');
@@ -130,7 +130,7 @@
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        
         const fullName = document.getElementById('fullName').value;
         const jobTitle = document.getElementById('jobTitle').value;
         const jobLocation = document.getElementById('jobLocation').value;
