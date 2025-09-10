@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل موظف جديد</title>
@@ -109,7 +109,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // **إعدادات Firebase الخاصة بك**
     const firebaseConfig = {
       apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
       authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -122,6 +121,9 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    const CLOUDINARY_CLOUD_NAME = "dbmjg23hi";
+    const CLOUDINARY_UPLOAD_PRESET = "employee_preset";
 
     const form = document.getElementById('employee-form');
     const messageDiv = document.getElementById('message');
@@ -141,10 +143,10 @@
         }
 
         try {
-            const profileImageUrl = await uploadImage(photoFile);
+            const profileImageUrl = await uploadToCloudinary(photoFile);
 
             const previousWorksUrls = await Promise.all(
-                Array.from(previousWorksFiles).map(file => uploadImage(file))
+                Array.from(previousWorksFiles).map(file => uploadToCloudinary(file))
             );
 
             await addDoc(collection(db, "employees"), {
@@ -161,24 +163,27 @@
 
         } catch (error) {
             console.error("خطأ في عملية التسجيل:", error);
-            // نعرض رسالة الخطأ التقنية هنا
             showMessage(`حدث خطأ: ${error.message}`, 'error');
         }
     });
 
-    async function uploadImage(file) {
-        const response = await fetch(`/api/upload-image?filename=${file.name}`, {
+    async function uploadToCloudinary(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`, {
             method: 'POST',
-            body: file, // نرسل الملف مباشرة
+            body: formData,
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || "خطأ غير معروف في الرفع");
+            throw new Error(errorData.error.message || "خطأ في رفع الملف إلى Cloudinary");
         }
 
-        const { url } = await response.json();
-        return url;
+        const data = await response.json();
+        return data.secure_url;
     }
 
     function showMessage(msg, type) {
@@ -190,6 +195,5 @@
         }, 5000);
     }
 </script>
-
 </body>
 </html>
