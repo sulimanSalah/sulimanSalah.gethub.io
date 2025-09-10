@@ -177,6 +177,12 @@
                         <option value="">اختر مدينة</option>
                     </select>
                 </div>
+                <div class="mb-4 hidden" id="areaContainer">
+                    <label for="area" class="block text-sm font-medium text-gray-700">المنطقة / الحي</label>
+                    <select id="area" name="area" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">اختر منطقة أو حي</option>
+                    </select>
+                </div>
                 <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn2">
                     السابق
                 </button>
@@ -261,7 +267,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        
+
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -271,21 +277,28 @@
           appId: "1:768887356636:web:11ec1d6991add3309c8819",
           measurementId: "G-98GQGZS09W"
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
+
         const CLOUDINARY_CLOUD_NAME = "dbmjg23hl";
         const CLOUDINARY_UPLOAD_PRESET = "employee_preset";
 
         let currentStep = 1;
         const totalSteps = 4;
-        
+
         const form = document.getElementById('employeeForm');
         const messageDiv = document.getElementById('message');
 
-        const sudanStates = {
-            "الخرطوم": ["الخرطوم", "أم درمان", "بحري", "شرق النيل", "جبل أولياء", "كرري"],
+        const sudanLocations = {
+            "الخرطوم": {
+                "الخرطوم": ["السجانة", "العمارات", "الرياض", "الطائف", "المنشية", "بري", "الخرطوم 2", "الخرطوم 3", "السوق العربي", "حي المطار", "الشجرة", "جبرة", "الأزهري", "الصحافة", "الكلاكلة"],
+                "أم درمان": ["العباسية", "بيت المال", "الملازمين", "أبو روف", "الموردة", "الهاشماب", "العرضة", "ود نوباوي", "حي العرب", "الشهداء", "المسالمة", "بانت", "الثورة", "الحتانة", "الفتيحاب", "الواحة", "أم بدة", "السلام", "الفتح", "دار السلام"],
+                "الخرطوم بحري": ["كافوري", "شمبات", "الشعبية", "الدناقلة", "الخوجلاب", "الصافية", "كوبر", "الحلفايا", "الدروشاب", "الحاج يوسف", "سوبا شرق", "العيلفون", "أم ضوا بان", "أم دوم", "الشقلة", "النصر", "الوادي الأخضر"],
+                "شرق النيل": ["شرق النيل"],
+                "جبل أولياء": ["جبل أولياء"],
+                "كرري": ["كرري"]
+            },
             "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
             "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر", "هيا"],
             "كسلا": ["كسلا", "حلفا الجديدة", "القضارف", "همشكوريب"],
@@ -304,7 +317,7 @@
             "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
             "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
         };
-        
+
         function nextStep(step) {
             const stepElement = document.getElementById(`step${step}`);
             const inputs = stepElement.querySelectorAll('input:not([type="hidden"]), select:not([type="hidden"]), textarea:not([type="hidden"])');
@@ -350,7 +363,7 @@
                 }
             });
         }
-        
+
         async function submitForm() {
             const submitButton = document.getElementById('submitBtn');
             submitButton.disabled = true;
@@ -364,12 +377,13 @@
             const phone = document.getElementById('phone').value;
             const state = document.getElementById('state').value;
             const city = document.getElementById('city').value;
+            const area = document.getElementById('area').value; // Get the new area field value
             const experience = document.getElementById('experience').value;
             const jobStatus = document.querySelector('input[name="jobStatus"]:checked').value;
             const cvUrl = document.getElementById('cvUrl').value;
             const portfolioUrl = document.getElementById('portfolioUrl').value;
             const linkedinUrl = document.getElementById('linkedinUrl').value;
-            
+
             const profilePhotoFile = document.getElementById('profilePhoto').files[0];
             const previousWorksFiles = document.getElementById('previousWorks').files;
 
@@ -378,7 +392,7 @@
 
             try {
                 const profileImageUrl = await uploadToCloudinary(profilePhotoFile);
-                
+
                 const previousWorksUrls = await Promise.all(
                     Array.from(previousWorksFiles).map(file => uploadToCloudinary(file))
                 );
@@ -392,8 +406,9 @@
                         email,
                         phone,
                         location: {
+                            state,
                             city,
-                            state
+                            area // Add the new area field to the data
                         }
                     },
                     skills,
@@ -454,23 +469,58 @@
         }
 
         // Event Listeners
-        document.getElementById('state').addEventListener('change', function() {
+        const stateSelect = document.getElementById('state');
+        const citySelect = document.getElementById('city');
+        const areaSelect = document.getElementById('area');
+        const cityContainer = document.getElementById('cityContainer');
+        const areaContainer = document.getElementById('areaContainer');
+
+        stateSelect.addEventListener('change', function() {
             const selectedState = this.value;
-            const cityContainer = document.getElementById('cityContainer');
-            const citySelect = document.getElementById('city');
-
             citySelect.innerHTML = '<option value="">اختر مدينة</option>';
+            cityContainer.classList.add('hidden');
+            areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
+            areaContainer.classList.add('hidden');
 
-            if (selectedState && sudanStates[selectedState]) {
-                sudanStates[selectedState].forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-                cityContainer.classList.remove('hidden');
-            } else {
-                cityContainer.classList.add('hidden');
+            if (selectedState && sudanLocations[selectedState]) {
+                const citiesOrAreas = sudanLocations[selectedState];
+                if (Array.isArray(citiesOrAreas)) { // For states with no sub-cities
+                    citiesOrAreas.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                    cityContainer.classList.remove('hidden');
+                } else if (typeof citiesOrAreas === 'object') { // For states with cities and sub-areas (e.g., Al-Khartoum)
+                    for (const city in citiesOrAreas) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    }
+                    cityContainer.classList.remove('hidden');
+                }
+            }
+        });
+
+        citySelect.addEventListener('change', function() {
+            const selectedState = stateSelect.value;
+            const selectedCity = this.value;
+            areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
+            areaContainer.classList.add('hidden');
+
+            if (selectedState && selectedCity && sudanLocations[selectedState][selectedCity]) {
+                const areas = sudanLocations[selectedState][selectedCity];
+                if (areas && Array.isArray(areas)) {
+                    areas.forEach(area => {
+                        const option = document.createElement('option');
+                        option.value = area;
+                        option.textContent = area;
+                        areaSelect.appendChild(option);
+                    });
+                    areaContainer.classList.remove('hidden');
+                }
             }
         });
 
