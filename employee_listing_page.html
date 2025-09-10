@@ -126,6 +126,34 @@
             color: #bbb;
         }
 
+        /* أزرار التنقل */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev {
+            left: 0;
+            border-radius: 0 3px 3px 0;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
         @media (max-width: 768px) {
             .modal-content {
                 width: 100%;
@@ -212,6 +240,8 @@
 
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
+        <span class="prev" onclick="plusSlides(-1)">&#10094;</span>
+        <span class="next" onclick="plusSlides(1)">&#10095;</span>
         <img class="modal-content" id="modalImage">
     </div>
 
@@ -302,8 +332,8 @@
                             <div class="mb-4">
                                 <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
                                 <div class="previous-works-gallery">
-                                    ${employee.previousWorksUrls.map(url => `
-                                        <img src="${url}" alt="صورة عمل سابق" onclick="openModal('${url}')">
+                                    ${employee.previousWorksUrls.map((url, index) => `
+                                        <img src="${url}" alt="صورة عمل سابق" onclick="openModal('${employee.id}', ${index})">
                                     `).join('')}
                                 </div>
                             </div>
@@ -431,12 +461,34 @@
             }
         };
 
+        // متغيرات لتخزين حالة معرض الصور
+        let currentGallery = [];
+        let slideIndex = 0;
+
         // دالة لفتح النافذة المنبثقة
-        function openModal(imageSrc) {
+        function openModal(employeeId, index) {
+            const employee = allEmployees.find(emp => emp.id === employeeId);
+            if (!employee || !employee.previousWorksUrls) return;
+            
+            currentGallery = employee.previousWorksUrls;
+            slideIndex = index;
+            
             const modal = document.getElementById("imageModal");
-            const modalImg = document.getElementById("modalImage");
             modal.style.display = "block";
-            modalImg.src = imageSrc;
+            showSlide(slideIndex);
+        }
+
+        // دالة لعرض الصورة
+        function showSlide(n) {
+            const modalImg = document.getElementById("modalImage");
+            if (n >= currentGallery.length) {slideIndex = 0}
+            if (n < 0) {slideIndex = currentGallery.length - 1}
+            modalImg.src = currentGallery[slideIndex];
+        }
+
+        // دالة للتنقل بين الصور
+        function plusSlides(n) {
+            showSlide(slideIndex += n);
         }
 
         // دالة لإغلاق النافذة المنبثقة
@@ -468,6 +520,7 @@
         // إتاحة الدوال على نطاق النافذة لكي يمكن استدعاؤها من HTML
         window.openModal = openModal;
         window.closeModal = closeModal;
+        window.plusSlides = plusSlides;
     </script>
 </body>
 </html>
