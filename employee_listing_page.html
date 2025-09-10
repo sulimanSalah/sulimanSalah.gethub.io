@@ -56,14 +56,80 @@
         .previous-works-gallery {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap;
+            overflow-x: auto; /* يجعل الشريط قابلاً للتمرير الأفقي */
+            white-space: nowrap; /* يمنع التفاف الصور */
+            padding-bottom: 10px; /* مسافة لشريط التمرير */
+            -webkit-overflow-scrolling: touch; /* لتحسين التمرير على الأجهزة التي تعمل باللمس */
         }
+        /* لتخصيص شكل شريط التمرير */
+        .previous-works-gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+        .previous-works-gallery::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+        .previous-works-gallery::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
         .previous-works-gallery img {
             width: 80px;
             height: 80px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
+            cursor: pointer; /* لإظهار إشارة اليد عند المرور عليها */
+            transition: transform 0.2s ease-in-out;
+        }
+        .previous-works-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* نافذة العرض الكبيرة (Modal) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding-top: 60px;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 800px;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -142,6 +208,11 @@
             <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الموظفين...</div>
             <div id="noEmployeesFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على موظفين.</div>
         </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script type="module">
@@ -223,7 +294,7 @@
                     const employeeCity = employee.contact?.location?.city || 'غير محدد';
                     const employeeState = employee.contact?.location?.state || 'غير محدد';
                     const locationText = `${employeeCity}، ${employeeState}`;
-                    
+
                     const profilePhotoURL = employee.profileImageUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
 
                     const previousWorksHtml = Array.isArray(employee.previousWorksUrls) && employee.previousWorksUrls.length > 0
@@ -231,7 +302,9 @@
                             <div class="mb-4">
                                 <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
                                 <div class="previous-works-gallery">
-                                    ${employee.previousWorksUrls.map(url => `<img src="${url}" alt="صورة عمل سابق">`).join('')}
+                                    ${employee.previousWorksUrls.map(url => `
+                                        <img src="${url}" alt="صورة عمل سابق" onclick="openModal('${url}')">
+                                    `).join('')}
                                 </div>
                             </div>
                           `
@@ -317,7 +390,7 @@
 
         function getTimeElapsed(timestamp) {
             if (!timestamp) return 'غير محدد';
-            
+
             const now = new Date();
             const employeeDate = new Date(timestamp.seconds * 1000);
             const diffInSeconds = Math.floor((now - employeeDate) / 1000);
@@ -358,11 +431,22 @@
             }
         };
 
-        // استدعاء دالة جلب الموظفين مباشرة عند تحميل الصفحة
+        // دالة لفتح النافذة المنبثقة
+        function openModal(imageSrc) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            modal.style.display = "block";
+            modalImg.src = imageSrc;
+        }
+
+        // دالة لإغلاق النافذة المنبثقة
+        function closeModal() {
+            const modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+        }
+
         document.addEventListener('DOMContentLoaded', fetchEmployees);
-
         searchInput.addEventListener('input', filterAndRenderEmployees);
-
         stateFilter.addEventListener('change', () => {
             const selectedState = stateFilter.value;
             cityFilter.innerHTML = '<option value="">جميع المدن</option>';
@@ -380,6 +464,10 @@
             filterAndRenderEmployees();
         });
         cityFilter.addEventListener('change', filterAndRenderEmployees);
+
+        // إتاحة الدوال على نطاق النافذة لكي يمكن استدعاؤها من HTML
+        window.openModal = openModal;
+        window.closeModal = closeModal;
     </script>
 </body>
 </html>
