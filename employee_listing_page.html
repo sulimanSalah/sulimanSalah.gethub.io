@@ -95,7 +95,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow: hidden; /* لمنع التمرير للصفحة الخلفية */
             background-color: rgba(0, 0, 0, 0.9);
             padding-top: 60px;
         }
@@ -106,6 +106,7 @@
             max-width: 800px;
             animation-name: zoom;
             animation-duration: 0.6s;
+            touch-action: pan-y; /* للسماح بالتمرير العمودي إذا كانت الصورة أكبر من الشاشة */
         }
         @keyframes zoom {
             from {transform:scale(0)} 
@@ -126,7 +127,7 @@
             color: #bbb;
         }
 
-        /* أزرار التنقل */
+        /* أزرار التنقل - يمكن إخفاؤها إذا كان التمرير بالإصبع هو الأساس */
         .prev, .next {
             cursor: pointer;
             position: absolute;
@@ -141,6 +142,7 @@
             border-radius: 0 3px 3px 0;
             user-select: none;
             -webkit-user-select: none;
+            z-index: 1001; /* لضمان ظهورها فوق الصورة */
         }
         .next {
             right: 0;
@@ -157,6 +159,10 @@
         @media (max-width: 768px) {
             .modal-content {
                 width: 100%;
+            }
+            /* إخفاء الأسهم على الشاشات الصغيرة إذا كنا نعتمد على التمرير بالإصبع */
+            .prev, .next {
+                display: none; 
             }
         }
     </style>
@@ -270,6 +276,9 @@
         const searchInput = document.getElementById('searchInput');
         const stateFilter = document.getElementById('stateFilter');
         const cityFilter = document.getElementById('cityFilter');
+        const imageModal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+
 
         let allEmployees = [];
 
@@ -464,6 +473,7 @@
         // متغيرات لتخزين حالة معرض الصور
         let currentGallery = [];
         let slideIndex = 0;
+        let isModalOpen = false; // لتتبع حالة النافذة المنبثقة
 
         // دالة لفتح النافذة المنبثقة
         function openModal(employeeId, index) {
@@ -473,17 +483,20 @@
             currentGallery = employee.previousWorksUrls;
             slideIndex = index;
             
-            const modal = document.getElementById("imageModal");
-            modal.style.display = "block";
+            imageModal.style.display = "block";
+            isModalOpen = true; // تعيين حالة النافذة المنبثقة إلى مفتوحة
+            document.body.style.overflow = 'hidden'; // منع التمرير للصفحة الخلفية
             showSlide(slideIndex);
+
+            // إضافة حالة جديدة إلى سجل المتصفح
+            history.pushState({ modalOpen: true }, '');
         }
 
         // دالة لعرض الصورة
         function showSlide(n) {
-            const modalImg = document.getElementById("modalImage");
             if (n >= currentGallery.length) {slideIndex = 0}
             if (n < 0) {slideIndex = currentGallery.length - 1}
-            modalImg.src = currentGallery[slideIndex];
+            modalImage.src = currentGallery[slideIndex];
         }
 
         // دالة للتنقل بين الصور
@@ -493,9 +506,24 @@
 
         // دالة لإغلاق النافذة المنبثقة
         function closeModal() {
-            const modal = document.getElementById("imageModal");
-            modal.style.display = "none";
+            imageModal.style.display = "none";
+            isModalOpen = false; // تعيين حالة النافذة المنبثقة إلى مغلقة
+            document.body.style.overflow = ''; // استعادة التمرير للصفحة الخلفية
+
+            // إذا تم إغلاقها يدوياً بزر X أو بالنقرة، والتاريخ يحتوي على حالة Modal، قم بالرجوع خطوة واحدة
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
         }
+
+        // الاستماع لحدث زر الرجوع في المتصفح/الهاتف
+        window.addEventListener('popstate', (event) => {
+            if (isModalOpen) {
+                // إذا كانت النافذة المنبثقة مفتوحة وزر الرجوع تم الضغط عليه، أغلق النافذة
+                closeModal();
+            }
+        });
+
 
         document.addEventListener('DOMContentLoaded', fetchEmployees);
         searchInput.addEventListener('input', filterAndRenderEmployees);
@@ -521,6 +549,29 @@
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.plusSlides = plusSlides;
+
+        // --- دعم التمرير بالإصبع (Swipe) ---
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        function handleGesture() {
+            if (touchendX < touchstartX - 50) { // Swipe left
+                plusSlides(1);
+            }
+            if (touchendX > touchstartX + 50) { // Swipe right
+                plusSlides(-1);
+            }
+        }
+
+        modalImage.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        modalImage.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+        // --- نهاية دعم التمرير بالإصبع ---
     </script>
 </body>
 </html>
