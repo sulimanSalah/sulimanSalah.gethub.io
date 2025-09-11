@@ -3,121 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق دردشة</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>الدردشة - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         
-        .chat-container {
-            width: 100%;
-            max-width: 450px;
-            height: 90vh;
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f59e0b;
+            --bg-color: #f5f7fa;
+            --card-bg-color: #fff;
+            --text-color: #222;
+            --light-text-color: #6c757d;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
             display: flex;
             flex-direction: column;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background-color: var(--card-bg-color);
+            padding: 1.5rem 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .employee-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .chat-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        /* Chat Box */
+        .chat-box {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
-        
-        .chat-header {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .chat-box {
+
+        .messages-container {
             flex-grow: 1;
-            padding: 15px;
+            padding: 1rem;
             overflow-y: auto;
-            background-color: #f9f9f9;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex-direction: column-reverse;
+            gap: 1rem;
         }
-        
+
         .message {
-            padding: 10px 15px;
+            max-width: 70%;
+            padding: 0.75rem 1rem;
             border-radius: 20px;
-            max-width: 75%;
+            position: relative;
             word-wrap: break-word;
-            font-size: 1em;
-            line-height: 1.4;
+            animation: fadeIn 0.3s ease-in-out;
         }
-        
-        .user-message {
-            background-color: #007bff;
-            color: #ffffff;
+
+        .message.company {
+            background-color: #eef2ff;
+            color: #1e40af;
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background-color: var(--primary-color);
+            color: var(--card-bg-color);
             align-self: flex-end;
         }
         
-        .ai-message {
-            background-color: #e0e0e0;
-            color: #333;
-            align-self: flex-start;
+        /* Warning Section */
+        .warning-section {
+            background-color: #fffde7;
+            border-right: 5px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem;
+            text-align: right;
         }
-        
-        .chat-input {
+        .warning-section h3 {
+            font-size: 1.25rem;
+            color: #d32f2f;
+            margin-bottom: 0.5rem;
+        }
+        .warning-section ul {
+            list-style-type: '⚠️ ';
+            padding-right: 1.5rem;
+        }
+        .warning-section li {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .warning-section li strong {
+            color: #d32f2f;
+        }
+
+        /* Message Input Form */
+        .message-input-form {
             display: flex;
-            padding: 10px;
-            border-top: 1px solid #e0e0e0;
-            background-color: #ffffff;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            gap: 0.5rem;
         }
-        
-        #user-input {
+
+        .message-input {
             flex-grow: 1;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            padding: 10px 15px;
-            font-size: 1em;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
             outline: none;
         }
-        
-        #send-btn {
-            background-color: #007bff;
-            color: #ffffff;
+
+        .send-btn {
+            background-color: var(--primary-color);
+            color: var(--card-bg-color);
             border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 1.2em;
+            transition: background-color var(--transition-speed) ease;
         }
-        
-        #send-btn:hover {
-            background-color: #0056b3;
+
+        .send-btn:hover {
+            background-color: #1e40af;
+        }
+
+        /* Utility Classes & Animations */
+        .hidden { display: none !important; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <header class="chat-header">
-            <h3>المساعد الافتراضي</h3>
-        </header>
-        <div class="chat-box" id="chat-box">
+
+    <div class="container">
+        <div class="chat-header">
+            <img id="employee-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الموظف" class="employee-photo">
+            <div>
+                <h1 id="chat-title">جارِ التحميل...</h1>
             </div>
-        <form class="chat-input" id="chat-form">
-            <input type="text" id="user-input" placeholder="اكتب رسالتك..." autocomplete="off">
-            <button type="submit" id="send-btn">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </form>
+        </div>
+
+        <div class="chat-box">
+            <div id="messages-container" class="messages-container">
+                </div>
+            
+            <div id="warning-section" class="warning-section">
+                <h3>⚠️ شروط هامة للمراسلة ⚠️</h3>
+                <ul>
+                    <li>هذه المحادثة هي بينك وبين الشركة.</li>
+                    <li><strong>يُمنع منعًا باتًا مشاركة أي معلومات اتصال شخصية مثل أرقام الهواتف أو البريد الإلكتروني أو الروابط الخارجية.</strong></li>
+                    <li>في حال مخالفة هذا الشرط، سيتم تعليق المحادثة.</li>
+                    <li>
+                        <a href="terms.html" target="_blank" class="text-blue-600 hover:underline">اضغط هنا للاطلاع على الشروط والأحكام الكاملة</a>
+                    </li>
+                </ul>
+            </div>
+
+            <form id="message-form" class="message-input-form">
+                <input type="text" id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                <button type="submit" class="send-btn">إرسال</button>
+            </form>
+        </div>
     </div>
 
-    <script type="module" src="chat.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const chatTitle = document.getElementById('chat-title');
+        const employeePhoto = document.getElementById('employee-photo');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        
+        // --- 1. قراءة البيانات من الرابط (URL) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const employeeId = urlParams.get('employeeId');
+        
+        let employeeNameFromUrl = urlParams.get('employeeName');
+        if (employeeNameFromUrl) {
+             // Decode the name to show it correctly in the title
+            employeeNameFromUrl = decodeURIComponent(employeeNameFromUrl);
+        }
+
+        async function fetchEmployeeData() {
+            if (!employeeId) {
+                chatTitle.textContent = "خطأ: لم يتم تحديد الموظف.";
+                return;
+            }
+
+            try {
+                // Get employee document from Firestore
+                const employeeDocRef = doc(db, "employees", employeeId);
+                const employeeDocSnap = await getDoc(employeeDocRef);
+
+                if (employeeDocSnap.exists()) {
+                    const employeeData = employeeDocSnap.data();
+                    
+                    // --- 2. تحديث الواجهة باسم وصورة الموظف ---
+                    chatTitle.textContent = `مراسلة مع ${employeeData.name || employeeNameFromUrl || 'الموظف'}`;
+                    if (employeeData.profileImageUrl) {
+                        employeePhoto.src = employeeData.profileImageUrl;
+                    }
+                    
+                    // --- 3. عرض رسالة الترحيب الأولى من الشركة ---
+                    const initialMessageText = `مرحباً ${employeeData.name || 'الموظف'}. لقد راجعنا ملفك الشخصي ونود التحدث معك حول فرصة عمل محتملة.`;
+                    appendMessage(initialMessageText, 'company');
+                    
+                } else {
+                    chatTitle.textContent = "خطأ: الموظف غير موجود.";
+                }
+            } catch (error) {
+                console.error("خطأ في جلب بيانات الموظف:", error);
+                chatTitle.textContent = "حدث خطأ أثناء التحميل.";
+            }
+        }
+        
+        // Call the function to fetch and display employee data
+        fetchEmployeeData();
+        
+        // Handle message sending (unchanged logic)
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+
+            if (messageText) {
+                if (containsForbiddenContent(messageText)) {
+                    alert('عذراً، لا يمكنك مشاركة أرقام هواتف أو روابط أو بريد إلكتروني.');
+                    return;
+                }
+
+                // Add message to chat display
+                appendMessage(messageText, 'user');
+                // Simulate an immediate reply
+                setTimeout(() => {
+                    appendMessage('شكراً لرسالتك. سيقوم فريقنا بمراجعتها والتواصل معك قريباً.', 'company');
+                }, 1000);
+                
+                // Clear the input field
+                messageInput.value = '';
+            }
+        });
+
+        // Function to add a new message to the chat
+        function appendMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.textContent = text;
+            messagesContainer.prepend(messageElement);
+        }
+
+        // Function to check for forbidden content
+        function containsForbiddenContent(text) {
+            const forbiddenPatterns = [
+                /\b\d{10,}\b/,
+                /\bhttps?:\/\/\S+/,
+                /\b[\w.-]+@[\w.-]+\.\w{2,4}\b/
+            ];
+            return forbiddenPatterns.some(pattern => pattern.test(text));
+        }
+    </script>
 </body>
 </html>
