@@ -380,11 +380,11 @@
                                     <span>${getTimeElapsed(employee.timestamp)}</span>
                                 </div>
                                 <div class="flex space-x-3 rtl:space-x-reverse">
-                                    <a href="chat.html?employeeId=${employee.id}&employeeName=${encodeURIComponent(employee.name)}"
-                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                        <i class="fas fa-envelope ml-1"></i> تواصل
-                                    </a>
-                                    <button onclick="window.hireEmployee('${employee.id}')"
+                                    <a <a href="chat.html?employeeId=${employee.id}&employeeName=${encodeURIComponent(employee.name)}&employeePhoto=${encodeURIComponent(employee.profileImageUrl)}"
+    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+    <i class="fas fa-envelope ml-1"></i> تواصل
+</a>
+       <button onclick="window.hireEmployee('${employee.id}')"
                                         class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
                                         <i class="fas fa-user-plus ml-1"></i> توظيف
                                     </button>
