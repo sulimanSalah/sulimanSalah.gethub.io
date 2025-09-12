@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
+
         :root {
             --primary-color: #2563eb;
             --secondary-color: #f59e0b;
@@ -59,7 +59,7 @@
             font-size: 1.5rem;
             font-weight: 700;
         }
-        
+
         .chat-box {
             background-color: var(--card-bg-color);
             border-radius: var(--border-radius);
@@ -100,7 +100,7 @@
             color: var(--card-bg-color);
             align-self: flex-end;
         }
-        
+
         .warning-section {
             background-color: #fffde7;
             border-right: 5px solid #ffc107;
@@ -180,7 +180,7 @@
             <div id="messages-container" class="messages-container">
                 <div id="loadingIndicator" class="text-center text-gray-500 py-4">جاري تحميل الرسائل...</div>
             </div>
-            
+
             <div id="warning-section" class="warning-section">
                 <h3>⚠️ شروط هامة للمراسلة ⚠️</h3>
                 <ul>
@@ -214,7 +214,7 @@
           appId: "1:768887356636:web:11ec1d6991add3309c8819",
           measurementId: "G-98GQGZS09W"
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
@@ -225,78 +225,77 @@
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
         const loadingIndicator = document.getElementById('loadingIndicator');
-        
+
         const urlParams = new URLSearchParams(window.location.search);
-const employeeId = urlParams.get('employeeId');
-// New: Read employee name and photo URL from the link
-const employeeName = decodeURIComponent(urlParams.get('employeeName'));
-const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
+        const employeeId = urlParams.get('employeeId');
+        const employeeNameFromUrl = decodeURIComponent(urlParams.get('employeeName'));
+        const employeePhotoUrlFromUrl = decodeURIComponent(urlParams.get('employeePhoto'));
 
-        let user; // لتعريف المستخدم الحالي
-
-        // 1. تحديد معرّف المحادثة الفريد
-        // سنستخدم معرّفين فريدين للمستخدمين (الشركة والموظف) لإنشاء معرف فريد للمحادثة
+        let user;
         let chatId;
 
-        // 2. دالة لجلب بيانات الموظف وتحديث الواجهة
+        // --- 1. الدالة المصححة لجلب بيانات الموظف وتحديث الواجهة ---
         async function fetchEmployeeData() {
             if (!employeeId) {
                 chatTitle.textContent = "خطأ: لم يتم تحديد الموظف.";
                 return;
             }
 
-            try {
-                const employeeDocRef = doc(db, "employees", employeeId);
-                const employeeDocSnap = await getDoc(employeeDocRef);
+            // استخدام البيانات من الرابط أولاً لتقليل عدد طلبات Firebase
+            if (employeeNameFromUrl) {
+                chatTitle.textContent = `مراسلة مع ${employeeNameFromUrl}`;
+            }
+            if (employeePhotoUrlFromUrl) {
+                employeePhoto.src = employeePhotoUrlFromUrl;
+            }
+            
+            // خيار احتياطي: إذا لم يتم تمرير البيانات في الرابط، قم بجلبها من Firebase
+            if (!employeeNameFromUrl || !employeePhotoUrlFromUrl) {
+                try {
+                    const employeeDocRef = doc(db, "employees", employeeId);
+                    const employeeDocSnap = await getDoc(employeeDocRef);
 
-                if (employeeDocSnap.exists()) {
-                    const employeeData = employeeDocSnap.data();
-                    
-                    chatTitle.textContent = `مراسلة مع ${employeeData.name || 'الموظف'}`;
-                    if (employeeData.profileImageUrl) {
-                        employeePhoto.src = employeeData.profileImageUrl;
+                    if (employeeDocSnap.exists()) {
+                        const employeeData = employeeDocSnap.data();
+                        
+                        if (employeeData.name) {
+                            chatTitle.textContent = `مراسلة مع ${employeeData.name}`;
+                        }
+                        if (employeeData.profileImageUrl) {
+                            employeePhoto.src = employeeData.profileImageUrl;
+                        }
                     }
-
-                    const initialMessageText = `مرحباً ${employeeData.name || 'الموظف'}. لقد راجعنا ملفك الشخصي ونود التحدث معك حول فرصة عمل محتملة.`;
-                    
-                    // نتحقق مما إذا كانت هذه هي أول محادثة
-                    const chatExists = await getDoc(doc(db, "chats", chatId));
-                    if (!chatExists.exists()) {
-                         // إذا كانت أول مرة، يتم إرسال رسالة ترحيب تلقائية
-                         // هذه الرسالة ستُضاف إلى قاعدة البيانات، مما يضمن ظهورها عند كلا الطرفين
-                         await addMessageToFirestore(initialMessageText, 'company');
-                    }
-                    
-                } else {
-                    chatTitle.textContent = "خطأ: الموظف غير موجود.";
+                } catch (error) {
+                    console.error("خطأ في جلب بيانات الموظف:", error);
+                    chatTitle.textContent = "حدث خطأ أثناء التحميل.";
                 }
-            } catch (error) {
-                console.error("خطأ في جلب بيانات الموظف:", error);
-                chatTitle.textContent = "حدث خطأ أثناء التحميل.";
+            }
+            
+            // إرسال رسالة ترحيب تلقائية إذا كانت أول محادثة
+            const initialMessageText = `مرحباً ${employeeNameFromUrl || 'الموظف'}. لقد راجعنا ملفك الشخصي ونود التحدث معك حول فرصة عمل محتملة.`;
+            const chatExists = await getDoc(doc(db, "chats", chatId));
+            if (!chatExists.exists()) {
+                 await addMessageToFirestore(initialMessageText, 'company');
             }
         }
-        
-        // 3. الاستماع لحالة المستخدم (الشركة)
+
+        // 2. الاستماع لحالة المستخدم (الشركة)
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 user = currentUser;
-                // إنشاء معرّف محادثة فريد
-                // المعرف يجب أن يكون متطابقًا للشركة والموظف بغض النظر عن ترتيب المعرّفات
                 const participants = [user.uid, employeeId].sort();
                 chatId = participants.join('_');
                 
-                // بدء جلب بيانات الموظف والاستماع للرسائل
                 fetchEmployeeData();
                 listenForMessages();
-                
+
             } else {
-                // إذا لم يكن المستخدم مسجلاً، يمكن توجيهه لصفحة الدخول أو إظهار رسالة
                 alert("يجب عليك تسجيل الدخول للمراسلة.");
-                window.location.href = "login.html"; // مثال
+                window.location.href = "login.html";
             }
         });
-        
-        // 4. دالة لإضافة رسالة إلى Firestore
+
+        // 3. دالة لإضافة رسالة إلى Firestore
         async function addMessageToFirestore(messageText, sender) {
             try {
                 await addDoc(collection(db, "chats", chatId, "messages"), {
@@ -310,18 +309,18 @@ const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
                 console.error("خطأ في إرسال الرسالة:", error);
             }
         }
-        
-        // 5. الاستماع للرسائل في الوقت الفعلي
+
+        // 4. الاستماع للرسائل في الوقت الفعلي
         function listenForMessages() {
             const messagesQuery = query(
                 collection(db, "chats", chatId, "messages"),
-                orderBy("timestamp") // ترتيب الرسائل من الأقدم إلى الأحدث
+                orderBy("timestamp")
             );
 
             onSnapshot(messagesQuery, (querySnapshot) => {
                 loadingIndicator.classList.add('hidden');
-                messagesContainer.innerHTML = ''; // مسح الرسائل الحالية لإعادة بنائها
-                
+                messagesContainer.innerHTML = '';
+
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const sender = message.isFromCompany ? 'company' : 'user';
@@ -329,15 +328,24 @@ const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
                 });
             });
         }
-        
-        // 6. التعامل مع إرسال الرسائل
+
+        // 5. التعامل مع إرسال الرسائل (مع التحقق الجديد)
         messageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const messageText = messageInput.value.trim();
+            const validationResult = containsForbiddenContent(messageText);
 
             if (messageText) {
-                if (containsForbiddenContent(messageText)) {
-                    alert('عذراً، لا يمكنك مشاركة أرقام هواتف أو روابط أو بريد إلكتروني.');
+                if (validationResult) {
+                    let errorMessage = 'عذراً، لا يمكنك مشاركة معلومات اتصال شخصية.';
+                    if (validationResult === 'phone') {
+                        errorMessage = 'عذراً، يُمنع مشاركة أرقام الهواتف.';
+                    } else if (validationResult === 'email') {
+                        errorMessage = 'عذراً، يُمنع مشاركة عناوين البريد الإلكتروني.';
+                    } else if (validationResult === 'link') {
+                        errorMessage = 'عذراً، يُمنع مشاركة الروابط الخارجية.';
+                    }
+                    alert(errorMessage);
                     return;
                 }
 
@@ -346,7 +354,7 @@ const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
             }
         });
 
-        // 7. دالة عرض الرسالة على الواجهة
+        // 6. دالة عرض الرسالة على الواجهة
         function appendMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
@@ -354,14 +362,33 @@ const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
             messagesContainer.prepend(messageElement);
         }
 
-        // 8. دالة التحقق من المحتوى المحظور
+        // 7. الدوال المحدثة للتحقق من المحتوى المحظور
         function containsForbiddenContent(text) {
-            const forbiddenPatterns = [
-                /\b\d{10,}\b/,
-                /\bhttps?:\/\/\S+/,
-                /\b[\w.-]+@[\w.-]+\.\w{2,4}\b/
-            ];
-            return forbiddenPatterns.some(pattern => pattern.test(text));
+            if (isPhoneNumber(text)) {
+                return 'phone';
+            }
+            if (isEmail(text)) {
+                return 'email';
+            }
+            if (isLink(text)) {
+                return 'link';
+            }
+            return false;
+        }
+
+        function isPhoneNumber(text) {
+            const pattern = /(\+\d{1,4}[-.\s]?)?(\(\d{1,4}\)[-.\s]?)?[\d\s-]{7,}/g;
+            return pattern.test(text);
+        }
+
+        function isEmail(text) {
+            const pattern = /[\w.-]+@[\w.-]+\.\w{2,4}/g;
+            return pattern.test(text);
+        }
+
+        function isLink(text) {
+            const pattern = /https?:\/\/\S+/g;
+            return pattern.test(text);
         }
     </script>
 </body>
