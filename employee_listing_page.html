@@ -98,7 +98,6 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
-            /* السطر الذي كان يسبب المشكلة تم إزالته هنا */
             align-items: center;
             justify-content: center;
         }
@@ -488,6 +487,9 @@
             
             imageModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+
+            // إضافة حالة جديدة إلى سجل التصفح
+            history.pushState({ modalOpen: true }, '');
         }
 
         function closeModal() {
@@ -498,6 +500,15 @@
             imageModal.style.display = "none";
             document.body.style.overflow = '';
         }
+
+        // الاستماع لحدث الرجوع في المتصفح
+        window.addEventListener('popstate', (event) => {
+            // التحقق مما إذا كان المودال مفتوحاً
+            if (imageModal.style.display === 'flex') {
+                // إذا كان مفتوحاً، أغلقه باستخدام دالتنا
+                closeModal();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', fetchEmployees);
         searchInput.addEventListener('input', filterAndRenderEmployees);
