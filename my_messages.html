@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رسائلي - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f59e0b;
+            --bg-color: #f5f7fa;
+            --card-bg-color: #fff;
+            --text-color: #222;
+            --light-text-color: #6c7280;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-inbox {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .messages-inbox h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .chat-list-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+        }
+
+        .chat-list-item:hover {
+            background-color: var(--bg-color);
+        }
+
+        .chat-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .company-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-info {
+            flex-grow: 1;
+        }
+
+        .chat-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .last-message {
+            font-size: 0.9rem;
+            color: var(--light-text-color);
+            margin-top: 0.25rem;
+        }
+
+        .time-ago {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--light-text-color);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="messages-inbox">
+            <h1>رسائلي</h1>
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin text-xl"></i> جاري تحميل المحادثات...
+            </div>
+            <div id="chat-list">
+                </div>
+            <div id="no-chats-message" class="loading hidden">
+                لا توجد لديك محادثات حاليًا.
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, query, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const chatListDiv = document.getElementById('chat-list');
+        const loadingDiv = document.getElementById('loading');
+        const noChatsMessage = document.getElementById('no-chats-message');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Fetch and display the list of chats for the current employee
+                fetchChatList(user.uid);
+            } else {
+                alert("يجب عليك تسجيل الدخول لعرض رسائلك.");
+                window.location.href = "login.html"; // Redirect to login page
+            }
+        });
+
+        async function fetchChatList(userId) {
+            loadingDiv.classList.remove('hidden');
+            noChatsMessage.classList.add('hidden');
+            chatListDiv.innerHTML = '';
+            
+            // Query chats where the user's ID is one of the participants
+            const chatsQuery = query(collection(db, "chats"), where("participants", "array-contains", userId));
+            
+            onSnapshot(chatsQuery, async (querySnapshot) => {
+                loadingDiv.classList.add('hidden');
+                
+                if (querySnapshot.empty) {
+                    noChatsMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                chatListDiv.innerHTML = ''; // Clear previous items
+
+                for (const chatDoc of querySnapshot.docs) {
+                    const chatId = chatDoc.id;
+                    const participants = chatId.split('_');
+                    const otherParticipantId = participants.find(p => p !== userId);
+
+                    // Fetch the company's data
+                    const companyDocRef = doc(db, "companies", otherParticipantId);
+                    const companyDocSnap = await getDoc(companyDocRef);
+
+                    if (companyDocSnap.exists()) {
+                        const companyData = companyDocSnap.data();
+                        
+                        // Fetch the last message to display it in the list
+                        const lastMessageQuery = query(
+                            collection(db, "chats", chatId, "messages"),
+                            orderBy("timestamp", "desc"),
+                            limit(1)
+                        );
+                        
+                        const lastMessageSnap = await getDocs(lastMessageQuery);
+                        const lastMessageText = lastMessageSnap.docs[0]?.data()?.text || "بدء المحادثة";
+                        
+                        renderChatItem(companyData, chatId, otherParticipantId, lastMessageText);
+                    }
+                }
+            });
+        }
+        
+        function renderChatItem(companyData, chatId, companyId, lastMessageText) {
+            const chatItem = document.createElement('div');
+            chatItem.classList.add('chat-list-item');
+            
+            chatItem.innerHTML = `
+                <img src="${companyData.profileImageUrl || 'https://via.placeholder.com/150'}" alt="صورة الشركة" class="company-photo">
+                <div class="chat-info">
+                    <h3>${companyData.name}</h3>
+                    <p class="last-message">${lastMessageText}</p>
+                </div>
+            `;
+            
+            chatItem.addEventListener('click', () => {
+                // Redirect to the chat page, passing necessary data
+                window.location.href = `employee_chat.html?chatId=${chatId}&companyId=${companyId}&companyName=${encodeURIComponent(companyData.name)}&companyPhoto=${encodeURIComponent(companyData.profileImageUrl || 'https://via.placeholder.com/150')}`;
+            });
+            
+            chatListDiv.appendChild(chatItem);
+        }
+    </script>
+</body>
+</html>
