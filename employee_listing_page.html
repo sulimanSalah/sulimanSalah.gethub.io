@@ -6,6 +6,9 @@
     <title>الموظفون المتاحون - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root {
@@ -85,31 +88,21 @@
             transform: scale(1.05);
         }
 
+        /* تنسيقات نافذة المودال */
         .modal {
-            display: none;
+            display: none; /* إخفاء المودال بشكل افتراضي */
             position: fixed;
             z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             background-color: rgba(0, 0, 0, 0.9);
-            padding-top: 60px;
+            /* السطر الذي كان يسبب المشكلة تم إزالته هنا */
+            align-items: center;
+            justify-content: center;
         }
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 90%;
-            max-width: 800px;
-            animation-name: zoom;
-            animation-duration: 0.6s;
-            touch-action: pan-y;
-        }
-        @keyframes zoom {
-            from {transform:scale(0)}
-            to {transform:scale(1)}
-        }
+        
         .close {
             position: absolute;
             top: 15px;
@@ -119,47 +112,36 @@
             font-weight: bold;
             transition: 0.3s;
             cursor: pointer;
+            z-index: 1002;
         }
         .close:hover,
         .close:focus {
             color: #bbb;
         }
-
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -50px;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-            -webkit-user-select: none;
-            z-index: 1001;
-        }
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .prev {
-            left: 0;
-            border-radius: 0 3px 3px 0;
-        }
-        .prev:hover, .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
+        
+        /* تنسيق Swiper */
+        .swiper {
+            width: 100%;
+            height: 100%;
         }
 
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 100%;
-            }
-            .prev, .next {
-                display: none;
-            }
+        .swiper-slide {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* إخفاء أزرار التنقل في Swiper */
+        .swiper-button-prev, .swiper-button-next {
+            display: none !important;
         }
     </style>
 </head>
@@ -242,9 +224,10 @@
 
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
-        <span class="prev" onclick="plusSlides(-1)">&#10094;</span>
-        <span class="next" onclick="plusSlides(1)">&#10095;</span>
-        <img class="modal-content" id="modalImage">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                </div>
+        </div>
     </div>
 
     <script type="module">
@@ -273,10 +256,9 @@
         const stateFilter = document.getElementById('stateFilter');
         const cityFilter = document.getElementById('cityFilter');
         const imageModal = document.getElementById("imageModal");
-        const modalImage = document.getElementById("modalImage");
-
-
+        
         let allEmployees = [];
+        let swiperInstance = null;
 
         const citiesByState = {
             'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
@@ -338,7 +320,7 @@
                                 <h4 class="font-semibold text-sm mb-2">أعمال سابقة:</h4>
                                 <div class="previous-works-gallery">
                                     ${employee.previousWorksUrls.map((url, index) => `
-                                        <img src="${url}" alt="صورة عمل سابق" onclick="openModal('${employee.id}', ${index})">
+                                        <img src="${url}" alt="صورة عمل سابق" onclick="openModal('${employee.id}', ${index}, 'works')">
                                     `).join('')}
                                 </div>
                             </div>
@@ -351,7 +333,7 @@
                     employeeCard.innerHTML = `
                         <div class="flex flex-col md:flex-row md:items-start md:justify-between">
                             <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                <img src="${profilePhotoURL}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover">
+                                <img src="${profilePhotoURL}" alt="صورة الموظف" class="w-14 h-14 rounded-full object-cover cursor-pointer" onclick="openModal('${employee.id}', 0, 'profile')">
                                 <div>
                                     <h3 class="font-bold text-lg">${employee.name || 'موظف غير معروف'}</h3>
                                     <p class="text-gray-600 text-sm mt-1">${employee.headline || 'بدون عنوان وظيفي'}</p>
@@ -380,14 +362,14 @@
                                     <span>${getTimeElapsed(employee.timestamp)}</span>
                                 </div>
                                 <div class="flex space-x-3 rtl:space-x-reverse">
-                                    <a <a href="chat.html?employeeId=${employee.id}&employeeName=${encodeURIComponent(employee.name)}&employeePhoto=${encodeURIComponent(employee.profileImageUrl)}"
+                                    <a href="chat.html?employeeId=${employee.id}&employeeName=${encodeURIComponent(employee.name)}&employeePhoto=${encodeURIComponent(employee.profileImageUrl)}"
     class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
     <i class="fas fa-envelope ml-1"></i> تواصل
 </a>
-       <button onclick="window.hireEmployee('${employee.id}')"
-                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
-                                        <i class="fas fa-user-plus ml-1"></i> توظيف
-                                    </button>
+                                        <button onclick="window.hireEmployee('${employee.id}')"
+                                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                            <i class="fas fa-user-plus ml-1"></i> توظيف
+                                        </button>
                                 </div>
                             </div>
                         </div>
@@ -466,50 +448,56 @@
             }
         };
 
-        let currentGallery = [];
-        let slideIndex = 0;
-        let isModalOpen = false;
-
-        function openModal(employeeId, index) {
+        function openModal(employeeId, index, galleryType) {
             const employee = allEmployees.find(emp => emp.id === employeeId);
-            if (!employee || !employee.previousWorksUrls) return;
+            if (!employee) return;
+            
+            let images = [];
+            if (galleryType === 'profile') {
+                images.push(employee.profileImageUrl || 'https://randomuser.me/api/portraits/men/32.jpg');
+            } else if (galleryType === 'works') {
+                images = employee.previousWorksUrls;
+            } else {
+                return;
+            }
 
-            currentGallery = employee.previousWorksUrls;
-            slideIndex = index;
+            if (!images || images.length === 0) return;
 
-            imageModal.style.display = "block";
-            isModalOpen = true;
+            const swiperWrapper = document.querySelector('.swiper-wrapper');
+            swiperWrapper.innerHTML = '';
+            images.forEach(url => {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'صورة مكبرة';
+                slide.appendChild(img);
+                swiperWrapper.appendChild(slide);
+            });
+            
+            if (swiperInstance) {
+                swiperInstance.destroy(true, true);
+            }
+            swiperInstance = new Swiper(".mySwiper", {
+                loop: false,
+                initialSlide: index,
+                keyboard: {
+                    enabled: true,
+                },
+            });
+            
+            imageModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            showSlide(slideIndex);
-
-            history.pushState({ modalOpen: true }, '');
-        }
-
-        function showSlide(n) {
-            if (n >= currentGallery.length) {slideIndex = 0}
-            if (n < 0) {slideIndex = currentGallery.length - 1}
-            modalImage.src = currentGallery[slideIndex];
-        }
-
-        function plusSlides(n) {
-            showSlide(slideIndex += n);
         }
 
         function closeModal() {
+            if (swiperInstance) {
+                swiperInstance.destroy(true, true);
+                swiperInstance = null;
+            }
             imageModal.style.display = "none";
-            isModalOpen = false;
             document.body.style.overflow = '';
-
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
         }
-
-        window.addEventListener('popstate', (event) => {
-            if (isModalOpen) {
-                closeModal();
-            }
-        });
 
         document.addEventListener('DOMContentLoaded', fetchEmployees);
         searchInput.addEventListener('input', filterAndRenderEmployees);
@@ -533,28 +521,6 @@
 
         window.openModal = openModal;
         window.closeModal = closeModal;
-        window.plusSlides = plusSlides;
-
-        let touchstartX = 0;
-        let touchendX = 0;
-
-        function handleGesture() {
-            if (touchendX < touchstartX - 50) {
-                plusSlides(1);
-            }
-            if (touchendX > touchstartX + 50) {
-                plusSlides(-1);
-            }
-        }
-
-        modalImage.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-        });
-
-        modalImage.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            handleGesture();
-        });
     </script>
 </body>
 </html>
