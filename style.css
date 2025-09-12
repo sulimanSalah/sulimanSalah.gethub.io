@@ -1,0 +1,79 @@
+/*
+ * أنماط CSS مخصصة لموقع شغلني
+ * تم تجميعها في ملف خارجي لتحسين الأداء وسهولة الصيانة
+ */
+
+/* خط 'Tajawal' */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+body {
+    font-family: 'Tajawal', sans-serif;
+    overflow-x: hidden;
+}
+
+/* تأثير التحويل عند التمرير على البطاقات */
+.job-card:hover, .employee-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* خلفية التدرج */
+.gradient-bg {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+}
+
+/* شريط التنقل القابل للتمرير */
+.scrollable-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;  /* Firefox */
+}
+.scrollable-nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+/* شريط تمرير الدورات التدريبية */
+.course-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    scroll-snap-type: x mandatory; /* إضافة التقاط التمرير لتحسين تجربة المستخدم */
+    gap: 1.5rem; /* استخدام الفجوة (gap) بدلاً من الهوامش (margins) للتحكم في المسافات */
+}
+.course-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+.course-card {
+    min-width: 300px;
+    flex: 0 0 auto;
+    scroll-snap-align: start; /* التقاط بداية البطاقة عند التمرير */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* قائمة الجوال (Sidebar) */
+.mobile-menu-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
+.mobile-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70%;
+    max-width: 300px; /* لضمان عدم امتداد القائمة بشكل كبير على الشاشات الأكبر */
+    height: 100%;
+    background-color: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    padding: 1.5rem;
+}
+.mobile-menu.active {
+    transform: translateX(0);
+}
