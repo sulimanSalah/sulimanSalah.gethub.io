@@ -227,7 +227,10 @@
         const loadingIndicator = document.getElementById('loadingIndicator');
         
         const urlParams = new URLSearchParams(window.location.search);
-        const employeeId = urlParams.get('employeeId');
+const employeeId = urlParams.get('employeeId');
+// New: Read employee name and photo URL from the link
+const employeeName = decodeURIComponent(urlParams.get('employeeName'));
+const employeePhotoUrl = decodeURIComponent(urlParams.get('employeePhoto'));
 
         let user; // لتعريف المستخدم الحالي
 
