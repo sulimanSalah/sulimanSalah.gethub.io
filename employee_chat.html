@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محادثاتي - شغلني</title>
+    <title>الدردشة - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        
+
         :root {
             --primary-color: #2563eb;
             --secondary-color: #f59e0b;
@@ -28,70 +28,47 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 2rem auto;
             padding: 1rem;
-            display: flex;
             min-height: calc(100vh - 4rem);
-            gap: 1.5rem;
-        }
-
-        .chat-list-sidebar {
-            background-color: var(--card-bg-color);
-            width: 300px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            padding: 1rem;
             display: flex;
             flex-direction: column;
-        }
-
-        .chat-list-sidebar h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .chat-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color var(--transition-speed);
-            margin-bottom: 0.5rem;
-        }
-
-        .chat-item:hover, .chat-item.active {
-            background-color: var(--bg-color);
-        }
-
-        .company-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .chat-main-area {
-            flex-grow: 1;
-            background-color: var(--card-bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
         }
 
         .chat-header {
             background-color: var(--card-bg-color);
             padding: 1.5rem 1rem;
-            border-bottom: 1px solid #eee;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             text-align: right;
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+
+        .company-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .chat-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .chat-box {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .messages-container {
@@ -99,7 +76,7 @@
             padding: 1rem;
             overflow-y: auto;
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column; /* تم التعديل إلى الاتجاه العادي */
             gap: 1rem;
         }
 
@@ -123,12 +100,13 @@
             color: var(--card-bg-color);
             align-self: flex-end;
         }
-        
+
         .message-input-form {
             display: flex;
             padding: 1rem;
             border-top: 1px solid #eee;
             gap: 0.5rem;
+            align-items: center; /* لضمان محاذاة العناصر */
         }
 
         .message-input {
@@ -139,6 +117,7 @@
             font-family: inherit;
             font-size: 1rem;
             outline: none;
+            resize: none; /* لمنع المستخدم من تغيير حجم حقل الإدخال */
         }
 
         .send-btn {
@@ -161,40 +140,25 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            .chat-list-sidebar {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="chat-list-sidebar">
-            <h2 class="text-xl">محادثاتي</h2>
-            <div id="chat-list" class="flex flex-col gap-2">
-                </div>
+        <div class="chat-header">
+            <img id="company-photo" src="https://via.placeholder.com/150" alt="صورة الشركة" class="company-photo">
+            <div>
+                <h1 id="chat-title">جارِ التحميل...</h1>
+            </div>
         </div>
 
-        <div id="chat-main" class="chat-main-area hidden">
-            <div class="chat-header">
-                <img id="company-photo" src="https://via.placeholder.com/150" alt="صورة الشركة" class="company-photo">
-                <div>
-                    <h1 id="chat-title" class="text-2xl font-bold"></h1>
-                </div>
-            </div>
-
+        <div class="chat-box">
             <div id="messages-container" class="messages-container">
                 <div id="loadingIndicator" class="text-center text-gray-500 py-4">جاري تحميل الرسائل...</div>
             </div>
 
             <form id="message-form" class="message-input-form">
-                <input type="text" id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1" autocomplete="off"></textarea>
                 <button type="submit" class="send-btn">إرسال</button>
             </form>
         </div>
@@ -202,9 +166,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+        
+        // قم بوضع إعدادات Firebase الخاصة بك هنا
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -219,8 +184,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        const chatListDiv = document.getElementById('chat-list');
-        const chatMainArea = document.getElementById('chat-main');
         const chatTitle = document.getElementById('chat-title');
         const companyPhoto = document.getElementById('company-photo');
         const messagesContainer = document.getElementById('messages-container');
@@ -228,116 +191,66 @@
         const messageInput = document.getElementById('message-input');
         const loadingIndicator = document.getElementById('loadingIndicator');
 
-        let user; 
-        let currentChatId;
-        let currentCompanyId;
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chatId');
+        const companyId = urlParams.get('companyId');
+        const companyName = decodeURIComponent(urlParams.get('companyName'));
+        const companyPhotoUrl = decodeURIComponent(urlParams.get('companyPhoto'));
+
+        let user;
         let unsubscribeFromMessages = null;
+
+        // Set initial UI based on URL parameters
+        chatTitle.textContent = companyName || 'جارِ التحميل...';
+        companyPhoto.src = companyPhotoUrl || 'https://via.placeholder.com/150';
 
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 user = currentUser;
-                // Fetch and display the list of chats for the current employee
-                fetchChatList();
+                if (chatId) {
+                    listenForMessages();
+                } else {
+                    chatTitle.textContent = "خطأ: لم يتم تحديد المحادثة.";
+                }
             } else {
                 alert("يجب عليك تسجيل الدخول للمراسلة.");
-                window.location.href = "login.html"; // Redirect to login
+                window.location.href = "login.html";
             }
         });
 
-        async function fetchChatList() {
-            // Find chats where the employee's ID is one of the participants
-            const chatsQuery = query(collection(db, "chats"), where("participants", "array-contains", user.uid));
-            
-            onSnapshot(chatsQuery, async (querySnapshot) => {
-                chatListDiv.innerHTML = ''; // Clear the list
-                
-                const chatIds = [];
-                querySnapshot.forEach(doc => {
-                    const chatId = doc.id;
-                    const participants = chatId.split('_');
-                    const companyId = participants.find(p => p !== user.uid);
-                    chatIds.push({ chatId, companyId });
-                });
-                
-                // Fetch company data for each chat
-                for (const chat of chatIds) {
-                    const companyDocRef = doc(db, "companies", chat.companyId);
-                    const companyDocSnap = await getDoc(companyDocRef);
-                    if (companyDocSnap.exists()) {
-                        const companyData = companyDocSnap.data();
-                        renderChatItem(companyData, chat.chatId, chat.companyId);
-                    }
-                }
-            });
-        }
-        
-        function renderChatItem(companyData, chatId, companyId) {
-            const chatItem = document.createElement('div');
-            chatItem.classList.add('chat-item');
-            chatItem.dataset.chatId = chatId;
-            chatItem.dataset.companyId = companyId;
-            
-            chatItem.innerHTML = `
-                <img src="${companyData.profileImageUrl || 'https://via.placeholder.com/150'}" alt="صورة الشركة" class="company-photo">
-                <div class="flex-grow">
-                    <h3 class="font-semibold">${companyData.name}</h3>
-                </div>
-            `;
-            
-            chatItem.addEventListener('click', () => {
-                // Remove 'active' class from all items
-                document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
-                // Add 'active' class to the clicked item
-                chatItem.classList.add('active');
-                
-                // Show the main chat area
-                chatMainArea.classList.remove('hidden');
-                
-                // Set current chat info
-                currentChatId = chatId;
-                currentCompanyId = companyId;
-                chatTitle.textContent = companyData.name;
-                companyPhoto.src = companyData.profileImageUrl || 'https://via.placeholder.com/150';
-                
-                // Unsubscribe from previous chat listener to avoid memory leaks
-                if (unsubscribeFromMessages) {
-                    unsubscribeFromMessages();
-                }
-                
-                // Start listening to messages for the new chat
-                listenForMessages();
-            });
-            
-            chatListDiv.appendChild(chatItem);
-        }
-
         function listenForMessages() {
+            if (unsubscribeFromMessages) {
+                unsubscribeFromMessages();
+            }
+
             const messagesQuery = query(
-                collection(db, "chats", currentChatId, "messages"),
-                orderBy("timestamp")
+                collection(db, "chats", chatId, "messages"),
+                orderBy("timestamp", "asc") // ترتيب الرسائل من الأقدم للأحدث
             );
 
             unsubscribeFromMessages = onSnapshot(messagesQuery, (querySnapshot) => {
                 loadingIndicator.classList.add('hidden');
-                messagesContainer.innerHTML = ''; 
+                messagesContainer.innerHTML = ''; // تفريغ الحاوية قبل إعادة العرض
                 
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
-                    // Render messages based on sender (company or employee)
-                    const sender = message.senderId === currentCompanyId ? 'company' : 'employee';
+                    const sender = message.senderId === companyId ? 'company' : 'employee';
                     appendMessage(message.text, sender);
                 });
+                scrollToBottom();
+            }, (error) => {
+                console.error("خطأ في الاستماع للرسائل:", error);
             });
         }
 
         async function addMessageToFirestore(messageText) {
             try {
-                await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                await addDoc(collection(db, "chats", chatId, "messages"), {
                     senderId: user.uid,
-                    receiverId: currentCompanyId,
+                    receiverId: companyId,
                     text: messageText,
                     timestamp: serverTimestamp(),
-                    isFromCompany: false // This is a message from the employee
+                    isFromCompany: false // Note: this field is likely set by the company's app
                 });
             } catch (error) {
                 console.error("خطأ في إرسال الرسالة:", error);
@@ -363,36 +276,20 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
             messageElement.textContent = text;
-            messagesContainer.prepend(messageElement);
+            messagesContainer.append(messageElement); // إضافة الرسالة إلى نهاية الحاوية
         }
 
-        // Re-use forbidden content validation functions from the company's chat file
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
         function containsForbiddenContent(text) {
-            if (isPhoneNumber(text)) {
-                return true;
-            }
-            if (isEmail(text)) {
-                return true;
-            }
-            if (isLink(text)) {
-                return true;
-            }
-            return false;
-        }
-
-        function isPhoneNumber(text) {
-            const pattern = /(\+\d{1,4}[-.\s]?)?(\(\d{1,4}\)[-.\s]?)?[\d\s-]{7,}/g;
-            return pattern.test(text);
-        }
-
-        function isEmail(text) {
-            const pattern = /[\w.-]+@[\w.-]+\.\w{2,4}/g;
-            return pattern.test(text);
-        }
-
-        function isLink(text) {
-            const pattern = /https?:\/\/\S+/g;
-            return pattern.test(text);
+            const forbiddenPatterns = [
+                /(\+\d{1,4}[-.\s]?)?(\(\d{1,4}\)[-.\s]?)?[\d\s-]{7,}/g, // أرقام الهواتف
+                /[\w.-]+@[\w.-]+\.\w{2,4}/g, // عناوين البريد الإلكتروني
+                /https?:\/\/\S+/g // روابط URL
+            ];
+            return forbiddenPatterns.some(pattern => pattern.test(text));
         }
     </script>
 </body>
