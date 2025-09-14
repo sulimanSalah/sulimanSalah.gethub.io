@@ -1,1 +1,298 @@
-لا يوجد شي
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملفي الشخصي - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f59e0b;
+            --bg-color: #f5f7fa;
+            --card-bg-color: #fff;
+            --text-color: #222;
+            --light-text-color: #6c7280;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        
+        .profile-section {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .hidden { display: none !important; }
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .alert.success { background-color: #d1fae5; color: #065f46; }
+        .alert.error { background-color: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <div id="loading-indicator" class="text-center text-lg text-gray-500">جاري تحميل الملف الشخصي...</div>
+
+            <div id="profile-card" class="hidden">
+                <div class="flex justify-center mb-4">
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                        <img id="profile-photo" src="https://via.placeholder.com/150" alt="صورة شخصية" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <h1 id="employee-name" class="text-2xl font-bold text-gray-800"></h1>
+                <p id="employee-headline" class="text-lg text-gray-600"></p>
+                <button id="edit-btn" class="mt-4 px-4 py-2 bg-secondary-color text-white rounded-md">تعديل الملف الشخصي</button>
+            </div>
+
+            <div id="edit-form-container" class="hidden mt-6">
+                <h2 class="text-xl font-bold mb-4 text-center">تعديل بياناتك</h2>
+                <div id="status-message" class="alert hidden"></div>
+                <form id="profile-form" class="space-y-4">
+                    <div class="form-group">
+                        <label for="name">الاسم الكامل</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="headline">العنوان الوظيفي</label>
+                        <input type="text" id="headline" name="headline">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">نبذة وظيفية</label>
+                        <textarea id="bio" name="bio"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="skills">المهارات (افصل بينها بفاصلة)</label>
+                        <input type="text" id="skills" name="skills">
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md">حفظ التغييرات</button>
+                    <button type="button" id="cancel-btn" class="w-full mt-2 px-4 py-2 bg-gray-400 text-white rounded-md">إلغاء</button>
+                </form>
+            </div>
+
+            <div id="profile-details" class="hidden space-y-6 mt-6">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h3 class="font-semibold text-blue-800 mb-2">نبذة وظيفية</h3>
+                    <p id="employee-bio" class="text-gray-700 text-right"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-800 mb-3">معلومات التواصل</h3>
+                        <div class="space-y-2">
+                            <p class="text-gray-700"><span class="font-medium">📞 الهاتف: </span><span id="employee-phone"></span></p>
+                            <p class="text-gray-700"><span class="font-medium">✉️ البريد: </span><span id="employee-email"></span></p>
+                            <p class="text-gray-700"><span class="font-medium">📍 العنوان: </span><span id="employee-address"></span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-800 mb-3">المهارات</h3>
+                        <div id="employee-skills" class="flex flex-wrap gap-2 mt-1"></div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-semibold text-gray-800">الحالة الوظيفية</h3>
+                            <p id="job-status-text" class="text-gray-600"></p>
+                        </div>
+                        <button id="toggle-job-status-btn" class="font-semibold px-4 py-2 rounded-md"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        // قم بتحديث هذا الكائن ببيانات مشروعك الخاصة
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // العناصر
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const profileCard = document.getElementById('profile-card');
+        const editFormContainer = document.getElementById('edit-form-container');
+        const profileDetails = document.getElementById('profile-details');
+        const editBtn = document.getElementById('edit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const profileForm = document.getElementById('profile-form');
+        const statusMessage = document.getElementById('status-message');
+        const toggleJobStatusBtn = document.getElementById('toggle-job-status-btn');
+
+        let user;
+
+        onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                user = currentUser;
+                fetchEmployeeProfile(user.uid);
+            } else {
+                alert("يجب عليك تسجيل الدخول لعرض ملفك الشخصي.");
+                window.location.href = "login.html"; // يمكنك توجيههم إلى صفحة تسجيل الدخول الخاصة بك
+            }
+        });
+
+        async function fetchEmployeeProfile(userId) {
+            loadingIndicator.classList.remove('hidden');
+            try {
+                const employeeDocRef = doc(db, "employees", userId);
+                const employeeDocSnap = await getDoc(employeeDocRef);
+                if (employeeDocSnap.exists()) {
+                    const employeeData = employeeDocSnap.data();
+                    displayProfile(employeeData);
+                } else {
+                    displayProfile({name: "لم يتم إنشاء ملف شخصي", headline: "", bio: ""});
+                    showEditMode(true);
+                }
+            } catch (error) {
+                console.error("خطأ في جلب الملف الشخصي:", error);
+                displayProfile({name: "حدث خطأ في التحميل", headline: "", bio: ""});
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        function displayProfile(data) {
+            document.getElementById('profile-photo').src = data.profileImageUrl || "https://via.placeholder.com/150";
+            document.getElementById('employee-name').textContent = data.name || "الاسم غير محدد";
+            document.getElementById('employee-headline').textContent = data.headline || "بدون عنوان وظيفي";
+            document.getElementById('employee-bio').textContent = data.bio || "لا توجد نبذة شخصية.";
+            document.getElementById('employee-phone').textContent = data.phoneNumber || "غير متوفر";
+            document.getElementById('employee-email').textContent = data.email || "غير متوفر";
+            document.getElementById('employee-address').textContent = data.address || "غير متوفر";
+            
+            const skillsContainer = document.getElementById('employee-skills');
+            skillsContainer.innerHTML = '';
+            (data.skills || []).forEach(skill => {
+                const span = document.createElement('span');
+                span.className = "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm";
+                span.textContent = skill;
+                skillsContainer.appendChild(span);
+            });
+
+            const jobStatusText = document.getElementById('job-status-text');
+            const jobStatusBtn = document.getElementById('toggle-job-status-btn');
+            const isLookingForJob = data.isLookingForJob || false;
+            jobStatusText.textContent = isLookingForJob ? "أبحث عن عمل حالياً" : "لا أبحث عن عمل حالياً";
+            jobStatusBtn.textContent = isLookingForJob ? "تغيير إلى غير متاح" : "تغيير إلى متاح للعمل";
+            jobStatusBtn.className = `font-semibold px-4 py-2 rounded-md ${isLookingForJob ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`;
+            
+            // تعبئة النموذج ببيانات المستخدم
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('headline').value = data.headline || '';
+            document.getElementById('bio').value = data.bio || '';
+            document.getElementById('skills').value = (data.skills || []).join(', ');
+        }
+
+        function showEditMode(show) {
+            profileCard.classList.toggle('hidden', show);
+            profileDetails.classList.toggle('hidden', show);
+            editFormContainer.classList.toggle('hidden', !show);
+        }
+
+        editBtn.addEventListener('click', () => showEditMode(true));
+        cancelBtn.addEventListener('click', () => showEditMode(false));
+        
+        toggleJobStatusBtn.addEventListener('click', async () => {
+            const currentStatus = document.getElementById('job-status-text').textContent === "أبحث عن عمل حالياً";
+            const newStatus = !currentStatus;
+            try {
+                const docRef = doc(db, "employees", user.uid);
+                await updateDoc(docRef, { isLookingForJob: newStatus });
+                displayProfile({ ...user.data, isLookingForJob: newStatus });
+                showStatusMessage("تم تحديث الحالة الوظيفية بنجاح!", 'success');
+            } catch (error) {
+                console.error("خطأ في تحديث الحالة:", error);
+                showStatusMessage("فشل تحديث الحالة. حاول مرة أخرى.", 'error');
+            }
+        });
+
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const updatedData = {
+                name: document.getElementById('name').value,
+                headline: document.getElementById('headline').value,
+                bio: document.getElementById('bio').value,
+                skills: document.getElementById('skills').value.split(',').map(s => s.trim())
+            };
+
+            try {
+                const docRef = doc(db, "employees", user.uid);
+                await updateDoc(docRef, updatedData);
+                displayProfile({ ...updatedData, email: user.email, phoneNumber: "999-999-9999", address: "Sudan" }); // تحديث الواجهة
+                showStatusMessage("تم حفظ التغييرات بنجاح!", 'success');
+                showEditMode(false);
+            } catch (error) {
+                console.error("خطأ في حفظ البيانات:", error);
+                showStatusMessage("فشل حفظ التغييرات. حاول مرة أخرى.", 'error');
+            }
+        });
+        
+        function showStatusMessage(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `alert ${type}`;
+            statusMessage.classList.remove('hidden');
+            setTimeout(() => statusMessage.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>
