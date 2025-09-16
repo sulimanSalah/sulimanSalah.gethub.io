@@ -101,8 +101,8 @@
       <label for="name">الاسم الكامل:</label>
       <input type="text" id="name" name="name" required placeholder="مثال: محمد أحمد" />
 
-      <label for="email">البريد الإلكتروني:</label>
-      <input type="email" id="email" name="email" required placeholder="example@email.com" />
+      <label for="phone">رقم الهاتف:</label>
+      <input type="tel" id="phone" name="phone" required placeholder="مثال: 05XXXXXXXX" />
 
       <label for="password">كلمة المرور:</label>
       <input type="password" id="password" name="password" required placeholder="********" />
@@ -125,11 +125,11 @@
   <script>
     document.getElementById("registerForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      // هنا يمكنك الربط مع Firebase
+      // هنا يمكنك الربط مع Firebase أو أي خدمة أخرى
+      // للتحقق من رقم الهاتف وإرسال كود التحقق
       alert("تم تسجيل الحساب بنجاح (مثال فقط)");
     });
   </script>
 
 </body>
 </html>
-
