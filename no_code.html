@@ -25,274 +25,458 @@
             color: var(--text-color);
             direction: rtl;
         }
-
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 2rem auto;
             padding: 1rem;
         }
-        
         .profile-section {
             background-color: var(--card-bg-color);
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+        }
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
         }
         .profile-photo {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--primary-color);
+            border: 5px solid var(--primary-color);
             margin-bottom: 1.5rem;
         }
-        .form-group {
-            text-align: right;
-            margin-bottom: 1.5rem;
+        .profile-header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .profile-header p {
+            font-size: 1.125rem;
+            color: #4b5563;
+        }
+        .info-card {
+            background-color: #f9fafb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .info-card h3 {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+        .info-card i {
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+        }
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin: 0.25rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
         }
         .form-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
+            font-weight: 600;
+            color: #4b5563;
         }
         .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
             border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            transition: border-color var(--transition-speed);
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .skill-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .remove-skill-btn {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #fca5a5;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .remove-skill-btn:hover {
+            background-color: #fee2e2;
+        }
+        .add-skill-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
         }
         .hidden { display: none !important; }
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 1rem;
+        .portfolio-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
         }
-        .alert.success { background-color: #d1fae5; color: #065f46; }
-        .alert.error { background-color: #fee2e2; color: #b91c1c; }
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+        }
+        .portfolio-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="profile-section">
-            <div id="loading-indicator" class="text-center text-lg text-gray-500">جاري تحميل الملف الشخصي...</div>
 
-            <div id="profile-card" class="hidden">
-                <div class="flex justify-center mb-4">
-                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                        <img id="profile-photo" src="https://via.placeholder.com/150" alt="صورة شخصية" class="w-full h-full object-cover">
+<div class="container">
+    <div class="profile-section">
+        <div id="display-mode">
+            <div class="profile-header">
+                <img id="profile-photo-display" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/03ffb162-8768-4496-a92c-d2816f82dca9.png" alt="صورة شخصية" class="profile-photo">
+                <h1 id="employee-name-display" class="font-bold text-gray-800">أحمد محمد عبدالله</h1>
+                <p id="employee-headline-display" class="text-gray-600">مبرمج ومطور ويب خبير</p>
+                <button id="edit-btn" class="btn btn-secondary mt-4">
+                    <i class="fas fa-edit ml-2"></i> تعديل الملف الشخصي
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="info-card">
+                    <h3 class="flex items-center"><i class="fas fa-info-circle"></i>نبذة عني</h3>
+                    <p id="employee-bio-display" class="text-gray-700 text-right mt-2">
+                        مطور ويب متمرس مع أكثر من 5 سنوات من الخبرة في تطوير تطبيقات الويب الحديثة.
+                        متخصص في React, TypeScript, وNode.js. أحب العمل في بيئات تعاونية وأستمتع بحل المشكلات التقنية المعقدة.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <h3 class="flex items-center"><i class="fas fa-tools"></i>المهارات</h3>
+                    <div id="employee-skills-display" class="flex flex-wrap mt-2">
+                        <span class="skill-badge">React</span>
+                        <span class="skill-badge">TypeScript</span>
+                        <span class="skill-badge">Node.js</span>
+                        <span class="skill-badge">Tailwind CSS</span>
+                        <span class="skill-badge">MongoDB</span>
                     </div>
                 </div>
-                <h1 id="employee-name" class="text-2xl font-bold text-gray-800"></h1>
-                <p id="employee-headline" class="text-lg text-gray-600"></p>
-                <button id="edit-btn" class="mt-4 px-4 py-2 bg-secondary-color text-white rounded-md">تعديل الملف الشخصي</button>
-            </div>
-
-            <div id="edit-form-container" class="hidden mt-6">
-                <h2 class="text-xl font-bold mb-4 text-center">تعديل بياناتك</h2>
-                <div id="status-message" class="alert hidden"></div>
-                <form id="profile-form" class="space-y-4">
-                    <div class="form-group">
-                        <label for="name">الاسم الكامل</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="headline">العنوان الوظيفي</label>
-                        <input type="text" id="headline" name="headline">
-                    </div>
-                    <div class="form-group">
-                        <label for="bio">نبذة وظيفية</label>
-                        <textarea id="bio" name="bio"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="skills">المهارات (افصل بينها بفاصلة)</label>
-                        <input type="text" id="skills" name="skills">
-                    </div>
-                    <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md">حفظ التغييرات</button>
-                    <button type="button" id="cancel-btn" class="w-full mt-2 px-4 py-2 bg-gray-400 text-white rounded-md">إلغاء</button>
-                </form>
-            </div>
-
-            <div id="profile-details" class="hidden space-y-6 mt-6">
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <h3 class="font-semibold text-blue-800 mb-2">نبذة وظيفية</h3>
-                    <p id="employee-bio" class="text-gray-700 text-right"></p>
+                <div id="contact-info-card" class="info-card">
+                    <h3 class="flex items-center"><i class="fas fa-phone"></i>معلومات الاتصال</h3>
+                    <ul class="text-gray-700 mt-2 space-y-2">
+                        <li><span class="font-medium">الهاتف: </span> <span id="employee-phone-display">+249 123 456 789</span></li>
+                        <li><span class="font-medium">البريد: </span> <span id="employee-email-display">ahmed.mohamed@example.com</span></li>
+                    </ul>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white p-4 rounded-lg border border-gray-200">
-                        <h3 class="font-semibold text-gray-800 mb-3">معلومات التواصل</h3>
-                        <div class="space-y-2">
-                            <p class="text-gray-700"><span class="font-medium">📞 الهاتف: </span><span id="employee-phone"></span></p>
-                            <p class="text-gray-700"><span class="font-medium">✉️ البريد: </span><span id="employee-email"></span></p>
-                            <p class="text-gray-700"><span class="font-medium">📍 العنوان: </span><span id="employee-address"></span></p>
+                <div class="info-card">
+                    <h3 class="flex items-center"><i class="fas fa-briefcase"></i>الحالة الوظيفية</h3>
+                    <div class="flex items-center justify-between mt-2">
+                        <p id="job-status-text" class="text-gray-700 font-medium">أبحث عن عمل حالياً</p>
+                        <button id="toggle-job-status-btn" class="btn btn-primary text-sm">تغيير إلى غير متاح</button>
+                    </div>
+                </div>
+            </div>
+            <div class="info-card mt-6">
+                <h3 class="flex items-center"><i class="fas fa-camera"></i>الأعمال السابقة</h3>
+                <div id="portfolio-display" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <div class="portfolio-item">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0931be88-acf7-4c30-9a57-1cc6eb30a524.png" alt="موقع تجارة إلكترونية" class="portfolio-image">
+                        <div class="p-4 bg-white">
+                            <h4 class="font-semibold text-lg">موقع تجارة إلكترونية</h4>
+                            <p class="text-gray-600 text-sm mt-1">تطوير منصة كاملة للتسوق عبر الإنترنت.</p>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-lg border border-gray-200">
-                        <h3 class="font-semibold text-gray-800 mb-3">المهارات</h3>
-                        <div id="employee-skills" class="flex flex-wrap gap-2 mt-1"></div>
-                    </div>
-                </div>
-                <div class="bg-white p-4 rounded-lg border border-gray-200">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="font-semibold text-gray-800">الحالة الوظيفية</h3>
-                            <p id="job-status-text" class="text-gray-600"></p>
+                    <div class="portfolio-item">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c61754f8-515c-4483-be01-e8d95e6f448a.png" alt="نظام إدارة محتوى" class="portfolio-image">
+                        <div class="p-4 bg-white">
+                            <h4 class="font-semibold text-lg">نظام إدارة محتوى</h4>
+                            <p class="text-gray-600 text-sm mt-1">بناء لوحة تحكم لإدارة المحتوى الرقمي.</p>
                         </div>
-                        <button id="toggle-job-status-btn" class="font-semibold px-4 py-2 rounded-md"></button>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d66591a9-7d07-44ec-a5cc-4f28ef12e415.png" alt="تطبيق جوال" class="portfolio-image">
+                        <div class="p-4 bg-white">
+                            <h4 class="font-semibold text-lg">تطبيق جوال</h4>
+                            <p class="text-gray-600 text-sm mt-1">تصميم وتطوير تطبيق جوال بسيط وأنيق.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="edit-mode" class="hidden">
+            <h2 class="text-2xl font-bold text-center mb-6">تعديل بيانات الملف الشخصي</h2>
+            <form id="edit-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group space-y-2">
+                        <label for="name-input">الاسم الكامل</label>
+                        <input type="text" id="name-input" name="name" class="w-full" value="أحمد محمد عبدالله">
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label for="headline-input">العنوان الوظيفي</label>
+                        <input type="text" id="headline-input" name="headline" class="w-full" value="مبرمج ومطور ويب خبير">
+                    </div>
+                </div>
+                <div class="form-group space-y-2">
+                    <label for="bio-input">نبذة وظيفية</label>
+                    <textarea id="bio-input" name="bio" rows="4" class="w-full">مطور ويب متمرس مع أكثر من 5 سنوات من الخبرة في تطوير تطبيقات الويب الحديثة. متخصص في React, TypeScript, وNode.js. أحب العمل في بيئات تعاونية وأستمتع بحل المشكلات التقنية المعقدة.</textarea>
+                </div>
+                <div class="form-group space-y-2">
+                    <label>المهارات</label>
+                    <div id="skills-container" class="flex flex-wrap gap-2 p-2 rounded-md bg-gray-50 border border-gray-200">
+                        </div>
+                    <div class="skill-input-group mt-2">
+                        <input type="text" id="new-skill-input" placeholder="أضف مهارة جديدة..." class="flex-grow">
+                        <button type="button" id="add-skill-btn" class="btn add-skill-btn">
+                            <i class="fas fa-plus"></i> أضف
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group space-y-2">
+                    <h3 class="font-bold text-lg text-gray-800">معلومات الاتصال (خاصة بك فقط)</h3>
+                    <label for="phone-input">الهاتف</label>
+                    <input type="text" id="phone-input" name="phone" class="w-full" value="+249 123 456 789">
+                    <label for="email-input" class="mt-4 block">البريد الإلكتروني</label>
+                    <input type="email" id="email-input" name="email" class="w-full" value="ahmed.mohamed@example.com">
+                </div>
+                <div class="form-group space-y-2">
+                    <h3 class="font-bold text-lg text-gray-800">أعمالي السابقة</h3>
+                    <div id="portfolio-edit-container" class="space-y-4">
+                        </div>
+                    <button type="button" id="add-portfolio-btn" class="btn btn-secondary w-full">
+                        <i class="fas fa-plus ml-2"></i> إضافة عمل جديد
+                    </button>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 justify-end">
+                    <button type="submit" class="btn btn-primary w-full md:w-auto"><i class="fas fa-save ml-2"></i> حفظ التغييرات</button>
+                    <button type="button" id="cancel-btn" class="btn btn-secondary w-full md:w-auto"><i class="fas fa-times ml-2"></i> إلغاء</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
-        // قم بتحديث هذا الكائن ببيانات مشروعك الخاصة
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+</div>
 
-        // العناصر
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const profileCard = document.getElementById('profile-card');
-        const editFormContainer = document.getElementById('edit-form-container');
-        const profileDetails = document.getElementById('profile-details');
-        const editBtn = document.getElementById('edit-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
-        const profileForm = document.getElementById('profile-form');
-        const statusMessage = document.getElementById('status-message');
-        const toggleJobStatusBtn = document.getElementById('toggle-job-status-btn');
+<script>
+    // العناصر الأساسية
+    const displayMode = document.getElementById('display-mode');
+    const editMode = document.getElementById('edit-mode');
+    const editBtn = document.getElementById('edit-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const editForm = document.getElementById('edit-form');
 
-        let user;
+    // عناصر وضع العرض
+    const nameDisplay = document.getElementById('employee-name-display');
+    const headlineDisplay = document.getElementById('employee-headline-display');
+    const bioDisplay = document.getElementById('employee-bio-display');
+    const skillsDisplay = document.getElementById('employee-skills-display');
+    const phoneDisplay = document.getElementById('employee-phone-display');
+    const emailDisplay = document.getElementById('employee-email-display');
+    const portfolioDisplay = document.getElementById('portfolio-display');
 
-        onAuthStateChanged(auth, (currentUser) => {
-            if (currentUser) {
-                user = currentUser;
-                fetchEmployeeProfile(user.uid);
-            } else {
-                alert("يجب عليك تسجيل الدخول لعرض ملفك الشخصي.");
-                window.location.href = "login.html"; // يمكنك توجيههم إلى صفحة تسجيل الدخول الخاصة بك
+    // عناصر وضع التعديل
+    const nameInput = document.getElementById('name-input');
+    const headlineInput = document.getElementById('headline-input');
+    const bioInput = document.getElementById('bio-input');
+    const skillsContainer = document.getElementById('skills-container');
+    const newSkillInput = document.getElementById('new-skill-input');
+    const addSkillBtn = document.getElementById('add-skill-btn');
+    const phoneInput = document.getElementById('phone-input');
+    const emailInput = document.getElementById('email-input');
+    const portfolioEditContainer = document.getElementById('portfolio-edit-container');
+    const addPortfolioBtn = document.getElementById('add-portfolio-btn');
+
+    // البيانات الافتراضية
+    let skillsData = ["React", "TypeScript", "Node.js", "Tailwind CSS", "MongoDB"];
+    let portfolioData = [
+        { title: "موقع تجارة إلكترونية", description: "تطوير منصة كاملة للتسوق عبر الإنترنت.", imageUrl: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0931be88-acf7-4c30-9a57-1cc6eb30a524.png" },
+        { title: "نظام إدارة محتوى", description: "بناء لوحة تحكم لإدارة المحتوى الرقمي.", imageUrl: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c61754f8-515c-4483-be01-e8d95e6f448a.png" },
+        { title: "تطبيق جوال", description: "تصميم وتطوير تطبيق جوال بسيط وأنيق.", imageUrl: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d66591a9-7d07-44ec-a5cc-4f28ef12e415.png" }
+    ];
+    let isLookingForJob = true;
+    let isMyProfile = true; // متغير افتراضي لتحديد ما إذا كان صاحب الحساب هو من يرى الصفحة
+
+    // دالة لعرض المهارات
+    function renderSkills(container, skills) {
+        container.innerHTML = '';
+        skills.forEach((skill, index) => {
+            const skillElement = document.createElement('span');
+            skillElement.className = 'skill-badge';
+            skillElement.textContent = skill;
+            if (container.id === 'skills-container') {
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-skill-btn';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = () => {
+                    skillsData.splice(index, 1);
+                    renderSkills(skillsContainer, skillsData);
+                };
+                skillElement.appendChild(removeBtn);
+            }
+            container.appendChild(skillElement);
+        });
+    }
+
+    // دالة لعرض الأعمال السابقة
+    function renderPortfolio(container, portfolio) {
+        container.innerHTML = '';
+        portfolio.forEach((item, index) => {
+            if (container.id === 'portfolio-display') {
+                const portfolioItem = document.createElement('div');
+                portfolioItem.className = 'portfolio-item';
+                portfolioItem.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}" class="portfolio-image">
+                    <div class="p-4 bg-white">
+                        <h4 class="font-semibold text-lg">${item.title}</h4>
+                        <p class="text-gray-600 text-sm mt-1">${item.description}</p>
+                    </div>
+                `;
+                container.appendChild(portfolioItem);
+            } else { // في وضع التعديل
+                const portfolioEditItem = document.createElement('div');
+                portfolioEditItem.className = 'info-card mb-4 relative';
+                portfolioEditItem.innerHTML = `
+                    <div class="space-y-2">
+                        <label>عنوان العمل</label>
+                        <input type="text" class="w-full portfolio-title-input" value="${item.title}">
+                        <label>وصف العمل</label>
+                        <textarea class="w-full portfolio-desc-input">${item.description}</textarea>
+                        <label>رابط الصورة</label>
+                        <input type="text" class="w-full portfolio-img-input" value="${item.imageUrl}">
+                    </div>
+                    <button type="button" class="absolute top-2 left-2 text-red-500 hover:text-red-700 remove-portfolio-item">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                `;
+                portfolioEditItem.querySelector('.remove-portfolio-item').onclick = () => {
+                    portfolioData.splice(index, 1);
+                    renderPortfolio(portfolioEditContainer, portfolioData);
+                };
+                container.appendChild(portfolioEditItem);
             }
         });
+    }
 
-        async function fetchEmployeeProfile(userId) {
-            loadingIndicator.classList.remove('hidden');
-            try {
-                const employeeDocRef = doc(db, "employees", userId);
-                const employeeDocSnap = await getDoc(employeeDocRef);
-                if (employeeDocSnap.exists()) {
-                    const employeeData = employeeDocSnap.data();
-                    displayProfile(employeeData);
-                } else {
-                    displayProfile({name: "لم يتم إنشاء ملف شخصي", headline: "", bio: ""});
-                    showEditMode(true);
-                }
-            } catch (error) {
-                console.error("خطأ في جلب الملف الشخصي:", error);
-                displayProfile({name: "حدث خطأ في التحميل", headline: "", bio: ""});
-            } finally {
-                loadingIndicator.classList.add('hidden');
+    // دالة للتبديل بين وضعي العرض والتعديل
+    function toggleEditMode(show) {
+        if (show) {
+            // تحديث قيم النموذج عند الدخول لوضع التعديل
+            renderSkills(skillsContainer, skillsData);
+            renderPortfolio(portfolioEditContainer, portfolioData);
+            document.getElementById('contact-info-card').classList.remove('hidden'); // إظهار معلومات الاتصال في وضع التعديل
+        } else {
+            // تحديث عرض البيانات بعد الخروج من وضع التعديل
+            renderSkills(skillsDisplay, skillsData);
+            renderPortfolio(portfolioDisplay, portfolioData);
+            // إخفاء معلومات الاتصال إذا لم يكن صاحب الحساب
+            if (!isMyProfile) {
+                document.getElementById('contact-info-card').classList.add('hidden');
             }
         }
+        displayMode.classList.toggle('hidden', show);
+        editMode.classList.toggle('hidden', !show);
+    }
 
-        function displayProfile(data) {
-            document.getElementById('profile-photo').src = data.profileImageUrl || "https://via.placeholder.com/150";
-            document.getElementById('employee-name').textContent = data.name || "الاسم غير محدد";
-            document.getElementById('employee-headline').textContent = data.headline || "بدون عنوان وظيفي";
-            document.getElementById('employee-bio').textContent = data.bio || "لا توجد نبذة شخصية.";
-            document.getElementById('employee-phone').textContent = data.phoneNumber || "غير متوفر";
-            document.getElementById('employee-email').textContent = data.email || "غير متوفر";
-            document.getElementById('employee-address').textContent = data.address || "غير متوفر";
-            
-            const skillsContainer = document.getElementById('employee-skills');
-            skillsContainer.innerHTML = '';
-            (data.skills || []).forEach(skill => {
-                const span = document.createElement('span');
-                span.className = "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm";
-                span.textContent = skill;
-                skillsContainer.appendChild(span);
+    // إضافة المهارات
+    addSkillBtn.addEventListener('click', () => {
+        const newSkill = newSkillInput.value.trim();
+        if (newSkill && !skillsData.includes(newSkill)) {
+            skillsData.push(newSkill);
+            renderSkills(skillsContainer, skillsData);
+            newSkillInput.value = '';
+        }
+    });
+
+    // إضافة عمل سابق
+    addPortfolioBtn.addEventListener('click', () => {
+        portfolioData.push({ title: "", description: "", imageUrl: "" });
+        renderPortfolio(portfolioEditContainer, portfolioData);
+    });
+
+    // تبديل حالة البحث عن عمل
+    const toggleJobStatusBtn = document.getElementById('toggle-job-status-btn');
+    const jobStatusText = document.getElementById('job-status-text');
+    toggleJobStatusBtn.addEventListener('click', () => {
+        isLookingForJob = !isLookingForJob;
+        jobStatusText.textContent = isLookingForJob ? "أبحث عن عمل حالياً" : "لا أبحث عن عمل حالياً";
+        toggleJobStatusBtn.textContent = isLookingForJob ? "تغيير إلى غير متاح" : "تغيير إلى متاح للعمل";
+        toggleJobStatusBtn.classList.toggle('btn-primary', isLookingForJob);
+        toggleJobStatusBtn.classList.toggle('btn-secondary', !isLookingForJob);
+    });
+
+    // معالجة النموذج (واجهة أمامية فقط)
+    editForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // تحديث البيانات من النموذج
+        nameDisplay.textContent = nameInput.value;
+        headlineDisplay.textContent = headlineInput.value;
+        bioDisplay.textContent = bioInput.value;
+        phoneDisplay.textContent = phoneInput.value;
+        emailDisplay.textContent = emailInput.value;
+
+        // تحديث بيانات الأعمال السابقة من الحقول
+        const portfolioItems = portfolioEditContainer.querySelectorAll('.info-card');
+        const newPortfolioData = [];
+        portfolioItems.forEach(item => {
+            newPortfolioData.push({
+                title: item.querySelector('.portfolio-title-input').value,
+                description: item.querySelector('.portfolio-desc-input').value,
+                imageUrl: item.querySelector('.portfolio-img-input').value
             });
-
-            const jobStatusText = document.getElementById('job-status-text');
-            const jobStatusBtn = document.getElementById('toggle-job-status-btn');
-            const isLookingForJob = data.isLookingForJob || false;
-            jobStatusText.textContent = isLookingForJob ? "أبحث عن عمل حالياً" : "لا أبحث عن عمل حالياً";
-            jobStatusBtn.textContent = isLookingForJob ? "تغيير إلى غير متاح" : "تغيير إلى متاح للعمل";
-            jobStatusBtn.className = `font-semibold px-4 py-2 rounded-md ${isLookingForJob ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`;
-            
-            // تعبئة النموذج ببيانات المستخدم
-            document.getElementById('name').value = data.name || '';
-            document.getElementById('headline').value = data.headline || '';
-            document.getElementById('bio').value = data.bio || '';
-            document.getElementById('skills').value = (data.skills || []).join(', ');
-        }
-
-        function showEditMode(show) {
-            profileCard.classList.toggle('hidden', show);
-            profileDetails.classList.toggle('hidden', show);
-            editFormContainer.classList.toggle('hidden', !show);
-        }
-
-        editBtn.addEventListener('click', () => showEditMode(true));
-        cancelBtn.addEventListener('click', () => showEditMode(false));
-        
-        toggleJobStatusBtn.addEventListener('click', async () => {
-            const currentStatus = document.getElementById('job-status-text').textContent === "أبحث عن عمل حالياً";
-            const newStatus = !currentStatus;
-            try {
-                const docRef = doc(db, "employees", user.uid);
-                await updateDoc(docRef, { isLookingForJob: newStatus });
-                displayProfile({ ...user.data, isLookingForJob: newStatus });
-                showStatusMessage("تم تحديث الحالة الوظيفية بنجاح!", 'success');
-            } catch (error) {
-                console.error("خطأ في تحديث الحالة:", error);
-                showStatusMessage("فشل تحديث الحالة. حاول مرة أخرى.", 'error');
-            }
         });
+        portfolioData = newPortfolioData;
 
-        profileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const updatedData = {
-                name: document.getElementById('name').value,
-                headline: document.getElementById('headline').value,
-                bio: document.getElementById('bio').value,
-                skills: document.getElementById('skills').value.split(',').map(s => s.trim())
-            };
+        // الانتقال إلى وضع العرض
+        toggleEditMode(false);
+        alert("تم تحديث البيانات بنجاح!");
+    });
 
-            try {
-                const docRef = doc(db, "employees", user.uid);
-                await updateDoc(docRef, updatedData);
-                displayProfile({ ...updatedData, email: user.email, phoneNumber: "999-999-9999", address: "Sudan" }); // تحديث الواجهة
-                showStatusMessage("تم حفظ التغييرات بنجاح!", 'success');
-                showEditMode(false);
-            } catch (error) {
-                console.error("خطأ في حفظ البيانات:", error);
-                showStatusMessage("فشل حفظ التغييرات. حاول مرة أخرى.", 'error');
-            }
-        });
-        
-        function showStatusMessage(message, type) {
-            statusMessage.textContent = message;
-            statusMessage.className = `alert ${type}`;
-            statusMessage.classList.remove('hidden');
-            setTimeout(() => statusMessage.classList.add('hidden'), 3000);
-        }
-    </script>
+    // ربط الأزرار بالوظائف
+    editBtn.addEventListener('click', () => toggleEditMode(true));
+    cancelBtn.addEventListener('click', () => toggleEditMode(false));
+
+    // عرض البيانات عند تحميل الصفحة
+    // هنا يمكن إضافة منطق للتحقق مما إذا كان المستخدم هو صاحب الحساب
+    if (!isMyProfile) {
+        document.getElementById('edit-btn').classList.add('hidden'); // إخفاء زر التعديل
+        document.getElementById('contact-info-card').classList.add('hidden'); // إخفاء معلومات الاتصال
+    }
+    renderSkills(skillsDisplay, skillsData);
+    renderPortfolio(portfolioDisplay, portfolioData);
+</script>
+
 </body>
 </html>
