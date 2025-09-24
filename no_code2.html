@@ -497,67 +497,43 @@
 
         function updateStepIndicators() {
             const steps = document.querySelectorAll('.step');
-            steps.forEach((stepEl, index) => {
-                const stepNum = index + 1;
-                stepEl.classList.remove('active');
-                if (isEmployerFlow) {
-                    stepEl.classList.remove('hidden');
-                } else {
-                    stepEl.classList.remove('hidden');
-                }
-            });
-
-            if (isEmployerFlow) {
-                document.getElementById('stepIndicator3').classList.remove('hidden');
-            } else {
-                document.getElementById('stepIndicator3').classList.remove('hidden');
-            }
-            updateSteps(); // To activate the current step indicator
+            steps.forEach((stepEl) => stepEl.classList.remove('active'));
+            updateSteps();
         }
 
-        function updateSteps() {
+        function showStep(stepNumber, role) {
+            const stepId = role === 'employer' ? `step${stepNumber}-employer` : `step${stepNumber}-employee`;
+            const allSteps = document.querySelectorAll('.form-card');
+            allSteps.forEach(el => el.classList.add('hidden'));
+            document.getElementById(stepId).classList.remove('hidden');
+        }
+
+        function updateStepIndicator() {
             const steps = document.querySelectorAll('.step');
             steps.forEach((stepEl, index) => {
-                const stepNumber = index + 1;
-                if (stepNumber <= currentStep) {
+                if (index < currentStep) {
                     stepEl.classList.add('active');
                 } else {
                     stepEl.classList.remove('active');
                 }
             });
-            // Hide/show the last step for employer flow
-            if (isEmployerFlow) {
-                 document.getElementById('stepIndicator4').classList.remove('hidden');
-            } else {
-                 document.getElementById('stepIndicator4').classList.remove('hidden');
-            }
         }
 
         function nextStep(step) {
-            let currentStepElement;
-            let nextStepElement;
-            let stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
+            let currentStepElementId;
+            let nextStepElementId;
 
             if (step === 1) {
-                currentStepElement = document.getElementById('step1');
-            } else {
-                currentStepElement = document.getElementById(`step${step}-${stepIdSuffix}`);
-            }
-            
-            // Validate required fields for the current step
-            const formInputs = currentStepElement.querySelectorAll('input:required, select:required, textarea:required');
-            let isStepValid = true;
-            formInputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    isStepValid = false;
-                }
-            });
-
-            if (!isStepValid) return;
-
-            // Handle password validation for step 1
-            if (step === 1) {
+                currentStepElementId = 'step1';
+                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required');
+                let isStepValid = true;
+                formInputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        isStepValid = false;
+                    }
+                });
+                if (!isStepValid) return;
                 const password = document.getElementById('password').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 if (password !== confirmPassword) {
@@ -568,40 +544,41 @@
                     showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
                     return;
                 }
+
+                isEmployerFlow = (document.getElementById('role').value === 'employer');
+                nextStepElementId = isEmployerFlow ? 'step2-employer' : 'step2-employee';
+                
+            } else {
+                const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
+                currentStepElementId = `step${step}-${stepIdSuffix}`;
+                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required, textarea:required');
+                let isStepValid = true;
+                formInputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        isStepValid = false;
+                    }
+                });
+                if (!isStepValid) return;
+
+                nextStepElementId = `step${step + 1}-${stepIdSuffix}`;
             }
 
-            // Hide current step and show next step
-            if (currentStepElement) currentStepElement.classList.add('hidden');
+            document.getElementById(currentStepElementId).classList.add('hidden');
+            document.getElementById(nextStepElementId).classList.remove('hidden');
             currentStep++;
-
-            // Determine the next step element
-            if (isEmployerFlow) {
-                nextStepElement = document.getElementById(`step${currentStep}-${stepIdSuffix}`);
-            } else {
-                nextStepElement = document.getElementById(`step${currentStep}-${stepIdSuffix}`);
-            }
-            
-            if (nextStepElement) nextStepElement.classList.remove('hidden');
-            updateSteps();
+            updateStepIndicator();
         }
-
+        
         function prevStep(step) {
-            let currentStepElement;
-            let prevStepElement;
-            let stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
+            const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
+            const currentStepElementId = `step${step}-${stepIdSuffix}`;
+            const prevStepElementId = step === 2 ? 'step1' : `step${step - 1}-${stepIdSuffix}`;
 
-            currentStepElement = document.getElementById(`step${step}-${stepIdSuffix}`);
-            if (step === 2) {
-                prevStepElement = document.getElementById('step1');
-            } else {
-                prevStepElement = document.getElementById(`step${step - 1}-${stepIdSuffix}`);
-            }
-
-            if (currentStepElement) currentStepElement.classList.add('hidden');
-            if (prevStepElement) prevStepElement.classList.remove('hidden');
+            document.getElementById(currentStepElementId).classList.add('hidden');
+            document.getElementById(prevStepElementId).classList.remove('hidden');
             currentStep--;
-            if (currentStep < 1) currentStep = 1;
-            updateSteps();
+            updateStepIndicator();
         }
 
         async function submitForm(event) {
@@ -903,7 +880,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.employee-steps > div, .employer-steps > div').forEach(el => el.classList.add('hidden'));
             document.getElementById('step1').classList.remove('hidden');
-            updateStepIndicators();
+            updateStepIndicator();
         });
     </script>
 </body>
