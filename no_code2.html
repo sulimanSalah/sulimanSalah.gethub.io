@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#تسجيل حساب جديد - شغلني</title>
+    <title>تسجيل حساب جديد - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -354,13 +354,37 @@
                     </button>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: إضافة وظائف</h2>
+                    <h2 class="text-lg font-bold mb-4">الخطوة 3: إضافة الوظائف</h2>
                     <div id="jobsContainer" class="space-y-4">
                         </div>
                     <button type="button" class="w-full mt-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600" id="addJobBtn">
                         <i class="fas fa-plus mr-2"></i> إضافة وظيفة
                     </button>
                     <button type="button" class="mt-6 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employer">
+                        السابق
+                    </button>
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employer">
+                        التالي
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employer">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 4: روابط الشركة</h2>
+                    <div class="mb-4">
+                        <label for="companyWebsite" class="block text-sm font-medium text-gray-700">الموقع الإلكتروني</label>
+                        <input type="url" id="companyWebsite" name="companyWebsite" placeholder="مثال: https://company.com"
+                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="companyFacebook" class="block text-sm font-medium text-gray-700">صفحة فيسبوك</label>
+                        <input type="url" id="companyFacebook" name="companyFacebook" placeholder="مثال: https://facebook.com/your-company"
+                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="companyLinkedin" class="block text-sm font-medium text-gray-700">صفحة لينكدإن</label>
+                        <input type="url" id="companyLinkedin" name="companyLinkedin" placeholder="مثال: https://linkedin.com/company/your-company"
+                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employer">
                         السابق
                     </button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employer">
@@ -476,17 +500,18 @@
             steps.forEach((stepEl, index) => {
                 const stepNum = index + 1;
                 stepEl.classList.remove('active');
-                stepEl.classList.remove('hidden');
                 if (isEmployerFlow) {
-                    if (stepNum > 3) {
-                        stepEl.classList.add('hidden');
-                    }
+                    stepEl.classList.remove('hidden');
                 } else {
-                    if (stepNum > 4) {
-                        stepEl.classList.add('hidden');
-                    }
+                    stepEl.classList.remove('hidden');
                 }
             });
+
+            if (isEmployerFlow) {
+                document.getElementById('stepIndicator3').classList.remove('hidden');
+            } else {
+                document.getElementById('stepIndicator3').classList.remove('hidden');
+            }
             updateSteps(); // To activate the current step indicator
         }
 
@@ -500,68 +525,76 @@
                     stepEl.classList.remove('active');
                 }
             });
+            // Hide/show the last step for employer flow
+            if (isEmployerFlow) {
+                 document.getElementById('stepIndicator4').classList.remove('hidden');
+            } else {
+                 document.getElementById('stepIndicator4').classList.remove('hidden');
+            }
         }
 
         function nextStep(step) {
             let currentStepElement;
             let nextStepElement;
+            let stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
 
             if (step === 1) {
                 currentStepElement = document.getElementById('step1');
-                const formInputs = currentStepElement.querySelectorAll('input:required, select:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-
-                if (isStepValid) {
-                    if (!validatePassword()) {
-                        showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
-                        isStepValid = false;
-                    }
-                }
-
-                if (!isStepValid) return;
-
-                if (isEmployerFlow) {
-                    nextStepElement = document.getElementById('step2-employer');
-                } else {
-                    nextStepElement = document.getElementById('step2-employee');
-                }
             } else {
-                let stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
                 currentStepElement = document.getElementById(`step${step}-${stepIdSuffix}`);
-                const formInputs = currentStepElement.querySelectorAll('input:required, select:required, textarea:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-                if (!isStepValid) return;
-                nextStepElement = document.getElementById(`step${step + 1}-${stepIdSuffix}`);
+            }
+            
+            // Validate required fields for the current step
+            const formInputs = currentStepElement.querySelectorAll('input:required, select:required, textarea:required');
+            let isStepValid = true;
+            formInputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    isStepValid = false;
+                }
+            });
+
+            if (!isStepValid) return;
+
+            // Handle password validation for step 1
+            if (step === 1) {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                if (password !== confirmPassword) {
+                    showMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
+                    return;
+                }
+                if (!validatePassword()) {
+                    showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
+                    return;
+                }
             }
 
+            // Hide current step and show next step
             if (currentStepElement) currentStepElement.classList.add('hidden');
-            if (nextStepElement) nextStepElement.classList.remove('hidden');
             currentStep++;
+
+            // Determine the next step element
+            if (isEmployerFlow) {
+                nextStepElement = document.getElementById(`step${currentStep}-${stepIdSuffix}`);
+            } else {
+                nextStepElement = document.getElementById(`step${currentStep}-${stepIdSuffix}`);
+            }
+            
+            if (nextStepElement) nextStepElement.classList.remove('hidden');
             updateSteps();
         }
-        
+
         function prevStep(step) {
             let currentStepElement;
             let prevStepElement;
+            let stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
 
-            if (isEmployerFlow) {
-                currentStepElement = document.getElementById(`step${step}-employer`);
-                prevStepElement = (step === 2) ? document.getElementById('step1') : document.getElementById(`step${step - 1}-employer`);
+            currentStepElement = document.getElementById(`step${step}-${stepIdSuffix}`);
+            if (step === 2) {
+                prevStepElement = document.getElementById('step1');
             } else {
-                currentStepElement = document.getElementById(`step${step}-employee`);
-                prevStepElement = (step === 2) ? document.getElementById('step1') : document.getElementById(`step${step - 1}-employee`);
+                prevStepElement = document.getElementById(`step${step - 1}-${stepIdSuffix}`);
             }
 
             if (currentStepElement) currentStepElement.classList.add('hidden');
@@ -629,9 +662,13 @@
 
                     const jobListingElements = document.querySelectorAll('.job-listing');
                     const jobs = Array.from(jobListingElements).map(jobElement => {
+                        const skillsInput = jobElement.querySelector('input[name="jobSkills[]"]').value;
+                        const experienceInput = jobElement.querySelector('input[name="jobExperience[]"]').value;
                         return {
                             title: jobElement.querySelector('input[name="jobTitle[]"]').value,
                             description: jobElement.querySelector('textarea[name="jobDescription[]"]').value,
+                            skills: skillsInput ? skillsInput.split(',').map(s => s.trim()) : [],
+                            experience: experienceInput,
                             location: jobElement.querySelector('input[name="jobLocation[]"]').value,
                             requirements: jobElement.querySelector('textarea[name="jobRequirements[]"]').value,
                             addedAt: serverTimestamp()
@@ -647,8 +684,15 @@
                         companyName: formInputs['companyName'].value || null,
                         companyLogoUrl,
                         companyDescription: formInputs['companyDescription'].value || null,
-                        companyPhone: formInputs['companyPhone'].value || null,
-                        companyEmail: formInputs['companyEmail'].value || null,
+                        contact: {
+                            phone: formInputs['companyPhone'].value || null,
+                            email: formInputs['companyEmail'].value || null,
+                        },
+                        links: {
+                            website: formInputs['companyWebsite'].value || null,
+                            facebook: formInputs['companyFacebook'].value || null,
+                            linkedin: formInputs['companyLinkedin'].value || null,
+                        },
                         jobs
                     };
                 }
@@ -696,12 +740,15 @@
             messageDiv.classList.remove('hidden');
         }
 
-        // Job Listing Logic
         const addJobBtn = document.getElementById('addJobBtn');
         const jobsContainer = document.getElementById('jobsContainer');
+        let jobCounter = 0;
+
         addJobBtn.addEventListener('click', () => {
+             jobCounter++;
             const jobHtml = `
-                <div class="job-listing p-4 border rounded-lg">
+                <div class="job-listing p-4 border rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold mb-2">الوظيفة #${jobCounter}</h3>
                     <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">عنوان الوظيفة</label>
                         <input type="text" name="jobTitle[]" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
@@ -711,12 +758,20 @@
                         <textarea name="jobDescription[]" rows="3" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required></textarea>
                     </div>
                     <div class="mb-2">
+                        <label class="block text-sm font-medium text-gray-700">المهارات المطلوبة (فصل بفاصلة)</label>
+                        <input type="text" name="jobSkills[]" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="مثال: JavaScript, React, Tailwind">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-sm font-medium text-gray-700">الخبرة المطلوبة</label>
+                        <input type="text" name="jobExperience[]" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="مثال: خبرة 3 سنوات" required>
+                    </div>
+                    <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">موقع العمل</label>
                         <input type="text" name="jobLocation[]" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="مثال: الخرطوم، حي الرياض" required>
                     </div>
                     <div class="mb-2">
-                        <label class="block text-sm font-medium text-gray-700">المتطلبات</label>
-                        <textarea name="jobRequirements[]" rows="3" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="مثال: خبرة 3 سنوات في التسويق الرقمي" required></textarea>
+                        <label class="block text-sm font-medium text-gray-700">متطلبات إضافية</label>
+                        <textarea name="jobRequirements[]" rows="3" class="w-full pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="مثال: إجادة اللغة الإنجليزية" required></textarea>
                     </div>
                     <button type="button" class="remove-job-btn"><i class="fas fa-minus"></i> إزالة</button>
                 </div>
@@ -725,7 +780,7 @@
         });
 
         jobsContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('remove-job-btn')) {
+            if (e.target.closest('.remove-job-btn')) {
                 e.target.closest('.job-listing').remove();
             }
         });
@@ -737,49 +792,6 @@
         document.getElementById('prevBtn3-employee').addEventListener('click', () => prevStep(3));
         document.getElementById('nextBtn3-employee').addEventListener('click', () => nextStep(3));
         document.getElementById('prevBtn4-employee').addEventListener('click', () => prevStep(4));
-        document.getElementById('prevBtn2-employer').addEventListener('click', () => prevStep(2));
-        document.getElementById('nextBtn2-employer').addEventListener('click', () => nextStep(2));
-        document.getElementById('prevBtn3-employer').addEventListener('click', () => prevStep(3));
         
-        document.getElementById('submitBtn-employee').addEventListener('click', submitForm);
-        document.getElementById('submitBtn-employer').addEventListener('click', submitForm);
-        
-        // Event Listeners for dynamic inputs
-        const stateSelect = document.getElementById('state');
-        const citySelect = document.getElementById('city');
-        const areaSelect = document.getElementById('area');
-        const cityContainer = document.getElementById('cityContainer');
-        const areaContainer = document.getElementById('areaContainer');
-
-        stateSelect.addEventListener('change', function() {
-            const selectedState = this.value;
-            citySelect.innerHTML = '<option value="">اختر مدينة</option>';
-            cityContainer.classList.add('hidden');
-            areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
-            areaContainer.classList.add('hidden');
-            if (selectedState && sudanLocations[selectedState]) {
-                const citiesOrAreas = sudanLocations[selectedState];
-                if (Array.isArray(citiesOrAreas)) {
-                    citiesOrAreas.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        citySelect.appendChild(option);
-                    });
-                    cityContainer.classList.remove('hidden');
-                } else if (typeof citiesOrAreas === 'object') {
-                    for (const city in citiesOrAreas) {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        citySelect.appendChild(option);
-                    }
-                    cityContainer.classList.remove('hidden');
-                }
-            }
-        });
-
-        citySelect.addEventListener('change', function() {
-            const selectedState = stateSelect.value;
-            const selectedCity = this.value;
-            areaSelect.innerHTML = '<option
+        // Employer flow navigation
+        document.getElementById('prevBtn
