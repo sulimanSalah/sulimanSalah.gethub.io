@@ -794,4 +794,117 @@
         document.getElementById('prevBtn4-employee').addEventListener('click', () => prevStep(4));
         
         // Employer flow navigation
-        document.getElementById('prevBtn
+        document.getElementById('prevBtn2-employer').addEventListener('click', () => prevStep(2));
+        document.getElementById('nextBtn2-employer').addEventListener('click', () => nextStep(2));
+        document.getElementById('prevBtn3-employer').addEventListener('click', () => prevStep(3));
+        document.getElementById('nextBtn3-employer').addEventListener('click', () => nextStep(3));
+        document.getElementById('prevBtn4-employer').addEventListener('click', () => prevStep(4));
+        
+        document.getElementById('submitBtn-employee').addEventListener('click', submitForm);
+        document.getElementById('submitBtn-employer').addEventListener('click', submitForm);
+        
+        // Event Listeners for dynamic inputs
+        const stateSelect = document.getElementById('state');
+        const citySelect = document.getElementById('city');
+        const areaSelect = document.getElementById('area');
+        const cityContainer = document.getElementById('cityContainer');
+        const areaContainer = document.getElementById('areaContainer');
+
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            citySelect.innerHTML = '<option value="">اختر مدينة</option>';
+            cityContainer.classList.add('hidden');
+            areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
+            areaContainer.classList.add('hidden');
+            if (selectedState && sudanLocations[selectedState]) {
+                const citiesOrAreas = sudanLocations[selectedState];
+                if (Array.isArray(citiesOrAreas)) {
+                    citiesOrAreas.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                    cityContainer.classList.remove('hidden');
+                } else if (typeof citiesOrAreas === 'object') {
+                    for (const city in citiesOrAreas) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    }
+                    cityContainer.classList.remove('hidden');
+                }
+            }
+        });
+
+        citySelect.addEventListener('change', function() {
+            const selectedState = stateSelect.value;
+            const selectedCity = this.value;
+            areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
+            areaContainer.classList.add('hidden');
+            if (selectedState && selectedCity && sudanLocations[selectedState][selectedCity]) {
+                const areas = sudanLocations[selectedState][selectedCity];
+                if (areas && Array.isArray(areas)) {
+                    areas.forEach(area => {
+                        const option = document.createElement('option');
+                        option.value = area;
+                        option.textContent = area;
+                        areaSelect.appendChild(option);
+                    });
+                    areaContainer.classList.remove('hidden');
+                }
+            }
+        });
+
+        document.getElementById('skillsContainer').addEventListener('click', function(event) {
+            const currentSkillsCount = document.querySelectorAll('.skill-input').length;
+            const messageElement = document.getElementById('skillsLimitMessage');
+            if (event.target.closest('.add-skill-btn')) {
+                if (currentSkillsCount >= 6) {
+                    messageElement.classList.remove('hidden');
+                    return;
+                }
+                messageElement.classList.add('hidden');
+                const newSkillInputHtml = `
+                    <div class="mb-4 flex items-center">
+                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="button" class="remove-skill-btn mr-2 p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><i class="fas fa-minus"></i></button>
+                    </div>
+                `;
+                document.getElementById('skillsContainer').insertAdjacentHTML('beforeend', newSkillInputHtml);
+            }
+            if (event.target.closest('.remove-skill-btn')) {
+                event.target.closest('.mb-4').remove();
+                if (document.querySelectorAll('.skill-input').length < 6) {
+                    messageElement.classList.add('hidden');
+                }
+            }
+        });
+
+        document.getElementById('previousWorks').addEventListener('change', function(event) {
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = '';
+            const files = event.target.files;
+            if (files) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+        
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.employee-steps > div, .employer-steps > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById('step1').classList.remove('hidden');
+            updateStepIndicators();
+        });
+    </script>
+</body>
+</html>
