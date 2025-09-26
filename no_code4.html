@@ -54,13 +54,8 @@
             border: 2px solid transparent;
         }
 
-        .image-preview img, .document-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-left: 8px;
-        }
+        /* تم حذف الأنماط المتعلقة بـ .image-preview و .document-preview */
+
         .message {
             text-align: center;
             padding: 1rem;
@@ -183,11 +178,6 @@
                         <textarea id="bio" name="bio" rows="5" placeholder="وصف مختصر عنك وعن خبراتك"
                                   class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
-                     <div class="mb-4">
-                        <label for="profilePhoto" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
-                        <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
                     <div class="mb-4">
                         <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
                         <input type="tel" id="phone" name="phone" placeholder="مثال: 0912345678"
@@ -261,15 +251,6 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employee">
                     <h2 class="text-lg font-bold mb-4">الخطوة 4: الملفات والروابط</h2>
                     <div class="mb-4">
-                        <label for="previousWorks" class="block text-sm font-medium text-gray-700">صور من أعمالك السابقة (5 صور على الأقل)</label>
-                        <input type="file" id="previousWorks" name="previousWorks" multiple accept="image/*"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                        <div id="image-preview" class="flex flex-wrap mt-2"></div>
-                        <p class="text-sm text-gray-500 mt-1">
-                            **مطلوب:** تحميل 5 صور على الأقل.
-                        </p>
-                    </div>
-                    <div class="mb-4">
                         <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV) (اختياري)</label>
                         <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -304,11 +285,6 @@
                     <div class="mb-4">
                         <label for="companyPhone" class="block text-sm font-medium text-gray-700">رقم الهاتف (اختياري)</label>
                         <input type="tel" id="companyPhone" name="companyPhone" placeholder="مثال: 0912345678"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyLogo" class="block text-sm font-medium text-gray-700">الشعار / اللوجو</label>
-                        <input type="file" id="companyLogo" name="companyLogo" accept="image/*"
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div class="mb-4">
@@ -363,12 +339,6 @@
                         <input type="file" id="commercialRegister" name="commercialRegister" accept=".pdf,.doc,.docx"
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <div class="mb-4">
-                        <label for="companyPhotos" class="block text-sm font-medium text-gray-700">صور من مقر الشركة / النشاط (3 صور على الأقل)</label>
-                        <input type="file" id="companyPhotos" name="companyPhotos" multiple accept="image/*"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <div id="company-photos-preview" class="flex flex-wrap mt-2"></div>
-                    </div>
                     <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employer">
                         السابق
                     </button>
@@ -414,8 +384,10 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-        
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; // تم الإبقاء على استيراد storage لأجل رفع السجل التجاري (pdf)
+
+        // **ملاحظة:** تم الإبقاء على استيراد Firebase Storage لأنه يُستخدم لرفع ملفات أخرى مثل السجل التجاري (Commercial Register).
+
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -428,14 +400,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const storage = getStorage(app);
+        const storage = getStorage(app); // تم الإبقاء على المتغير
 
         let currentStep = 1;
         let isEmployerFlow = false;
         const form = document.getElementById('unifiedForm');
         const messageDiv = document.getElementById('message');
         const roleSelect = document.getElementById('role');
-        
+
         const sudanLocations = {
             "الخرطوم": {
                 "الخرطوم": ["السجانة", "العمارات", "الرياض", "الطائف", "المنشية", "بري", "الخرطوم 2", "الخرطوم 3", "السوق العربي", "حي المطار", "الشجرة", "جبرة", "الأزهري", "الصحافة", "الكلاكلة"],
@@ -463,7 +435,7 @@
             "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
             "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
         };
-        
+
         function validatePassword() {
             const password = document.getElementById('password').value;
             const checks = {
@@ -519,7 +491,7 @@
             currentStep = stepNumber;
             updateStepIndicator();
         }
-        
+
         function nextStep(step) {
             let currentStepElementId;
             let nextStepElementId;
@@ -567,7 +539,7 @@
             currentStep++;
             updateStepIndicator();
         }
-        
+
         function prevStep(step) {
             const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
             const currentStepElementId = `step${step}-${stepIdSuffix}`;
@@ -598,14 +570,7 @@
                 let userData;
 
                 if (role === 'employee') {
-                    const profilePhotoFile = formInputs['profilePhoto'].files[0];
-                    const previousWorksFiles = formInputs['previousWorks'].files;
-                    let profileImageUrl = null;
-                    let previousWorksUrls = [];
-                    if (profilePhotoFile) { profileImageUrl = await uploadFile(profilePhotoFile, `profile_photos/${user.uid}`); }
-                    if (previousWorksFiles.length > 0) {
-                        previousWorksUrls = await Promise.all(Array.from(previousWorksFiles).map(file => uploadFile(file, `previous_works/${user.uid}`)));
-                    }
+                    // تم حذف منطق جلب وتحميل صور الملف الشخصي والأعمال السابقة
 
                     const skillInputs = document.querySelectorAll('.skill-input');
                     const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
@@ -618,7 +583,7 @@
                         createdAt: serverTimestamp(),
                         headline: formInputs['headline'].value || null,
                         bio: formInputs['bio'].value || null,
-                        profileImageUrl,
+                        // تم حذف profileImageUrl,
                         contact: {
                             phone: formInputs['phone'].value || null,
                             location: { state: formInputs['state'].value || null, city: formInputs['city'].value || null, area: formInputs['area'].value || null }
@@ -627,27 +592,26 @@
                         experience: formInputs['experience'].value || null,
                         jobStatus: formInputs['jobStatus'].value || null,
                         links: { cv: formInputs['cvUrl'].value || null, linkedin: formInputs['linkedinUrl'].value || null },
-                        previousWorksUrls,
+                        // تم حذف previousWorksUrls,
                     };
-                    
-                } else if (role === 'employer') {
-                    const companyLogoFile = formInputs['companyLogo'].files[0];
-                    const commercialRegisterFile = formInputs['commercialRegister'].files[0];
-                    const companyPhotosFiles = formInputs['companyPhotos'].files;
 
-                    let companyLogoUrl = null;
+                } else if (role === 'employer') {
+                    // تم حذف منطق جلب وتحميل شعار الشركة وصور مقر الشركة
+                    const commercialRegisterFile = formInputs['commercialRegister'].files[0];
+
+                    // تم حذف companyLogoFile و companyPhotosFiles
                     let commercialRegisterUrl = null;
-                    let companyPhotosUrls = [];
+                    // تم حذف companyLogoUrl و companyPhotosUrls
                     let isVerified = false;
 
-                    if (companyLogoFile) { companyLogoUrl = await uploadFile(companyLogoFile, `company_logos/${user.uid}`); }
-                    if (commercialRegisterFile) { 
-                        commercialRegisterUrl = await uploadFile(commercialRegisterFile, `company_documents/${user.uid}`); 
+                    // if (companyLogoFile) { companyLogoUrl = await uploadFile(companyLogoFile, `company_logos/${user.uid}`); } // تم الحذف
+                    if (commercialRegisterFile) {
+                        commercialRegisterUrl = await uploadFile(commercialRegisterFile, `company_documents/${user.uid}`);
                         isVerified = true;
                     }
-                    if (companyPhotosFiles.length > 0) {
-                        companyPhotosUrls = await Promise.all(Array.from(companyPhotosFiles).map(file => uploadFile(file, `company_photos/${user.uid}`)));
-                    }
+                    // if (companyPhotosFiles.length > 0) { // تم الحذف
+                    //     companyPhotosUrls = await Promise.all(Array.from(companyPhotosFiles).map(file => uploadFile(file, `company_photos/${user.uid}`)));
+                    // }
 
                     userData = {
                         name: name,
@@ -659,7 +623,7 @@
                             name: formInputs['companyName'].value || null,
                             email: formInputs['companyEmail'].value || null,
                             phone: formInputs['companyPhone'].value || null,
-                            logoUrl: companyLogoUrl,
+                            // تم حذف logoUrl: companyLogoUrl,
                             businessType: formInputs['businessType'].value || null,
                             description: formInputs['companyDescription'].value || null,
                             location: {
@@ -671,7 +635,7 @@
                         verification: {
                             isVerified: isVerified,
                             commercialRegisterUrl: commercialRegisterUrl,
-                            companyPhotosUrls: companyPhotosUrls,
+                            // تم حذف companyPhotosUrls: companyPhotosUrls,
                         },
                         subRole: formInputs['employerType'].value
                     };
@@ -708,6 +672,7 @@
             }
         }
 
+        // تم الإبقاء على دالة uploadFile لرفع السجل التجاري
         async function uploadFile(file, filePath) {
             const storageRef = ref(storage, filePath + '/' + file.name);
             const uploadTask = await uploadBytes(storageRef, file);
@@ -780,7 +745,7 @@
                 }
             });
         }
-        
+
         populateLocations(employeeStateSelect, employeeCitySelect, employeeAreaSelect, employeeCityContainer, employeeAreaContainer);
         populateLocations(employerStateSelect, employerCitySelect, employerAreaSelect, employerCityContainer, employerAreaContainer);
 
@@ -822,40 +787,9 @@
             }
         });
 
-        document.getElementById('previousWorks').addEventListener('change', function(event) {
-            const previewContainer = document.getElementById('image-preview');
-            previewContainer.innerHTML = '';
-            const files = event.target.files;
-            if (files) {
-                Array.from(files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        previewContainer.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
-        });
+        // تم حذف مستمع الحدث الخاص بمعاينة 'previousWorks'
+        // تم حذف مستمع الحدث الخاص بمعاينة 'companyPhotos'
 
-        document.getElementById('companyPhotos').addEventListener('change', function(event) {
-            const previewContainer = document.getElementById('company-photos-preview');
-            previewContainer.innerHTML = '';
-            const files = event.target.files;
-            if (files) {
-                Array.from(files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        previewContainer.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
-        });
-        
         // Navigation Event Listeners
         document.getElementById('nextBtn1').addEventListener('click', () => nextStep(1));
         document.getElementById('nextBtn2-employee').addEventListener('click', () => nextStep(2));
@@ -871,10 +805,10 @@
         document.getElementById('prevBtn3-employer').addEventListener('click', () => prevStep(3));
         document.getElementById('prevBtn4-employer').addEventListener('click', () => prevStep(4));
         document.getElementById('prevBtn5-employer').addEventListener('click', () => prevStep(5));
-        
+
         document.getElementById('submitBtn-employee').addEventListener('click', submitForm);
         document.getElementById('submitBtn-employer').addEventListener('click', submitForm);
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.form-card').forEach(el => el.classList.add('hidden'));
             document.getElementById('step1').classList.remove('hidden');
