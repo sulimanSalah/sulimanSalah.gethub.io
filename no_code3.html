@@ -3,157 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">ملف الشركة (للتجربة)</title>
+    <title>قائمة أصحاب العمل - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f5f7fa; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        /* تصميم بسيط للبطاقة يتناسب مع الصفحة الأصلية */
+        .employer-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .employer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .error-message {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+        }
     </style>
 </head>
-<body class="p-4 sm:p-8">
+<body class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-8 text-center">قائمة الشركات وأصحاب العمل</h1>
 
-    <div id="loading-spinner" class="text-center mt-12 text-blue-600 hidden">
-        <i class="fas fa-spinner fa-spin fa-3x"></i>
-        <p class="mt-2 text-gray-700">جاري تحميل بيانات الشركة...</p>
+        <div id="statusMessage" class="text-center text-lg text-gray-600 mb-6">
+            جاري تحميل البيانات... <i class="fas fa-spinner fa-spin mr-2"></i>
+        </div>
+        
+        <div id="employersListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+
     </div>
 
-    <div id="company-profile" class="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-6 sm:p-10">
+    <script type="module">
+        // 1. استيراد مكتبات Firebase الضرورية
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        <div class="flex flex-col sm:flex-row items-center sm:items-start space-x-0 sm:space-x-6 pb-6 border-b border-gray-200">
-            <img id="company-logo" src="https://via.placeholder.com/150/F5F7FA/CCCCCC?text=LOGO" alt="Company Logo" 
-                 class="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover mb-4 sm:mb-0">
-            
-            <div class="text-center sm:text-right flex-grow">
-                <h1 class="text-4xl font-extrabold text-gray-900 flex items-center justify-center sm:justify-start">
-                    <span id="company-name">اسم الشركة</span>
-                    <span id="verified-badge" class="mr-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full hidden shadow-md">
-                        <i class="fas fa-check-circle ml-1"></i> موثقة
-                    </span>
-                </h1>
-                <p class="text-xl text-gray-600 mt-1"><i class="fas fa-industry ml-2 text-blue-500"></i> <span id="business-type">نوع النشاط</span></p>
-            </div>
-        </div>
-        
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-1 mb-4 text-gray-800">نبذة عن الشركة</h2>
-            <p id="company-description" class="text-gray-700 leading-relaxed text-lg italic">
-                الوصف المختصر وعدد الموظفين/الخدمات...
-            </p>
-        </div>
-        
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-1 mb-4 text-gray-800">الموقع والتواصل</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-                <div class="flex items-center">
-                    <i class="fas fa-map-marker-alt ml-3 text-2xl text-red-500"></i>
-                    <span class="font-semibold">الموقع الجغرافي:</span> 
-                    <span id="company-location" class="mr-2"></span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-envelope ml-3 text-2xl text-blue-500"></i>
-                    <span class="font-semibold">البريد الرسمي:</span> 
-                    <span id="company-email" class="mr-2"></span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-phone-alt ml-3 text-2xl text-green-500"></i>
-                    <span class="font-semibold">رقم الهاتف:</span> 
-                    <span id="company-phone" class="mr-2"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-1 mb-4 text-gray-800">صور من مقر الشركة</h2>
-            <div id="company-photos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <p id="no-photos-msg" class="text-gray-500 hidden">لا توجد صور متاحة لمقر الشركة.</p>
-                </div>
-        </div>
-
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold border-b-2 border-blue-500 pb-1 mb-4 text-gray-800">الوظائف الشاغرة حالياً</h2>
-            <div id="job-listings">
-                <p class="text-gray-500">سيتم عرض قائمة بالوظائف المتاحة هنا.</p>
-            </div>
-        </div>
-        
-    </div>
-
-    <script>
-        // 1. البيانات الوهمية (Mock Data)
-        const mockCompanyData = {
-            companyInfo: {
-                name: "شركة التقنية للخدمات المتقدمة",
-                email: "info@techadvance.com",
-                phone: "0912345678",
-                logoUrl: "https://via.placeholder.com/150/4F46E5/FFFFFF?text=TA",
-                businessType: "تكنولوجيا المعلومات والبرمجة",
-                description: "نحن شركة رائدة في تطوير تطبيقات الويب والجوال وحلول الذكاء الاصطناعي. نؤمن بالابتكار ونعمل على توفير بيئة عمل محفزة لفريقنا من المبرمجين والمصممين.",
-                location: {
-                    state: "الخرطوم",
-                    city: "الخرطوم",
-                    area: "الرياض"
-                }
-            },
-            verification: {
-                isVerified: true,
-                // صور وهمية لتظهر في الواجهة
-                companyPhotosUrls: [
-                    "https://via.placeholder.com/400x300/4B5563/FFFFFF?text=مقر+الشركة+1",
-                    "https://via.placeholder.com/400x300/374151/FFFFFF?text=مقر+الشركة+2",
-                    "https://via.placeholder.com/400x300/1F2937/FFFFFF?text=مقر+الشركة+3"
-                ]
-            }
+        // 2. تكوين Firebase - يجب أن يتطابق مع صفحة التسجيل
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.appspot.com",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          measurementId: "G-98GQGZS09W"
         };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        // 2. دالة عرض البيانات
-        function displayCompanyData(data) {
-            // تحديث العنوان
-            document.getElementById('page-title').textContent = `${data.companyInfo.name} | ملف الشركة`;
-            document.getElementById('company-name').textContent = data.companyInfo.name || 'اسم الشركة';
-            document.getElementById('business-type').textContent = data.companyInfo.businessType || 'نوع النشاط';
-            document.getElementById('company-description').textContent = data.companyInfo.description || 'لا يوجد وصف متاح.';
+        const employersListContainer = document.getElementById('employersListContainer');
+        const statusMessage = document.getElementById('statusMessage');
 
-            // بيانات الاتصال والموقع
-            document.getElementById('company-email').textContent = data.companyInfo.email || 'غير متوفر';
-            document.getElementById('company-phone').textContent = data.companyInfo.phone || 'غير متوفر';
-            
-            const location = data.companyInfo.location;
-            document.getElementById('company-location').textContent = 
-                `${location.area || ''}${location.area ? '، ' : ''}${location.city || ''}${location.city ? '، ' : ''}${location.state || 'غير محدد'}`;
+        // 3. دالة جلب وعرض بيانات أصحاب العمل
+        async function fetchEmployers() {
+            try {
+                // الاتصال بمجموعة 'employers'
+                const employersCollectionRef = collection(db, "employers");
+                
+                // جلب جميع الوثائق (documents)
+                const snapshot = await getDocs(employersCollectionRef);
+                
+                // مسح رسالة التحميل
+                statusMessage.classList.add('hidden');
+                
+                if (snapshot.empty) {
+                    statusMessage.textContent = "لا توجد شركات مسجلة حالياً.";
+                    statusMessage.classList.remove('hidden');
+                    return;
+                }
 
-            // اللوجو (الشعار)
-            if (data.companyInfo.logoUrl) {
-                document.getElementById('company-logo').src = data.companyInfo.logoUrl;
-            }
+                // المرور على كل سجل وإنشاء بطاقة العرض
+                snapshot.forEach(doc => {
+                    const employerData = doc.data();
+                    
+                    // قراءة البيانات من حقل companyInfo
+                    const companyName = employerData.companyInfo?.name || "اسم غير متوفر";
+                    const description = employerData.companyInfo?.description || "لا يوجد وصف حالياً.";
+                    const businessType = employerData.companyInfo?.businessType || "نوع النشاط غير محدد";
+                    const logoUrl = employerData.companyInfo?.logoUrl || 'https://via.placeholder.com/80?text=Logo'; // صورة افتراضية
 
-            // شارة التوثيق
-            if (data.verification && data.verification.isVerified) {
-                document.getElementById('verified-badge').classList.remove('hidden');
-            }
-
-            // صور المقر
-            const photosContainer = document.getElementById('company-photos-container');
-            const photosUrls = data.verification?.companyPhotosUrls || [];
-            
-            if (photosUrls.length > 0) {
-                photosUrls.forEach(url => {
-                    const div = document.createElement('div');
-                    div.innerHTML = `<img src="${url}" alt="Company Photo" class="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">`;
-                    photosContainer.appendChild(div);
+                    const cardHtml = `
+                        <div class="employer-card bg-white rounded-xl p-6 shadow-md flex flex-col items-center text-center">
+                            <img src="${logoUrl}" alt="${companyName} Logo" class="w-20 h-20 object-cover rounded-full mb-4 border-2 border-blue-500">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${companyName}</h3>
+                            <p class="text-sm text-blue-600 font-medium mb-3">${businessType}</p>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">${description}</p>
+                            <a href="#" class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition duration-300">عرض التفاصيل</a>
+                        </div>
+                    `;
+                    employersListContainer.insertAdjacentHTML('beforeend', cardHtml);
                 });
-            } else {
-                document.getElementById('no-photos-msg').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("خطأ في جلب بيانات أصحاب العمل:", error);
+                // عرض رسالة خطأ واضحة للمستخدم
+                statusMessage.textContent = `فشل في تحميل البيانات. يرجى التحقق من اتصال Firebase.`;
+                statusMessage.classList.remove('hidden');
+                statusMessage.classList.add('error-message');
             }
         }
 
-        // 3. محاكاة تحميل البيانات عند بدء تشغيل الصفحة
-        document.addEventListener('DOMContentLoaded', () => {
-            // محاكاة تأخير بسيط للتحميل (يمكنك إزالته)
-            setTimeout(() => {
-                displayCompanyData(mockCompanyData);
-            }, 50);
-        });
+        // بدء جلب البيانات عند تحميل محتوى الصفحة بالكامل
+        document.addEventListener('DOMContentLoaded', fetchEmployers);
+
     </script>
 </body>
 </html>
