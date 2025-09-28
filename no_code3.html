@@ -117,15 +117,15 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
-        // ** تأكد من أن هذا التكوين مطابق للتكوين في صفحة التسجيل **
+        // 🚨 التكوين الموحد والـ API الذي تم التأكد منه 
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
           projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.appspot.com",
+          storageBucket: "shaglni-c64c0.firebasestorage.app", 
           messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
+          appId: "1:768887356636:web:fe1a49e39f9dc2889c8819",
+          measurementId: "G-TVXYPC75BL" 
         };
         
         const app = initializeApp(firebaseConfig);
@@ -166,14 +166,17 @@
         async function fetchEmployers() {
             loadingIndicator.classList.remove('hidden');
             try {
-                const querySnapshot = await getDocs(collection(db, "employers"));
+                // ✅ **التصحيح الرئيسي**: تم تغيير اسم المجموعة من "employers" إلى "All_jops"
+                const querySnapshot = await getDocs(collection(db, "All_jops")); 
+                
                 allEmployers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 // فرز الشركات حسب الأحدث (افتراض أن لديك حقل 'createdAt' أو 'timestamp')
                 allEmployers.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)); 
                 filterAndRenderEmployers();
             } catch (error) {
                 console.error("خطأ في جلب الشركات:", error);
-                employersList.innerHTML = '<div class="text-center text-red-500 p-8 error-message">حدث خطأ أثناء تحميل بيانات الشركات. تأكد من إعدادات Firebase.</div>';
+                // عرض رسالة خطأ أكثر وضوحاً
+                employersList.innerHTML = `<div class="text-center text-red-500 p-8 error-message">حدث خطأ أثناء تحميل بيانات الشركات: ${error.message}. تأكد من قواعد الأمان.</div>`;
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
