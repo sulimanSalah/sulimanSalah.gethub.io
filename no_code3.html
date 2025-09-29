@@ -63,7 +63,7 @@
     </style>
 </head>
 <body class="min-h-screen p-8">
-    
+
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
@@ -79,7 +79,7 @@
                 </div>
         </div>
     </nav>
-    
+
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col md:flex-row justify-between items-center mb-8">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الشركات وأصحاب العمل</h1>
@@ -112,11 +112,11 @@
             <div id="noEmployersFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على شركات.</div>
         </div>
     </div>
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        
+
         // 🚨 التكوين الموحد والـ API الذي تم التأكد منه 
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -127,7 +127,7 @@
           appId: "1:768887356636:web:fe1a49e39f9dc2889c8819",
           measurementId: "G-TVXYPC75BL" 
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -137,7 +137,7 @@
         const searchInput = document.getElementById('searchInput');
         const stateFilter = document.getElementById('stateFilter');
         const cityFilter = document.getElementById('cityFilter');
-        
+
         let allEmployers = [];
 
         // بيانات المواقع (للتصفية - تم نسخها من الكود الأصلي)
@@ -152,7 +152,7 @@
             "كسلا": ["كسلا", "حلفا الجديدة", "القضارف"],
             // ... يمكنك إضافة بقية الولايات هنا
         };
-        
+
         function populateStateFilter() {
             const stateNames = Object.keys(sudanLocations);
             stateNames.forEach(state => {
@@ -166,9 +166,13 @@
         async function fetchEmployers() {
             loadingIndicator.classList.remove('hidden');
             try {
-                // ✅ **التصحيح الرئيسي**: تم تغيير اسم المجموعة من "employers" إلى "All_jops"
+                // ✅ **اسم المجموعة**: "All_jops"
                 const querySnapshot = await getDocs(collection(db, "All_jops")); 
-                
+
+                // ❗ ملاحظة: "All_jops" تحتوي على الشركات والوظائف. هذا الكود سيعرض كل المستندات.
+                // إذا كنت تريد الشركات فقط، يجب أن يكون هناك حقل يحدد النوع (مثل role: 'employer').
+                // نفترض حالياً أن كل مستند في All_jops يمثل شركة أو صاحب عمل (كما يوحي السياق).
+
                 allEmployers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 // فرز الشركات حسب الأحدث (افتراض أن لديك حقل 'createdAt' أو 'timestamp')
                 allEmployers.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)); 
@@ -189,29 +193,41 @@
             } else {
                 noEmployersFound.classList.add('hidden');
                 employers.forEach(employer => {
-                    // افتراض أن البيانات منظمة داخل حقل companyInfo
+                    // افتراض أن بيانات الشركة منظمة داخل حقل companyInfo كما في كود التسجيل
                     const info = employer.companyInfo || {};
                     const verification = employer.verification || {};
-                    
-                    const companyName = info.name || 'شركة غير معروفة';
+
+                    const companyName = info.name || employer.name || 'شركة غير معروفة';
                     const businessType = info.businessType || 'نشاط غير محدد';
                     const description = info.description || 'لا يوجد وصف متاح لهذه الشركة.';
+                    // ✅ **التعديل الرئيسي للصور**: استخدام logoUrl مباشرة من info
+                    // إذا لم يتم العثور على الرابط، يتم استخدام صورة Placeholder
                     const logoUrl = info.logoUrl || 'https://via.placeholder.com/60?text=Logo'; 
-                    
+
                     const isVerified = verification.isVerified === true;
                     const statusClass = isVerified ? 'status-verified' : 'status-unverified';
                     const statusText = isVerified ? 'شركة موثقة ✅' : 'غير موثقة ⚠️';
 
                     const companyCity = info.location?.city || 'غير محدد';
                     const companyState = info.location?.state || 'غير محدد';
-                    const locationText = `${companyCity}، ${companyState}`;
-
-                    // يمكن إضافة حقل الـ subRole كتاغ ثانوي إذا أردت
-                    const subRoleTag = employer.subRole 
-                        ? `<span class="skill-tag">${employer.subRole === 'hiring' ? 'توظيف شواغر' : 'صاحب عمل فردي'}</span>`
+                    
+                    // يتم عرض الولاية والمدينة فقط إذا كانا محددين 
+                    let locationText = 'الموقع غير محدد';
+                    if (companyState !== 'غير محدد' && companyCity !== 'غير محدد') {
+                        locationText = `${companyCity}، ${companyState}`;
+                    } else if (companyState !== 'غير محدد') {
+                        locationText = companyState;
+                    } else if (companyCity !== 'غير محدد') {
+                        locationText = companyCity;
+                    }
+                    
+                    // يمكن إضافة حقل الـ subRole كتاغ ثانوي 
+                    const subRoleText = employer.subRole === 'hiring' ? 'توظيف شواغر' : employer.subRole === 'individual' ? 'صاحب عمل فردي' : '';
+                    const subRoleTag = subRoleText
+                        ? `<span class="skill-tag">${subRoleText}</span>`
                         : '';
-                        
-                    // رابط لصفحة تفاصيل الشركة (يمكنك إنشائها لاحقاً)
+
+                    // رابط لصفحة تفاصيل الشركة
                     const detailsUrl = `employer-profile.html?id=${employer.id}`;
 
                     const employerCard = document.createElement('div');
@@ -273,7 +289,7 @@
 
             renderEmployers(filteredEmployers);
         }
-        
+
         // ربط أحداث التصفية والبحث
         searchInput.addEventListener('input', filterAndRenderEmployers);
 
@@ -290,7 +306,7 @@
                 } else if (typeof citiesOrAreas === 'object') {
                     cities = Object.keys(citiesOrAreas);
                 }
-                
+
                 cities.forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
