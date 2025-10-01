@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>الشركات وأصحاب العمل - شغلني</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
@@ -24,10 +24,13 @@
             background-color: #f5f7fa;
         }
 
-        /* تصميم البطاقة المشابه لبطاقة الموظف */
         .employer-card {
+            position: relative;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem;
+            overflow: hidden;
+            background-color: white;
         }
 
         .employer-card:hover {
@@ -35,30 +38,98 @@
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* لضمان عرض صور Cloudinary بشكل صحيح */
-        .employer-card img {
+        /* الصورة في الأعلى - أصبحت الشعار */
+        .employer-card img.company-image {
+            width: 100%;
+            height: 180px;
             object-fit: cover;
+            display: block;
         }
 
-        .skill-tag {
-            display: inline-flex;
+        .company-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .job-title-location {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            background-color: #eef2ff;
-            color: #4338ca;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+        }
+
+        .job-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .location i {
+            margin-left: 0.25rem;
+            color: var(--primary);
+        }
+
+        /* نوع الوظيفة في الأعلى يمين */
+        .job-type-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--secondary);
+            color: white;
+            font-weight: 600;
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
-            font-size: 0.75rem;
-            margin: 0.125rem;
+            font-size: 0.875rem;
+            user-select: none;
+            white-space: nowrap;
+            z-index: 10;
         }
 
-        .status-verified {
-            background-color: #d1fae5;
-            color: #065f46;
+        /* أيقونة التوثيق بجانب اسم الشركة */
+        .verified-icon {
+            color: #1877f2;
+            margin-left: 0.5rem;
+            vertical-align: middle;
         }
-        .status-unverified {
-            background-color: #fef3c7;
-            color: #92400e;
+
+        /* مستطيل عرض التفاصيل أسفل البطاقة */
+        .details-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-radius: 0 0 1rem 1rem;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            user-select: none;
         }
+
+        .details-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .details-button i {
+            margin-left: 0.5rem;
+        }
+
+        /* تصميم رسالة الخطأ */
         .error-message {
             background-color: #fee2e2;
             color: #991b1b;
@@ -67,249 +138,246 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-8">
+<body class="min-h-screen p-8 bg-gray-100">
 
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div class="text-2xl font-bold text-blue-600">شغلني</div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
-                    <a href="#" class="text-blue-600 font-bold">عرض الشركات</a>
-                    <a href="signup.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">تسجيل حساب</a>
-                </div>
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                <div class="text-2xl font-bold text-blue-600">شغلني</div>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+                <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الرئيسية</a>
+                <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">عرض الوظائف</a>
+                <a href="#" class="text-blue-600 font-bold">عرض الشركات</a>
+                <a href="signup.html" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">تسجيل حساب</a>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الشركات وأصحاب العمل</h1>
-            <div class="relative w-full md:w-1/3">
-                <input type="text" id="searchInput" placeholder="ابحث عن شركة..."
-                       class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
-                </div>
+<div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4 md:mb-0">الشركات وأصحاب العمل</h1>
+        <div class="relative w-full md:w-1/3">
+            <input type="text" id="searchInput" placeholder="ابحث عن شركة..."
+                   class="w-full pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right" />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
             </div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:space-x-4 rtl:space-x-reverse mb-6">
-            <div class="w-full md:w-1/2 mb-4 md:mb-0">
-                <label for="stateFilter" class="block text-sm font-medium text-gray-700">فلتر حسب الولاية:</label>
-                <select id="stateFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
-                    <option value="">جميع الولايات</option>
-                    </select>
-            </div>
-            <div class="w-full md:w-1/2">
-                <label for="cityFilter" class="block text-sm font-medium text-gray-700">فلتر حسب المدينة:</label>
-                <select id="cityFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md" disabled>
-                    <option value="">جميع المدن</option>
-                </select>
-            </div>
-        </div>
-
-        <div id="employersList" class="space-y-4">
-            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل الشركات... <i class="fas fa-spinner fa-spin mr-2"></i></div>
-            <div id="noEmployersFound" class="hidden text-center text-lg text-gray-500 p-8">لم يتم العثور على شركات.</div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <div class="flex flex-col md:flex-row md:space-x-4 rtl:space-x-reverse mb-6">
+        <div class="w-full md:w-1/2 mb-4 md:mb-0">
+            <label for="stateFilter" class="block text-sm font-medium text-gray-700">فلتر حسب الولاية:</label>
+            <select id="stateFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                <option value="">جميع الولايات</option>
+            </select>
+        </div>
+        <div class="w-full md:w-1/2">
+            <label for="cityFilter" class="block text-sm font-medium text-gray-700">فلتر حسب المدينة:</label>
+            <select id="cityFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md" disabled>
+                <option value="">جميع المدن</option>
+            </select>
+        </div>
+    </div>
+    
+    <div id="employersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div id="loadingIndicator" class="col-span-full text-center text-lg text-gray-500 p-8">جاري تحميل الشركات... <i class="fas fa-spinner fa-spin mr-2"></i></div>
+        <div id="noEmployersFound" class="hidden col-span-full text-center text-lg text-gray-500 p-8">لم يتم العثور على شركات.</div>
+    </div>
+</div>
 
-        // 🚨 التكوين الموحد
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.firebasestorage.app", 
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:fe1a49e39f9dc2889c8819",
-          measurementId: "G-TVXYPC75BL" 
-        };
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+      authDomain: "shaglni-c64c0.firebaseapp.com",
+      projectId: "shaglni-c64c0",
+      storageBucket: "shaglni-c64c0.firebasestorage.app",
+      messagingSenderId: "768887356636",
+      appId: "1:768887356636:web:fe1a49e39f9dc2889c8819",
+      measurementId: "G-TVXYPC75BL"
+    };
 
-        const employersList = document.getElementById('employersList');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const noEmployersFound = document.getElementById('noEmployersFound');
-        const searchInput = document.getElementById('searchInput');
-        const stateFilter = document.getElementById('stateFilter');
-        const cityFilter = document.getElementById('cityFilter');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        let allEmployers = [];
+    const employersList = document.getElementById('employersList');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const noEmployersFound = document.getElementById('noEmployersFound');
+    const searchInput = document.getElementById('searchInput');
+    const stateFilter = document.getElementById('stateFilter');
+    const cityFilter = document.getElementById('cityFilter');
 
-        // بيانات المواقع (بدون تغيير)
-        const sudanLocations = {
-            "الخرطوم": {
-                "الخرطوم": ["السجانة", "العمارات", "الرياض"],
-                "أم درمان": ["العباسية", "بيت المال", "الموردة"],
-                "الخرطوم بحري": ["كافوري", "شمبات", "الشعبية"],
-            },
-            "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل"],
-            "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر"],
-            "كسلا": ["كسلا", "حلفا الجديدة", "القضارف"],
-            // ... يمكنك إضافة بقية الولايات هنا
-        };
+    let allEmployers = [];
 
-        function populateStateFilter() {
-            const stateNames = Object.keys(sudanLocations);
-            stateNames.forEach(state => {
+    const sudanLocations = {
+        "الخرطوم": {
+            "الخرطوم": ["السجانة", "العمارات", "الرياض"],
+            "أم درمان": ["العباسية", "بيت المال", "الموردة"],
+            "الخرطوم بحري": ["كافوري", "شمبات", "الشعبية"],
+        },
+        "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل"],
+        "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر"],
+        "كسلا": ["كسلا", "حلفا الجديدة", "القضارف"],
+    };
+
+    function populateStateFilter() {
+        const stateNames = Object.keys(sudanLocations);
+        stateNames.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = `ولاية ${state}`;
+            stateFilter.appendChild(option);
+        });
+    }
+    
+    function updateCityFilter() {
+        const selectedState = stateFilter.value;
+        cityFilter.innerHTML = '<option value="">جميع المدن</option>';
+        if (!selectedState) {
+            cityFilter.disabled = true;
+            return;
+        }
+        cityFilter.disabled = false;
+        const cities = sudanLocations[selectedState];
+        if (Array.isArray(cities)) {
+            cities.forEach(city => {
                 const option = document.createElement('option');
-                option.value = state;
-                option.textContent = `ولاية ${state}`;
-                stateFilter.appendChild(option);
+                option.value = city;
+                option.textContent = city;
+                cityFilter.appendChild(option);
+            });
+        } else if (typeof cities === 'object') {
+            Object.keys(cities).forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityFilter.appendChild(option);
             });
         }
+    }
 
-        async function fetchEmployers() {
-            loadingIndicator.classList.remove('hidden');
-            try {
-                // ✅ **التعديل الهام**: تصفية النتائج لعرض مستندات الشركات فقط (إذا كان لديك حقل 'role')
-                // إذا كنت متأكد أن مجموعة All_jops تحتوي على الشركات فقط، يمكن إزالة سطر .where
-                const employersQuery = query(
-                    collection(db, "All_jops"),
-                    where("role", "==", "employer")
-                );
+    async function fetchEmployers() {
+        loadingIndicator.classList.remove('hidden');
+        try {
+            const employersQuery = query(
+                collection(db, "All_jops"),
+                where("role", "==", "employer")
+            );
 
-                const querySnapshot = await getDocs(employersQuery); 
+            const querySnapshot = await getDocs(employersQuery);
 
-                allEmployers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // فرز الشركات حسب الأحدث (افتراض أن لديك حقل 'createdAt' أو 'timestamp')
-                allEmployers.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)); 
-                filterAndRenderEmployers();
-            } catch (error) {
-                console.error("خطأ في جلب الشركات:", error);
-                // عرض رسالة خطأ أكثر وضوحاً
-                employersList.innerHTML = `<div class="text-center text-red-500 p-8 error-message">حدث خطأ أثناء تحميل بيانات الشركات: ${error.message}. تأكد من قواعد الأمان.</div>`;
-            } finally {
-                loadingIndicator.classList.add('hidden');
-            }
-        }
-
-        function renderEmployers(employers) {
-            employersList.innerHTML = '';
-            if (employers.length === 0) {
-                noEmployersFound.classList.remove('hidden');
-            } else {
-                noEmployersFound.classList.add('hidden');
-                employers.forEach(employer => {
-                    // افتراض أن البيانات منظمة داخل حقل companyInfo
-                    const info = employer.companyInfo || {};
-                    const verification = employer.verification || {};
-
-                    const companyName = info.name || employer.name || 'شركة غير معروفة';
-                    const businessType = info.businessType || 'نشاط غير محدد';
-                    const description = info.description || 'لا يوجد وصف متاح لهذه الشركة.';
-                    
-                    // ✅ **التعديل للصور**: التحقق من وجود الرابط Cloudinary
-                    const defaultLogo = 'https://via.placeholder.com/60?text=Logo'; 
-                    // إذا كان الرابط موجودًا وتم رفعه على Cloudinary، فسيظهر
-                    const logoUrl = info.logoUrl && info.logoUrl.startsWith('http') ? info.logoUrl : defaultLogo;
-
-                    const isVerified = verification.isVerified === true;
-                    const statusClass = isVerified ? 'status-verified' : 'status-unverified';
-                    const statusText = isVerified ? 'شركة موثقة ✅' : 'غير موثقة ⚠️';
-
-                    const companyCity = info.location?.city || 'غير محدد';
-                    const companyState = info.location?.state || 'غير محدد';
-                    
-                    let locationText = 'الموقع غير محدد';
-                    if (companyState !== 'غير محدد' && companyCity !== 'غير محدد') {
-                        locationText = `${companyCity}، ${companyState}`;
-                    } else if (companyState !== 'غير محدد') {
-                        locationText = companyState;
-                    } else if (companyCity !== 'غير محدد') {
-                        locationText = companyCity;
-                    }
-
-                    const subRoleText = employer.subRole === 'hiring' ? 'توظيف شواغر' : employer.subRole === 'individual' ? 'صاحب عمل فردي' : '';
-                    const subRoleTag = subRoleText
-                        ? `<span class="skill-tag">${subRoleText}</span>`
-                        : '';
-
-                    const detailsUrl = `employer-profile.html?id=${employer.id}`;
-
-                    const employerCard = document.createElement('div');
-                    employerCard.className = 'bg-white rounded-xl shadow-sm employer-card overflow-hidden p-6';
-
-                    employerCard.innerHTML = `
-                        <div class="flex flex-col md:flex-row md:items-start md:justify-between">
-                            <div class="flex items-start space-x-4 rtl:space-x-reverse mb-4 md:mb-0">
-                                <img src="${logoUrl}" alt="${companyName} Logo" class="w-14 h-14 rounded-full object-cover">
-                                <div>
-                                    <h3 class="font-bold text-lg">${companyName}</h3>
-                                    <p class="text-gray-600 text-sm mt-1">${businessType}</p>
-                                    <div class="flex items-center text-gray-500 text-sm mt-2">
-                                        <i class="fas fa-map-marker-alt ml-1"></i>
-                                        <span>${locationText}</span>
-                                        ${subRoleTag ? `<span class="mx-2">•</span>` + subRoleTag : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex flex-col items-end">
-                                <span class="px-3 py-1 rounded-full ${statusClass} text-xs font-semibold mb-2">${statusText}</span>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-gray-700 mb-4 line-clamp-3">${description}</p>
-                            
-                            <div class="flex flex-wrap items-center justify-end">
-                                <a href="${detailsUrl}"
-                                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                   <i class="fas fa-info-circle ml-1"></i> عرض التفاصيل
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    employersList.appendChild(employerCard);
-                });
-            }
-        }
-
-        function filterAndRenderEmployers() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const selectedState = stateFilter.value;
-            const selectedCity = cityFilter.value;
-
-            const filteredEmployers = allEmployers.filter(employer => {
-                const info = employer.companyInfo || {};
-                const companyCity = info.location?.city || '';
-                const companyState = info.location?.state || '';
-
-                const employeeText = `${info.name || ''} ${info.businessType || ''} ${info.description || ''} ${companyState || ''} ${companyCity || ''}`.toLowerCase();
-                const matchesSearch = employeeText.includes(searchTerm);
-
-                const matchesState = selectedState === '' || (companyState === selectedState);
-                const matchesCity = selectedCity === '' || (companyCity === selectedCity);
-
-                return matchesSearch && matchesState && matchesCity;
-            });
-
-            renderEmployers(filteredEmployers);
-        }
-
-        // ربط أحداث التصفية والبحث
-        searchInput.addEventListener('input', filterAndRenderEmployers);
-        stateFilter.addEventListener('change', () => {
-            // منطق تحديث المدينة...
-            // ... (بقية الدالة هنا)
+            allEmployers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            allEmployers.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             filterAndRenderEmployers();
-        });
-        cityFilter.addEventListener('change', filterAndRenderEmployers);
+        } catch (error) {
+            console.error("خطأ في جلب الشركات:", error);
+            employersList.innerHTML = `<div class="col-span-full text-center text-red-500 p-8 error-message">حدث خطأ أثناء تحميل بيانات الشركات: ${error.message}. تأكد من قواعد الأمان.</div>`;
+        } finally {
+            loadingIndicator.classList.add('hidden');
+        }
+    }
 
-        // تشغيل الدوال عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', () => {
-            populateStateFilter();
-            fetchEmployers();
+    function renderEmployers(employers) {
+        employersList.innerHTML = '';
+        if (employers.length === 0) {
+            noEmployersFound.classList.remove('hidden');
+        } else {
+            noEmployersFound.classList.add('hidden');
+            employers.forEach(employer => {
+                const info = employer.companyInfo || {};
+                const verification = employer.verification || {};
+
+                const companyName = info.name || employer.name || 'شركة غير معروفة';
+                const businessType = info.businessType || 'نشاط غير محدد';
+                const jobTitle = employer.jobTitle || 'وظيفة غير محددة';
+
+                const defaultLogo = 'https://placeholder-image-service.onrender.com/image/400x180?prompt=Company+logo+with+professional+design&id=b927e42e-55a5-411b-8a71-8d90092dbc25'; 
+                const logoUrl = info.logoUrl && info.logoUrl.startsWith('http') ? info.logoUrl : defaultLogo;
+
+                const isVerified = verification.isVerified === true;
+
+                const companyCity = info.location?.city || 'غير محدد';
+                const companyState = info.location?.state || 'غير محدد';
+
+                let locationText = 'الموقع غير محدد';
+                if (companyState !== 'غير محدد' && companyCity !== 'غير محدد') {
+                    locationText = `${companyCity}، ${companyState}`;
+                } else if (companyState !== 'غير محدد') {
+                    locationText = companyState;
+                } else if (companyCity !== 'غير محدد') {
+                    locationText = companyCity;
+                }
+
+                const detailsUrl = `employer-profile.html?id=${employer.id}`;
+
+                const employerCard = document.createElement('div');
+                employerCard.className = 'employer-card';
+
+                employerCard.innerHTML = `
+                    <img src="${logoUrl}" alt="شعار شركة ${companyName}" class="company-image" loading="lazy" />
+                    <div class="job-type-badge">${businessType}</div>
+                    <div class="px-6 pb-6">
+                        <h3 class="company-name">
+                            ${companyName}
+                            ${isVerified ? `<i class="fas fa-check-circle verified-icon" title="شركة موثقة"></i>` : ''}
+                        </h3>
+                        <div class="job-title-location">
+                            <span class="job-title">${jobTitle}</span>
+                            <span class="location"><i class="fas fa-map-marker-alt"></i>${locationText}</span>
+                        </div>
+                    </div>
+                    <a href="${detailsUrl}" class="details-button" aria-label="عرض التفاصيل">
+                        عرض التفاصيل <i class="fas fa-info-circle"></i>
+                    </a>
+                `;
+
+                employersList.appendChild(employerCard);
+            });
+        }
+    }
+
+    function filterAndRenderEmployers() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedState = stateFilter.value;
+        const selectedCity = cityFilter.value;
+
+        const filteredEmployers = allEmployers.filter(employer => {
+            const info = employer.companyInfo || {};
+            const companyCity = info.location?.city || '';
+            const companyState = info.location?.state || '';
+            const businessType = info.businessType || '';
+            const jobTitle = employer.jobTitle || '';
+
+            const textToSearch = `${info.name || ''} ${businessType} ${jobTitle} ${info.description || ''} ${companyState} ${companyCity}`.toLowerCase();
+
+            const matchesSearch = textToSearch.includes(searchTerm);
+            const matchesState = selectedState === '' || (companyState === selectedState);
+            const matchesCity = selectedCity === '' || (companyCity === selectedCity);
+
+            return matchesSearch && matchesState && matchesCity;
         });
 
-    </script>
+        renderEmployers(filteredEmployers);
+    }
+
+    searchInput.addEventListener('input', filterAndRenderEmployers);
+    stateFilter.addEventListener('change', () => {
+        updateCityFilter();
+        filterAndRenderEmployers();
+    });
+    cityFilter.addEventListener('change', filterAndRenderEmployers);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        populateStateFilter();
+        fetchEmployers();
+    });
+</script>
+
 </body>
 </html>
