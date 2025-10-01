@@ -96,6 +96,7 @@
             <div class="step" id="stepIndicator3">3</div>
             <div class="step" id="stepIndicator4">4</div>
             <div class="step hidden" id="stepIndicator5">5</div>
+            <div class="step hidden" id="stepIndicator6">6</div>
         </div>
 
         <form id="unifiedForm">
@@ -169,10 +170,23 @@
                     التالي
                 </button>
             </div>
-
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-verification">
+                <h2 class="text-lg font-bold mb-4 text-center">الخطوة 2: توثيق البريد الإلكتروني</h2>
+                <div class="text-center space-y-4">
+                    <p class="text-gray-700">لقد أرسلنا رابط توثيق إلى بريدك الإلكتروني (<span id="verificationEmailDisplay" class="font-semibold text-blue-600"></span>).</p>
+                    <p class="text-gray-700">الرجاء النقر على الرابط في بريدك الإلكتروني **ثم** اضغط على زر "تأكيد التوثيق" أدناه للمتابعة.</p>
+                    <button type="button" class="mt-4 px-6 py-3 bg-success text-white rounded-lg hover:bg-green-700 w-full" id="confirmVerificationBtn">
+                        تأكيد التوثيق والمتابعة
+                    </button>
+                    <button type="button" class="text-sm text-blue-600 hover:text-blue-800" id="resendVerificationBtn">
+                        إعادة إرسال الإيميل
+                    </button>
+                </div>
+            </div>
             <div class="employee-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 2: البيانات الأساسية</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employee">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 3: البيانات الأساسية</h2>
                     <div class="mb-4">
                         <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
                         <input type="text" id="headline" name="headline" placeholder="مثال: عامل ديكور"
@@ -211,16 +225,16 @@
                             <option value="">اختر منطقة أو حي</option>
                         </select>
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn2-employee">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employee">
                         السابق
                     </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn2-employee">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employee">
                         التالي
                     </button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employee">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 4: المهارات ومستوى الخبرة</h2>
                     <div id="skillsContainer">
                         <div class="mb-4 flex items-center">
                             <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -250,16 +264,16 @@
                             </label>
                         </div>
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employee">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employee">
                         السابق
                     </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employee">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn4-employee">
                         التالي
                     </button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: الملفات والروابط</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employee">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 5: الملفات والروابط</h2>
                     <div class="mb-4">
                         <label for="previousWorks" class="block text-sm font-medium text-gray-700">صور من أعمالك السابقة (5 صور على الأقل)</label>
                         <input type="file" id="previousWorks" name="previousWorks" multiple accept="image/*"
@@ -279,18 +293,18 @@
                         <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employee">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn5-employee">
                         السابق
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employee">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employee">
                         إنشاء الحساب
                     </button>
                 </div>
             </div>
 
             <div class="employer-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 2: بيانات الشركة</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employer">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 3: بيانات الشركة</h2>
                     <div class="mb-4">
                         <label for="companyName" class="block text-sm font-medium text-gray-700">اسم الشركة / النشاط التجاري</label>
                         <input type="text" id="companyName" name="companyName" placeholder="مثال: شركة التقنية الحديثة" required
@@ -316,15 +330,15 @@
                         <input type="text" id="businessType" name="businessType" placeholder="مثال: مطعم، برمجة، ورشة..." required
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn2-employer">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employer">
                         السابق
                     </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn2-employer">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employer">
                         التالي
                     </button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: التفاصيل</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employer">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 4: التفاصيل</h2>
                     <div class="mb-4">
                         <label for="companyDescription" class="block text-sm font-medium text-gray-700">نبذة عن الشركة</label>
                         <textarea id="companyDescription" name="companyDescription" rows="5" placeholder="وصف مختصر وعدد الموظفين/الخدمات" required
@@ -348,15 +362,15 @@
                             <option value="">اختر منطقة أو حي</option>
                         </select>
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employer">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employer">
                         السابق
                     </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employer">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn4-employer">
                         التالي
                     </button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: التوثيق (اختياري)</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employer">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 5: التوثيق (اختياري)</h2>
                     <p class="text-sm text-gray-500 mb-4">إذا قمت بتوثيق حسابك، ستحصل على شارة **"شركة موثقة ✅"**.</p>
                     <div class="mb-4">
                         <label for="commercialRegister" class="block text-sm font-medium text-gray-700">رخصة / سجل تجاري (اختياري)</label>
@@ -369,15 +383,15 @@
                                class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <div id="company-photos-preview" class="flex flex-wrap mt-2"></div>
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employer">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn5-employer">
                         السابق
                     </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn4-employer">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn5-employer">
                         التالي
                     </button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 5: تفعيل الحساب</h2>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step6-employer">
+                    <h2 class="text-lg font-bold mb-4">الخطوة 6: تفعيل الحساب</h2>
                      <p class="text-sm text-gray-500 mb-4">اختر نوع الحساب الفرعي لتفعيل حسابك:</p>
                     <div class="flex flex-col space-y-4">
                         <label class="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
@@ -389,10 +403,10 @@
                             <span class="text-lg font-semibold mr-2">صاحب عمل فردي يبحث عن موظف أو عامل</span>
                         </label>
                     </div>
-                    <button type="button" class="mt-6 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn5-employer">
+                    <button type="button" class="mt-6 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn6-employer">
                         السابق
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employer">
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employer">
                         إنشاء الحساب
                     </button>
                 </div>
@@ -413,8 +427,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        
+        // 🟢 تم تحديث الاستيرادات
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, reload, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
         // Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -425,7 +440,7 @@
           appId: "1:768887356636:web:11ec1d6991add3309c8819", 
           measurementId: "G-98GQGZS09W" 
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
@@ -433,13 +448,17 @@
         // 🟢 تم التحديث: بيانات Cloudinary الخاصة بك
         const CLOUDINARY_CLOUD_NAME = "dbmjg23hl"; 
         const CLOUDINARY_UPLOAD_PRESET = "Companies_emploies";
-        
+
         let currentStep = 1;
         let isEmployerFlow = false;
         const form = document.getElementById('unifiedForm');
         const messageDiv = document.getElementById('message');
         const roleSelect = document.getElementById('role');
         
+        // 🟢 متغيّر لتخزين الدور مؤقتاً بعد الخطوة 1
+        let userRoleAfterStep1 = ''; 
+
+
         const sudanLocations = {
             "الخرطوم": {
                 "الخرطوم": ["السجانة", "العمارات", "الرياض", "الطائف", "المنشية", "بري", "الخرطوم 2", "الخرطوم 3", "السوق العربي", "حي المطار", "الشجرة", "جبرة", "الأزهري", "الصحافة", "الكلاكلة"],
@@ -467,7 +486,7 @@
             "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
             "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
         };
-        
+
         function validatePassword() {
             const password = document.getElementById('password').value;
             const checks = {
@@ -503,79 +522,228 @@
         });
 
         function updateStepIndicator() {
+            const totalSteps = isEmployerFlow ? 6 : 5;
             const steps = document.querySelectorAll('.step');
             steps.forEach(stepEl => stepEl.classList.remove('active'));
+            
+            // إخفاء وإظهار الـ stepIndicator5 والـ stepIndicator6 حسب نوع الحساب
+            document.getElementById('stepIndicator5').classList.add('hidden');
+            document.getElementById('stepIndicator6').classList.add('hidden');
+            if (isEmployerFlow) {
+                document.getElementById('stepIndicator5').classList.remove('hidden');
+                document.getElementById('stepIndicator6').classList.remove('hidden');
+            } else {
+                 document.getElementById('stepIndicator5').classList.remove('hidden'); // الموظف لديه 5 خطوات
+            }
+
             for (let i = 1; i <= currentStep; i++) {
                 const indicator = document.getElementById(`stepIndicator${i}`);
                 if (indicator) indicator.classList.add('active');
             }
-            document.getElementById('stepIndicator5').classList.add('hidden');
-            if (isEmployerFlow) {
-                document.getElementById('stepIndicator5').classList.remove('hidden');
-            }
         }
-
-        function showStep(stepNumber, role) {
-            const stepId = role === 'employer' ? `step${stepNumber}-employer` : `step${stepNumber}-employee`;
+        
+        function showStep(stepNumber, flow) {
+            const stepId = flow === 'employer' ? `step${stepNumber}-employer` : `step${stepNumber}-employee`;
             const allSteps = document.querySelectorAll('.form-card');
             allSteps.forEach(el => el.classList.add('hidden'));
-            document.getElementById(stepId).classList.remove('hidden');
+            
+            // 🟢 التعامل مع الخطوة الجديدة
+            if (stepNumber === 2) {
+                document.getElementById('step2-verification').classList.remove('hidden');
+            } else if (stepNumber === 1) {
+                document.getElementById('step1').classList.remove('hidden');
+            } else {
+                // للخطوات 3 و ما بعدها
+                document.getElementById(stepId).classList.remove('hidden');
+            }
+            
             currentStep = stepNumber;
             updateStepIndicator();
         }
+
+
+        // 🟢 دالة جديدة لمعالجة الخطوة 1 (إنشاء الحساب وإرسال التوثيق)
+        async function handleStep1Next() {
+            const currentStepElementId = 'step1';
+            const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required');
+            let isStepValid = true;
+            formInputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    isStepValid = false;
+                }
+            });
+            if (!isStepValid) return;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                showMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
+                return;
+            }
+            if (!validatePassword()) {
+                showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
+                return;
+            }
+            
+            const email = document.getElementById('email').value;
+            userRoleAfterStep1 = document.getElementById('role').value;
+            isEmployerFlow = (userRoleAfterStep1 === 'employer');
+
+            const nextBtn = document.getElementById('nextBtn1');
+            nextBtn.disabled = true;
+            const originalText = nextBtn.textContent;
+            nextBtn.textContent = 'جاري التسجيل...';
+
+            try {
+                // 1. إنشاء المستخدم في Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. إرسال إيميل التوثيق
+                await sendEmailVerification(user);
+                
+                // 3. الانتقال إلى شاشة انتظار التوثيق (الخطوة 2 الجديدة)
+                document.getElementById('verificationEmailDisplay').textContent = email;
+                document.getElementById(currentStepElementId).classList.add('hidden');
+                showStep(2, null); // الانتقال للخطوة 2 وهي خطوة التوثيق
+                showMessage('تم إنشاء حسابك! تم إرسال رابط توثيق إلى بريدك الإلكتروني.', 'success');
+
+            } catch (error) {
+                console.error("خطأ في التسجيل:", error);
+                let errorMessage = 'حدث خطأ غير متوقع.';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'هذا البريد الإلكتروني مستخدم بالفعل.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'كلمة المرور ضعيفة جداً.';
+                        break;
+                    default:
+                        errorMessage = 'حدث خطأ في إنشاء الحساب. ' + error.message;
+                }
+                showMessage(errorMessage, 'error');
+            } finally {
+                nextBtn.disabled = false;
+                nextBtn.textContent = originalText;
+            }
+        }
         
+        // 🟢 دالة لمعالجة النقر على زر "تأكيد التوثيق والمتابعة"
+        document.getElementById('confirmVerificationBtn').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                showMessage('الرجاء تسجيل الدخول أولاً.', 'error');
+                return;
+            }
+            
+            const confirmBtn = document.getElementById('confirmVerificationBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'جاري التحقق...';
+
+            try {
+                // إعادة تحميل حالة المستخدم من Firebase
+                await reload(user); 
+
+                if (user.emailVerified) {
+                    showMessage('تم توثيق بريدك الإلكتروني بنجاح! ننتقل إلى إكمال البيانات.', 'success');
+                    
+                    // 1. إخفاء خطوة التوثيق
+                    document.getElementById('step2-verification').classList.add('hidden');
+                    
+                    // 2. الانتقال إلى الخطوة 3 (الخطوة 2 الأصلية)
+                    if (isEmployerFlow) {
+                         showStep(3, 'employer');
+                    } else {
+                         showStep(3, 'employee');
+                    }
+                    
+                } else {
+                    showMessage('لم يتم توثيق الإيميل بعد. تأكد من النقر على الرابط في صندوق الوارد الخاص بك.', 'error');
+                }
+            } catch (e) {
+                console.error("خطأ في إعادة التحميل:", e);
+                showMessage('حدث خطأ أثناء التحقق. حاول مجدداً.', 'error');
+            } finally {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'تأكيد التوثيق والمتابعة';
+            }
+        });
+        
+        // 🟢 دالة لإعادة إرسال إيميل التوثيق
+        document.getElementById('resendVerificationBtn').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                showMessage('الرجاء تسجيل الدخول أولاً.', 'error');
+                return;
+            }
+            try {
+                await sendEmailVerification(user);
+                showMessage('تمت إعادة إرسال رابط التوثيق إلى بريدك الإلكتروني.', 'success');
+            } catch (error) {
+                console.error("Error resending email:", error);
+                showMessage('حدث خطأ أثناء إرسال البريد: ' + error.message, 'error');
+            }
+        });
+
+        // 🟢 تعديل دالة nextStep للتعامل مع الخطوة 2 الجديدة
         function nextStep(step) {
             let currentStepElementId;
             let nextStepElementId;
 
+            // الخطوة 1 تم التعامل معها بواسطة handleStep1Next
             if (step === 1) {
-                currentStepElementId = 'step1';
-                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-                if (!isStepValid) return;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                if (password !== confirmPassword) {
-                    showMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
-                    return;
-                }
-                if (!validatePassword()) {
-                    showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
-                    return;
-                }
-                isEmployerFlow = (document.getElementById('role').value === 'employer');
-                nextStepElementId = isEmployerFlow ? 'step2-employer' : 'step2-employee';
-            } else {
-                const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
-                currentStepElementId = `step${step}-${stepIdSuffix}`;
-                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required, textarea:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-                if (!isStepValid) return;
-                nextStepElementId = `step${step + 1}-${stepIdSuffix}`;
+                handleStep1Next();
+                return;
             }
 
+            const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
+            currentStepElementId = `step${step}-${stepIdSuffix}`;
+            
+            // تحقق من صلاحية مدخلات الخطوة الحالية
+            const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required, textarea:required');
+            let isStepValid = true;
+            formInputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    isStepValid = false;
+                }
+            });
+            if (!isStepValid) return;
+
+            nextStepElementId = isEmployerFlow ? `step${step + 1}-employer` : `step${step + 1}-employee`;
+
+
             document.getElementById(currentStepElementId).classList.add('hidden');
-            document.getElementById(nextStepElementId).classList.remove('hidden');
-            currentStep++;
+            
+            // 🟢 لا حاجة للتحقق من وجود العنصر التالي في حالة submit
+            const nextElement = document.getElementById(nextStepElementId);
+            if (nextElement) {
+                nextElement.classList.remove('hidden');
+                currentStep++;
+            }
+            
             updateStepIndicator();
         }
-        
+
+        // 🟢 تعديل دالة prevStep للتعامل مع الخطوة 2 الجديدة
         function prevStep(step) {
             const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
-            const currentStepElementId = `step${step}-${stepIdSuffix}`;
-            const prevStepElementId = step === 2 ? 'step1' : `step${step - 1}-${stepIdSuffix}`;
+            const currentStepElementId = (step === 2) ? 'step2-verification' : `step${step}-${stepIdSuffix}`;
+            
+            let prevStepElementId;
+            if (step === 3 && currentStep === 3) {
+                // العودة من الخطوة 3 (البيانات الأساسية) إلى خطوة التوثيق (الخطوة 2)
+                prevStepElementId = 'step2-verification';
+            } else if (step === 2 || step === 3) {
+                // العودة من خطوة التوثيق (2) إلى الخطوة 1 (بيانات الحساب)
+                prevStepElementId = 'step1';
+            } else {
+                // العودة من خطوة 4 أو 5 أو 6 إلى الخطوة السابقة في نفس المسار
+                prevStepElementId = `step${step - 1}-${stepIdSuffix}`;
+            }
 
             document.getElementById(currentStepElementId).classList.add('hidden');
             document.getElementById(prevStepElementId).classList.remove('hidden');
@@ -590,7 +758,7 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-            // formData.append('folder', 'shaglni_uploads'); // يمكنك استخدام هذا إذا كان الـ Preset غير محدد المجلد
+            // formData.append('folder', 'shaglni_uploads'); 
 
             try {
                 const response = await fetch(
@@ -616,23 +784,22 @@
             }
         }
 
-        async function submitForm(event) {
+        // 🟢 دالة جديدة لإكمال حفظ البيانات في Firestore (تُستدعى بعد التأكد من التوثيق)
+        async function handleDataSubmission(event) {
             event.preventDefault();
             const submitButton = event.target;
             submitButton.disabled = true;
             const originalButtonText = submitButton.textContent;
             submitButton.textContent = 'جاري الحفظ...';
+            showMessage('جاري حفظ البيانات في قاعدة البيانات...', 'success');
 
             const formInputs = form.elements;
+            const user = auth.currentUser;
+            const role = userRoleAfterStep1; // استخدام الدور المخزن بعد الخطوة 1
             const name = formInputs['name'].value;
             const email = formInputs['email'].value;
-            const password = formInputs['password'].value;
-            const role = formInputs['role'].value;
 
             try {
-                // 1. إنشاء المستخدم في Firebase Auth
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
                 let userData;
 
                 if (role === 'employee') {
@@ -640,8 +807,8 @@
                     const previousWorksFiles = formInputs['previousWorks'].files;
                     let profileImageUrl = null;
                     let previousWorksUrls = [];
-                    
-                    // 2. رفع الملفات إلى Cloudinary
+
+                    // 1. رفع الملفات إلى Cloudinary
                     if (profilePhotoFile) { profileImageUrl = await uploadFile(profilePhotoFile); }
                     if (previousWorksFiles.length > 0) {
                         previousWorksUrls = await Promise.all(Array.from(previousWorksFiles).map(file => uploadFile(file)));
@@ -655,6 +822,7 @@
                         email: user.email,
                         role: role,
                         isProfileComplete: true,
+                        isEmailVerified: user.emailVerified, // إضافة حالة التوثيق
                         createdAt: serverTimestamp(),
                         headline: formInputs['headline'].value || null,
                         bio: formInputs['bio'].value || null,
@@ -669,7 +837,7 @@
                         links: { cv: formInputs['cvUrl'].value || null, linkedin: formInputs['linkedinUrl'].value || null },
                         previousWorksUrls,
                     };
-                    
+
                 } else if (role === 'employer') {
                     const companyLogoFile = formInputs['companyLogo'].files[0];
                     const commercialRegisterFile = formInputs['commercialRegister'].files[0];
@@ -680,7 +848,7 @@
                     let companyPhotosUrls = [];
                     let isVerified = false;
 
-                    // 2. رفع الملفات إلى Cloudinary
+                    // 1. رفع الملفات إلى Cloudinary
                     if (companyLogoFile) { companyLogoUrl = await uploadFile(companyLogoFile); }
                     if (commercialRegisterFile) { 
                         commercialRegisterUrl = await uploadFile(commercialRegisterFile); 
@@ -695,6 +863,7 @@
                         email: user.email,
                         role: role,
                         isProfileComplete: true,
+                        isEmailVerified: user.emailVerified, // إضافة حالة التوثيق
                         createdAt: serverTimestamp(),
                         companyInfo: {
                             name: formInputs['companyName'].value || null,
@@ -718,10 +887,12 @@
                     };
                 }
 
-                // 3. حفظ بيانات المستخدم في Firestore
-                // 🚨 التعديل الرئيسي: استخدام All_jops للشركات
-                const collectionName = role === 'employee' ? 'employees' : '**All_jops**';
+                // 2. حفظ بيانات المستخدم في Firestore
+                const collectionName = role === 'employee' ? 'employees' : 'All_jops';
                 await setDoc(doc(db, collectionName, user.uid), userData);
+                
+                // 3. تسجيل خروج المستخدم لضمان تسجيل الدخول لاحقاً
+                await signOut(auth);
 
                 showMessage('تم إنشاء حسابك بنجاح! سيتم توجيهك الآن.', 'success');
 
@@ -731,19 +902,8 @@
                 }, 2000);
 
             } catch (error) {
-                console.error("خطأ في التسجيل:", error);
-                let errorMessage = 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = 'هذا البريد الإلكتروني مستخدم بالفعل.';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = 'كلمة المرور ضعيفة جداً.';
-                        break;
-                }
+                console.error("خطأ في حفظ البيانات:", error);
+                let errorMessage = 'حدث خطأ في حفظ البيانات (Firestore/Cloudinary). يرجى المحاولة لاحقًا.';
                 showMessage(errorMessage, 'error');
             } finally {
                 submitButton.disabled = false;
@@ -817,7 +977,7 @@
                 }
             });
         }
-        
+
         populateLocations(employeeStateSelect, employeeCitySelect, employeeAreaSelect, employeeCityContainer, employeeAreaContainer);
         populateLocations(employerStateSelect, employerCitySelect, employerAreaSelect, employerCityContainer, employerAreaContainer);
 
@@ -892,26 +1052,29 @@
                 });
             }
         });
-        
+
         // Navigation Event Listeners
         document.getElementById('nextBtn1').addEventListener('click', () => nextStep(1));
-        document.getElementById('nextBtn2-employee').addEventListener('click', () => nextStep(2));
+        // 🟢 تم تغيير الأرقام هنا لتتوافق مع الخطوات الجديدة
         document.getElementById('nextBtn3-employee').addEventListener('click', () => nextStep(3));
-        document.getElementById('nextBtn2-employer').addEventListener('click', () => nextStep(2));
+        document.getElementById('nextBtn4-employee').addEventListener('click', () => nextStep(4));
         document.getElementById('nextBtn3-employer').addEventListener('click', () => nextStep(3));
         document.getElementById('nextBtn4-employer').addEventListener('click', () => nextStep(4));
+        document.getElementById('nextBtn5-employer').addEventListener('click', () => nextStep(5));
 
-        document.getElementById('prevBtn2-employee').addEventListener('click', () => prevStep(2));
+        // 🟢 تم تغيير الأرقام هنا لتتوافق مع الخطوات الجديدة
         document.getElementById('prevBtn3-employee').addEventListener('click', () => prevStep(3));
         document.getElementById('prevBtn4-employee').addEventListener('click', () => prevStep(4));
-        document.getElementById('prevBtn2-employer').addEventListener('click', () => prevStep(2));
+        document.getElementById('prevBtn5-employee').addEventListener('click', () => prevStep(5));
         document.getElementById('prevBtn3-employer').addEventListener('click', () => prevStep(3));
         document.getElementById('prevBtn4-employer').addEventListener('click', () => prevStep(4));
         document.getElementById('prevBtn5-employer').addEventListener('click', () => prevStep(5));
-        
-        document.getElementById('submitBtn-employee').addEventListener('click', submitForm);
-        document.getElementById('submitBtn-employer').addEventListener('click', submitForm);
-        
+        document.getElementById('prevBtn6-employer').addEventListener('click', () => prevStep(6));
+
+        // 🟢 تم ربط أزرار الإنشاء بالدالة الجديدة
+        document.getElementById('submitBtn-employee').addEventListener('click', handleDataSubmission);
+        document.getElementById('submitBtn-employer').addEventListener('click', handleDataSubmission);
+
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.form-card').forEach(el => el.classList.add('hidden'));
             document.getElementById('step1').classList.remove('hidden');
