@@ -61,23 +61,19 @@
                 <i class="fas fa-chart-line w-5 h-5 ml-3"></i>
                 <span>لوحة التحكم الرئيسية</span>
             </a>
-
             <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
                 <i class="fas fa-user-circle w-5 h-5 ml-3"></i>
                 <span>ملفي الشخصي</span>
             </a>
-
             <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
                 <i class="fas fa-search w-5 h-5 ml-3"></i>
                 <span>البحث عن وظيفة</span>
             </a>
-
             <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
                 <i class="fas fa-paper-plane w-5 h-5 ml-3"></i>
                 <span>طلبات التقديم</span>
-                <span class="mr-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+                <span class="mr-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full" id="pending-applications-badge">3</span>
             </a>
-
             <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
                 <i class="fas fa-bookmark w-5 h-5 ml-3"></i>
                 <span>وظائف محفوظة</span>
@@ -89,7 +85,7 @@
                 <i class="fas fa-cog w-5 h-5 ml-3"></i>
                 <span>الإعدادات</span>
             </a>
-            <a href="login.html" class="flex items-center p-3 rounded-lg text-red-600 hover:bg-red-50 font-medium">
+            <a href="#" class="flex items-center p-3 rounded-lg text-red-600 hover:bg-red-50 font-medium" id="logout-button">
                 <i class="fas fa-sign-out-alt w-5 h-5 ml-3"></i>
                 <span>تسجيل الخروج</span>
             </a>
@@ -99,15 +95,15 @@
     <div class="main-content flex-grow p-8">
 
         <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm">
-            <h2 class="text-2xl font-bold text-gray-800">مرحباً بك يا أحمد!</h2>
+            <h2 class="text-2xl font-bold text-gray-800" id="welcome-message">مرحباً بك يا أحمد!</h2> 
             <div class="flex items-center space-x-4 space-x-reverse">
                 <button class="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-full">
                     <i class="fas fa-bell text-xl"></i>
                     <span class="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-500"></span>
                 </button>
                 <div class="flex items-center space-x-3 space-x-reverse">
-                    <span class="text-gray-700 font-medium hidden sm:block">أحمد علي</span>
-                    <img class="h-10 w-10 rounded-full object-cover border-2 border-blue-500" src="https://via.placeholder.com/150/2563eb/ffffff?text=A" alt="صورة الملف الشخصي">
+                    <span class="text-gray-700 font-medium hidden sm:block" id="user-name-display">أحمد علي</span> 
+                    <img id="profile-picture" class="h-10 w-10 rounded-full object-cover border-2 border-blue-500" src="https://via.placeholder.com/150/2563eb/ffffff?text=A" alt="صورة الملف الشخصي">
                 </div>
             </div>
         </header>
@@ -120,7 +116,7 @@
                         <i class="fas fa-paper-plane text-3xl text-blue-600 ml-4"></i>
                         <div>
                             <p class="text-sm text-gray-500">عدد الطلبات المرسلة</p>
-                            <p class="text-3xl font-extrabold text-gray-900">12</p>
+                            <p id="applications-count" class="text-3xl font-extrabold text-gray-900">12</p>
                         </div>
                     </div>
                 </div>
@@ -130,7 +126,7 @@
                         <i class="fas fa-eye text-3xl text-green-600 ml-4"></i>
                         <div>
                             <p class="text-sm text-gray-500">مشاهدات ملفك هذا الأسبوع</p>
-                            <p class="text-3xl font-extrabold text-gray-900">45</p>
+                            <p id="views-count" class="text-3xl font-extrabold text-gray-900">45</p>
                         </div>
                     </div>
                 </div>
@@ -140,7 +136,7 @@
                         <i class="fas fa-check-circle text-3xl text-amber-600 ml-4"></i>
                         <div>
                             <p class="text-sm text-gray-500">عروض العمل/القبول</p>
-                            <p class="text-3xl font-extrabold text-gray-900">2</p>
+                            <p id="accepted-count" class="text-3xl font-extrabold text-gray-900">2</p>
                         </div>
                     </div>
                 </div>
@@ -150,38 +146,20 @@
                 <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-md space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xl font-bold text-gray-800">حالة الملف الشخصي</h3>
-                        <span class="text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">90% مكتمل</span>
+                        <span id="profile-completion" class="text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">90% مكتمل</span>
                     </div>
                     <p class="text-gray-600 text-sm">أضف 5 صور أخرى من أعمالك لرفع نسبة الإكمال والحصول على فرص أكبر.</p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-150">
                         تحديث ملفي الآن
                     </button>
                 </div>
-
+                
                 <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">آخر التنبيهات والإشعارات</h3>
                     <ul class="space-y-3">
-                        <li class="flex items-start text-gray-700">
-                            <i class="fas fa-comment-dots text-blue-500 ml-3 mt-1"></i>
-                            <p class="text-sm">
-                                <span class="font-semibold">شركة المستقبل للتقنية</span> أرسلت لك رسالة جديدة بشأن طلبك لوظيفة مبرمج.
-                                <span class="text-xs text-gray-500 mr-2">منذ 5 دقائق</span>
-                            </p>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <i class="fas fa-check-circle text-green-500 ml-3 mt-1"></i>
-                            <p class="text-sm">
-                                تم <span class="font-semibold text-green-700">قبول</span> طلبك المبدئي لوظيفة عامل ديكور.
-                                <span class="text-xs text-gray-500 mr-2">منذ ساعتين</span>
-                            </p>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <i class="fas fa-star text-amber-500 ml-3 mt-1"></i>
-                            <p class="text-sm">
-                                تم نشر 3 وظائف جديدة تطابق مهاراتك (لحام). <a href="#" class="text-blue-600 hover:underline">مشاهدة الوظائف</a>.
-                                <span class="text-xs text-gray-500 mr-2">يوم أمس</span>
-                            </p>
-                        </li>
+                        <li class="flex items-start text-gray-700">...</li>
+                        <li class="flex items-start text-gray-700">...</li>
+                        <li class="flex items-start text-gray-700">...</li>
                     </ul>
                 </div>
             </div>
@@ -193,64 +171,107 @@
                 </h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex justify-between items-start mb-3">
-                            <h4 class="text-lg font-semibold text-gray-800">مشرف عمال بناء</h4>
-                            <i class="far fa-bookmark text-gray-400 hover:text-blue-600 cursor-pointer"></i>
-                        </div>
-                        <p class="text-blue-600 font-medium mb-2">مجموعة الفرسان للمقاولات</p>
-                        <div class="space-y-1 text-sm text-gray-600 mb-4">
-                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> الخرطوم، الرياض</p>
-                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> دوام كامل</p>
-                        </div>
-                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">خبرة (5+ سنوات)</span>
-                        <div class="flex justify-end">
-                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                                التقديم الآن
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex justify-between items-start mb-3">
-                            <h4 class="text-lg font-semibold text-gray-800">فني تكييف وتبريد</h4>
-                            <i class="fas fa-bookmark text-blue-600 cursor-pointer"></i>
-                        </div>
-                        <p class="text-blue-600 font-medium mb-2">مؤسسة الأمان للصيانة</p>
-                        <div class="space-y-1 text-sm text-gray-600 mb-4">
-                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> ود مدني</p>
-                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> جزئي/مشاريع</p>
-                        </div>
-                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">مبتدئ (0-2 سنوات)</span>
-                        <div class="flex justify-end">
-                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                                التقديم الآن
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex justify-between items-start mb-3">
-                            <h4 class="text-lg font-semibold text-gray-800">نجار أثاث منزلي</h4>
-                            <i class="far fa-bookmark text-gray-400 hover:text-blue-600 cursor-pointer"></i>
-                        </div>
-                        <p class="text-blue-600 font-medium mb-2">ورشة الإبداع للخشب</p>
-                        <div class="space-y-1 text-sm text-gray-600 mb-4">
-                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> أم درمان، الثورة</p>
-                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> دوام كامل</p>
-                        </div>
-                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">متوسط (2-5 سنوات)</span>
-                        <div class="flex justify-end">
-                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                                التقديم الآن
-                            </button>
-                        </div>
-                    </div>
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">...</div>
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">...</div>
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">...</div>
                 </div>
             </div>
 
         </main>
     </div>
 
+    <script type="module">
+        // 1. استيراد مكتبات Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // 2. إعدادات Firebase (يجب استبدالها بمعلومات مشروعك)
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk", 
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.appspot.com", 
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819", 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 3. الدوال المساعدة لتحديث الواجهة
+        
+        function updateUserName(name) {
+            document.getElementById('welcome-message').textContent = `مرحباً بك يا ${name}!`;
+            document.getElementById('user-name-display').textContent = name;
+        }
+
+        function updateProfilePicture(url, name) {
+            const imgElement = document.getElementById('profile-picture');
+            if (url) {
+                imgElement.src = url;
+                imgElement.alt = `صورة الملف الشخصي لـ ${name}`;
+            } else {
+                const initial = name ? name.charAt(0) : 'A';
+                imgElement.src = `https://via.placeholder.com/150/2563eb/ffffff?text=${initial}`;
+            }
+        }
+        
+        function updateStats(userData) {
+            // يتم تعيين القيمة إلى البيانات الحقيقية من Firestore، أو 0 إذا كانت غير موجودة
+            document.getElementById('applications-count').textContent = userData.applicationsCount || 0; 
+            document.getElementById('views-count').textContent = userData.viewsCount || 0;
+            document.getElementById('accepted-count').textContent = userData.acceptedCount || 0; 
+            
+            // تحديث شارة الطلبات المعلقة في الشريط الجانبي
+            document.getElementById('pending-applications-badge').textContent = userData.applicationsCount || 0; 
+        
+            // تحديث حالة إكمال الملف الشخصي (نفترض وجود حقل profileCompletion)
+            const completion = userData.profileCompletion || 0;
+            document.getElementById('profile-completion').textContent = `${completion}% مكتمل`;
+        }
+
+        // 4. الدالة الرئيسية لحماية الصفحة وجلب البيانات
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // المستخدم مسجل الدخول، نبدأ جلب البيانات
+                const userDocRef = doc(db, "employees", user.uid); 
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists() && userDoc.data().role === 'employee') {
+                    const userData = userDoc.data();
+                    
+                    const userName = userData.name || "مستخدمنا العزيز";
+                    updateUserName(userName);
+                    updateProfilePicture(userData.profileImageUrl, userName);
+                    updateStats(userData); 
+                    
+                } else {
+                    // المستخدم ليس موظفاً أو لا توجد وثيقة له، نقوم بتسجيل الخروج
+                    alert("يبدو أن هذا الحساب ليس حساب موظف. سيتم توجيهك لتسجيل الدخول.");
+                    await signOut(auth);
+                    window.location.href = "login.html"; 
+                }
+            } else {
+                // المستخدم غير مسجل الدخول
+                alert("الرجاء تسجيل الدخول أولاً للوصول إلى لوحة التحكم.");
+                window.location.href = "login.html"; 
+            }
+        });
+
+        // 5. وظيفة تسجيل الخروج
+        document.getElementById('logout-button').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = "login.html"; 
+            } catch (error) {
+                console.error("خطأ في تسجيل الخروج:", error);
+                alert("حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى.");
+            }
+        });
+
+    </script>
 </body>
 </html>
