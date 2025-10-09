@@ -8,158 +8,249 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        :root {
+            --primary: #2563eb; /* Blue-600 */
+            --primary-light: #eff6ff; /* Blue-50 */
+            --secondary: #f59e0b; /* Amber-500 */
+            --success: #10b981; /* Green-500 */
+            --danger: #ef4444; /* Red-500 */
+        }
+
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f5f7fa; /* Light Gray Background */
         }
+
+        /* تخصيص الشريط الجانبي */
         .sidebar {
-            width: 250px;
+            width: 280px;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
         }
-        .sidebar a {
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            border-radius: 0.5rem;
-            margin-bottom: 0.5rem;
-            transition: all 0.2s;
+
+        .sidebar-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-right: 4px solid var(--primary);
         }
-        .sidebar a.active {
-            background-color: #1d4ed8;
-            color: white;
-            font-weight: 700;
+
+        /* تباعد المحتوى الرئيسي ليناسب الشريط الجانبي في RTL */
+        .main-content {
+            margin-right: 280px;
         }
-        .sidebar a:hover:not(.active) {
-            background-color: #e5e7eb;
-            color: #1f2937;
+
+        /* كرت الوظيفة المقترحة */
+        .job-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="bg-gray-100 flex min-h-screen">
+<body class="flex min-h-screen">
 
-    <aside class="sidebar bg-white shadow-lg p-6 flex flex-col">
-        <div class="mb-8">
-            <a href="#" class="flex items-center space-x-2 rtl:space-x-reverse">
-                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4c6ac0b9-d0f3-4546-89b8-cf881347ac80.png" alt="شعار موقع شغلني" class="h-10">
-                <span class="text-2xl font-bold text-blue-600">شغلني</span>
-            </a>
+    <aside class="sidebar fixed top-0 right-0 h-full bg-white p-6 flex flex-col z-10">
+        <div class="flex items-center justify-center mb-10 border-b pb-4">
+            <h1 class="text-3xl font-extrabold text-gray-900">شغلني<span class="text-blue-600">.</span></h1>
         </div>
-        <nav class="flex-1">
-            <a href="employee_dashboard.html" class="active">
-                <i class="fas fa-comments ml-3"></i>
-                <span>محادثاتي</span>
+
+        <nav class="flex-grow space-y-2">
+            <a href="#" class="sidebar-link active flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-chart-line w-5 h-5 ml-3"></i>
+                <span>لوحة التحكم الرئيسية</span>
             </a>
-            <a href="#">
-                <i class="fas fa-briefcase ml-3"></i>
-                <span>الوظائف</span>
-            </a>
-            <a href="#">
-                <i class="fas fa-building ml-3"></i>
-                <span>الشركات</span>
-            </a>
-            <a href="#">
-                <i class="fas fa-user ml-3"></i>
+
+            <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-user-circle w-5 h-5 ml-3"></i>
                 <span>ملفي الشخصي</span>
             </a>
+
+            <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-search w-5 h-5 ml-3"></i>
+                <span>البحث عن وظيفة</span>
+            </a>
+
+            <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-paper-plane w-5 h-5 ml-3"></i>
+                <span>طلبات التقديم</span>
+                <span class="mr-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+            </a>
+
+            <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-bookmark w-5 h-5 ml-3"></i>
+                <span>وظائف محفوظة</span>
+            </a>
         </nav>
-        <div class="mt-auto">
-            <a href="#" class="text-red-600 hover:text-white hover:bg-red-600">
-                <i class="fas fa-sign-out-alt ml-3"></i>
+
+        <div class="pt-6 border-t mt-6">
+            <a href="#" class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                <i class="fas fa-cog w-5 h-5 ml-3"></i>
+                <span>الإعدادات</span>
+            </a>
+            <a href="login.html" class="flex items-center p-3 rounded-lg text-red-600 hover:bg-red-50 font-medium">
+                <i class="fas fa-sign-out-alt w-5 h-5 ml-3"></i>
                 <span>تسجيل الخروج</span>
             </a>
         </div>
     </aside>
 
-    <main class="flex-1 p-8">
-        <div class="bg-white shadow-lg rounded-xl p-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">محادثاتي مع الشركات</h1>
-            <div id="chatsList" class="space-y-4">
-                <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل المحادثات...</div>
-                <div id="noChatsFound" class="hidden text-center text-lg text-gray-500 p-8">لا توجد محادثات حتى الآن.</div>
+    <div class="main-content flex-grow p-8">
+
+        <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm">
+            <h2 class="text-2xl font-bold text-gray-800">مرحباً بك يا أحمد!</h2>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <button class="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-full">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-500"></span>
+                </button>
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <span class="text-gray-700 font-medium hidden sm:block">أحمد علي</span>
+                    <img class="h-10 w-10 rounded-full object-cover border-2 border-blue-500" src="https://via.placeholder.com/150/2563eb/ffffff?text=A" alt="صورة الملف الشخصي">
+                </div>
             </div>
-        </div>
-    </main>
+        </header>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, orderBy, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        <main class="space-y-8">
 
-        // **1. تهيئة Firebase - بيانات مشروعك**
-        const firebaseConfig = {
-            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-            authDomain: "shaglni-c64c0.firebaseapp.com",
-            projectId: "shaglni-c64c0",
-            storageBucket: "shaglni-c64c0.firebasestorage.app",
-            messagingSenderId: "768887356636",
-            appId: "1:768887356636:web:3aca75cb4733f0e49c8819",
-            measurementId: "G-XKM89TW824"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-600">
+                    <div class="flex items-center">
+                        <i class="fas fa-paper-plane text-3xl text-blue-600 ml-4"></i>
+                        <div>
+                            <p class="text-sm text-gray-500">عدد الطلبات المرسلة</p>
+                            <p class="text-3xl font-extrabold text-gray-900">12</p>
+                        </div>
+                    </div>
+                </div>
 
-        // **2. ربط عناصر الواجهة**
-        const chatsList = document.getElementById('chatsList');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const noChatsFound = document.getElementById('noChatsFound');
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-600">
+                    <div class="flex items-center">
+                        <i class="fas fa-eye text-3xl text-green-600 ml-4"></i>
+                        <div>
+                            <p class="text-sm text-gray-500">مشاهدات ملفك هذا الأسبوع</p>
+                            <p class="text-3xl font-extrabold text-gray-900">45</p>
+                        </div>
+                    </div>
+                </div>
 
-        // **3. دالة لجلب المحادثات وعرضها**
-        async function fetchChats() {
-            loadingIndicator.classList.remove('hidden');
-            chatsList.innerHTML = '';
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-600">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-3xl text-amber-600 ml-4"></i>
+                        <div>
+                            <p class="text-sm text-gray-500">عروض العمل/القبول</p>
+                            <p class="text-3xl font-extrabold text-gray-900">2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    const employeeId = user.uid;
-                    try {
-                        const chatsQuery = query(collection(db, "chats"), where("employeeId", "==", employeeId), orderBy("lastMessageTimestamp", "desc"));
-                        const chatsSnapshot = await getDocs(chatsQuery);
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-md space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold text-gray-800">حالة الملف الشخصي</h3>
+                        <span class="text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">90% مكتمل</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">أضف 5 صور أخرى من أعمالك لرفع نسبة الإكمال والحصول على فرص أكبر.</p>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-150">
+                        تحديث ملفي الآن
+                    </button>
+                </div>
 
-                        if (chatsSnapshot.empty) {
-                            noChatsFound.classList.remove('hidden');
-                        } else {
-                            noChatsFound.classList.add('hidden');
-                            for (const docSnapshot of chatsSnapshot.docs) {
-                                const chatData = docSnapshot.data();
-                                const chatId = docSnapshot.id;
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">آخر التنبيهات والإشعارات</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start text-gray-700">
+                            <i class="fas fa-comment-dots text-blue-500 ml-3 mt-1"></i>
+                            <p class="text-sm">
+                                <span class="font-semibold">شركة المستقبل للتقنية</span> أرسلت لك رسالة جديدة بشأن طلبك لوظيفة مبرمج.
+                                <span class="text-xs text-gray-500 mr-2">منذ 5 دقائق</span>
+                            </p>
+                        </li>
+                        <li class="flex items-start text-gray-700">
+                            <i class="fas fa-check-circle text-green-500 ml-3 mt-1"></i>
+                            <p class="text-sm">
+                                تم <span class="font-semibold text-green-700">قبول</span> طلبك المبدئي لوظيفة عامل ديكور.
+                                <span class="text-xs text-gray-500 mr-2">منذ ساعتين</span>
+                            </p>
+                        </li>
+                        <li class="flex items-start text-gray-700">
+                            <i class="fas fa-star text-amber-500 ml-3 mt-1"></i>
+                            <p class="text-sm">
+                                تم نشر 3 وظائف جديدة تطابق مهاراتك (لحام). <a href="#" class="text-blue-600 hover:underline">مشاهدة الوظائف</a>.
+                                <span class="text-xs text-gray-500 mr-2">يوم أمس</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-                                // جلب بيانات الشركة المرتبطة بالمحادثة
-                                const companyId = chatData.companyId;
-                                const companyDoc = await getDoc(doc(db, "companies", companyId));
-                                const companyData = companyDoc.exists() ? companyDoc.data() : { name: 'شركة غير معروفة', logoUrl: 'https://via.placeholder.com/150' };
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-bold text-gray-800 mb-6 flex justify-between items-center">
+                    الوظائف المقترحة لك
+                    <a href="#" class="text-blue-600 text-sm hover:underline">عرض الكل <i class="fas fa-arrow-left mr-2 text-xs"></i></a>
+                </h3>
 
-                                const companyName = companyData.name;
-                                const companyLogoUrl = companyData.logoUrl;
-                                const lastMessage = chatData.lastMessage || 'لا توجد رسائل حديثة';
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-lg font-semibold text-gray-800">مشرف عمال بناء</h4>
+                            <i class="far fa-bookmark text-gray-400 hover:text-blue-600 cursor-pointer"></i>
+                        </div>
+                        <p class="text-blue-600 font-medium mb-2">مجموعة الفرسان للمقاولات</p>
+                        <div class="space-y-1 text-sm text-gray-600 mb-4">
+                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> الخرطوم، الرياض</p>
+                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> دوام كامل</p>
+                        </div>
+                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">خبرة (5+ سنوات)</span>
+                        <div class="flex justify-end">
+                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                                التقديم الآن
+                            </button>
+                        </div>
+                    </div>
 
-                                const chatCard = document.createElement('a');
-                                chatCard.href = `employee_chat.html?chatId=${chatId}&companyId=${companyId}`;
-                                chatCard.className = 'flex items-center space-x-4 rtl:space-x-reverse bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition duration-200';
-                                chatCard.innerHTML = `
-                                    <img src="${companyLogoUrl}" alt="شعار الشركة" class="w-12 h-12 rounded-full object-cover">
-                                    <div class="flex-1">
-                                        <h4 class="font-bold text-gray-800">${companyName}</h4>
-                                        <p class="text-xs text-gray-400 mt-1">${lastMessage}</p>
-                                    </div>
-                                    <i class="fas fa-chevron-left text-gray-400"></i>
-                                `;
-                                chatsList.appendChild(chatCard);
-                            }
-                        }
-                    } catch (error) {
-                        console.error("Error fetching chats:", error);
-                        chatsList.innerHTML = '<div class="text-center text-red-500 p-8">حدث خطأ أثناء تحميل المحادثات.</div>';
-                    } finally {
-                        loadingIndicator.classList.add('hidden');
-                    }
-                } else {
-                    window.location.href = "login.html";
-                }
-            });
-        }
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-lg font-semibold text-gray-800">فني تكييف وتبريد</h4>
+                            <i class="fas fa-bookmark text-blue-600 cursor-pointer"></i>
+                        </div>
+                        <p class="text-blue-600 font-medium mb-2">مؤسسة الأمان للصيانة</p>
+                        <div class="space-y-1 text-sm text-gray-600 mb-4">
+                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> ود مدني</p>
+                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> جزئي/مشاريع</p>
+                        </div>
+                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">مبتدئ (0-2 سنوات)</span>
+                        <div class="flex justify-end">
+                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                                التقديم الآن
+                            </button>
+                        </div>
+                    </div>
 
-        // **4. استدعاء الدالة عند تحميل الصفحة**
-        document.addEventListener('DOMContentLoaded', fetchChats);
-    </script>
+                    <div class="job-card bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-lg font-semibold text-gray-800">نجار أثاث منزلي</h4>
+                            <i class="far fa-bookmark text-gray-400 hover:text-blue-600 cursor-pointer"></i>
+                        </div>
+                        <p class="text-blue-600 font-medium mb-2">ورشة الإبداع للخشب</p>
+                        <div class="space-y-1 text-sm text-gray-600 mb-4">
+                            <p><i class="fas fa-map-marker-alt ml-2 text-gray-400"></i> أم درمان، الثورة</p>
+                            <p><i class="fas fa-clock ml-2 text-gray-400"></i> دوام كامل</p>
+                        </div>
+                        <span class="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mb-3">متوسط (2-5 سنوات)</span>
+                        <div class="flex justify-end">
+                            <button class="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                                التقديم الآن
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
 </body>
 </html>
