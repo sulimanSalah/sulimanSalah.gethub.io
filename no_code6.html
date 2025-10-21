@@ -3,72 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل حساب جديد - شغلني</title>
+    <title>تسجيل حساب جديد - شغلني (تجريبي)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --light: #f9fafb;
-            --dark: #1f2937;
-            --gray: #6b7280;
-        }
-
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f5f7fa;
-        }
-
-        .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .step.active {
-            background-color: var(--success);
-        }
-
-        .step-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .form-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
-        }
-
-        /* تم حذف الأنماط المتعلقة بـ .image-preview و .document-preview */
-
-        .message {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        .success-message {
-            background-color: #dcfce7;
-            color: #065f46;
-        }
-        .error-message {
-            background-color: #fee2e2;
-            color: #991b1b;
         }
         .password-requirement-item {
             display: flex;
@@ -80,296 +22,254 @@
         .password-requirement-item.valid {
             color: #10b981;
         }
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-indicator.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        /* تصميم الحقول المعطلة لتبدو ممتلئة وليست فارغة */
+        input:disabled, select:disabled {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+        /* تصميم الإطار الجديد للمستند */
+        .document-frame {
+            border: 3px dashed #9ca3af; /* لون رمادي متقطع */
+            border-radius: 0.75rem;
+            padding: 1.5rem; /* مساحة داخلية */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px; /* لجعله واضحاً */
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        /* إشارات الزوايا */
+        .corner-mark {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #10b981; /* لون أخضر */
+            border-style: solid;
+        }
+        .top-right { top: -3px; right: -3px; border-width: 3px 3px 0 0; }
+        .top-left { top: -3px; left: -3px; border-width: 3px 0 0 3px; }
+        .bottom-right { bottom: -3px; right: -3px; border-width: 0 3px 3px 0; }
+        .bottom-left { bottom: -3px; left: -3px; border-width: 0 0 3px 3px; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-6">إنشاء حساب جديد</h2>
-        <div class="step-container" id="stepContainer">
-            <div class="step active" id="stepIndicator1">1</div>
-            <div class="step" id="stepIndicator2">2</div>
-            <div class="step" id="stepIndicator3">3</div>
-            <div class="step" id="stepIndicator4">4</div>
-            <div class="step hidden" id="stepIndicator5">5</div>
+        <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-6">إنشاء حساب جديد (تجربة)</h2>
+        
+        <div class="flex justify-between items-center mb-6">
+            <div id="step-indicator-1" class="step-indicator w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold">1</div>
+            <div class="flex-grow border-t-2 border-gray-300 mx-1"></div>
+            <div id="step-indicator-2" class="step-indicator w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold">2</div>
+            <div class="flex-grow border-t-2 border-gray-300 mx-1"></div>
+            <div id="step-indicator-3" class="step-indicator w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold">3</div>
+            <div class="flex-grow border-t-2 border-gray-300 mx-1"></div>
+            <div id="step-indicator-4" class="step-indicator w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold">4</div>
         </div>
+        
+        <form id="registerForm" class="space-y-6">
+            <div id="feedbackMessage" class="hidden text-center mt-4 mb-4"></div>
 
-        <form id="unifiedForm">
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: بيانات الحساب</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">الاسم الثلاثي</label>
-                        <div class="mt-1">
-                            <input id="name" name="name" type="text" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أدخل اسمك الثلاثي">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                        <div class="mt-1">
-                            <input id="email" name="email" type="email" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أدخل بريدك الإلكتروني">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
-                        <div class="mt-1">
-                            <input id="password" name="password" type="password" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أدخل كلمة مرور قوية">
-                        </div>
-                        <div class="password-requirements mt-2" id="passwordRequirements">
-                            <p class="text-gray-500 text-sm">يجب أن تحتوي كلمة المرور على:</p>
-                            <div id="min-length" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>6 أحرف على الأقل</span>
-                            </div>
-                            <div id="has-upper" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>حرف كبير واحد على الأقل</span>
-                            </div>
-                            <div id="has-lower" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>حرف صغير واحد على الأقل</span>
-                            </div>
-                            <div id="has-number" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>رقم واحد على الأقل</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
-                        <div class="mt-1">
-                            <input id="confirmPassword" name="confirmPassword" type="password" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أعد إدخال كلمة المرور">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="role" class="block text-sm font-medium text-gray-700">نوع الحساب</label>
-                        <div class="mt-1">
-                            <select id="role" name="role" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right">
-                                <option value="" disabled selected>اختر نوع الحساب</option>
-                                <option value="employee">موظف</option>
-                                <option value="employer">شركة / صاحب عمل</option>
-                            </select>
-                        </div>
+            <div id="step-1" class="step-content">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">الخطوة 1: معلومات الاتصال</h3>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                    <div class="mt-1">
+                        <input id="email" name="email" type="email" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="example@domain.com">
                     </div>
                 </div>
-                <button type="button" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn1">
-                    التالي
-                </button>
+
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                    <div class="mt-1">
+                        <input id="phone" name="phone" type="tel" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="أدخل رقمك">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700">نوع الحساب</label>
+                    <div class="mt-1">
+                        <select id="role" name="role" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right">
+                            <option value="" disabled selected>اختر نوع الحساب</option>
+                            <option value="employee">موظف</option>
+                            <option value="employer">صاحب عمل</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="button" id="next-step-2"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        التالي (توثيق الحساب)
+                    </button>
+                </div>
             </div>
 
-            <div class="employee-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 2: البيانات الأساسية</h2>
-                    <div class="mb-4">
-                        <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
-                        <input type="text" id="headline" name="headline" placeholder="مثال: عامل ديكور"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="bio" class="block text-sm font-medium text-gray-700">نبذة وظيفية عنك</label>
-                        <textarea id="bio" name="bio" rows="5" placeholder="وصف مختصر عنك وعن خبراتك"
-                                  class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
-                        <input type="tel" id="phone" name="phone" placeholder="مثال: 0912345678"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="state" class="block text-sm font-medium text-gray-700">الولاية</label>
-                        <select id="state" name="state" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر ولاية</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="cityContainer">
-                        <label for="city" class="block text-sm font-medium text-gray-700">المدينة</label>
-                        <select id="city" name="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر مدينة</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="areaContainer">
-                        <label for="area" class="block text-sm font-medium text-gray-700">المنطقة / الحي</label>
-                        <select id="area" name="area" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر منطقة أو حي</option>
-                        </select>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn2-employee">
-                        السابق
-                    </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn2-employee">
-                        التالي
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: المهارات ومستوى الخبرة</h2>
-                    <div id="skillsContainer">
-                        <div class="mb-4 flex items-center">
-                            <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i class="fas fa-plus"></i></button>
+            <div id="step-2" class="step-content hidden">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">الخطوة 2: كلمة المرور والتحقق</h3>
+                
+                <div class="bg-yellow-50 border-r-4 border-yellow-400 p-4 mb-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 ml-3"></i>
+                        <div>
+                            <p class="text-sm font-medium text-yellow-800">
+                                تم إنشاء حسابك مؤقتاً. **سأرسل لك رابط تحقق عبر الإيميل بعد الضغط على زر "التالي"**.
+                                <br>يرجى تحديد كلمة المرور هنا.
+                            </p>
                         </div>
                     </div>
-                    <p id="skillsLimitMessage" class="text-red-500 text-sm mt-2 hidden">لا يمكنك إضافة أكثر من 6 مهارات.</p>
-                    <div class="mb-4">
-                        <label for="experience" class="block text-sm font-medium text-gray-700">مستوى الخبرة</label>
-                        <select id="experience" name="experience" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر مستوى الخبرة</option>
-                            <option value="مبتدئ">مبتدئ (0-2 سنوات)</option>
-                            <option value="متوسط">متوسط (2-5 سنوات)</option>
-                            <option value="خبير">خبير (5+ سنوات)</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">حالة البحث عن عمل</label>
-                        <div class="flex gap-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="jobStatus" value="متاح للعمل" class="form-radio text-blue-600" checked>
-                                <span class="mr-2">متاح للعمل</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="jobStatus" value="لا أبحث حالياً" class="form-radio text-blue-600">
-                                <span class="mr-2">لا أبحث حالياً</span>
-                            </label>
-                        </div>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employee">
-                        السابق
-                    </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employee">
-                        التالي
-                    </button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: الملفات والروابط</h2>
-                    <div class="mb-4">
-                        <label for="cvUrl" class="block text-sm font-medium text-gray-700">رابط السيرة الذاتية (CV) (اختياري)</label>
-                        <input type="url" id="cvUrl" name="cvUrl" placeholder="مثال: https://docs.google.com/your-cv"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <div class="mt-1">
+                        <input id="password" name="password" type="password" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="أدخل كلمة مرور قوية">
                     </div>
-                    <div class="mb-4">
-                        <label for="linkedinUrl" class="block text-sm font-medium text-gray-700">رابط لينكد إن (اختياري)</label>
-                        <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="مثال: https://linkedin.com/in/your-profile"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <div class="password-requirements mt-2" id="passwordRequirements">
+                         <p class="text-gray-500 text-sm">يجب أن تحتوي كلمة المرور على:</p>
+                         <div id="min-length" class="password-requirement-item">
+                             <i class="fas fa-check-circle ml-2 text-red-500"></i>
+                             <span>6 أحرف على الأقل</span>
+                         </div>
+                         <div id="has-upper" class="password-requirement-item">
+                             <i class="fas fa-check-circle ml-2 text-red-500"></i>
+                             <span>حرف كبير واحد على الأقل</span>
+                         </div>
+                         <div id="has-lower" class="password-requirement-item">
+                             <i class="fas fa-check-circle ml-2 text-red-500"></i>
+                             <span>حرف صغير واحد على الأقل</span>
+                         </div>
+                         <div id="has-number" class="password-requirement-item">
+                             <i class="fas fa-check-circle ml-2 text-red-500"></i>
+                             <span>رقم واحد على الأقل</span>
+                         </div>
                     </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employee">
+                </div>
+
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
+                    <div class="mt-1">
+                        <input id="confirmPassword" name="confirmPassword" type="password" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="أعد إدخال كلمة المرور">
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="prev-step-1"
+                            class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
                         السابق
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employee">
+                    <button type="button" id="next-step-3"
+                            class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        التالي (الكاميرا والمسح)
+                    </button>
+                </div>
+            </div>
+            
+            <div id="step-3" class="step-content hidden">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">الخطوة 3: التحقق عبر الكاميرا (OCR)</h3>
+
+                <div class="hidden">
+                    <input id="idCardImage" name="idCardImage" type="file" accept="image/*" capture="user">
+                </div>
+
+                <div class="document-frame">
+                    <div class="corner-mark top-right"></div>
+                    <div class="corner-mark top-left"></div>
+                    <div class="corner-mark bottom-right"></div>
+                    <div class="corner-mark bottom-left"></div>
+
+                    <label class="block text-lg font-bold text-gray-700 mb-4">
+                        📸 يرجى وضع البطاقة الشخصية داخل هذا الإطار
+                    </label>
+                    
+                    <button type="button" id="scanButton"
+                            class="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400">
+                        <i class="fas fa-camera ml-2"></i>
+                        افتح الكاميرا والتقط صورة
+                    </button>
+                    
+                    <div id="ocrStatus" class="text-center text-sm font-medium mt-3 hidden"></div>
+                </div>
+                
+                <p class="text-sm text-gray-500 mt-4 text-center">
+                    **ملاحظة:** سيتم ملء البيانات آليًا ولا يمكن تعديلها يدوياً.
+                </p>
+
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="prev-step-2"
+                            class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                        السابق
+                    </button>
+                    <button type="button" id="next-step-4" disabled
+                            class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400">
+                        التالي (مراجعة البيانات)
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="step-4" class="step-content hidden">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">الخطوة 4: مراجعة وإتمام التسجيل</h3>
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">الاسم الكامل (آلي)</label>
+                    <div class="mt-1">
+                        <input id="name" name="name" type="text" required disabled
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="سيتم الملء آلياً بعد المسح">
+                    </div>
+                </div>
+                 
+                <div>
+                    <label for="nationalID" class="block text-sm font-medium text-gray-700">الرقم الوطني (آلي)</label>
+                    <div class="mt-1">
+                        <input id="nationalID" name="nationalID" type="text" required disabled
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="سيتم الملء آلياً بعد المسح">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="currentAddress" class="block text-sm font-medium text-gray-700">العنوان الحالي (آلي)</label>
+                    <div class="mt-1">
+                        <input id="currentAddress" name="currentAddress" type="text" required disabled
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
+                               placeholder="سيتم الملء آلياً بعد المسح">
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="prev-step-3"
+                            class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                        السابق (إعادة المسح)
+                    </button>
+                    <button type="submit"
+                            class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         إنشاء الحساب
                     </button>
                 </div>
             </div>
 
-            <div class="employer-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 2: بيانات الشركة</h2>
-                    <div class="mb-4">
-                        <label for="companyName" class="block text-sm font-medium text-gray-700">اسم الشركة / النشاط التجاري</label>
-                        <input type="text" id="companyName" name="companyName" placeholder="مثال: شركة التقنية الحديثة" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyEmail" class="block text-sm font-medium text-gray-700">البريد الإلكتروني الرسمي</label>
-                        <input type="email" id="companyEmail" name="companyEmail" placeholder="مثال: info@company.com" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyPhone" class="block text-sm font-medium text-gray-700">رقم الهاتف (اختياري)</label>
-                        <input type="tel" id="companyPhone" name="companyPhone" placeholder="مثال: 0912345678"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="businessType" class="block text-sm font-medium text-gray-700">نوع النشاط</label>
-                        <input type="text" id="businessType" name="businessType" placeholder="مثال: مطعم، برمجة، ورشة..." required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn2-employer">
-                        السابق
-                    </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn2-employer">
-                        التالي
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: التفاصيل</h2>
-                    <div class="mb-4">
-                        <label for="companyDescription" class="block text-sm font-medium text-gray-700">نبذة عن الشركة</label>
-                        <textarea id="companyDescription" name="companyDescription" rows="5" placeholder="وصف مختصر وعدد الموظفين/الخدمات" required
-                                  class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyState" class="block text-sm font-medium text-gray-700">الولاية</label>
-                        <select id="companyState" name="companyState" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر ولاية</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="companyCityContainer">
-                        <label for="companyCity" class="block text-sm font-medium text-gray-700">المدينة</label>
-                        <select id="companyCity" name="companyCity" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر مدينة</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="companyAreaContainer">
-                        <label for="companyArea" class="block text-sm font-medium text-gray-700">المنطقة / الحي</label>
-                        <select id="companyArea" name="companyArea" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">اختر منطقة أو حي</option>
-                        </select>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn3-employer">
-                        السابق
-                    </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn3-employer">
-                        التالي
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: التوثيق (اختياري)</h2>
-                    <p class="text-sm text-gray-500 mb-4">إذا قمت بتوثيق حسابك، ستحصل على شارة **"شركة موثقة ✅"**.</p>
-                    <div class="mb-4">
-                        <label for="commercialRegister" class="block text-sm font-medium text-gray-700">رخصة / سجل تجاري (اختياري)</label>
-                        <input type="file" id="commercialRegister" name="commercialRegister" accept=".pdf,.doc,.docx"
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn4-employer">
-                        السابق
-                    </button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="nextBtn4-employer">
-                        التالي
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 5: تفعيل الحساب</h2>
-                     <p class="text-sm text-gray-500 mb-4">اختر نوع الحساب الفرعي لتفعيل حسابك:</p>
-                    <div class="flex flex-col space-y-4">
-                        <label class="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <input type="radio" name="employerType" value="hiring" class="form-radio text-blue-600" checked>
-                            <span class="text-lg font-semibold mr-2">شركة لديها شواغر وتريد التوظيف</span>
-                        </label>
-                        <label class="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <input type="radio" name="employerType" value="individual" class="form-radio text-blue-600">
-                            <span class="text-lg font-semibold mr-2">صاحب عمل فردي يبحث عن موظف أو عامل</span>
-                        </label>
-                    </div>
-                    <button type="button" class="mt-6 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300" id="prevBtn5-employer">
-                        السابق
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="submitBtn-employer">
-                        إنشاء الحساب
-                    </button>
-                </div>
-            </div>
         </form>
-
-        <div id="message" class="message hidden"></div>
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">
                 هل لديك حساب بالفعل؟
@@ -383,437 +283,319 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; // تم الإبقاء على استيراد storage لأجل رفع السجل التجاري (pdf)
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import Tesseract from 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.esm.min.js';
 
-        // **ملاحظة:** تم الإبقاء على استيراد Firebase Storage لأنه يُستخدم لرفع ملفات أخرى مثل السجل التجاري (Commercial Register).
-
+        // **1. تهيئة Firebase**
         const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.appspot.com",
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819",
-          measurementId: "G-98GQGZS09W"
+            apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+            authDomain: "shaglni-c64c0.firebaseapp.com",
+            projectId: "shaglni-c64c0",
+            storageBucket: "shaglni-c64c0.firebasestorage.app",
+            messagingSenderId: "768887356636",
+            appId: "1:768887356636:web:11ec1d6991add3309c8819",
+            measurementId: "G-98GQGZS09W"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const storage = getStorage(app); // تم الإبقاء على المتغير
 
+        // **2. ربط عناصر الواجهة بمتغيرات في الكود**
+        const registerForm = document.getElementById('registerForm');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        // حقول الخطوة 1
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const roleInput = document.getElementById('role');
+        // حقول الخطوة 2
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        // عناصر الخطوة 3 (الكاميرا)
+        const idCardImageInput = document.getElementById('idCardImage');
+        const scanButton = document.getElementById('scanButton');
+        const ocrStatus = document.getElementById('ocrStatus');
+        const nextStep4Button = document.getElementById('next-step-4'); 
+        // حقول الخطوة 4 (مراجعة البيانات - مُعطلة)
+        const nameInput = document.getElementById('name');
+        const nationalIDInput = document.getElementById('nationalID');
+        const currentAddressInput = document.getElementById('currentAddress');
+
+        // **3. وظائف التنقل بين الخطوات**
         let currentStep = 1;
-        let isEmployerFlow = false;
-        const form = document.getElementById('unifiedForm');
-        const messageDiv = document.getElementById('message');
-        const roleSelect = document.getElementById('role');
 
-        const sudanLocations = {
-            "الخرطوم": {
-                "الخرطوم": ["السجانة", "العمارات", "الرياض", "الطائف", "المنشية", "بري", "الخرطوم 2", "الخرطوم 3", "السوق العربي", "حي المطار", "الشجرة", "جبرة", "الأزهري", "الصحافة", "الكلاكلة"],
-                "أم درمان": ["العباسية", "بيت المال", "الملازمين", "أبو روف", "الموردة", "الهاشماب", "العرضة", "ود نوباوي", "حي العرب", "الشهداء", "المسالمة", "بانت", "الثورة", "الحتانة", "الفتيحاب", "الواحة", "أم بدة", "السلام", "الفتح", "دار السلام"],
-                "الخرطوم بحري": ["كافوري", "شمبات", "الشعبية", "الدناقلة", "الخوجلاب", "الصافية", "كوبر", "الحلفايا", "الدروشاب", "الحاج يوسف", "سوبا شرق", "العيلفون", "أم ضوا بان", "أم دوم", "الشقلة", "النصر", "الوادي الأخضر"],
-                "شرق النيل": ["شرق النيل"],
-                "جبل أولياء": ["جبل أولياء"],
-                "كرري": ["كرري"]
-            },
-            "الجزيرة": ["ود مدني", "الحصاحيصا", "المناقل", "رفاعة"],
-            "البحر الأحمر": ["بورتسودان", "سواكن", "طوكر", "هيا"],
-            "كسلا": ["كسلا", "حلفا الجديدة", "القضارف", "همشكوريب"],
-            "القضارف": ["القضارف", "الفشقة", "القلابات", "الرهد"],
-            "سنار": ["سنار", "سنجة", "التينا", "الدندر"],
-            "النيل الأبيض": ["ربك", "كوستي", "الدويّم", "تندلتي"],
-            "النيل الأزرق": ["الدمازين", "الروصيرص", "الكرمك", "باو"],
-            "شمال كردفان": ["الأبيض", "أم روابة", "بارا", "سودري"],
-            "جنوب كردفان": ["كادقلي", "تلودي", "العباسية", "أبو جبيهة"],
-            "غرب كردفان": ["الفولة", "لقاوة", "الميرم", "أبو زبد"],
-            "الشمالية": ["دنقلا", "حلفا", "مروي", "القولد"],
-            "نهر النيل": ["الدامر", "عطبرة", "شندي", "بربر"],
-            "شمال دارفور": ["الفاشر", "كبكابية", "المالحة", "كتم"],
-            "جنوب دارفور": ["نيالا", "الضعين", "رهيد البردي", "كاس"],
-            "غرب دارفور": ["الجنينة", "سرف عمرة", "كرينك", "كلبس"],
-            "وسط دارفور": ["زالنجي", "وداد", "مكجر"],
-            "شرق دارفور": ["الضعين", "عديلة", "أبو كارنكا", "ياسين"],
-        };
-
-        function validatePassword() {
-            const password = document.getElementById('password').value;
-            const checks = {
-                minLength: password.length >= 6,
-                hasUpper: /[A-Z]/.test(password),
-                hasLower: /[a-z]/.test(password),
-                hasNumber: /[0-9]/.test(password)
-            };
-            const requirements = {
-                minLength: document.getElementById('min-length'),
-                hasUpper: document.getElementById('has-upper'),
-                hasLower: document.getElementById('has-lower'),
-                hasNumber: document.getElementById('has-number'),
-            };
-            for (const key in checks) {
-                const element = requirements[key];
-                if (checks[key]) {
-                    element.classList.add('valid');
-                    element.querySelector('i').className = 'fas fa-check-circle ml-2 text-green-500';
+        function updateStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.step-indicator').forEach(el => {
+                const stepNum = parseInt(el.id.slice(-1));
+                if (stepNum <= step) {
+                    el.classList.add('active');
+                    el.classList.remove('bg-gray-200', 'text-gray-500');
+                    el.classList.add('bg-blue-600', 'text-white');
                 } else {
-                    element.classList.remove('valid');
-                    element.querySelector('i').className = 'fas fa-times-circle ml-2 text-red-500';
+                    el.classList.remove('active', 'bg-blue-600', 'text-white');
+                    el.classList.add('bg-gray-200', 'text-gray-500');
                 }
-            }
-            return Object.values(checks).every(Boolean);
+            });
+            currentStep = step;
         }
+        
+        // **4. دالة التحقق من كلمة المرور**
+        function validatePassword() {
+            // ... (منطق كلمة المرور)
+             const password = passwordInput.value;
+             const checks = {
+                 minLength: password.length >= 6,
+                 hasUpper: /[A-Z]/.test(password),
+                 hasLower: /[a-z]/.test(password),
+                 hasNumber: /[0-9]/.test(password)
+             };
+             const requirements = {
+                 minLength: document.getElementById('min-length'),
+                 hasUpper: document.getElementById('has-upper'),
+                 hasLower: document.getElementById('has-lower'),
+                 hasNumber: document.getElementById('has-number'),
+             };
+             for (const key in checks) {
+                 const element = requirements[key];
+                 if (checks[key]) {
+                     element.classList.add('valid');
+                     element.querySelector('i').className = 'fas fa-check-circle ml-2 text-green-500';
+                 } else {
+                     element.classList.remove('valid');
+                     element.querySelector('i').className = 'fas fa-times-circle ml-2 text-red-500';
+                 }
+             }
+             return Object.values(checks).every(Boolean);
+        }
+        passwordInput.addEventListener('input', validatePassword);
 
-        document.getElementById('password').addEventListener('input', validatePassword);
-
-        roleSelect.addEventListener('change', () => {
-            isEmployerFlow = (roleSelect.value === 'employer');
-            updateStepIndicator();
+        // **5. معالجة التنقل والتحقق**
+        
+        // من 1 إلى 2
+        document.getElementById('next-step-2').addEventListener('click', () => {
+            feedbackMessage.classList.add('hidden');
+            if (!emailInput.value || !phoneInput.value || !roleInput.value) {
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = 'الرجاء ملء جميع الحقول المطلوبة في الخطوة 1.';
+                return;
+            }
+            updateStep(2);
         });
 
-        function updateStepIndicator() {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach(stepEl => stepEl.classList.remove('active'));
-            for (let i = 1; i <= currentStep; i++) {
-                const indicator = document.getElementById(`stepIndicator${i}`);
-                if (indicator) indicator.classList.add('active');
+        // من 2 إلى 3 (الكاميرا) - إنشاء حساب Firebase وإرسال إيميل التحقق
+        document.getElementById('next-step-3').addEventListener('click', async () => {
+            feedbackMessage.classList.add('hidden');
+            if (passwordInput.value !== confirmPasswordInput.value || !validatePassword()) {
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = 'الرجاء التأكد من صحة و تطابق كلمة المرور.';
+                return;
             }
-            document.getElementById('stepIndicator5').classList.add('hidden');
-            if (isEmployerFlow) {
-                document.getElementById('stepIndicator5').classList.remove('hidden');
-            }
-        }
-
-        function showStep(stepNumber, role) {
-            const stepId = role === 'employer' ? `step${stepNumber}-employer` : `step${stepNumber}-employee`;
-            const allSteps = document.querySelectorAll('.form-card');
-            allSteps.forEach(el => el.classList.add('hidden'));
-            document.getElementById(stepId).classList.remove('hidden');
-            currentStep = stepNumber;
-            updateStepIndicator();
-        }
-
-        function nextStep(step) {
-            let currentStepElementId;
-            let nextStepElementId;
-
-            if (step === 1) {
-                currentStepElementId = 'step1';
-                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-                if (!isStepValid) return;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                if (password !== confirmPassword) {
-                    showMessage('كلمة المرور وتأكيدها غير متطابقين.', 'error');
-                    return;
-                }
-                if (!validatePassword()) {
-                    showMessage('كلمة المرور لا تستوفي جميع المتطلبات.', 'error');
-                    return;
-                }
-                isEmployerFlow = (document.getElementById('role').value === 'employer');
-                nextStepElementId = isEmployerFlow ? 'step2-employer' : 'step2-employee';
-            } else {
-                const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
-                currentStepElementId = `step${step}-${stepIdSuffix}`;
-                const formInputs = document.getElementById(currentStepElementId).querySelectorAll('input:required, select:required, textarea:required');
-                let isStepValid = true;
-                formInputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isStepValid = false;
-                    }
-                });
-                if (!isStepValid) return;
-                nextStepElementId = `step${step + 1}-${stepIdSuffix}`;
-            }
-
-            document.getElementById(currentStepElementId).classList.add('hidden');
-            document.getElementById(nextStepElementId).classList.remove('hidden');
-            currentStep++;
-            updateStepIndicator();
-        }
-
-        function prevStep(step) {
-            const stepIdSuffix = isEmployerFlow ? 'employer' : 'employee';
-            const currentStepElementId = `step${step}-${stepIdSuffix}`;
-            const prevStepElementId = step === 2 ? 'step1' : `step${step - 1}-${stepIdSuffix}`;
-
-            document.getElementById(currentStepElementId).classList.add('hidden');
-            document.getElementById(prevStepElementId).classList.remove('hidden');
-            currentStep--;
-            updateStepIndicator();
-        }
-
-        async function submitForm(event) {
-            event.preventDefault();
-            const submitButton = event.target;
-            submitButton.disabled = true;
-            const originalButtonText = submitButton.textContent;
-            submitButton.textContent = 'جاري الحفظ...';
-
-            const formInputs = form.elements;
-            const name = formInputs['name'].value;
-            const email = formInputs['email'].value;
-            const password = formInputs['password'].value;
-            const role = formInputs['role'].value;
-
+            
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
                 const user = userCredential.user;
-                let userData;
+                await sendEmailVerification(user);
 
-                if (role === 'employee') {
-                    // تم حذف منطق جلب وتحميل صور الملف الشخصي والأعمال السابقة
-
-                    const skillInputs = document.querySelectorAll('.skill-input');
-                    const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(skill => skill !== '');
-
-                    userData = {
-                        name: name,
-                        email: user.email,
-                        role: role,
-                        isProfileComplete: true,
-                        createdAt: serverTimestamp(),
-                        headline: formInputs['headline'].value || null,
-                        bio: formInputs['bio'].value || null,
-                        // تم حذف profileImageUrl,
-                        contact: {
-                            phone: formInputs['phone'].value || null,
-                            location: { state: formInputs['state'].value || null, city: formInputs['city'].value || null, area: formInputs['area'].value || null }
-                        },
-                        skills,
-                        experience: formInputs['experience'].value || null,
-                        jobStatus: formInputs['jobStatus'].value || null,
-                        links: { cv: formInputs['cvUrl'].value || null, linkedin: formInputs['linkedinUrl'].value || null },
-                        // تم حذف previousWorksUrls,
-                    };
-
-                } else if (role === 'employer') {
-                    // تم حذف منطق جلب وتحميل شعار الشركة وصور مقر الشركة
-                    const commercialRegisterFile = formInputs['commercialRegister'].files[0];
-
-                    // تم حذف companyLogoFile و companyPhotosFiles
-                    let commercialRegisterUrl = null;
-                    // تم حذف companyLogoUrl و companyPhotosUrls
-                    let isVerified = false;
-
-                    // if (companyLogoFile) { companyLogoUrl = await uploadFile(companyLogoFile, `company_logos/${user.uid}`); } // تم الحذف
-                    if (commercialRegisterFile) {
-                        commercialRegisterUrl = await uploadFile(commercialRegisterFile, `company_documents/${user.uid}`);
-                        isVerified = true;
-                    }
-                    // if (companyPhotosFiles.length > 0) { // تم الحذف
-                    //     companyPhotosUrls = await Promise.all(Array.from(companyPhotosFiles).map(file => uploadFile(file, `company_photos/${user.uid}`)));
-                    // }
-
-                    userData = {
-                        name: name,
-                        email: user.email,
-                        role: role,
-                        isProfileComplete: true,
-                        createdAt: serverTimestamp(),
-                        companyInfo: {
-                            name: formInputs['companyName'].value || null,
-                            email: formInputs['companyEmail'].value || null,
-                            phone: formInputs['companyPhone'].value || null,
-                            // تم حذف logoUrl: companyLogoUrl,
-                            businessType: formInputs['businessType'].value || null,
-                            description: formInputs['companyDescription'].value || null,
-                            location: {
-                                state: formInputs['companyState'].value || null,
-                                city: formInputs['companyCity'].value || null,
-                                area: formInputs['companyArea'].value || null,
-                            }
-                        },
-                        verification: {
-                            isVerified: isVerified,
-                            commercialRegisterUrl: commercialRegisterUrl,
-                            // تم حذف companyPhotosUrls: companyPhotosUrls,
-                        },
-                        subRole: formInputs['employerType'].value
-                    };
-                }
-
-                const collectionName = role === 'employee' ? 'employees' : 'employers';
-                await setDoc(doc(db, collectionName, user.uid), userData);
-
-                showMessage('تم إنشاء حسابك بنجاح! سيتم توجيهك الآن.', 'success');
-
-                setTimeout(() => {
-                    const redirectUrl = role === 'employee' ? "profile.html" : "employer-dashboard.html";
-                    window.location.href = redirectUrl;
-                }, 2000);
+                updateStep(3);
+                nextStep4Button.disabled = true; // تعطيل زر "التالي" حتى يتم المسح بنجاح
 
             } catch (error) {
-                console.error("خطأ في التسجيل:", error);
-                let errorMessage = 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
+                feedbackMessage.classList.remove('hidden', 'text-green-500');
+                feedbackMessage.classList.add('text-red-500');
                 switch (error.code) {
                     case 'auth/email-already-in-use':
-                        errorMessage = 'هذا البريد الإلكتروني مستخدم بالفعل.';
+                        feedbackMessage.textContent = 'هذا البريد الإلكتروني مستخدم بالفعل.';
                         break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = 'كلمة المرور ضعيفة جداً.';
+                    default:
+                        feedbackMessage.textContent = '❌ حدث خطأ غير متوقع في إنشاء الحساب.';
+                        console.error("خطأ التسجيل:", error);
                         break;
                 }
-                showMessage(errorMessage, 'error');
+            }
+        });
+
+        // أزرار الرجوع
+        document.getElementById('prev-step-1').addEventListener('click', () => updateStep(1));
+        document.getElementById('prev-step-2').addEventListener('click', () => updateStep(2));
+        document.getElementById('prev-step-3').addEventListener('click', () => updateStep(3));
+
+        // من 3 إلى 4 (المراجعة)
+        document.getElementById('next-step-4').addEventListener('click', () => {
+             // التحقق فقط من حالة الزر. يجب أن يكون تم تفعيله بواسطة دالة المسح
+             if (nextStep4Button.disabled) {
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = 'الرجاء إكمال مسح البطاقة بنجاح أولاً في الخطوة 3.';
+                return;
+             }
+             updateStep(4);
+        });
+
+        // **6. وظائف OCR المساعدة**
+        function extractSudanIDData(text) {
+            const lines = text.split('\n').filter(line => line.trim().length > 0);
+            const data = { fullName: '', nationalID: '', address: '' };
+            const nameKeywords = ['الاسم', 'الاسم الكامل', 'الأسماء'];
+            const addressKeywords = ['العنوان', 'السكن', 'المحلية'];
+
+            for (const line of lines) {
+                // البحث عن 11 رقمًا متتاليًا
+                const idMatch = line.match(/(\d{11})/); 
+                if (idMatch && !data.nationalID) {
+                    data.nationalID = idMatch[0];
+                    continue;
+                }
+                if (!data.fullName && nameKeywords.some(keyword => line.includes(keyword))) {
+                    let namePart = line;
+                    nameKeywords.forEach(k => { namePart = namePart.replace(k, '').trim(); });
+                    data.fullName = namePart.trim();
+                    continue;
+                }
+                if (!data.address && addressKeywords.some(keyword => line.includes(keyword))) {
+                    let addressPart = line;
+                    addressKeywords.forEach(k => { addressPart = addressPart.replace(k, '').trim(); });
+                    data.address = addressPart.trim();
+                    continue;
+                }
+            }
+            if (!data.fullName && lines.length > 0) {
+                 data.fullName = lines[0].substring(0, 30).trim() || 'لم يتم استخلاص الاسم';
+            }
+            return data;
+        }
+        
+        // **7. دالة معالجة OCR (الخطوة 3) - تم تخفيف شرط النجاح**
+        async function processOCR() {
+            const file = idCardImageInput.files[0];
+            if (!file) return;
+            
+            ocrStatus.classList.remove('hidden', 'text-green-500', 'text-red-500');
+            ocrStatus.classList.add('text-blue-500');
+            ocrStatus.textContent = 'جاري تحليل الصورة الملتقطة واستخراج البيانات...';
+            
+            scanButton.disabled = true;
+            nextStep4Button.disabled = true; 
+            scanButton.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري المسح (انتظر قليلاً)';
+
+            try {
+                const result = await Tesseract.recognize(
+                    file,
+                    'ara',
+                    { logger: m => { if (m.status === 'recognizing text') { ocrStatus.textContent = `جاري استخراج النص: ${Math.round(m.progress * 100)}%`; } } }
+                );
+                
+                const extractedData = extractSudanIDData(result.data.text);
+                
+                // يكفي العثور على أي بيانات معقولة لتمرير المسح (تجربة)
+                const isDataValid = (extractedData.nationalID && extractedData.nationalID.length >= 5) || extractedData.fullName.length > 5;
+                
+                // ملء الحقول في الخطوة 4
+                nameInput.value = extractedData.fullName || 'لم يتم استخلاص الاسم';
+                nationalIDInput.value = extractedData.nationalID || 'لم يتم استخلاص الرقم الوطني';
+                currentAddressInput.value = extractedData.address || 'لم يتم استخلاص العنوان';
+
+                if (isDataValid) {
+                    ocrStatus.classList.remove('text-blue-500');
+                    ocrStatus.classList.add('text-green-500');
+                    ocrStatus.textContent = '✅ تم استخراج البيانات بنجاح! يمكنك الآن الانتقال للخطوة التالية للمراجعة.';
+                    nextStep4Button.disabled = false; // تفعيل زر التالي
+                } else {
+                    // رسالة الخطأ الواضحة
+                    ocrStatus.classList.remove('text-blue-500');
+                    ocrStatus.classList.add('text-red-500');
+                    ocrStatus.innerHTML = `
+                        ❌ **فشل في استخراج أي بيانات أساسية!**
+                        <br>الرجاء إعادة التصوير والتأكد من:
+                        <ul class="list-disc text-right mr-4 mt-1">
+                            <li>وضوح الصورة (غير معكوسة أو مظلمة).</li>
+                            <li>ظهور بيانات الاسم أو الرقم الوطني (11 رقمًا) داخل الإطار.</li>
+                        </ul>
+                    `;
+                    nextStep4Button.disabled = true; // تأكيد تعطيل زر التالي
+                }
+
+
+            } catch (error) {
+                console.error("OCR Error:", error);
+                ocrStatus.classList.remove('text-blue-500');
+                ocrStatus.classList.add('text-red-500');
+                ocrStatus.textContent = '❌ حدث خطأ فني أثناء المعالجة. يرجى التأكد من اتصالك بالإنترنت والتقاط صورة واضحة.';
+                nextStep4Button.disabled = true; 
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
+                scanButton.disabled = false;
+                scanButton.innerHTML = '<i class="fas fa-camera ml-2"></i> أعد التقاط صورة أخرى للبطاقة';
             }
         }
 
-        // تم الإبقاء على دالة uploadFile لرفع السجل التجاري
-        async function uploadFile(file, filePath) {
-            const storageRef = ref(storage, filePath + '/' + file.name);
-            const uploadTask = await uploadBytes(storageRef, file);
-            return await getDownloadURL(uploadTask.ref);
-        }
-
-        function showMessage(msg, type) {
-            messageDiv.textContent = msg;
-            messageDiv.className = `message ${type}-message`;
-            messageDiv.classList.remove('hidden');
-        }
-
-        const employeeStateSelect = document.getElementById('state');
-        const employeeCitySelect = document.getElementById('city');
-        const employeeAreaSelect = document.getElementById('area');
-        const employeeCityContainer = document.getElementById('cityContainer');
-        const employeeAreaContainer = document.getElementById('areaContainer');
-
-        const employerStateSelect = document.getElementById('companyState');
-        const employerCitySelect = document.getElementById('companyCity');
-        const employerAreaSelect = document.getElementById('companyArea');
-        const employerCityContainer = document.getElementById('companyCityContainer');
-        const employerAreaContainer = document.getElementById('companyAreaContainer');
-
-        function populateLocations(stateSelect, citySelect, areaSelect, cityContainer, areaContainer) {
-            stateSelect.addEventListener('change', function() {
-                const selectedState = this.value;
-                citySelect.innerHTML = '<option value="">اختر مدينة</option>';
-                cityContainer.classList.add('hidden');
-                areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
-                areaContainer.classList.add('hidden');
-                if (selectedState && sudanLocations[selectedState]) {
-                    const citiesOrAreas = sudanLocations[selectedState];
-                    if (Array.isArray(citiesOrAreas)) {
-                        citiesOrAreas.forEach(city => {
-                            const option = document.createElement('option');
-                            option.value = city;
-                            option.textContent = city;
-                            citySelect.appendChild(option);
-                        });
-                        cityContainer.classList.remove('hidden');
-                    } else if (typeof citiesOrAreas === 'object') {
-                        for (const city in citiesOrAreas) {
-                            const option = document.createElement('option');
-                            option.value = city;
-                            option.textContent = city;
-                            citySelect.appendChild(option);
-                        }
-                        cityContainer.classList.remove('hidden');
-                    }
-                }
-            });
-
-            citySelect.addEventListener('change', function() {
-                const selectedState = stateSelect.value;
-                const selectedCity = this.value;
-                areaSelect.innerHTML = '<option value="">اختر منطقة أو حي</option>';
-                areaContainer.classList.add('hidden');
-                if (selectedState && selectedCity && sudanLocations[selectedState][selectedCity]) {
-                    const areas = sudanLocations[selectedState][selectedCity];
-                    if (areas && Array.isArray(areas)) {
-                        areas.forEach(area => {
-                            const option = document.createElement('option');
-                            option.value = area;
-                            option.textContent = area;
-                            areaSelect.appendChild(option);
-                        });
-                        areaContainer.classList.remove('hidden');
-                    }
-                }
-            });
-        }
-
-        populateLocations(employeeStateSelect, employeeCitySelect, employeeAreaSelect, employeeCityContainer, employeeAreaContainer);
-        populateLocations(employerStateSelect, employerCitySelect, employerAreaSelect, employerCityContainer, employerAreaContainer);
-
-        function populateStateSelects() {
-            const stateNames = Object.keys(sudanLocations);
-            [employeeStateSelect, employerStateSelect].forEach(select => {
-                stateNames.forEach(state => {
-                    const option = document.createElement('option');
-                    option.value = state;
-                    option.textContent = state;
-                    select.appendChild(option);
-                });
-            });
-        }
-        populateStateSelects();
-
-        document.getElementById('skillsContainer').addEventListener('click', function(event) {
-            const currentSkillsCount = document.querySelectorAll('.skill-input').length;
-            const messageElement = document.getElementById('skillsLimitMessage');
-            if (event.target.closest('.add-skill-btn')) {
-                if (currentSkillsCount >= 6) {
-                    messageElement.classList.remove('hidden');
-                    return;
-                }
-                messageElement.classList.add('hidden');
-                const newSkillInputHtml = `
-                    <div class="mb-4 flex items-center">
-                        <input type="text" name="skills[]" placeholder="مثال: React.js" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="button" class="remove-skill-btn mr-2 p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"><i class="fas fa-minus"></i></button>
-                    </div>
-                `;
-                document.getElementById('skillsContainer').insertAdjacentHTML('beforeend', newSkillInputHtml);
+        // **8. ربط زر الكاميرا (الخطوة 3)**
+        scanButton.addEventListener('click', () => {
+            idCardImageInput.click(); 
+        });
+        idCardImageInput.addEventListener('change', processOCR);
+        
+        // **9. دالة التسجيل وإنشاء الحساب النهائية (الخطوة 4)**
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (currentStep !== 4) return;
+            
+            // تحقق نهائي من أن هناك بيانات تم ملؤها
+            if (nationalIDInput.value.includes('لم يتم') && nameInput.value.includes('لم يتم')) {
+                feedbackMessage.classList.remove('hidden');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = 'الرجاء العودة للخطوة 3 والتأكد من نجاح مسح البطاقة والحصول على بعض البيانات.';
+                return;
             }
-            if (event.target.closest('.remove-skill-btn')) {
-                event.target.closest('.mb-4').remove();
-                if (document.querySelectorAll('.skill-input').length < 6) {
-                    messageElement.classList.add('hidden');
-                }
+            
+            // تمكين الحقول مؤقتاً قبل إرسال النموذج وحفظ البيانات في Firebase
+            nameInput.disabled = false;
+            nationalIDInput.disabled = false;
+            currentAddressInput.disabled = false;
+
+            try {
+                const user = auth.currentUser;
+                if (!user) throw new Error("User not authenticated.");
+
+                const collectionName = roleInput.value === 'employee' ? 'employees' : 'employers';
+
+                await setDoc(doc(db, collectionName, user.uid), {
+                    // حفظ البيانات كما تم استخلاصها
+                    fullName: nameInput.value,
+                    nationalID: nationalIDInput.value, 
+                    currentAddress: currentAddressInput.value,
+                    email: user.email,
+                    phone: phoneInput.value,
+                    role: roleInput.value,
+                    createdAt: serverTimestamp()
+                }, { merge: true });
+
+                feedbackMessage.classList.remove('hidden', 'text-red-500');
+                feedbackMessage.classList.add('text-green-500');
+                feedbackMessage.textContent = '🎉 تم إكمال إنشاء حسابك بنجاح! نُقلك لصفحة البداية.';
+
+                // إعادة تعيين النموذج
+                registerForm.reset();
+                updateStep(1); 
+
+            } catch (error) {
+                feedbackMessage.classList.remove('hidden', 'text-green-500');
+                feedbackMessage.classList.add('text-red-500');
+                feedbackMessage.textContent = '❌ حدث خطأ أثناء إتمام التسجيل. يرجى المحاولة لاحقًا.';
+                console.error("خطأ التسجيل النهائي:", error);
+            } finally {
+                // إعادة تعطيل الحقول بعد الإرسال أو عند الفشل
+                nameInput.disabled = true;
+                nationalIDInput.disabled = true;
+                currentAddressInput.disabled = true;
             }
         });
-
-        // تم حذف مستمع الحدث الخاص بمعاينة 'previousWorks'
-        // تم حذف مستمع الحدث الخاص بمعاينة 'companyPhotos'
-
-        // Navigation Event Listeners
-        document.getElementById('nextBtn1').addEventListener('click', () => nextStep(1));
-        document.getElementById('nextBtn2-employee').addEventListener('click', () => nextStep(2));
-        document.getElementById('nextBtn3-employee').addEventListener('click', () => nextStep(3));
-        document.getElementById('nextBtn2-employer').addEventListener('click', () => nextStep(2));
-        document.getElementById('nextBtn3-employer').addEventListener('click', () => nextStep(3));
-        document.getElementById('nextBtn4-employer').addEventListener('click', () => nextStep(4));
-
-        document.getElementById('prevBtn2-employee').addEventListener('click', () => prevStep(2));
-        document.getElementById('prevBtn3-employee').addEventListener('click', () => prevStep(3));
-        document.getElementById('prevBtn4-employee').addEventListener('click', () => prevStep(4));
-        document.getElementById('prevBtn2-employer').addEventListener('click', () => prevStep(2));
-        document.getElementById('prevBtn3-employer').addEventListener('click', () => prevStep(3));
-        document.getElementById('prevBtn4-employer').addEventListener('click', () => prevStep(4));
-        document.getElementById('prevBtn5-employer').addEventListener('click', () => prevStep(5));
-
-        document.getElementById('submitBtn-employee').addEventListener('click', submitForm);
-        document.getElementById('submitBtn-employer').addEventListener('click', submitForm);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.form-card').forEach(el => el.classList.add('hidden'));
-            document.getElementById('step1').classList.remove('hidden');
-            updateStepIndicator();
-        });
+        
+        // البدء بالخطوة الأولى
+        updateStep(1);
     </script>
 </body>
 </html>
