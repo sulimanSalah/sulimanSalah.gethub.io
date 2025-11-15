@@ -28,7 +28,8 @@
         }
 
         .container {
-            max-width: 900px;
+            /* تعديل: إزالة الـ max-width لملء الشاشة عرضًا */
+            width: 100%;
             margin: 0 auto;
             padding: 0;
             min-height: 100vh;
@@ -71,28 +72,29 @@
 
         .messages-container {
             flex-grow: 1;
-            padding: 0.5rem 1rem;
+            /* تعديل: زيادة المساحة الداخلية لتبدو أوسع */
+            padding: 1rem 1.5rem; 
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            gap: 0.5rem;
+            gap: 0.75rem; /* تعديل: زيادة المسافة بين الرسائل */
         }
 
         .message {
-            padding: 8px 10px;
-            border-radius: 8px;
-            min-width: 100px; 
-            max-width: 75%;
+            /* تعديل: زيادة الـ padding والـ font-size لجعل الفقاعات أكبر */
+            padding: 10px 12px; 
+            border-radius: 10px; 
+            min-width: 120px; 
+            max-width: 85%; /* تعديل: زيادة الحد الأقصى لملء الشاشة */
             position: relative;
             word-wrap: break-word;
-            font-size: 0.95rem;
+            font-size: 1rem;
             box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
         }
         
-        /* رسائل الطرف الآخر (الموظف) */
         .message.company {
             background-color: var(--card-bg-color);
             color: var(--text-color);
@@ -101,7 +103,6 @@
             border-top-right-radius: 0;
         }
 
-        /* رسائل المرسل (الشركة) */
         .message.user {
             background-color: var(--secondary-color);
             color: var(--text-color);
@@ -111,20 +112,26 @@
         }
 
         .message-content {
-            padding-bottom: 15px; /* مساحة للوقت في الأسفل */
+            padding-bottom: 15px;
         }
 
+        .message-footer {
+            /* حاوية flex لوقت الرسالة وعلامات القراءة */
+            display: flex;
+            align-items: flex-end;
+            position: absolute;
+            bottom: 3px;
+            left: 8px; /* دفع الوقت والمؤشر لليسار */
+        }
+        
         .message-time {
             font-size: 0.65rem;
             color: #888;
-            margin-top: 5px;
-            position: absolute;
-            bottom: 3px;
-            left: 8px; /* دفع الوقت لليسار */
         }
 
-        .message.user .message-time {
-            color: #4CAF50; /* لون أخضر أو أزرق خفيف للمرسل */
+        .read-status-icon {
+            margin-right: 3px; /* مسافة بين الوقت والمؤشر */
+            margin-bottom: 0px;
         }
 
         /* قسم التحذير (الشروط) */
@@ -132,16 +139,18 @@
             background-color: #fffde7;
             border-right: 5px solid #ffc107;
             padding: 1rem;
-            margin: 0.5rem 1rem;
+            margin: 0.5rem 1.5rem; /* تعديل: زيادة الهامش الأفقي */
             border-radius: 8px;
             text-align: right;
-            transition: all 0.5s ease-out; /* تحسين الانتقال */
+            transition: all 0.5s ease-out; 
         }
         .warning-section.hidden {
             opacity: 0;
             height: 0;
-            padding: 0 1rem; /* الحفاظ على الهامش الأفقي لسهولة العرض */
-            margin: 0.5rem 1rem;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
             overflow: hidden;
         }
         .warning-section h3 {
@@ -203,7 +212,7 @@
             <i class="fas fa-arrow-right text-gray-700 hover:text-gray-900 cursor-pointer text-xl" onclick="history.back()"></i>
             <img id="employee-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الموظف" class="employee-photo">
             <div>
-                <h1 id="chat-title">جارِ التحميل...</h1>
+                <h1 id="chat-title">جارِ التحميل...</h1> 
             </div>
         </div>
 
@@ -237,7 +246,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        // استيراد دوال Realtime Database
+        import { getDatabase, ref, push, onValue, serverTimestamp, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         // **هام:** تأكد من أن هذا التكوين مطابق لإعدادات مشروعك في Firebase
         const firebaseConfig = {
@@ -265,23 +275,28 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const employeeId = urlParams.get('employeeId');
-        // تفترض هذه المتغيرات أنك قمت بتمرير الاسم والصورة في رابط employee_list.html
         const employeeNameFromUrl = decodeURIComponent(urlParams.get('employeeName') || ''); 
         const employeePhotoUrlFromUrl = decodeURIComponent(urlParams.get('employeePhoto') || '');
 
         let user;
         let chatId;
-
+        
         // دالة مساعدة لتنسيق الوقت (ساعة:دقيقة ص/م)
         function formatTime(timestamp) {
             if (!timestamp) return '';
-            // Timestamp في Realtime DB هو بالألف من الثانية، يجب التحقق من قيمته
             const date = new Date(timestamp); 
             return date.toLocaleTimeString('ar-EG', { 
                 hour: '2-digit', 
                 minute: '2-digit', 
                 hour12: true 
             });
+        }
+
+        // دالة جديدة لتحديث ختم الوقت لآخر قراءة للمستخدم الحالي
+        function updateLastReadStatus() {
+            if (!user || !chatId) return;
+            const lastReadRef = ref(realtimeDb, `chats_metadata/${chatId}/lastRead/${user.uid}`);
+            set(lastReadRef, Date.now());
         }
         
         async function fetchEmployeeData() {
@@ -319,7 +334,6 @@
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 user = currentUser;
-                // التأكد من أن chatId يتشكل بترتيب أبجدي ليتطابق مع قواعد الأمان
                 const participants = [user.uid, employeeId].sort();
                 chatId = participants.join('_');
 
@@ -346,44 +360,69 @@
             }
         }
 
+        // دالة فصل منطق تحميل وعرض الرسائل
+        function loadAndRenderMessages(lastReadTimestamp, snapshot) {
+            loadingIndicator.classList.add('hidden');
+            messagesContainer.innerHTML = '';
+            
+            let hasUserSentMessage = false;
+            let hasOtherSentMessage = false;
+
+            if (snapshot && snapshot.exists()) {
+                const messagesData = snapshot.val();
+                const messages = Object.keys(messagesData).map(key => ({ ...messagesData[key], key }));
+                
+                messages.sort((a, b) => a.timestamp - b.timestamp);
+
+                messages.forEach((message) => {
+                    const sender = message.senderId === user.uid ? 'user' : 'company';
+                    
+                    // تحديد حالة القراءة: (فقط للرسائل التي أرسلها المستخدم الحالي)
+                    let isRead = false;
+                    if (sender === 'user' && message.timestamp <= lastReadTimestamp) {
+                         isRead = true;
+                    }
+                    
+                    if (message.senderId === user.uid) {
+                        hasUserSentMessage = true;
+                    } else {
+                        hasOtherSentMessage = true;
+                    }
+
+                    appendMessage(message.text, sender, message.timestamp, isRead);
+                });
+            }
+            
+            // منطق إخفاء قسم الشروط
+            if (hasUserSentMessage || hasOtherSentMessage) {
+                warningSection.classList.add('hidden');
+            }
+            // التمرير لأسفل تلقائياً لآخر رسالة
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // الاستماع للرسائل وحالة القراءة
         function listenForMessages() {
             const messagesRef = ref(realtimeDb, `messages/${chatId}`);
+            const employeeLastReadRef = ref(realtimeDb, `chats_metadata/${chatId}/lastRead/${employeeId}`);
+
+            let lastReadTimestamp = 0;
+            let messagesSnapshot = null;
             
+            // 1. الاستماع لحالة قراءة الموظف (الطرف الآخر)
+            onValue(employeeLastReadRef, (snapshot) => {
+                lastReadTimestamp = snapshot.val() || 0;
+                // إعادة تحميل الرسائل بعد تحديث حالة القراءة
+                if (messagesSnapshot) {
+                    loadAndRenderMessages(lastReadTimestamp, messagesSnapshot); 
+                }
+            });
+
+            // 2. الاستماع لبيانات الرسائل
             onValue(messagesRef, (snapshot) => {
-                loadingIndicator.classList.add('hidden');
-                messagesContainer.innerHTML = '';
-
-                let hasUserSentMessage = false;
-                let hasOtherSentMessage = false;
-
-                if (snapshot.exists()) {
-                    const messagesData = snapshot.val();
-                    const messages = Object.keys(messagesData).map(key => ({ ...messagesData[key], key }));
-                    
-                    // فرز الرسائل حسب ختم الوقت
-                    messages.sort((a, b) => a.timestamp - b.timestamp);
-
-                    messages.forEach((message) => {
-                        const sender = message.senderId === user.uid ? 'user' : 'company';
-                        
-                        // تتبع إرسال الرسائل لإخفاء التحذير
-                        if (message.senderId === user.uid) {
-                            hasUserSentMessage = true;
-                        } else {
-                            hasOtherSentMessage = true;
-                        }
-
-                        appendMessage(message.text, sender, message.timestamp);
-                    });
-                }
-                
-                // منطق إخفاء قسم الشروط (إذا أرسل أي طرف رسالة)
-                if (hasUserSentMessage || hasOtherSentMessage) {
-                    warningSection.classList.add('hidden');
-                }
-                
-                // التمرير لأسفل تلقائياً لآخر رسالة
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                messagesSnapshot = snapshot;
+                updateLastReadStatus(); // تحديث حالة القراءة للمستخدم الحالي
+                loadAndRenderMessages(lastReadTimestamp, messagesSnapshot);
             });
         }
 
@@ -415,16 +454,26 @@
             }
         });
 
-        // دالة عرض الرسالة على الواجهة (إضافة الوقت)
-        function appendMessage(text, sender, timestamp) {
+        // دالة عرض الرسالة على الواجهة (إضافة الوقت ومؤشر القراءة)
+        function appendMessage(text, sender, timestamp, isRead = false) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
             
             const timeSpan = `<span class="message-time">${formatTime(timestamp)}</span>`;
             
+            // الأيقونة الجديدة: تعرض علامتي صح إذا كانت الرسالة مقروءة
+            let readStatusIcon = '';
+            if (sender === 'user') {
+                const iconColor = isRead ? 'text-blue-500' : 'text-gray-400';
+                readStatusIcon = `<i class="fas fa-check-double text-xs ${iconColor} read-status-icon"></i>`;
+            }
+
             messageElement.innerHTML = `
                 <div class="message-content">${text}</div>
-                ${timeSpan}
+                <div class="message-footer">
+                    ${timeSpan}
+                    ${readStatusIcon}
+                </div>
             `;
             
             messagesContainer.appendChild(messageElement);
