@@ -9,15 +9,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
 
+        /* ألوان وتصميم مستوحاة من واتساب */
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #f59e0b;
-            --bg-color: #f5f7fa;
+            --primary-color: #075e54; /* أخضر واتساب */
+            --secondary-color: #dcf8c6; /* لون فقاعة الرسائل المرسلة */
+            --bg-color: #e5ddd5; /* خلفية واتساب */
             --card-bg-color: #fff;
             --text-color: #222;
             --light-text-color: #6c7280;
-            --border-radius: 12px;
-            --transition-speed: 0.3s;
         }
 
         body {
@@ -25,92 +24,125 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             direction: rtl;
+            margin: 0;
         }
 
         .container {
             max-width: 900px;
-            margin: 2rem auto;
-            padding: 1rem;
-            min-height: calc(100vh - 4rem);
+            margin: 0 auto;
+            padding: 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         .chat-header {
             background-color: var(--card-bg-color);
-            padding: 1.5rem 1rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            text-align: right;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
         .employee-photo {
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--primary-color);
         }
 
         .chat-header h1 {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
+            margin: 0;
         }
 
         .chat-box {
-            background-color: var(--card-bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* تعديل CSS لتحسين ترتيب الرسائل */
         .messages-container {
             flex-grow: 1;
-            padding: 1rem;
+            padding: 0.5rem 1rem;
             overflow-y: auto;
             display: flex;
-            flex-direction: column; /* الترتيب الطبيعي */
-            justify-content: flex-end; /* الرسائل تبدأ من الأسفل */
-            gap: 1rem;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 0.5rem;
         }
-        /* نهاية تعديل CSS */
 
         .message {
-            max-width: 70%;
-            padding: 0.75rem 1rem;
-            border-radius: 20px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            min-width: 100px; 
+            max-width: 75%;
             position: relative;
             word-wrap: break-word;
-            animation: fadeIn 0.3s ease-in-out;
+            font-size: 0.95rem;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
-
+        
+        /* رسائل الطرف الآخر (الموظف) */
         .message.company {
-            background-color: #eef2ff;
-            color: #1e40af;
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
             align-self: flex-start;
+            margin-right: auto;
+            border-top-right-radius: 0;
         }
 
+        /* رسائل المرسل (الشركة) */
         .message.user {
-            background-color: var(--primary-color);
-            color: var(--card-bg-color);
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             align-self: flex-end;
+            margin-left: auto;
+            border-top-left-radius: 0;
         }
 
+        .message-content {
+            padding-bottom: 15px; /* مساحة للوقت في الأسفل */
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            color: #888;
+            margin-top: 5px;
+            position: absolute;
+            bottom: 3px;
+            left: 8px; /* دفع الوقت لليسار */
+        }
+
+        .message.user .message-time {
+            color: #4CAF50; /* لون أخضر أو أزرق خفيف للمرسل */
+        }
+
+        /* قسم التحذير (الشروط) */
         .warning-section {
             background-color: #fffde7;
             border-right: 5px solid #ffc107;
-            padding: 1.5rem;
+            padding: 1rem;
+            margin: 0.5rem 1rem;
             border-radius: 8px;
-            margin: 1rem;
             text-align: right;
+            transition: all 0.5s ease-out; /* تحسين الانتقال */
+        }
+        .warning-section.hidden {
+            opacity: 0;
+            height: 0;
+            padding: 0 1rem; /* الحفاظ على الهامش الأفقي لسهولة العرض */
+            margin: 0.5rem 1rem;
+            overflow: hidden;
         }
         .warning-section h3 {
             font-size: 1.25rem;
@@ -121,26 +153,20 @@
             list-style-type: '⚠️ ';
             padding-right: 1.5rem;
         }
-        .warning-section li {
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        .warning-section li strong {
-            color: #d32f2f;
-        }
 
         .message-input-form {
-            display: flex;
-            padding: 1rem;
-            border-top: 1px solid #eee;
+            background-color: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-top: 1px solid #ddd;
             gap: 0.5rem;
+            display: flex;
+            align-items: center;
         }
 
         .message-input {
             flex-grow: 1;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            border: none;
             border-radius: 50px;
             font-family: inherit;
             font-size: 1rem;
@@ -151,28 +177,30 @@
             background-color: var(--primary-color);
             color: var(--card-bg-color);
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 700;
+            padding: 0.75rem;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: background-color var(--transition-speed) ease;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .send-btn:hover {
-            background-color: #1e40af;
+            background-color: #054a41;
         }
 
         .hidden { display: none !important; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="chat-header">
+            <i class="fas fa-arrow-right text-gray-700 hover:text-gray-900 cursor-pointer text-xl" onclick="history.back()"></i>
             <img id="employee-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="صورة الموظف" class="employee-photo">
             <div>
                 <h1 id="chat-title">جارِ التحميل...</h1>
@@ -198,20 +226,20 @@
 
             <form id="message-form" class="message-input-form">
                 <input type="text" id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
-                <button type="submit" class="send-btn">إرسال</button>
+                <button type="submit" class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </form>
         </div>
     </div>
 
     <script type="module">
-        // 1. استبدال مكتبات Firestore بمكتبات Realtime Database
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        // دوال Realtime Database الجديدة
         import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-
+        // **هام:** تأكد من أن هذا التكوين مطابق لإعدادات مشروعك في Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -224,8 +252,8 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const firestoreDb = getFirestore(app); // الاحتفاظ بها لجلب بيانات الموظف
-        const realtimeDb = getDatabase(app); // Realtime Database
+        const firestoreDb = getFirestore(app); 
+        const realtimeDb = getDatabase(app);
 
         const chatTitle = document.getElementById('chat-title');
         const employeePhoto = document.getElementById('employee-photo');
@@ -233,32 +261,44 @@
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const warningSection = document.getElementById('warning-section');
 
         const urlParams = new URLSearchParams(window.location.search);
         const employeeId = urlParams.get('employeeId');
-        // تأكد من تمرير هذه البيانات من صفحة عرض الموظفين لتحسين الأداء
+        // تفترض هذه المتغيرات أنك قمت بتمرير الاسم والصورة في رابط employee_list.html
         const employeeNameFromUrl = decodeURIComponent(urlParams.get('employeeName') || ''); 
         const employeePhotoUrlFromUrl = decodeURIComponent(urlParams.get('employeePhoto') || '');
 
         let user;
         let chatId;
 
-        // --- 1. الدالة لجلب بيانات الموظف وتحديث الواجهة (باستخدام Firestore) ---
+        // دالة مساعدة لتنسيق الوقت (ساعة:دقيقة ص/م)
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            // Timestamp في Realtime DB هو بالألف من الثانية، يجب التحقق من قيمته
+            const date = new Date(timestamp); 
+            return date.toLocaleTimeString('ar-EG', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true 
+            });
+        }
+        
         async function fetchEmployeeData() {
             if (!employeeId) {
                 chatTitle.textContent = "خطأ: لم يتم تحديد الموظف.";
                 return;
             }
 
-            // استخدام البيانات من الرابط أولاً
+            // عرض الاسم مباشرة
             if (employeeNameFromUrl) {
-                chatTitle.textContent = `مراسلة مع ${employeeNameFromUrl}`;
+                chatTitle.textContent = employeeNameFromUrl;
             }
             if (employeePhotoUrlFromUrl) {
                 employeePhoto.src = employeePhotoUrlFromUrl;
             }
 
-            // خيار احتياطي لجلب البيانات من Firestore إذا لم يتم تمريرها في الرابط
+            // الخيار الاحتياطي لجلب البيانات من Firestore إذا لم يتم تمريرها
             if (!employeeNameFromUrl || !employeePhotoUrlFromUrl) {
                 try {
                     const employeeDocRef = doc(firestoreDb, "employees", employeeId);
@@ -266,7 +306,7 @@
 
                     if (employeeDocSnap.exists()) {
                         const employeeData = employeeDocSnap.data();
-                        chatTitle.textContent = `مراسلة مع ${employeeData.name || 'موظف غير معروف'}`;
+                        chatTitle.textContent = employeeData.name || 'موظف غير معروف';
                         employeePhoto.src = employeeData.profileImageUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
                     }
                 } catch (error) {
@@ -275,11 +315,11 @@
                 }
             }
         }
-
-        // 2. الاستماع لحالة المستخدم (الشركة)
+        
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 user = currentUser;
+                // التأكد من أن chatId يتشكل بترتيب أبجدي ليتطابق مع قواعد الأمان
                 const participants = [user.uid, employeeId].sort();
                 chatId = participants.join('_');
 
@@ -292,16 +332,13 @@
             }
         });
 
-        // 3. دالة لإضافة رسالة إلى Realtime Database
         async function addMessageToRealtimeDB(messageText) {
             try {
-                // المسار في Realtime DB: messages/chatId/
                 const messagesRef = ref(realtimeDb, `messages/${chatId}`);
                 
                 await push(messagesRef, {
                     senderId: user.uid,
                     text: messageText,
-                    // Realtime DB تستخدم serverTimestamp() من مكتبتها الخاصة
                     timestamp: serverTimestamp() 
                 });
             } catch (error) {
@@ -309,27 +346,40 @@
             }
         }
 
-        // 4. الاستماع للرسائل في الوقت الفعلي (باستخدام onValue)
         function listenForMessages() {
             const messagesRef = ref(realtimeDb, `messages/${chatId}`);
             
-            // onValue: مستمع دائم يُطلق عند أي تغيير في المسار
             onValue(messagesRef, (snapshot) => {
                 loadingIndicator.classList.add('hidden');
-                messagesContainer.innerHTML = ''; // مسح الرسائل القديمة
+                messagesContainer.innerHTML = '';
+
+                let hasUserSentMessage = false;
+                let hasOtherSentMessage = false;
 
                 if (snapshot.exists()) {
-                    // Realtime DB تعيد كائن JSON، نحتاج لتحويله إلى مصفوفة
                     const messagesData = snapshot.val();
-                    const messages = Object.keys(messagesData).map(key => messagesData[key]);
+                    const messages = Object.keys(messagesData).map(key => ({ ...messagesData[key], key }));
                     
-                    // فرز الرسائل حسب ختم الوقت (Timestamp)
+                    // فرز الرسائل حسب ختم الوقت
                     messages.sort((a, b) => a.timestamp - b.timestamp);
 
                     messages.forEach((message) => {
                         const sender = message.senderId === user.uid ? 'user' : 'company';
-                        appendMessage(message.text, sender);
+                        
+                        // تتبع إرسال الرسائل لإخفاء التحذير
+                        if (message.senderId === user.uid) {
+                            hasUserSentMessage = true;
+                        } else {
+                            hasOtherSentMessage = true;
+                        }
+
+                        appendMessage(message.text, sender, message.timestamp);
                     });
+                }
+                
+                // منطق إخفاء قسم الشروط (إذا أرسل أي طرف رسالة)
+                if (hasUserSentMessage || hasOtherSentMessage) {
+                    warningSection.classList.add('hidden');
                 }
                 
                 // التمرير لأسفل تلقائياً لآخر رسالة
@@ -337,7 +387,7 @@
             });
         }
 
-        // 5. التعامل مع إرسال الرسائل (مع التحقق)
+        // التعامل مع إرسال الرسائل
         messageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const messageText = messageInput.value.trim();
@@ -345,7 +395,6 @@
 
             if (messageText) {
                 if (validationResult) {
-                    // عرض رسالة الخطأ المناسبة
                     let errorMessage = 'عذراً، لا يمكنك مشاركة معلومات اتصال شخصية.';
                     if (validationResult === 'phone') {
                         errorMessage = 'عذراً، يُمنع مشاركة أرقام الهواتف.';
@@ -360,18 +409,28 @@
 
                 await addMessageToRealtimeDB(messageText);
                 messageInput.value = '';
+                
+                // إخفاء التحذير فوراً بعد الإرسال
+                warningSection.classList.add('hidden');
             }
         });
 
-        // 6. دالة عرض الرسالة على الواجهة
-        function appendMessage(text, sender) {
+        // دالة عرض الرسالة على الواجهة (إضافة الوقت)
+        function appendMessage(text, sender, timestamp) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
-            messageElement.textContent = text;
+            
+            const timeSpan = `<span class="message-time">${formatTime(timestamp)}</span>`;
+            
+            messageElement.innerHTML = `
+                <div class="message-content">${text}</div>
+                ${timeSpan}
+            `;
+            
             messagesContainer.appendChild(messageElement);
         }
 
-        // 7. الدوال المحدثة للتحقق من المحتوى المحظور (كما كانت في كودك)
+        // الدوال المساعدة للتحقق من المحتوى المحظور
         function containsForbiddenContent(text) {
             if (isPhoneNumber(text)) {
                 return 'phone';
