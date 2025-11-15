@@ -7,15 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* (استخدم نفس CSS تمامًا من ملف chat.html لتحقيق الاتساق) */
+        /* (الـ CSS بالكامل كما تم تعديله سابقاً - يملأ الشاشة مع تصميم واتساب) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        :root {
-            --primary-color: #075e54; 
-            --secondary-color: #dcf8c6; 
-            --bg-color: #e5ddd5; 
-            --card-bg-color: #fff;
-            --text-color: #222;
-        }
+        :root { --primary-color: #075e54; --secondary-color: #dcf8c6; --bg-color: #e5ddd5; --card-bg-color: #fff; --text-color: #222; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-color); direction: rtl; margin: 0; }
         .container { width: 100%; margin: 0 auto; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
         .chat-header { background-color: var(--card-bg-color); padding: 0.75rem 1rem; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 1rem; }
@@ -83,7 +77,6 @@
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getDatabase, ref, push, onValue, serverTimestamp, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-        // **هام:** تأكد من أن هذا التكوين مطابق لإعدادات مشروعك في Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
           authDomain: "shaglni-c64c0.firebaseapp.com",
@@ -100,7 +93,7 @@
         const realtimeDb = getDatabase(app);
 
         const chatTitle = document.getElementById('chat-title');
-        const partnerPhoto = document.getElementById('partner-photo'); // تم تغيير الاسم
+        const partnerPhoto = document.getElementById('partner-photo'); 
         const messagesContainer = document.getElementById('messages-container');
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
@@ -108,7 +101,6 @@
         const warningSection = document.getElementById('warning-section');
 
         const urlParams = new URLSearchParams(window.location.search);
-        // تم تغيير اسم المعرف إلى companyId
         const companyId = urlParams.get('companyId'); 
         const companyNameFromUrl = decodeURIComponent(urlParams.get('companyName') || ''); 
         const companyPhotoUrlFromUrl = decodeURIComponent(urlParams.get('companyPhoto') || '');
@@ -116,28 +108,24 @@
         let user;
         let chatId;
         
-        // دالة مساعدة لتنسيق الوقت (ساعة:دقيقة ص/م)
         function formatTime(timestamp) {
             if (!timestamp) return '';
             const date = new Date(timestamp); 
             return date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
         }
 
-        // دالة جديدة لتحديث ختم الوقت لآخر قراءة للمستخدم الحالي (الموظف)
         function updateLastReadStatus() {
             if (!user || !chatId) return;
             const lastReadRef = ref(realtimeDb, `chats_metadata/${chatId}/lastRead/${user.uid}`);
             set(lastReadRef, Date.now());
         }
         
-        // تم تغيير اسم الدالة لجلب بيانات الشركة
         async function fetchCompanyData() {
             if (!companyId) {
                 chatTitle.textContent = "خطأ: لم يتم تحديد الشركة.";
                 return;
             }
 
-            // عرض الاسم مباشرة
             if (companyNameFromUrl) {
                 chatTitle.textContent = companyNameFromUrl;
             }
@@ -145,7 +133,6 @@
                 partnerPhoto.src = companyPhotoUrlFromUrl;
             }
 
-            // الخيار الاحتياطي لجلب البيانات من Firestore
             if (!companyNameFromUrl || !companyPhotoUrlFromUrl) {
                 try {
                     const companyDocRef = doc(firestoreDb, "companies", companyId);
@@ -166,7 +153,6 @@
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 user = currentUser;
-                // إنشاء chatId بنفس الطريقة (فرز المعرفات)
                 const participants = [user.uid, companyId].sort();
                 chatId = participants.join('_');
 
@@ -175,11 +161,11 @@
 
             } else {
                 alert("يجب عليك تسجيل الدخول للمراسلة.");
-                window.location.href = "../auth/login.html"; // التوجيه الصحيح
+                window.location.href = "../auth/login.html"; 
             }
         });
 
-        // تم تحديث هذه الدالة لإضافة مسار معكوس لقائمة المحادثات
+        // **دالة إضافة الرسالة (المعدلة) - تقوم بإنشاء المسار العكسي**
         async function addMessageToRealtimeDB(messageText) {
             try {
                 const messagesRef = ref(realtimeDb, `messages/${chatId}`);
@@ -191,14 +177,13 @@
                     timestamp: serverTimestamp() 
                 });
 
-                // 2. تحديث المسار المعكوس في chats_by_user لكل من الموظف والشركة
+                // 2. تحديث المسار العكسي في chats_by_user لكلا الطرفين
                 const updates = {};
-                updates[`chats_by_user/${user.uid}/${chatId}`] = true;
-                updates[`chats_by_user/${companyId}/${chatId}`] = true;
+                updates[`/chats_by_user/${user.uid}/${chatId}`] = true; // للموظف (المستخدم الحالي)
+                updates[`/chats_by_user/${companyId}/${chatId}`] = true; // للشركة (الطرف الآخر)
 
-                // استخدام دالة set لتنفيذ عدة عمليات كتابة مرة واحدة (كبديل لـ push)
-                const chatsByUserRef = ref(realtimeDb, '/');
-                set(updates, chatsByUserRef); 
+                const rootRef = ref(realtimeDb, '/');
+                set(rootRef, updates); 
 
             } catch (error) {
                 console.error("خطأ في إرسال الرسالة:", error);
@@ -220,10 +205,9 @@
                 messages.sort((a, b) => a.timestamp - b.timestamp);
 
                 messages.forEach((message) => {
-                    // هنا الموظف هو 'user' والشركة هي 'company'
+                    // الموظف هو 'user' والشركة هي 'company'
                     const sender = message.senderId === user.uid ? 'user' : 'company';
                     
-                    // تحديد حالة القراءة: (فقط للرسائل التي أرسلها المستخدم الحالي)
                     let isRead = false;
                     if (sender === 'user' && message.timestamp <= lastReadTimestamp) {
                          isRead = true;
@@ -239,7 +223,6 @@
                 });
             }
             
-            // منطق إخفاء قسم الشروط
             if (hasUserSentMessage || hasOtherSentMessage) {
                 warningSection.classList.add('hidden');
             }
@@ -249,13 +232,11 @@
         // الاستماع للرسائل وحالة القراءة
         function listenForMessages() {
             const messagesRef = ref(realtimeDb, `messages/${chatId}`);
-            // الطرف الآخر الذي نقرأ حالة قراءته هو الشركة
             const partnerLastReadRef = ref(realtimeDb, `chats_metadata/${chatId}/lastRead/${companyId}`); 
 
             let lastReadTimestamp = 0;
             let messagesSnapshot = null;
             
-            // 1. الاستماع لحالة قراءة الشركة (الطرف الآخر)
             onValue(partnerLastReadRef, (snapshot) => {
                 lastReadTimestamp = snapshot.val() || 0;
                 if (messagesSnapshot) {
@@ -263,10 +244,9 @@
                 }
             });
 
-            // 2. الاستماع لبيانات الرسائل
             onValue(messagesRef, (snapshot) => {
                 messagesSnapshot = snapshot;
-                updateLastReadStatus(); // تحديث حالة القراءة للموظف الحالي
+                updateLastReadStatus(); 
                 loadAndRenderMessages(lastReadTimestamp, messagesSnapshot);
             });
         }
@@ -305,7 +285,6 @@
             
             const timeSpan = `<span class="message-time">${formatTime(timestamp)}</span>`;
             
-            // مؤشر القراءة يظهر فقط للرسائل التي يرسلها الموظف ('user')
             let readStatusIcon = '';
             if (sender === 'user') {
                 const iconColor = isRead ? 'text-blue-500' : 'text-gray-400';
@@ -323,17 +302,10 @@
             messagesContainer.appendChild(messageElement);
         }
 
-        // الدوال المساعدة للتحقق من المحتوى المحظور (كما هي)
         function containsForbiddenContent(text) {
-            if (isPhoneNumber(text)) {
-                return 'phone';
-            }
-            if (isEmail(text)) {
-                return 'email';
-            }
-            if (isLink(text)) {
-                return 'link';
-            }
+            if (isPhoneNumber(text)) { return 'phone'; }
+            if (isEmail(text)) { return 'email'; }
+            if (isLink(text)) { return 'link'; }
             return false;
         }
 
