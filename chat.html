@@ -71,14 +71,17 @@
             overflow: hidden;
         }
 
+        /* تعديل CSS لتحسين ترتيب الرسائل */
         .messages-container {
             flex-grow: 1;
             padding: 1rem;
             overflow-y: auto;
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column; /* الترتيب الطبيعي */
+            justify-content: flex-end; /* الرسائل تبدأ من الأسفل */
             gap: 1rem;
         }
+        /* نهاية تعديل CSS */
 
         .message {
             max-width: 70%;
@@ -201,9 +204,13 @@
     </div>
 
     <script type="module">
+        // 1. استبدال مكتبات Firestore بمكتبات Realtime Database
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // دوال Realtime Database الجديدة
+        import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -216,8 +223,9 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
         const auth = getAuth(app);
+        const firestoreDb = getFirestore(app); // الاحتفاظ بها لجلب بيانات الموظف
+        const realtimeDb = getDatabase(app); // Realtime Database
 
         const chatTitle = document.getElementById('chat-title');
         const employeePhoto = document.getElementById('employee-photo');
@@ -228,54 +236,43 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const employeeId = urlParams.get('employeeId');
-        const employeeNameFromUrl = decodeURIComponent(urlParams.get('employeeName'));
-        const employeePhotoUrlFromUrl = decodeURIComponent(urlParams.get('employeePhoto'));
+        // تأكد من تمرير هذه البيانات من صفحة عرض الموظفين لتحسين الأداء
+        const employeeNameFromUrl = decodeURIComponent(urlParams.get('employeeName') || ''); 
+        const employeePhotoUrlFromUrl = decodeURIComponent(urlParams.get('employeePhoto') || '');
 
         let user;
         let chatId;
 
-        // --- 1. الدالة المصححة لجلب بيانات الموظف وتحديث الواجهة ---
+        // --- 1. الدالة لجلب بيانات الموظف وتحديث الواجهة (باستخدام Firestore) ---
         async function fetchEmployeeData() {
             if (!employeeId) {
                 chatTitle.textContent = "خطأ: لم يتم تحديد الموظف.";
                 return;
             }
 
-            // استخدام البيانات من الرابط أولاً لتقليل عدد طلبات Firebase
+            // استخدام البيانات من الرابط أولاً
             if (employeeNameFromUrl) {
                 chatTitle.textContent = `مراسلة مع ${employeeNameFromUrl}`;
             }
             if (employeePhotoUrlFromUrl) {
                 employeePhoto.src = employeePhotoUrlFromUrl;
             }
-            
-            // خيار احتياطي: إذا لم يتم تمرير البيانات في الرابط، قم بجلبها من Firebase
+
+            // خيار احتياطي لجلب البيانات من Firestore إذا لم يتم تمريرها في الرابط
             if (!employeeNameFromUrl || !employeePhotoUrlFromUrl) {
                 try {
-                    const employeeDocRef = doc(db, "employees", employeeId);
+                    const employeeDocRef = doc(firestoreDb, "employees", employeeId);
                     const employeeDocSnap = await getDoc(employeeDocRef);
 
                     if (employeeDocSnap.exists()) {
                         const employeeData = employeeDocSnap.data();
-                        
-                        if (employeeData.name) {
-                            chatTitle.textContent = `مراسلة مع ${employeeData.name}`;
-                        }
-                        if (employeeData.profileImageUrl) {
-                            employeePhoto.src = employeeData.profileImageUrl;
-                        }
+                        chatTitle.textContent = `مراسلة مع ${employeeData.name || 'موظف غير معروف'}`;
+                        employeePhoto.src = employeeData.profileImageUrl || 'https://randomuser.me/api/portraits/men/32.jpg';
                     }
                 } catch (error) {
                     console.error("خطأ في جلب بيانات الموظف:", error);
                     chatTitle.textContent = "حدث خطأ أثناء التحميل.";
                 }
-            }
-            
-            // إرسال رسالة ترحيب تلقائية إذا كانت أول محادثة
-            const initialMessageText = `مرحباً ${employeeNameFromUrl || 'الموظف'}. لقد راجعنا ملفك الشخصي ونود التحدث معك حول فرصة عمل محتملة.`;
-            const chatExists = await getDoc(doc(db, "chats", chatId));
-            if (!chatExists.exists()) {
-                 await addMessageToFirestore(initialMessageText, 'company');
             }
         }
 
@@ -285,7 +282,7 @@
                 user = currentUser;
                 const participants = [user.uid, employeeId].sort();
                 chatId = participants.join('_');
-                
+
                 fetchEmployeeData();
                 listenForMessages();
 
@@ -295,41 +292,52 @@
             }
         });
 
-        // 3. دالة لإضافة رسالة إلى Firestore
-        async function addMessageToFirestore(messageText, sender) {
+        // 3. دالة لإضافة رسالة إلى Realtime Database
+        async function addMessageToRealtimeDB(messageText) {
             try {
-                await addDoc(collection(db, "chats", chatId, "messages"), {
+                // المسار في Realtime DB: messages/chatId/
+                const messagesRef = ref(realtimeDb, `messages/${chatId}`);
+                
+                await push(messagesRef, {
                     senderId: user.uid,
-                    receiverId: employeeId,
                     text: messageText,
-                    timestamp: serverTimestamp(),
-                    isFromCompany: sender === 'company'
+                    // Realtime DB تستخدم serverTimestamp() من مكتبتها الخاصة
+                    timestamp: serverTimestamp() 
                 });
             } catch (error) {
                 console.error("خطأ في إرسال الرسالة:", error);
             }
         }
 
-        // 4. الاستماع للرسائل في الوقت الفعلي
+        // 4. الاستماع للرسائل في الوقت الفعلي (باستخدام onValue)
         function listenForMessages() {
-            const messagesQuery = query(
-                collection(db, "chats", chatId, "messages"),
-                orderBy("timestamp")
-            );
-
-            onSnapshot(messagesQuery, (querySnapshot) => {
+            const messagesRef = ref(realtimeDb, `messages/${chatId}`);
+            
+            // onValue: مستمع دائم يُطلق عند أي تغيير في المسار
+            onValue(messagesRef, (snapshot) => {
                 loadingIndicator.classList.add('hidden');
-                messagesContainer.innerHTML = '';
+                messagesContainer.innerHTML = ''; // مسح الرسائل القديمة
 
-                querySnapshot.forEach((doc) => {
-                    const message = doc.data();
-                    const sender = message.isFromCompany ? 'company' : 'user';
-                    appendMessage(message.text, sender);
-                });
+                if (snapshot.exists()) {
+                    // Realtime DB تعيد كائن JSON، نحتاج لتحويله إلى مصفوفة
+                    const messagesData = snapshot.val();
+                    const messages = Object.keys(messagesData).map(key => messagesData[key]);
+                    
+                    // فرز الرسائل حسب ختم الوقت (Timestamp)
+                    messages.sort((a, b) => a.timestamp - b.timestamp);
+
+                    messages.forEach((message) => {
+                        const sender = message.senderId === user.uid ? 'user' : 'company';
+                        appendMessage(message.text, sender);
+                    });
+                }
+                
+                // التمرير لأسفل تلقائياً لآخر رسالة
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             });
         }
 
-        // 5. التعامل مع إرسال الرسائل (مع التحقق الجديد)
+        // 5. التعامل مع إرسال الرسائل (مع التحقق)
         messageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const messageText = messageInput.value.trim();
@@ -337,6 +345,7 @@
 
             if (messageText) {
                 if (validationResult) {
+                    // عرض رسالة الخطأ المناسبة
                     let errorMessage = 'عذراً، لا يمكنك مشاركة معلومات اتصال شخصية.';
                     if (validationResult === 'phone') {
                         errorMessage = 'عذراً، يُمنع مشاركة أرقام الهواتف.';
@@ -349,7 +358,7 @@
                     return;
                 }
 
-                await addMessageToFirestore(messageText, 'user');
+                await addMessageToRealtimeDB(messageText);
                 messageInput.value = '';
             }
         });
@@ -359,10 +368,10 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
             messageElement.textContent = text;
-            messagesContainer.prepend(messageElement);
+            messagesContainer.appendChild(messageElement);
         }
 
-        // 7. الدوال المحدثة للتحقق من المحتوى المحظور
+        // 7. الدوال المحدثة للتحقق من المحتوى المحظور (كما كانت في كودك)
         function containsForbiddenContent(text) {
             if (isPhoneNumber(text)) {
                 return 'phone';
