@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
     <style>
+        /* (الـ CSS بالكامل كما هو) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root {
             --primary: #2563eb;
@@ -260,7 +260,7 @@
 
         let allEmployees = [];
         let swiperInstance = null;
-        let companyId = null; // متغير لتخزين معرف الشركة المسجلة دخولها
+        let companyId = null; 
 
         const citiesByState = {
             'الخرطوم': ['الخرطوم', 'أم درمان', 'بحري'],
@@ -284,7 +284,6 @@
         };
 
         async function fetchEmployees() {
-            // توقف التحميل إذا لم يكن هناك companyId
             if (!companyId) return; 
             
             loadingIndicator.classList.remove('hidden');
@@ -332,7 +331,7 @@
                           `
                         : '';
 
-                    // **التعديل هنا:** بناء رابط الدردشة مع تمرير employeeId ومعلومات المستخدم لـ chat.html
+                    // **هذا هو الرابط المُعدّل الذي يعمل بشكل صحيح داخل مجلد company/**
                     const chatUrl = `chat.html?employeeId=${employee.id}&employeeName=${encodeURIComponent(employee.name || 'موظف')}&employeePhoto=${encodeURIComponent(profilePhotoURL)}`;
 
                     const employeeCard = document.createElement('div');
@@ -515,15 +514,12 @@
             }
         });
 
-        // **التعديل الحاسم:** الاستماع لحالة المصادقة
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // تخزين معرف الشركة (UID) هنا
                 companyId = user.uid;
-                // جلب الموظفين بعد الحصول على المعرف
                 fetchEmployees(); 
             } else {
-                // التوجيه إلى صفحة تسجيل الدخول إذا لم يكن المستخدم مسجلاً
+                // يمكنك توجيه المستخدم لصفحة تسجيل الدخول إذا لم يكن مسجلاً
                 // window.location.href = "../auth/login.html"; 
                 employeesList.innerHTML = '<div class="text-center text-lg text-gray-500 p-8">يرجى تسجيل الدخول كشركة لاستعراض الموظفين.</div>';
             }
