@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
-            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي غير المرغوب فيه */
+            overflow-x: hidden;
         }
         .job-card:hover, .employee-card:hover {
             transform: translateY(-5px);
@@ -22,23 +22,23 @@
         .scrollable-nav {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;  /* Firefox */
+            scrollbar-width: none;
         }
         .scrollable-nav::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
+            display: none;
         }
         .course-slider {
             display: flex;
             overflow-x: auto;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
         .course-slider::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
+            display: none;
         }
         .course-card {
-            min-width: 300px; /* حجم ثابت لكل بطاقة */
+            min-width: 300px;
             flex: 0 0 auto;
             margin-left: 1rem;
             transition: transform 0.3s ease;
@@ -56,21 +56,21 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            display: none; /* مخفي افتراضياً */
+            display: none;
         }
         .mobile-menu {
             position: absolute;
             top: 0;
             right: 0;
-            width: 70%; /* عرض القائمة على الجوال */
+            width: 70%;
             height: 100%;
             background-color: #fff;
-            transform: translateX(100%); /* مخفي على اليمين */
+            transform: translateX(100%);
             transition: transform 0.3s ease-in-out;
             padding: 1.5rem;
         }
         .mobile-menu.active {
-            transform: translateX(0); /* تظهر من اليمين */
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -87,20 +87,21 @@
                     <div class="flex space-x-1 space-x-reverse">
                         <a href="index.html" class="px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
                         <a href="job_listing_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
-                        <a href="company/employee_list.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
+                        <a href="company_employee_list.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
                         <a href="jop_posting_page.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
-                        <a href="registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
-                        <a href="my_messages.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap"> رسائلي</a>
+                        <a href="employee_registration.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
+                        <a href="employee_inbox.html" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap"> رسائلي</a>
                     </div>
                 </div>
 
-                <div class="mr-4 hidden md:block">
-                    <a href="no_code4.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل الدخول</a>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <div id="auth-section" class="hidden md:block flex items-center space-x-2 rtl:space-x-reverse">
+                        </div>
+                    
+                    <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                 </div>
-
-                <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
             </div>
         </nav>
     </header>
@@ -116,12 +117,12 @@
             <nav class="space-y-4">
                 <a href="index.html" class="block px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الرئيسية</a>
                 <a href="job_listing_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الوظائف المتاحة</a>
-                <a href="company/employee_list.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
+                <a href="company_employee_list.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">الموظفون المتاحون</a>
                 <a href="jop_posting_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
-                <a href="registration.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
-                <a href="my_messages.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap"> رسائلي</a>
-                <a href="no_code4.html" class="block px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mt-4">تسجيل الدخول</a>
-            </nav>
+                <a href="employee_registration.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
+                <a href="employee_inbox.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap"> رسائلي</a>
+                
+                </nav>
         </div>
     </div>
 
@@ -131,12 +132,12 @@
             <h1 class="text-4xl md:text-5xl font-bold mb-6">ابحث عن الوظيفة المثالية أو الموظف المثالي</h1>
             <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">منصة شغلني تربط بين أفضل المواهب وأفضل الشركات في المنطقة العربية</p>
             <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 space-x-reverse">
-                <a href="no_code3.html" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300"> ابحث عن وظيفة  </a>
-                <a href="company/employee_list.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-600 transition duration-300">ابخث عن موظف </a>
+                <a href="job_listing_page.html" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300"> ابحث عن وظيفة  </a>
+                <a href="company_employee_list.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-600 transition duration-300">ابخث عن موظف </a>
             </div>
         </div>
     </section>
-
+    
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10">
@@ -350,58 +351,9 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-white">الرئيسية</a></li>
                         <li><a href="job_listing_page.html" class="text-gray-400 hover:text-white">الوظائف</a></li>
                         <li><a href="employee_listing_page.html" class="text-gray-400 hover:text-white">البحث عن موظفين</a></li>
-                        <li><a href="job_application_page.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
-
-                          <li><a href="employee_chats.html" class="text-gray-400 hover:text-white">الرسائل </a></li>
-                            </ul>
-
-
-
-
-
-
-
-
-
-
-
- <li><a href="no_code.html" class="text-gray-400 hover:text-white"> كود لا  له </a></li>
-
-
-
- <li><a href=no_code2.html" class="text-gray-400 hover:text-white"> كود لا 2 له بالموقع،للتجرب</a></li>
-
-
-
- <li><a href="no_code3.html" class="text-gray-400 hover:text-white"> كود لا 3 له بالموقع،للتجرب</a></li>
-
-
-
-
- <li><a href="no_code4.html" class="text-gray-400 hover:text-white"> كود لا 4 له بالموقع،للتجرب</a></li>
-
-
-
- <li><a href="no_code5.html" class="text-gray-400 hover:text-white"> كود لا 5علاقة له بالموقع،للتجرب</a></li>
-
-
-
-
- <li><a href="no_code6.html" class="text-gray-400 hover:text-white"> كود لا علاقة له بالموقع،للت6جرب</a></li>
-
-
-
- <li><a href="employee_inbox.html" class="text-gray-400 hover:text-white">     inbox،</a></li>
-
-
-
-
-
-
-
-
-
-
+                        <li><a href="employee_registration.html" class="text-gray-400 hover:text-white">تسجيل موظف</a></li>
+                        <li><a href="employee_inbox.html" class="text-gray-400 hover:text-white">الرسائل </a></li>
+                        </ul>
                 </div>
                 <div>
                     <h3 class="text-lg font-bold mb-4">تواصل معنا</h3>
@@ -427,39 +379,127 @@
             </div>
         </div>
     </footer>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
-            const mobileMenuContainer = document.getElementById('mobile-menu-container');
-            const mobileMenu = document.getElementById('mobile-menu');
+        // ------------------------------------------
+        // وظائف القائمة الجوالة (Mobile Menu Functionality)
+        // ------------------------------------------
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
+        const mobileMenuContainer = document.getElementById('mobile-menu-container');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuNav = document.querySelector('#mobile-menu nav'); // للحصول على قائمة الروابط داخل القائمة الجوالة
 
-            // Open mobile menu
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenuContainer.style.display = 'block';
-                setTimeout(() => {
-                    mobileMenu.classList.add('active');
-                }, 10);
-            });
+        // فتح القائمة
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenuContainer.style.display = 'block';
+            setTimeout(() => {
+                mobileMenu.classList.add('active');
+            }, 10);
+        });
 
-            // Close mobile menu
-            closeMobileMenuButton.addEventListener('click', function() {
+        // إغلاق القائمة
+        closeMobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            setTimeout(() => {
+                mobileMenuContainer.style.display = 'none';
+            }, 300);
+        });
+
+        // إغلاق القائمة عند النقر خارجها
+        mobileMenuContainer.addEventListener('click', function(e) {
+            if (e.target === mobileMenuContainer) {
                 mobileMenu.classList.remove('active');
                 setTimeout(() => {
                     mobileMenuContainer.style.display = 'none';
-                }, 300); // Wait for transition to finish
-            });
-
-            // Close mobile menu when clicking outside
-            mobileMenuContainer.addEventListener('click', function(e) {
-                if (e.target === mobileMenuContainer) {
-                    mobileMenu.classList.remove('active');
-                    setTimeout(() => {
-                        mobileMenuContainer.style.display = 'none';
-                    }, 300);
-                }
-            });
+                }, 300);
+            }
         });
-    </script>
-</body>
-</html>
+
+
+        // ------------------------------------------
+        // وظائف المصادقة الديناميكية (Dynamic Auth Status)
+        // ------------------------------------------
+
+        /**
+         * دالة محاكاة التحقق من حالة تسجيل الدخول ونوع المستخدم
+         * @returns {string} 'guest' | 'employee' | 'company'
+         */
+        function checkUserStatus() {
+            // 💡 يمكنك تغيير هذه القيمة لاختبار الحالات المختلفة:
+            //   'employee' لعرض لوحة تحكم الموظف
+            //   'company' لعرض لوحة تحكم الشركة
+            //   'guest' (الافتراضي) لعرض أزرار تسجيل الدخول
+            return 'guest'; 
+            
+            // في تطبيق Firebase حقيقي، يمكنك استخدام:
+            /*
+            const user = firebase.auth().currentUser;
+            if (!user) return 'guest';
+            // يجب أن تستخدم طريقة لتحديد نوع الحساب (مثل قراءة من Firestore)
+            // if (user.isEmployee) return 'employee';
+            // if (user.isCompany) return 'company';
+            */
+        }
+
+        function renderAuthSection() {
+            const status = checkUserStatus();
+            const authSection = document.getElementById('auth-section');
+            
+            authSection.innerHTML = ''; 
+            
+            // إزالة أي عناصر تسجيل دخول سابقة من القائمة الجوالة لكي لا تتكرر
+            const elementsToRemove = mobileMenuNav.querySelectorAll('#mobile-auth-element');
+            elementsToRemove.forEach(el => el.remove());
+
+
+            if (status === 'guest') {
+                // حالة الزائر: عرض أزرار تسجيل الدخول والتسجيل
+                
+                // 1. للكمبيوتر (سطح المكتب)
+                authSection.innerHTML = `
+                    <a href="employee_login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل دخول موظف</a>
+                    <a href="company_login.html" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap mr-2">تسجيل دخول شركة</a>
+                `;
+                
+                // 2. للجوال: إضافة روابط تسجيل الدخول
+                const mobileLoginLinks = `
+                    <a id="mobile-auth-element" href="employee_login.html" class="block px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mt-4">تسجيل دخول موظف</a>
+                    <a id="mobile-auth-element" href="company_login.html" class="block px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap mt-2">تسجيل دخول شركة</a>
+                `;
+                mobileMenuNav.insertAdjacentHTML('beforeend', mobileLoginLinks);
+
+            } else if (status === 'employee') {
+                // حالة الموظف: عرض أيقونة لوحة تحكم وخروج
+                
+                // 1. للكمبيوتر
+                authSection.innerHTML = `
+                    <a href="employee_inbox.html" title="الرسائل" class="p-2 text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                    <a href="employee_dashboard.html" title="لوحة تحكم الموظف" class="p-2 text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                    </a>
+                    <button onclick="alert('تسجيل الخروج سيتم برمجته لاحقاً')" class="text-red-500 hover:text-red-700 font-medium mr-2">
+                        <i class="fas fa-sign-out-alt ml-1"></i> خروج
+                    </button>
+                `;
+                
+                // 2. للجوال: إضافة رابط لوحة التحكم
+                const mobileDashboardLink = `
+                    <a id="mobile-auth-element" href="employee_dashboard.html" class="block px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mt-4">
+                        <i class="fas fa-tachometer-alt ml-2"></i> لوحة تحكم الموظف
+                    </a>
+                    <a id="mobile-auth-element" href="#" onclick="alert('تسجيل الخروج سيتم برمجته لاحقاً')" class="block px-4 py-2 text-red-600 font-medium rounded-lg hover:bg-red-50 whitespace-nowrap mt-2">
+                        <i class="fas fa-sign-out-alt ml-2"></i> خروج
+                    </a>
+                `;
+                mobileMenuNav.insertAdjacentHTML('beforeend', mobileDashboardLink);
+
+            } else if (status === 'company') {
+                // حالة الشركة: عرض أيقونة لوحة تحكم وخروج
+                
+                // 1. للكمبيوتر
+                authSection.innerHTML = `
+                    <a href="company_inbox.html" title="الرسائل" class="p-2 text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-envelope
