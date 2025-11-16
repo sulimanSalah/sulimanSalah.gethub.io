@@ -1,7 +1,3 @@
-employee/employee_chat.html
-
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -11,7 +7,7 @@ employee/employee_chat.html
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* (الـ CSS بالكامل كما تم تعديله سابقاً - يملأ الشاشة مع تصميم واتساب) */
+        /* (الـ CSS بالكامل - تصميم واتساب) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         :root { --primary-color: #075e54; --secondary-color: #dcf8c6; --bg-color: #e5ddd5; --card-bg-color: #fff; --text-color: #222; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-color); direction: rtl; margin: 0; }
@@ -43,7 +39,7 @@ employee/employee_chat.html
     <div class="container">
         <div class="chat-header">
             <i class="fas fa-arrow-right text-gray-700 hover:text-gray-900 cursor-pointer text-xl" onclick="history.back()"></i>
-            <img id="partner-photo" src="https://via.placeholder.com/50" alt="صورة الشركة" class="employee-photo">
+            <img id="partner-photo" src="https://via.placeholder.com/50" alt="صورة الطرف الآخر" class="employee-photo">
             <div>
                 <h1 id="chat-title">جارِ التحميل...</h1> 
             </div>
@@ -79,7 +75,8 @@ employee/employee_chat.html
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getDatabase, ref, push, onValue, serverTimestamp, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        // 💡 تم إضافة update لاستخدامه على المسار الجذر
+        import { getDatabase, ref, push, onValue, serverTimestamp, set, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
@@ -111,6 +108,8 @@ employee/employee_chat.html
 
         let user;
         let chatId;
+        let employeeName = "موظف"; // 💡 متغير لتخزين اسم الموظف الحالي
+        let employeePhotoUrl = 'https://via.placeholder.com/50'; // 💡 متغير لتخزين صورة الموظف الحالي
 
         function formatTime(timestamp) {
             if (!timestamp) return '';
@@ -124,33 +123,49 @@ employee/employee_chat.html
             set(lastReadRef, Date.now());
         }
 
+        /**
+         * جلب بيانات الطرفين (الشركة والموظف الحالي)
+         */
         async function fetchCompanyData() {
             if (!companyId) {
                 chatTitle.textContent = "خطأ: لم يتم تحديد الشركة.";
                 return;
             }
 
-            if (companyNameFromUrl) {
-                chatTitle.textContent = companyNameFromUrl;
-            }
-            if (companyPhotoUrlFromUrl) {
-                partnerPhoto.src = companyPhotoUrlFromUrl;
-            }
+            // جلب بيانات الشركة
+            let companyName = companyNameFromUrl;
+            let companyPhoto = companyPhotoUrlFromUrl;
 
-            if (!companyNameFromUrl || !companyPhotoUrlFromUrl) {
-                try {
+            try {
+                if (!companyName || !companyPhoto) {
                     const companyDocRef = doc(firestoreDb, "companies", companyId);
                     const companyDocSnap = await getDoc(companyDocRef);
 
                     if (companyDocSnap.exists()) {
                         const companyData = companyDocSnap.data();
-                        chatTitle.textContent = companyData.name || 'شركة غير معروفة';
-                        partnerPhoto.src = companyData.logoUrl || 'https://via.placeholder.com/50';
+                        companyName = companyData.name || 'شركة غير معروفة';
+                        companyPhoto = companyData.logoUrl || 'https://via.placeholder.com/50';
                     }
-                } catch (error) {
-                    console.error("خطأ في جلب بيانات الشركة:", error);
-                    chatTitle.textContent = "حدث خطأ أثناء التحميل.";
                 }
+                chatTitle.textContent = companyName;
+                partnerPhoto.src = companyPhoto;
+            } catch (error) {
+                console.error("خطأ في جلب بيانات الشركة:", error);
+                chatTitle.textContent = "حدث خطأ أثناء التحميل.";
+            }
+
+            // جلب بيانات الموظف الحالي (لأغراض تحديث صندوق وارد الشركة)
+            try {
+                const employeeDocRef = doc(firestoreDb, "employees", user.uid);
+                const employeeDocSnap = await getDoc(employeeDocRef);
+
+                if (employeeDocSnap.exists()) {
+                    const employeeData = employeeDocSnap.data();
+                    employeeName = employeeData.name || "موظف مجهول";
+                    employeePhotoUrl = employeeData.photoUrl || 'https://via.placeholder.com/50';
+                }
+            } catch (error) {
+                console.error("خطأ في جلب بيانات الموظف:", error);
             }
         }
 
@@ -160,7 +175,7 @@ employee/employee_chat.html
                 const participants = [user.uid, companyId].sort();
                 chatId = participants.join('_');
 
-                fetchCompanyData();
+                fetchCompanyData(); // جلب البيانات بعد تحديد user.uid
                 listenForMessages();
 
             } else {
@@ -169,11 +184,14 @@ employee/employee_chat.html
             }
         });
 
-        // **دالة إضافة الرسالة (المعدلة) - تقوم بإنشاء المسار العكسي**
+        // 🟢 الدالة المصححة: إضافة الرسالة وتحديث صندوق الوارد لكلا الطرفين
         async function addMessageToRealtimeDB(messageText) {
+            if (!user || !chatId || !companyId || !messageText) return;
+
             try {
                 const messagesRef = ref(realtimeDb, `messages/${chatId}`);
-
+                const timestamp = Date.now(); 
+                
                 // 1. إضافة الرسالة
                 await push(messagesRef, {
                     senderId: user.uid,
@@ -181,16 +199,56 @@ employee/employee_chat.html
                     timestamp: serverTimestamp() 
                 });
 
-                // 2. تحديث المسار العكسي في chats_by_user لكلا الطرفين
+                // 2. تحديث صندوق الوارد (Inbox) لكلا الطرفين
+                
                 const updates = {};
-                updates[`/chats_by_user/${user.uid}/${chatId}`] = true; // للموظف (المستخدم الحالي)
-                updates[`/chats_by_user/${companyId}/${chatId}`] = true; // للشركة (الطرف الآخر)
+                
+                // 2.1. تحديث صندوق وارد الموظف (المستخدم الحالي)
+                updates[`/chats_by_user/${user.uid}/${chatId}`] = {
+                    chatId: chatId,
+                    partnerId: companyId,
+                    partnerName: chatTitle.textContent,
+                    partnerPhoto: partnerPhoto.src,
+                    lastMessage: {
+                        senderId: user.uid,
+                        text: messageText,
+                        timestamp: timestamp
+                    },
+                    unreadCount: 0 // تم القراءة لأنها رسالة من المرسل نفسه
+                };
 
+                // 2.2. تحديث صندوق وارد الشركة (الطرف الآخر)
+                // يجب جلب unreadCount الحالي بشكل آمن وزيادته. سنستخدم القراءة/الكتابة هنا.
+                
+                // **للتصحيح السريع والعملي، نقوم بإعداد بيانات التحديث ثم نستخدم Transaction/Update**
+                
+                // نقوم بقراءة عدد الرسائل غير المقروءة للشركة أولاً (لضمان الدقة)
+                const companyInboxRef = ref(realtimeDb, `/chats_by_user/${companyId}/${chatId}`);
+                const currentInboxSnap = await get(companyInboxRef);
+                const currentUnreadCount = currentInboxSnap.exists() ? (currentInboxSnap.val().unreadCount || 0) : 0;
+                
+                // يتم استخدام اسم وصورة الموظف هنا ليظهر للشركة
+                updates[`/chats_by_user/${companyId}/${chatId}`] = {
+                    chatId: chatId,
+                    partnerId: user.uid,
+                    partnerName: employeeName, 
+                    partnerPhoto: employeePhotoUrl, 
+                    lastMessage: {
+                        senderId: user.uid,
+                        text: messageText,
+                        timestamp: timestamp
+                    },
+                    // زيادة العداد
+                    unreadCount: currentUnreadCount + 1 
+                };
+                
+                // 3. تطبيق التحديث على المسار الجذر باستخدام update()
                 const rootRef = ref(realtimeDb, '/');
-                set(rootRef, updates); 
+                await update(rootRef, updates); 
 
             } catch (error) {
                 console.error("خطأ في إرسال الرسالة:", error);
+                alert("فشل إرسال الرسالة. راجع console للحصول على التفاصيل.");
             }
         }
 
@@ -209,7 +267,6 @@ employee/employee_chat.html
                 messages.sort((a, b) => a.timestamp - b.timestamp);
 
                 messages.forEach((message) => {
-                    // الموظف هو 'user' والشركة هي 'company'
                     const sender = message.senderId === user.uid ? 'user' : 'company';
 
                     let isRead = false;
@@ -305,7 +362,8 @@ employee/employee_chat.html
 
             messagesContainer.appendChild(messageElement);
         }
-
+        
+        // (باقي الدوال المساعدة تبقى كما هي)
         function containsForbiddenContent(text) {
             if (isPhoneNumber(text)) { return 'phone'; }
             if (isEmail(text)) { return 'email'; }
