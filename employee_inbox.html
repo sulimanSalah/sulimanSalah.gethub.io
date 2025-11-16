@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صندوق الرسائل - شغلني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        .chat-item {
+            transition: all 0.2s ease;
+        }
+        .chat-item:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .unread-indicator {
+            background-color: #ef4444; /* Red */
+            color: white;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="employee_dashboard.html" class="text-2xl font-bold text-blue-600">شغلني - الموظف</a>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <button class="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i class="fas fa-sign-out-alt text-xl"></i>
+                    </button>
+                    <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="صورة الملف الشخصي" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6">💬 صندوق الرسائل (المحادثات)</h1>
+        
+        <div id="chatsList" class="space-y-3">
+            <div id="loadingIndicator" class="text-center text-lg text-gray-500 p-8">جاري تحميل المحادثات...</div>
+            <div id="noChats" class="hidden text-center text-lg text-gray-500 p-8">لا توجد محادثات لديك بعد.</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // قم بتعيين إعدادات Firebase الخاصة بك هنا
+        const firebaseConfig = {
+          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
+          authDomain: "shaglni-c64c0.firebaseapp.com",
+          projectId: "shaglni-c64c0",
+          storageBucket: "shaglni-c64c0.firebasestorage.app",
+          messagingSenderId: "768887356636",
+          appId: "1:768887356636:web:11ec1d6991add3309c8819",
+          databaseURL: "https://shaglni-c64c0-default-rtdb.firebaseio.com", // تأكد من وجود رابط قاعدة البيانات الوقت الحقيقي
+          measurementId: "G-98GQGZS09W"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        const chatsList = document.getElementById('chatsList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noChats = document.getElementById('noChats');
+        
+        let currentEmployeeId = null;
+
+        /**
+         * دالة جلب وعرض المحادثات.
+         * يتم تشغيل هذه الدالة عند تسجيل دخول الموظف.
+         */
+        function fetchAndRenderChats(employeeId) {
+            currentEmployeeId = employeeId;
+            const chatsRef = ref(db, `chats_by_user/${employeeId}`);
+
+            // الاستماع للتغييرات في قائمة محادثات هذا الموظف
+            onValue(chatsRef, (snapshot) => {
+                loadingIndicator.classList.add('hidden');
+                
+                if (!snapshot.exists()) {
+                    noChats.classList.remove('hidden');
+                    return;
+                }
+
+                const chats = snapshot.val();
+                
+                // تحويل الكائنات إلى مصفوفة لفرزها
+                const sortedChats = Object.values(chats).sort((a, b) => {
+                    const timeA = a.lastMessage?.timestamp || 0;
+                    const timeB = b.lastMessage?.timestamp || 0;
+                    return timeB - timeA; // الأحدث أولاً
+                });
+
+                noChats.classList.add('hidden');
+                chatsList.innerHTML = ''; // تفريغ القائمة قبل إعادة العرض
+
+                sortedChats.forEach(chat => {
+                    // Chat ID يكون بصيغة (companyId_employeeId)
+                    const companyName = chat.companyName || 'شركة غير معروفة';
+                    const lastMessageText = chat.lastMessage?.text || 'لا توجد رسائل سابقة';
+                    const lastMessageTime = formatTime(chat.lastMessage?.timestamp);
+                    const isUnread = chat.unreadCount > 0;
+                    const partnerPhoto = chat.companyPhoto || 'https://via.placeholder.com/150/0000FF/808080?Text=C';
+
+                    // 💡 التعديل: التأكد من أن الرابط يشير إلى employee_chat.html (نفس المسار الجذر)
+                    const chatUrl = `employee_chat.html?chatId=${chat.chatId}&companyName=${encodeURIComponent(companyName)}&companyPhoto=${encodeURIComponent(partnerPhoto)}`;
+
+                    const chatItem = document.createElement('a');
+                    chatItem.href = chatUrl;
+                    chatItem.className = 'chat-item block bg-white p-4 rounded-xl shadow-sm flex items-center space-x-4 rtl:space-x-reverse border-r-4 border-transparent hover:border-blue-500';
+
+                    chatItem.innerHTML = `
+                        <img src="${partnerPhoto}" alt="صورة الشركة" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
+                        <div class="flex-grow min-w-0">
+                            <div class="flex justify-between items-center mb-1">
+                                <h3 class="text-lg font-bold truncate">${companyName}</h3>
+                                ${isUnread ? `<span class="unread-indicator">${chat.unreadCount}</span>` : ''}
+                            </div>
+                            <p class="text-gray-600 text-sm truncate">${lastMessageText}</p>
+                        </div>
+                        <div class="text-right flex-shrink-0 text-xs text-gray-400">
+                            ${lastMessageTime}
+                        </div>
+                    `;
+                    chatsList.appendChild(chatItem);
+                });
+            });
+        }
+
+        /**
+         * دالة مساعدة لتحويل الـ Timestamp إلى نص
+         */
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        // الاستماع لحالة المصادقة
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // الموظف مسجل الدخول
+                fetchAndRenderChats(user.uid);
+            } else {
+                // ليس مسجلاً، التوجيه إلى صفحة تسجيل دخول الموظف (employee_login.html)
+                loadingIndicator.classList.add('hidden');
+                noChats.textContent = "يرجى تسجيل الدخول كـ موظف لرؤية محادثاتك.";
+                noChats.classList.remove('hidden');
+                // window.location.href = "employee_login.html"; // المسار الصحيح الآن
+            }
+        });
+    </script>
+</body>
+</html>
