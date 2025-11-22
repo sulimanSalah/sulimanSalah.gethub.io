@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر الأجهزة الذكية | هواتف Xiaomi و Samsung</title>
-    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         /* التنسيقات العامة والـ UX */
         body {
-            font-family: 'Changa', sans-serif; 
+            font-family: 'Tajawal', sans-serif; /* خط نظيف وحديث */
             direction: rtl; 
-            background-color: #f8f9fa; /* خلفية بيضاء/رمادية فاتحة لتبدو نظيفة واحترافية */
-            color: #212529; /* لون نص داكن وواضح */
+            background-color: #000000; /* خلفية سوداء فاحمة */
+            color: #ffffff; /* نص أبيض ناصع */
             margin: 0;
             padding: 0;
             line-height: 1.6;
@@ -21,164 +21,183 @@
 
         /* الرأس الرئيسي للصفحة */
         .page-header {
-            background-color: #007bff; /* أزرق موثوق */
-            color: white;
-            padding: 20px 0;
+            background-color: #111111;
+            padding: 30px 0;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #333333;
         }
         
-        /* حاوية عرض المنتجات (ترتيب سهل للمستخدم) */
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 2.5em;
+            color: #00ff99; /* لمسة نيون جذابة */
+        }
+        
+        .page-header p {
+            color: #aaaaaa;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+        
+        /* حاوية عرض المنتجات */
         .products-grid {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 60px auto;
             padding: 0 20px;
             display: grid;
-            /* عرض بطاقتين (منتجين) في الصف */
-            grid-template-columns: 1fr 1fr; 
-            gap: 40px; /* مسافة بين البطاقات */
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* تصميم مرن */
+            gap: 40px; 
         }
         
         /* تنسيق بطاقة المنتج الفردية */
         .product-card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* ظل خفيف وأنيق */
-            padding: 25px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-top: 5px solid; /* سيتم تحديد اللون لكل منتج لاحقاً */
+            background-color: #111111; /* رمادي داكن للبطاقة */
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); 
+            padding: 30px;
+            text-align: right;
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 1px solid #333333;
         }
         
-        /* تأثير عند مرور المؤشر (لتحسين تجربة المستخدم) */
+        /* تأثير عند مرور المؤشر (UX) */
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 153, 0.2); /* ظل نيون خفيف */
         }
 
         /* تنسيق صور المنتج */
         .product-card img {
-            width: 80%; /* حجم معقول داخل البطاقة */
+            width: 90%; 
             height: auto;
-            max-height: 300px;
+            max-height: 350px;
             object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
         }
 
         /* تنسيق العنوان */
         .product-card h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #007bff;
-            border-bottom: 2px solid #e9ecef;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            color: #ffffff;
+            border-bottom: 2px solid #333333;
             padding-bottom: 10px;
+            font-weight: 700;
         }
         
-        /* الوصف المختصر والمواصفات الرئيسية */
+        /* الوصف والمواصفات */
+        .product-specs p {
+            font-style: italic;
+            color: #aaaaaa;
+            margin-bottom: 20px;
+        }
+        
         .product-specs ul {
             list-style: none;
             padding: 0;
-            text-align: right; /* محاذاة القائمة لليمين داخل البطاقة */
         }
         
         .product-specs li {
-            background: #f8f9fa;
-            border-bottom: 1px dashed #ced4da;
-            padding: 10px 0;
+            background: #222222;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 4px;
             font-size: 1.1em;
-            color: #495057;
-            font-weight: 500;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .product-specs li strong {
+            color: #00ff99; /* تمييز القيم بلون النيون */
+            font-weight: 500;
+        }
+        
         /* زر الإجراء (Call to Action) */
         .cta-button {
             display: block;
-            background-color: #28a745; /* أخضر للإيحاء بالإنجاز والتجارة */
-            color: white;
-            padding: 15px 25px;
+            background-color: #00ff99; /* أخضر نيون لافت جداً */
+            color: #000000;
+            padding: 18px 25px;
             text-decoration: none; 
-            border-radius: 50px; /* مستدير لافت للنظر */
-            font-size: 1.2em;
+            border-radius: 5px; 
+            font-size: 1.3em;
             font-weight: 700;
-            margin-top: 20px;
+            margin-top: 30px;
             transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.4);
         }
 
         .cta-button:hover {
-            background-color: #1e7e34; 
-            transform: scale(1.02);
-        }
-        
-        /* تخصيص لون الحد العلوي لكل منتج */
-        .redmi-color {
-            border-color: #ff6600 !important; /* لون Xiaomi برتقالي/أحمر */
-        }
-        
-        .samsung-color {
-            border-color: #1272c7 !important; /* لون Samsung أزرق */
+            background-color: #00e68a; 
+            transform: scale(1.03);
         }
         
         /* تذييل الصفحة */
         .site-footer {
             text-align: center;
-            padding: 25px;
-            background-color: #343a40;
-            color: white;
-            margin-top: 50px;
+            padding: 30px;
+            background-color: #0d0d0d;
+            color: #555555;
             font-size: 0.9em;
+            border-top: 1px solid #333333;
         }
     </style>
     </head>
 <body>
 
     <header class="page-header">
-        <h1>🔍 اختر جهازك: Xiaomi Redmi 12 و Samsung Galaxy S23 Ultra</h1>
-        <p>استعراض احترافي لأهم المواصفات ومميزات كل جهاز.</p>
+        <h1>هواتف مختارة بعناية: Samsung و Xiaomi</h1>
+        <p>مقارنة المواصفات الأساسية وإجراء طلب الشراء.</p>
     </header>
 
     <div class="products-grid">
         
-        <div class="product-card samsung-color">
+        <div class="product-card">
             <img src="s23_ultra.jpg" alt="صورة هاتف Samsung Galaxy S23 Ultra">
             <h2>Samsung Galaxy S23 Ultra</h2>
             
             <section class="product-specs">
-                <p><strong>ملك الأندرويد في الأداء والكاميرا</strong></p>
+                <p>قمة الأداء والتصوير الفوتوغرافي في هاتف واحد. مثالي للمحترفين والمستخدمين ذوي المتطلبات العالية.</p>
                 <ul>
-                    <li>**الشاشة:** Dynamic AMOLED 2X بمقاس 6.8 إنش.</li>
-                    <li>**المعالج:** Snapdragon 8 Gen 2 مخصص لإصدار Galaxy.</li>
-                    <li>**الكاميرا الرئيسية:** 200 ميجابكسل (احترافية فائقة).</li>
-                    <li>**البطارية:** 5000mAh مع دعم الشحن السريع.</li>
-                    <li>**ميزة إضافية:** قلم S Pen مدمج.</li>
+                    <li>الشاشة: <strong>6.8" Dynamic AMOLED 2X</strong></li>
+                    <li>المعالج: <strong>Snapdragon 8 Gen 2 for Galaxy</strong></li>
+                    <li>الكاميرا: <strong>200MP + 12MP + 10MP + 10MP</strong></li>
+                    <li>الذاكرة/التخزين: <strong>12GB RAM / 256GB</strong></li>
+                    <li>الميزات: <strong>قلم S Pen مدمج</strong></li>
                 </ul>
             </section>
             
-            <a href="#contact-form" class="cta-button">📞 استفسر عن سعر S23 Ultra الآن</a>
+            <a href="#contact-form" class="cta-button">طلب عرض سعر Samsung S23 Ultra</a>
         </div>
 
-        <div class="product-card redmi-color">
+        <div class="product-card">
             <img src="redmi_12.jpg" alt="صورة هاتف Xiaomi Redmi 12">
             <h2>Xiaomi Redmi 12</h2>
             
             <section class="product-specs">
-                <p><strong>أفضل قيمة مقابل السعر في الفئة الاقتصادية</strong></p>
+                <p>التوازن المثالي بين السعر والميزات. جهاز موثوق يلبي كافة احتياجاتك اليومية بفعالية.</p>
                 <ul>
-                    <li>**الشاشة:** DotDisplay FHD+ بمقاس 6.79 إنش ومعدل 90Hz.</li>
-                    <li>**المعالج:** MediaTek Helio G88 (أداء موثوق للاستخدام اليومي).</li>
-                    <li>**الكاميرا الرئيسية:** 50 ميجابكسل ثلاثية العدسة.</li>
-                    <li>**البطارية:** 5000mAh تدوم ليوم كامل بسهولة.</li>
-                    <li>**ميزة إضافية:** تصميم زجاجي أنيق ومقاوم للرذاذ.</li>
+                    <li>الشاشة: <strong>6.79" FHD+ (90Hz)</strong></li>
+                    <li>المعالج: <strong>MediaTek Helio G88</strong></li>
+                    <li>الكاميرا: <strong>50MP أساسية ثلاثية العدسة</strong></li>
+                    <li>الذاكرة/التخزين: <strong>8GB RAM / 128GB</strong></li>
+                    <li>الميزات: <strong>مقاومة خفيفة للرذاذ (IP53)</strong></li>
                 </ul>
             </section>
             
-            <a href="#contact-form" class="cta-button">📞 استفسر عن سعر Redmi 12 الآن</a>
+            <a href="#contact-form" class="cta-button">طلب عرض سعر Xiaomi Redmi 12</a>
         </div>
 
     </div>
 
     <footer class="site-footer">
-        <p>للحصول على أفضل العروض، يرجى التواصل معنا عبر نماذج الاستفسار.</p>
+        <p>لتفاصيل الدفع وتحديد موعد الشحن، يرجى ملء نموذج التواصل.</p>
     </footer>
 
 </body>
