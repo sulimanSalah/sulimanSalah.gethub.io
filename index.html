@@ -82,8 +82,8 @@
         <nav class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <img src="shagelnie.png.png" alt="شعار موقع شغلني" class="h-10 mr-2">
-                 
+                    <img src="shagelnie.png.png" alt="شعار موقع شغلني" class="h-20 w-auto mr-2">
+
 
                 <div class="hidden md:flex flex-grow justify-center scrollable-nav">
                     <div class="flex space-x-1 space-x-reverse">
@@ -98,8 +98,7 @@
 
                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                     <div id="auth-section" class="hidden md:flex items-center space-x-2 rtl:space-x-reverse">
-                         <a href="employee_login.html" class="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل دخول موظف</a>
-                        <a href="company_login.html" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap">تسجيل دخول شركة</a>
+                        <a href="login.html" class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap">تسجيل دخول</a>
                     </div>
 
                     <button id="mobile-menu-button" class="md:hidden p-2 text-gray-600 hover:text-blue-600 focus:outline-none transition duration-150 rounded-lg">
@@ -125,8 +124,7 @@
                 <a href="jop_posting_page.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">أضف وظيفة</a>
                 <a href="employee_registration.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap">تسجيل موظف</a>
                 <a href="employee_inbox.html" class="block px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-blue-50 whitespace-nowrap"> رسائلي</a>
-                <a href="employee_login.html" class="block px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-lg hover:bg-blue-50 whitespace-nowrap mt-4">تسجيل دخول موظف</a>
-                <a href="company_login.html" class="block px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap mt-2">تسجيل دخول شركة</a>
+                <a href="login.html" class="block px-4 py-3 bg-blue-600 text-white text-center font-medium rounded-lg hover:bg-blue-700 whitespace-nowrap mt-4">تسجيل دخول</a>
             </nav>
         </div>
     </div>
@@ -341,7 +339,7 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="shagelnie.png.png" alt="شعار شغلني" class="h-10 mb-4">
+                    <img src="shagelnie.png.png" alt="شعار شغلني" class="h-20 mb-4 w-auto">
                     <p class="text-gray-400">منصة التوظيف الأولى في  السودان</p>
                     <div class="flex space-x-4 space-x-reverse mt-4">
                         <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
@@ -365,26 +363,7 @@
                         <li><a href="no_code5.html" class="text-gray-400 hover:text-white"> كود لا 5 علاقة له بالموقع،للتجرب</a></li>
                         <li><a href="no_code6.html" class="text-gray-400 hover:text-white"> كود لا علاقة له بالموقع،للت6جرب</a></li>
                         <li><a href="employee_inbox.html" class="text-gray-400 hover:text-white"> inbox</a></li>
-
-
-  <li><a href="no_code.a1.html" class="text-gray-400 hover:text-white"> no code a1</a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        <li><a href="no_code.a1.html" class="text-gray-400 hover:text-white"> no code a1</a></li>
                     </ul>
                 </div>
                 <div>
@@ -413,17 +392,12 @@
     </footer>
 
     <script>
-        // ------------------------------------------
-        // وظائف القائمة الجوالة (Mobile Menu Functionality)
-        // تم تبسيط الكود وإزالة منطق المصادقة المعقد
-        // ------------------------------------------
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
             const mobileMenuContainer = document.getElementById('mobile-menu-container');
             const mobileMenu = document.getElementById('mobile-menu');
 
-            // فتح القائمة
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenuContainer.style.display = 'block';
                 setTimeout(() => {
@@ -431,7 +405,6 @@
                 }, 10);
             });
 
-            // إغلاق القائمة
             closeMobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.remove('active');
                 setTimeout(() => {
@@ -439,7 +412,6 @@
                 }, 300);
             });
 
-            // إغلاق القائمة عند النقر خارجها
             mobileMenuContainer.addEventListener('click', function(e) {
                 if (e.target === mobileMenuContainer) {
                     mobileMenu.classList.remove('active');
