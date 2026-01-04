@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل حساب جديد - شغلني</title>
+    <title>تسجيل الدخول - شغلني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -11,9 +11,7 @@
         :root {
             --primary: #2563eb;
             --primary-dark: #1e40af;
-            --secondary: #f59e0b;
             --success: #10b981;
-            --danger: #ef4444;
             --light: #f9fafb;
             --dark: #1f2937;
             --gray: #6b7280;
@@ -24,520 +22,106 @@
             background-color: #f5f7fa;
         }
 
-        .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .step.active {
-            background-color: var(--success);
-        }
-
-        .step-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
         .form-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 2px solid transparent;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
         }
 
-        .image-preview img, .document-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-left: 8px;
-        }
-        .message {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        .success-message {
-            background-color: #dcfce7;
-            color: #065f46;
-        }
-        .error-message {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        .password-requirement-item {
-            display: flex;
-            align-items: center;
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-top: 0.5rem;
-        }
-        .password-requirement-item.valid {
-            color: #10b981;
-        }
         .password-input-wrapper {
             position: relative;
         }
+
         .password-toggle {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #6b7280;
+            color: var(--gray);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-6">إنشاء حساب جديد</h2>
-        <div class="step-container" id="stepContainer">
-            <div class="step active" id="stepIndicator1">1</div>
-            <div class="step" id="stepIndicator2">2</div>
-            <div class="step" id="stepIndicator3">3</div>
-            <div class="step" id="stepIndicator4">4</div>
-            <div class="step" id="stepIndicator5">5</div>
-            </div>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-        <form id="unifiedForm">
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card" id="step1">
-                <h2 class="text-lg font-bold mb-4">الخطوة 1: بيانات الحساب</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">الاسم الثلاثي</label>
-                        <div class="mt-1">
-                            <input id="name" name="name" type="text" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أدخل اسمك الثلاثي">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-                        <div class="mt-1">
-                            <input id="email" name="email" type="email" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right"
-                                placeholder="أدخل بريدك الإلكتروني">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
-                        <div class="mt-1 password-input-wrapper">
-                            <input id="password" name="password" type="password" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right pr-10"
-                                placeholder="أدخل كلمة مرور قوية">
-                            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
-                        </div>
-                        <div class="password-requirements mt-2" id="passwordRequirements">
-                            <p class="text-gray-500 text-sm">يجب أن تحتوي كلمة المرور على:</p>
-                            <div id="min-length" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>6 أحرف على الأقل</span>
-                            </div>
-                            <div id="has-upper" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>حرف كبير واحد على الأقل</span>
-                            </div>
-                            <div id="has-lower" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>حرف صغير واحد على الأقل</span>
-                            </div>
-                            <div id="has-number" class="password-requirement-item">
-                                <i class="fas fa-check-circle ml-2 text-red-500"></i>
-                                <span>رقم واحد على الأقل</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
-                        <div class="mt-1 password-input-wrapper">
-                            <input id="confirmPassword" name="confirmPassword" type="password" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right pr-10"
-                                placeholder="أعد إدخال كلمة المرور">
-                            <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="role" class="block text-sm font-medium text-gray-700">نوع الحساب</label>
-                        <div class="mt-1">
-                            <select id="role" name="role" required
-                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-right">
-                                <option value="" disabled selected>اختر نوع الحساب</option>
-                                <option value="employee">موظف / حرفي</option>
-                                <option value="employer">شركة / صاحب عمل</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="mt-6 w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold" id="nextBtn1">
-                    التالي
-                </button>
-            </div>
+    <div class="w-full max-w-md bg-white rounded-2xl p-8 form-card">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-gray-900">مرحباً بك مجدداً</h2>
+            <p class="text-gray-500 mt-2">سجل دخولك للمتابعة في منصة شغلني</p>
+        </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step2-verification">
-                <h2 class="text-lg font-bold mb-4 text-center">الخطوة 2: توثيق البريد الإلكتروني</h2>
-                <div class="text-center space-y-4">
-                    <div class="flex justify-center mb-4 text-blue-500">
-                        <i class="fas fa-envelope-open-text text-5xl"></i>
-                    </div>
-                    <p class="text-gray-700">لقد أرسلنا رابط توثيق إلى بريدك الإلكتروني.</p>
-                    <p class="text-sm text-gray-500 font-bold">يرجى الضغط على زر "تأكيد التوثيق" بعد تفعيل حسابك من Gmail.</p>
-                    <button type="button" class="mt-4 px-6 py-4 bg-blue-800 text-white rounded-lg hover:bg-black w-full shadow-lg border-2 border-blue-400 transition-all font-black text-lg" id="confirmVerificationBtn">
-                        <i class="fas fa-check-double ml-2"></i> تأكيد التوثيق والمتابعة
-                    </button>
-                    <button type="button" class="text-sm text-blue-600 hover:text-blue-800" id="resendVerificationBtn">
-                        إعادة إرسال الإيميل
-                    </button>
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-bold text-gray-700 mb-1">البريد الإلكتروني</label>
+                <div class="relative">
+                    <input id="email" name="email" type="email" required
+                        class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm text-right"
+                        placeholder="example@mail.com">
                 </div>
             </div>
 
-            <div class="employee-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: البيانات الأساسية</h2>
-                    <div class="mb-4">
-                        <label for="headline" class="block text-sm font-medium text-gray-700">العنوان الاحترافي</label>
-                        <input type="text" id="headline" name="headline" placeholder="مثال: عامل ديكور" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="birthDate" class="block text-sm font-medium text-gray-700">تاريخ الميلاد</label>
-                        <input type="date" id="birthDate" name="birthDate" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="bio" class="block text-sm font-medium text-gray-700">نبذة وظيفية عنك</label>
-                        <textarea id="bio" name="bio" rows="4" placeholder="وصف مختصر عنك"
-                                  class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="profilePhoto" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي (مطلوبة)</label>
-                        <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف (سوداني)</label>
-                        <input type="tel" id="phone" name="phone" placeholder="09xxxxxxx أو 01xxxxxxx" required
-                               class="w-full pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="state" class="block text-sm font-medium text-gray-700">الولاية (مطلوبة)</label>
-                        <select id="state" name="state" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                            <option value="">اختر ولاية</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="cityContainer">
-                        <label for="city" class="block text-sm font-medium text-gray-700">المدينة (مطلوبة)</label>
-                        <select id="city" name="city" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="areaContainer">
-                        <label for="area" class="block text-sm font-medium text-gray-700">المنطقة / الحي (مطلوبة)</label>
-                        <select id="area" name="area" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        </select>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn3-employee">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="nextBtn3-employee">التالي</button>
+            <div>
+                <div class="flex justify-between mb-1">
+                    <label for="password" class="block text-sm font-bold text-gray-700">كلمة المرور</label>
+                    <a href="#" class="text-xs text-blue-600 hover:underline">نسيت كلمة المرور؟</a>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: المهارات</h2>
-                    <div id="skillsContainer">
-                        <div class="mb-4 flex items-center">
-                            <input type="text" name="skills[]" placeholder="مثال: سباكة" class="skill-input w-full pr-4 py-2 border border-gray-300 rounded-lg">
-                            <button type="button" class="add-skill-btn mr-2 p-2 bg-blue-100 text-blue-600 rounded-lg"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn4-employee">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="nextBtn4-employee">التالي</button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employee">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 5: الأعمال السابقة</h2>
-                    <div class="mb-4">
-                        <label for="previousWorks" class="block text-sm font-medium text-gray-700">صور أعمالك (5 صور على الأقل)</label>
-                        <input type="file" id="previousWorks" name="previousWorks" multiple accept="image/*" required class="w-full">
-                        <div id="image-preview" class="flex flex-wrap mt-2"></div>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn5-employee">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="submitBtn-employee">إنشاء الحساب</button>
+                <div class="mt-1 password-input-wrapper">
+                    <input id="password" name="password" type="password" required
+                        class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm text-right pr-4 pl-10"
+                        placeholder="أدخل كلمة المرور">
+                    <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                 </div>
             </div>
 
-            <div class="employer-steps">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step3-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 3: بيانات الشركة</h2>
-                    <div class="mb-4">
-                        <label for="companyName" class="block text-sm font-medium text-gray-700">اسم النشاط التجاري</label>
-                        <input type="text" id="companyName" name="companyName" required class="w-full pr-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyEmail" class="block text-sm font-medium text-gray-700">البريد الإلكتروني الرسمي (إجباري)</label>
-                        <input type="email" id="companyEmail" name="companyEmail" required class="w-full pr-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyPhone" class="block text-sm font-medium text-gray-700">رقم الهاتف (إجباري)</label>
-                        <input type="tel" id="companyPhone" name="companyPhone" required class="w-full pr-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyLogo" class="block text-sm font-medium text-gray-700">اللوغو (إجباري)</label>
-                        <input type="file" id="companyLogo" name="companyLogo" accept="image/*" required class="w-full pr-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div class="mb-4">
-                        <label for="businessType" class="block text-sm font-medium text-gray-700">نوع النشاط</label>
-                        <select id="businessType" name="businessType" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                            <option value="">اختر نوع النشاط</option>
-                            <option value="برمجة">برمجة</option>
-                            <option value="مطعم">مطعم</option>
-                            <option value="بناء">بناء</option>
-                        </select>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn3-employer">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="nextBtn3-employer">التالي</button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step4-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة 4: الموقع والوصف</h2>
-                    <div class="mb-4">
-                        <label for="companyDescription" class="block text-sm font-medium text-gray-700">نبذة عن النشاط</label>
-                        <textarea id="companyDescription" name="companyDescription" rows="4" required class="w-full pr-4 py-2 border border-gray-300 rounded-lg"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="companyState" class="block text-sm font-medium text-gray-700">الولاية (مطلوبة)</label>
-                        <select id="companyState" name="companyState" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                            <option value="">اختر ولاية</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 hidden" id="companyCityContainer">
-                        <label for="companyCity" class="block text-sm font-medium text-gray-700">المدينة (مطلوبة)</label>
-                        <select id="companyCity" name="companyCity" required class="w-full border border-gray-300 rounded-lg px-3 py-2"></select>
-                    </div>
-                    <div class="mb-4 hidden" id="companyAreaContainer">
-                        <label for="companyArea" class="block text-sm font-medium text-gray-700">المنطقة / الحي (مطلوبة)</label>
-                        <select id="companyArea" name="companyArea" required class="w-full border border-gray-300 rounded-lg px-3 py-2"></select>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn4-employer">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="nextBtn4-employer">التالي</button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 form-card hidden" id="step5-employer">
-                    <h2 class="text-lg font-bold mb-4">الخطوة الأخيرة: التوثيق والتفعيل</h2>
-                    <div class="mb-4">
-                        <label class="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer">
-                            <input type="radio" name="employerType" value="hiring" checked>
-                            <span class="mr-2 font-semibold">شركة تريد التوظيف</span>
-                        </label>
-                    </div>
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg" id="prevBtn5-employer">السابق</button>
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg" id="submitBtn-employer">إنشاء الحساب</button>
-                </div>
-            </div>
+            <button type="submit" class="w-full py-3 px-4 btn-primary text-white font-bold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center space-x-2">
+                <span>تسجيل الدخول</span>
+                <i class="fas fa-sign-in-alt mr-2"></i>
+            </button>
         </form>
 
-        <div id="message" class="message hidden"></div>
+        <div id="message" class="mt-4 text-center text-sm hidden"></div>
+
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-600">
+                ليس لديك حساب؟ 
+                <a href="register.html" class="font-bold text-blue-600 hover:text-blue-500 transition-colors">
+                    إنشاء حساب جديد
+                </a>
+            </p>
+        </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, reload, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // منطق تبديل رؤية كلمة المرور
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('togglePassword');
 
-        // Firebase Config (نفس بياناتك الأصلية دون تغيير)
-        const firebaseConfig = {
-          apiKey: "AIzaSyBsIaCjE7QOQ6QkhqhCIMA3sLdMvxBxPHk",
-          authDomain: "shaglni-c64c0.firebaseapp.com",
-          projectId: "shaglni-c64c0",
-          storageBucket: "shaglni-c64c0.appspot.com", 
-          messagingSenderId: "768887356636",
-          appId: "1:768887356636:web:11ec1d6991add3309c8819", 
-          measurementId: "G-98GQGZS09W" 
-        };
+        toggleIcon.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleIcon.classList.toggle('fa-eye');
+            toggleIcon.classList.toggle('fa-eye-slash');
+        });
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        const CLOUDINARY_CLOUD_NAME = "dbmjg23hl"; 
-        const CLOUDINARY_UPLOAD_PRESET = "Companies_emploies";
-
-        let currentStep = 1;
-        let isEmployerFlow = false;
-        const form = document.getElementById('unifiedForm');
-        const messageDiv = document.getElementById('message');
-        const roleSelect = document.getElementById('role');
-
-        const sudanLocations = {
-            "الخرطوم": {
-                "الخرطوم": ["السجانة", "العمارات", "الرياض", "الطائف", "المنشية", "بري"],
-                "أم درمان": ["العباسية", "بيت المال", "الملازمين", "الثورة"],
-                "الخرطوم بحري": ["كافوري", "شمبات", "الشعبية"]
-            },
-            "الجزيرة": {"ود مدني": ["مارنجان", "جزيرة الفيل"], "الحصاحيصا": ["الحصاحيصا"]},
-            // ... (بقية الولايات تبقى كما هي في كودك الأصلي)
-        };
-
-        // دالة التحقق من العمر (+18)
-        function checkAge(birthDate) {
-            const today = new Date();
-            const birth = new Date(birthDate);
-            let age = today.getFullYear() - birth.getFullYear();
-            const m = today.getMonth() - birth.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) { age--; }
-            return age >= 18;
-        }
-
-        // دالة التحقق من رقم الهاتف السوداني
-        function validateSudanPhone(phone) {
-            const re = /^(09|01)\d{8}$/;
-            return re.test(phone);
-        }
-
-        async function handleStep1Next() {
-            const nextBtn = document.getElementById('nextBtn1');
-            const inputs = document.getElementById('step1').querySelectorAll('input, select');
-            for(let input of inputs) if(!input.checkValidity()){ input.reportValidity(); return; }
-
-            const password = document.getElementById('password').value;
-            if(password !== document.getElementById('confirmPassword').value){
-                showMessage('كلمات المرور غير متطابقة', 'error'); return;
-            }
-
-            nextBtn.disabled = true;
-            nextBtn.textContent = 'الخطوة التالية...'; // تعديل: تغيير النص
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, password);
-                await sendEmailVerification(userCredential.user);
-                isEmployerFlow = (roleSelect.value === 'employer');
-                document.getElementById('step1').classList.add('hidden');
-                showStep(2);
-                showMessage('تم إرسال رابط التفعيل لبريدك', 'success');
-            } catch (error) {
-                showMessage('خطأ: ' + error.message, 'error');
-                nextBtn.disabled = false;
-                nextBtn.textContent = 'التالي';
-            }
-        }
-
-        async function handleDataSubmission(e) {
+        // هنا يمكنك إضافة منطق Firebase Login كما فعلت في صفحة التسجيل
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const btn = e.target;
-            
-            // التحقق من العمر للموظف
-            if(!isEmployerFlow) {
-                const bDate = document.getElementById('birthDate').value;
-                if(!checkAge(bDate)){ showMessage('يجب أن يكون عمرك 18 عاماً فأكثر', 'error'); return; }
-                if(!validateSudanPhone(document.getElementById('phone').value)){
-                    showMessage('رقم الهاتف السوداني غير صحيح (يجب أن يبدأ بـ 09 أو 01 ويتكون من 10 أرقام)', 'error'); return;
-                }
-                if(!document.getElementById('profilePhoto').files[0]){
-                    showMessage('صورة الملف الشخصي مطلوبة', 'error'); return;
-                }
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'جاري الحفظ...';
-            
-            // (منطق الرفع لـ Cloudinary و Firestore يبقى كما هو لضمان العمل)
-            // سأقوم فقط بتعديل رسالة النجاح في النهاية كما طلبت
-            
-            try {
-                // ... (نفس منطق الحفظ الخاص بك)
-                // عند النجاح:
-                showMessage('ستتم مراجعة بياناتك والرد عليك في أقرب وقت', 'success'); // تعديل: رسالة النجاح
-                setTimeout(() => { window.location.href = isEmployerFlow ? "employer-dashboard.html" : "profile.html"; }, 3000);
-            } catch (err) {
-                showMessage('حدث خطأ أثناء الحفظ', 'error');
-                btn.disabled = false;
-            }
-        }
-
-        // --- الدوال المساعدة للملاحة والمواقع (تم الحفاظ عليها مع إضافة "required" للموقع) ---
-        function showStep(n) {
-            document.querySelectorAll('.form-card').forEach(c => c.classList.add('hidden'));
-            let id = n === 1 ? 'step1' : (n === 2 ? 'step2-verification' : `step${n}-${isEmployerFlow?'employer':'employee'}`);
-            document.getElementById(id).classList.remove('hidden');
-            currentStep = n;
-            updateStepIndicator();
-        }
-
-        function updateStepIndicator() {
-            document.querySelectorAll('.step').forEach((s, i) => {
-                s.classList.toggle('active', i < currentStep);
-            });
-        }
-
-        function showMessage(msg, type) {
-            messageDiv.textContent = msg;
-            messageDiv.className = `message ${type}-message`;
+            const messageDiv = document.getElementById('message');
             messageDiv.classList.remove('hidden');
-        }
-
-        // الربط بالأزرار
-        document.getElementById('nextBtn1').addEventListener('click', handleStep1Next);
-        document.getElementById('confirmVerificationBtn').addEventListener('click', async () => {
-            await reload(auth.currentUser);
-            if(auth.currentUser.emailVerified) showStep(3);
-            else showMessage('يرجى تفعيل البريد أولاً', 'error');
+            messageDiv.textContent = "جاري التحقق من البيانات...";
+            messageDiv.className = "mt-4 text-center text-sm text-blue-600";
+            
+            // إضافة منطق Firebase Auth هنا لاحقاً
         });
-
-        // تشغيل دوال المواقع (نفس منطقك الأصلي مع تأكيد الاختيار)
-        function populateLocations(sSelect, cSelect, aSelect, cCont, aCont) {
-            sSelect.addEventListener('change', function() {
-                const data = sudanLocations[this.value];
-                cSelect.innerHTML = '<option value="">اختر مدينة</option>';
-                if(data) {
-                    Object.keys(data).forEach(c => {
-                        let op = document.createElement('option'); op.value = c; op.textContent = c; cSelect.appendChild(op);
-                    });
-                    cCont.classList.remove('hidden');
-                }
-            });
-            cSelect.addEventListener('change', function() {
-                const areas = sudanLocations[sSelect.value][this.value];
-                aSelect.innerHTML = '<option value="">اختر حي</option>';
-                if(areas) {
-                    areas.forEach(a => {
-                        let op = document.createElement('option'); op.value = a; op.textContent = a; aSelect.appendChild(op);
-                    });
-                    aCont.classList.remove('hidden');
-                }
-            });
-        }
-
-        // تفعيل الدوال للأزرار المتبقية
-        document.getElementById('nextBtn3-employee').addEventListener('click', () => showStep(4));
-        document.getElementById('nextBtn4-employee').addEventListener('click', () => showStep(5));
-        document.getElementById('nextBtn3-employer').addEventListener('click', () => showStep(4));
-        document.getElementById('nextBtn4-employer').addEventListener('click', () => showStep(5));
-        document.getElementById('submitBtn-employee').addEventListener('click', handleDataSubmission);
-        document.getElementById('submitBtn-employer').addEventListener('click', handleDataSubmission);
-
-        // تعبئة الولايات عند التحميل
-        const stateNames = Object.keys(sudanLocations);
-        [document.getElementById('state'), document.getElementById('companyState')].forEach(sel => {
-            stateNames.forEach(st => {
-                let op = document.createElement('option'); op.value = st; op.textContent = st; sel.appendChild(op);
-            });
-        });
-
-        populateLocations(document.getElementById('state'), document.getElementById('city'), document.getElementById('area'), document.getElementById('cityContainer'), document.getElementById('areaContainer'));
-        populateLocations(document.getElementById('companyState'), document.getElementById('companyCity'), document.getElementById('companyArea'), document.getElementById('companyCityContainer'), document.getElementById('companyAreaContainer'));
-
-        // توضيح كلمة المرور
-        document.getElementById('togglePassword').addEventListener('click', () => {
-            const p = document.getElementById('password');
-            p.type = p.type === 'password' ? 'text' : 'password';
-        });
-
     </script>
 </body>
 </html>
